@@ -1,0 +1,9 @@
+1. Here one sample array is given and also the sample value is given..
+
+2. if the val is in the array then element that value from the array and then print the length of the array..
+
+3. use the simple logic by runnning a while loop on a condtion if value is in the array
+
+5. if the condition is true then remove that value from the array by using the remove method in python
+
+6. And then print the length of the array

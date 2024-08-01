@@ -1,0 +1,21 @@
+1.  To solve this problem we have to first store the the element of the list in the separate variables one by one and then we have to take the carry value and then we have to find the summ of the additon of the  first list element and second list element with the carry value.let us know it in better way with the example..
+
+2. First take the result of all the elements by creating a new list named head and give a sample number as 0 in it.
+
+3. then store the new list in the root and the initialize the carry value as 0 by creating a varible as carry.
+
+4. Initialize the while loop until the condtion l1 or l2 is true
+
+5. store the first element of the linked list in the v1 and for the second one store it in the v2 then make the sum by adding the v1 , v2 and carry..
+
+6. Then update the carry by doing the floor division (//) of the sum    s // 10
+
+7. And then after doing that make the head node to point the next node where we can store the element by calculating the modulus of sum   s % 10
+
+8. And then update both the l1 and l2 to point to the next element for their respective linked list
+
+9. And one edge case in this problem is that we cant store the number with two digits in it  if 6+4=10 then u have  to store only 0 and then take the 1 as the carry and then add it in the next addition process and repeat the process if their are number with two digit.
+
+10. Note:- Now if the end two numeber's additon gets  the number with two digt  then where it will carry then there the logic comes in if after whole addition there is the extra value in the carry then initialize it in the end element of the head list..
+
+11. And then simply return the next root in it..

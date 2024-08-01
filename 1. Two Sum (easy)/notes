@@ -1,12 +1,19 @@
-* We can go with the two types of qpproaches where one is brute force approach and the other is the two pointer approach...
-* First let us discuss the brute force approach where first we will run the two loops where the first loop will compare the first value of the array with the second value of the array with the help of the second loop
-* And then compare both the values by adding them and then comparing it with the target value if the condition is true then  print those indexes
+1.  We can go with the two types of qpproaches where one is brute force approach and the other is the two pointer approach...
 
+2.  First let us discuss the brute force approach where first we will run the two loops where the first loop will compare the first value of the array with the second value of the array with the help of the second loop
 
-* Now let us talk about the two pointer approach where we will keep track of the first index and the last index with the help of the left and right named variable.
-* And then run the while loop where compare the left with the right
-* The calculate the total sum of the first and last indexes elements and then store it in current.
-* Thenn check the condition if both the current and the target are equal if they are equal then print those indexes
-* And if the current is less than the target value then increment 1 in left 
-* Otherwise decrement 1 in right 
-* And  run the loop until the correct indexes are found
+3.  And then compare both the values by adding them and then comparing it with the target value if the condition is true then  print those indexes
+
+4.  Now let us talk about the two pointer approach where we will keep track of the first index and the last index with the help of the left and right named variable.
+
+5.  And then run the while loop where compare the left with the right
+
+6.  The calculate the total sum of the first and last indexes elements and then store it in current.
+
+7.  Thenn check the condition if both the current and the target are equal if they are equal then print those indexes
+
+8.  And if the current is less than the target value then increment 1 in left 
+
+9.  Otherwise decrement 1 in right 
+
+10.  And  run the loop until the correct indexes are found

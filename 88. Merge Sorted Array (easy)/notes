@@ -1,0 +1,17 @@
+1.  In this question we have two arrays and also two variables names m and n which are storing the length of the array..
+
+2. Now the logic is take the second elements of the second array given and store it in the first array with sorted order and at last return the first array
+
+3. Now we can implement it keeping track of the first array elemet index with t1
+
+4. Same foe the second array track it by using the t2.
+
+5. and now take the t for storing the sum of the length of both t1 and t2.
+
+6. implement the condition if t2 greater than or equal to 0..
+
+7. Check the first condtion where t1 greater than 0 and element of t1 >element of t2 then replace the element of t1 with the total element of t and decrement 1 in t1
+
+8. otherwise replace the element of t with the element of t2 and again decrement 1 in t2
+
+9. And at last decrement 1 in t...
