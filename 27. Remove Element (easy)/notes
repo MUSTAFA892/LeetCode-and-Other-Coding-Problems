@@ -4,6 +4,6 @@
 
 3. use the simple logic by runnning a while loop on a condtion if value is in the array
 
-5. if the condition is true then remove that value from the array by using the remove method in python
+4. if the condition is true then remove that value from the array by using the remove method in python
 
-6. And then print the length of the array
+5. And then print the length of the array

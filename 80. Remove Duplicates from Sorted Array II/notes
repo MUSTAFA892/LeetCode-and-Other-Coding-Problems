@@ -1,0 +1,11 @@
+1. This question is kind of very similar to the last remove element question where  they ask to remove all the duplicate value of the number.. but in this question  u have to keep one duplicate value of the number and then return  the length of the array at the last..
+
+2. First we have checked whether the length of the array is lesser than or equal to 2 or not because if it is lesser than 2 than its length would 1 and it wont have any duplicate value and if length os equal to 2 than it might have two different number or one number and its duplicate and it is an exception in this question..
+
+3. Then take the extra variable k which would keep the track for the length of the array ..
+
+4. Then run the loop over the array from 2 to its length then check the condition if the value at i is not equal to value at  k-2 
+
+5. If the condition is true then replace the value at k with the value at i and then increment 1 in k...
+
+6. Then return k to display its length...

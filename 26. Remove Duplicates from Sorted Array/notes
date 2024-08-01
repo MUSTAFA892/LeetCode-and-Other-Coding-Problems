@@ -1,0 +1,11 @@
+1.  In the given problem we have given an array in which we have to remove the duplicate element from it and then return the length of the array..
+
+2. First take a variable in which act it like a counter for the array so take it with the value of 1.
+
+3. Run the loop over the array from 1 to its length and check the condition if the value at the index  i  is not equal to the value at the index  i-1 ...
+
+4. If the condition is true then replace the value at i with the value at j..
+
+5. And then increment 1 in j..
+
+6.  Then return the j for displaying its length..
