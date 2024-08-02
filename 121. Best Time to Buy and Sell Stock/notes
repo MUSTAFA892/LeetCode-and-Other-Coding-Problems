@@ -1,0 +1,34 @@
+1. You are given an array prices where prices[i] is the price of a given stock on the i-th day. You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock. Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
+
+Example
+Input: prices = [7, 1, 5, 3, 6, 4]
+Output: 5
+Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6 - 1 = 5.
+
+Note: In this problem i can only  buy one stock which will be giving the maximum profit. not more than one
+
+2. We will go with the two pointers approach in which there will be pointers for left and right which will be holding 0 and 1 index..
+
+3. We will compare the stocks at left index and stocks at right index if the left index is > than the right index then increment 1 in both left and right...
+
+4. and if the left is < than the right then calculate the profit by subtracting the profit of right - left and then compare if the max_profit already contains the value is lesser than the calculated profit..
+
+5. Then update the max_profit with  the calculated profit and increment 1 in right unitl the loop ends and update the max_profit as long as the condition is true..
+
+6. And then return max_profit 
+
+7. Here's the graph for the problem:-
+
+Day:     1    2    3    4    5    6
+Prices:  7    1    5    3    6    4
+
+7   |    *  
+6   |    |     .              *   
+5   |    |     |        *        
+4   |    |     |              .   
+3   |    |     |    .         .   
+2   |    |     |    |         .   
+1   |    *---->*----*----*----*  
+    +----+----+----+----+----+----+
+         1    2    3    4    5    6
+         B              S

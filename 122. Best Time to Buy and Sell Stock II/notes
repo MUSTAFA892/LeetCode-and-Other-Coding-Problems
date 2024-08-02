@@ -1,0 +1,9 @@
+1. Now this problem is very similar to the previous 121th problem in which u are allowed to buy only one stock which would be profitable in future in a single day.
+
+2. But in this problem u can buy as many as stock in a each single day..
+
+3. Its the simple logic in which u will compare the stocks of i and  i-1 if i greater than subtract those both stocks i - (i-1) and then u will add it to the profit..
+
+4. And continue  the loop until u can get final profit after u get all the profitable ones..
+
+5. And then return the profit..
