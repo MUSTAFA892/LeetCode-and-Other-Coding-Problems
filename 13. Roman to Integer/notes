@@ -1,0 +1,13 @@
+
+
+1. **Function Definition**: Defines the `romanToInt` method that converts a Roman numeral string `s` to an integer.
+2. **Mapping Dictionary**: Creates a dictionary `d` mapping Roman numerals to their integer values.
+3. **Variable Initialization**: Initializes `i` to 0, `sum` to 0, and `n` to the length of the input string `s`.
+4. **Start Loop**: Begins a while loop to iterate over the string `s`.
+5. **Subtractive Notation Check**: Checks if the current character is less than the next character (subtractive notation).
+6. **Add Subtractive Value**: Adds the result of the next character's value minus the current character's value to `sum`.
+7. **Skip Next Character**: Increments `i` by 2 to skip the next character.
+8. **Add Regular Value**: Adds the value of the current character to `sum` if no subtractive notation is found.
+9. **Increment Index**: Increments `i` by 1 to move to the next character.
+10. **Return Result**: Returns the accumulated `sum` as the final integer value.
+

@@ -1,0 +1,15 @@
+1. In this problem we have to find the closest number to 0 then return the number..
+
+2. first make the two empty list  which represents the positive and negative list ..
+
+3. Iterate through every element in the nums list and compare if the given number in the list is less than 0 or greater than 0..
+
+4. If less than 0  append it to the neg and if it is greater than 0 append it to pos 
+
+5. Again check for the condition if the neg list is empty then diisplay the first element of the sorted pos list 
+
+6. Otherwise pos is empty then display the last element of the neg sorted list..
+
+7. and again check the  condition if there are many elements in the both pos and neg list then check if the absolute last value of the sorted neg list is less than the first value of the pos list  then return the last value of the neg list
+
+8. Otherwise display the first value of the pos sorted list...
