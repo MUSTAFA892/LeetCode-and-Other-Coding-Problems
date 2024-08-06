@@ -1,0 +1,57 @@
+Sure! Here are detailed notes for the `summaryRanges` method in 10 single-line points:
+
+1. **Class Definition:** `class Solution:` defines a class named `Solution`.
+
+2. **Method Definition:** `def summaryRanges(self, nums: List[int]) -> List[str]:` defines a method `summaryRanges` within the `Solution` class, which takes a list of integers `nums` and returns a list of strings.
+
+3. **Initialize Answer List:** `ans = []` initializes an empty list `ans` to store the summary ranges.
+
+4. **Initialize Index:** `i = 0` initializes an index `i` to traverse the `nums` list.
+
+5. **Outer While Loop:** `while i < len(nums):` iterates through each element in the `nums` list.
+
+6. **Set Range Start:** `start = nums[i]` sets `start` to the current element, marking the beginning of a new range.
+
+7. **Inner While Loop:** 
+   ```python
+   while i < len(nums) - 1 and nums[i] + 1 == nums[i + 1]:
+       i += 1
+   ```
+   - Checks if the next element is consecutive to the current element.
+   - If true, increments `i` to extend the current range.
+
+8. **Create Range String:**
+   ```python
+   if start != nums[i]:
+       ans.append(str(start) + '->' + str(nums[i]))
+   else:
+       ans.append(str(nums[i]))
+   ```
+   - Appends the range as `"start->end"` if `start` is different from `nums[i]`.
+   - Appends only the single number as a string if `start` equals `nums[i]`.
+
+9. **Increment Index:** `i += 1` moves to the next element to start a new range.
+
+10. **Return Result:** `return ans` returns the list of summary ranges after processing all elements.
+
+
+### Example Walkthrough
+
+For `nums = [0, 1, 2, 4, 5, 7]`:
+
+1. **Range `[0, 1, 2]`:**
+   - `start` is `0`.
+   - Inner loop extends `i` to `2`.
+   - Append `"0->2"` to `ans`.
+
+2. **Range `[4, 5]`:**
+   - `start` is `4`.
+   - Inner loop extends `i` to `5`.
+   - Append `"4->5"` to `ans`.
+
+3. **Single Number `[7]`:**
+   - `start` is `7`.
+   - No range extension.
+   - Append `"7"` to `ans`.
+
+The final output is `["0->2", "4->5", "7"]`.

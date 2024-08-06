@@ -1,0 +1,38 @@
+Sure! Here are detailed notes for the provided `longestCommonPrefix` method in 10 single-line points:
+
+1. **Class Definition:** `class Solution:` defines a class named `Solution`.
+
+2. **Method Definition:** `def longestCommonPrefix(self, strs: List[str]) -> str:` defines a method `longestCommonPrefix` within the `Solution` class, which takes a list of strings `strs` and returns a string.
+
+3. **Initialization of Answer String:** `ans = ""` initializes an empty string `ans` to store the longest common prefix.
+
+4. **Sort the List:** `strs = sorted(strs)` sorts the list of strings `strs` in lexicographical order.
+
+5. **Identify the First and Last Strings:** 
+   ```python
+   first = strs[0]  # First string in the sorted list
+   Last = strs[-1]  # Last string in the sorted list
+   ```
+
+6. **Determine the Shorter Length:** The loop will iterate up to the length of the shorter string between `first` and `Last`:
+   ```python
+   min(len(first), len(Last))
+   ```
+
+7. **For Loop Initialization:** `for i in range(min(len(first), len(Last))):` iterates over the characters up to the length of the shorter string.
+
+8. **Character Match Check:** 
+   ```python
+   if first[i] == Last[i]:
+       ans += first[i]  # Append matching character to ans
+   ```
+
+9. **Character Mismatch Check and Return:** 
+   ```python
+   else:
+       return ans  # Return ans immediately if characters do not match
+       break  # This break is unnecessary as return already exits the method
+   ```
+
+10. **Return the Result:** `return ans` returns the longest common prefix after the loop completes.
+

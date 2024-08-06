@@ -1,0 +1,21 @@
+
+
+1. **Class Definition:** `class Solution:` defines a class named `Solution`.
+
+2. **Method Definition:** `def isSubsequence(self, s: str, t: str) -> bool:` defines a method `isSubsequence` within the `Solution` class, which takes two strings `s` and `t` and returns a boolean.
+
+3. **String Lengths:** `S = len(s)` and `T = len(t)` store the lengths of strings `s` and `t` in variables `S` and `T`.
+
+4. **Empty String Check:** `if s == '': return True` returns `True` if the string `s` is empty, as an empty string is a subsequence of any string.
+
+5. **Length Comparison:** `if S > T: return False` returns `False` if the length of `s` is greater than the length of `t`, as `s` cannot be a subsequence of `t` in this case.
+
+6. **Pointer Initialization:** `j = 0` initializes a pointer `j` to 0, which will track the current index in the string `s`.
+
+7. **For Loop:** `for i in range (T):` iterates over each character in the string `t` using an index `i`.
+
+8. **Character Match Check:** `if t[i] == s[j]:` checks if the current character in `t` matches the current character in `s`.
+
+9. **End of `s` Check:** `if j == S-1:` checks if `j` is at the last character of `s`, indicating that all characters of `s` have been found in sequence.
+
+10. **Pointer Increment:** `j += 1` increments the pointer `j` if there is a character match, and `return False` at the end of the loop if the end of `s` is not reached during the traversal of `t`.
