@@ -1,0 +1,41 @@
+
+### Example: `num = 16`
+
+1. **Initial Setup:**
+   - `left = 1`
+   - `right = 16`
+
+2. **Edge Case Check:**
+   - Since `num = 16` is greater than 1, we skip the edge case return.
+
+3. **Binary Search Loop:**
+
+   - **First Iteration:**
+     - Calculate `mid = (1 + 16) // 2 = 8`
+     - Check if `8 ** 2 == 16`: 
+       - `64` is not equal to `16`.
+     - Since `64 > 16`, update `right = 8 - 1 = 7`.
+     
+   - **Second Iteration:**
+     - Calculate `mid = (1 + 7) // 2 = 4`
+     - Check if `4 ** 2 == 16`: 
+       - `16` is equal to `16`.
+     - Since `4 ** 2 == 16`, return `True`.
+
+4. **Result:**
+   - The function returns `True` because 16 is a perfect square (4 × 4).
+
+### Notes:
+
+1. **Binary Search:**
+   - The function uses binary search to efficiently determine if `num` is a perfect square. The search space is reduced by half each iteration.
+
+2. **Edge Case Handling:**
+   - If `num` is less than or equal to 1, it returns `num` directly. This is because 0 and 1 are perfect squares (0 × 0 = 0 and 1 × 1 = 1).
+
+3. **Time Complexity:**
+   - The time complexity is O(log n), where n is the value of `num`, due to the binary search.
+
+4. **Return Values:**
+   - Returns `True` if `num` is a perfect square.
+   - Returns `False` if `num` is not a perfect square.

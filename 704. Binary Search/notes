@@ -1,0 +1,25 @@
+
+
+1. **Purpose:** Finds the index of `target` in a sorted list `nums`.
+
+2. **Initialization:** Set `first` to 0 and `last` to the last index of the list.
+
+3. **Loop Condition:** Continue while `first <= last`.
+
+4. **Mid Calculation:** Use `(first + last) // 2` to find the middle index.
+
+5. **Target Comparison:**
+   - If `nums[mid] == target`, return `mid`.
+   - If `target < nums[mid]`, adjust `last` to `mid - 1`.
+   - If `target > nums[mid]`, adjust `first` to `mid + 1`.
+
+6. **Exit Condition:** If the loop exits without finding the target, return `-1`.
+
+7. **Time Complexity:** The algorithm runs in O(log n) time.
+
+8. **Edge Cases:** Handles empty lists and targets not in the list.
+
+9. **Efficiency:** Efficient for large sorted lists.
+
+10. **Correctness:** Ensures accurate adjustment of `first` and `last` for proper search range.
+

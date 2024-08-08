@@ -1,0 +1,80 @@
+Certainly! Here's a more detailed explanation with examples for each part of the code:
+
+1. **Initialize `record` list:**
+   ```python
+   record = []
+   ```
+   - **Explanation:** This line initializes an empty list called `record` to keep track of the scores as they are calculated.
+   - **Example:** At the beginning, `record = []`.
+
+2. **Loop through `operations`:**
+   ```python
+   for i in operations:
+   ```
+   - **Explanation:** This starts a loop that goes through each element in the `operations` list, processing each one in order.
+   - **Example:** If `operations = ["5", "-2", "4", "C", "D", "9", "+", "+"]`, the loop will first process `"5"`, then `"-2"`, and so on.
+
+3. **Check if `i` is a number:**
+   ```python
+   if i.isdigit() or (i.startswith('-') and i[1:].isdigit()):
+   ```
+   - **Explanation:** This condition checks if the current operation `i` is a valid integer (either positive or negative). If true, it's treated as a score to be added to `record`.
+   - **Example:** `"5"` and `"-2"` are recognized as numbers.
+
+4. **Convert and add to `record`:**
+   ```python
+   record.append(int(i))
+   ```
+   - **Explanation:** Converts the string `i` to an integer and appends it to the `record` list.
+   - **Example:** For `i = "5"`, `record.append(5)` results in `record = [5]`.
+
+5. **Handle 'C' operation:**
+   ```python
+   elif i == 'C':
+       record.pop()
+   ```
+   - **Explanation:** If the operation is 'C', remove the last score from the `record` list, effectively "canceling" the most recent round.
+   - **Example:** If `record = [5, -2, 4]` and `i = "C"`, `record.pop()` changes `record` to `[5, -2]`.
+
+6. **Handle 'D' operation:**
+   ```python
+   elif i == 'D':
+       if record:
+           record.append(2 * record[-1])
+   ```
+   - **Explanation:** If the operation is 'D', double the last score in `record` and append the result as a new score.
+   - **Example:** If `record = [5, -2]` and `i = "D"`, `record.append(-4)` results in `record = [5, -2, -4]`.
+
+7. **Handle '+' operation:**
+   ```python
+   elif i == '+':
+       if len(record) >= 2:
+           record.append(record[-2] + record[-1])
+   ```
+   - **Explanation:** If the operation is '+', sum the last two scores in `record` and append the result as a new score.
+   - **Example:** If `record = [5, -2, -4, 9]` and `i = "+"`, `record.append(5)` results in `record = [5, -2, -4, 9, 5]`.
+
+8. **Sum the `record`:**
+   ```python
+   return sum(record)
+   ```
+   - **Explanation:** Calculate the total score by summing all the values in the `record` list and return it as the final result.
+   - **Example:** If `record = [5, -2, -4, 9, 5, 14]`, `sum(record)` returns `27`.
+
+9. **Return the total score:**
+   - **Explanation:** The final score, which is the sum of all the operations, is returned as the output of the function.
+   - **Example:** For `operations = ["5", "-2", "4", "C", "D", "9", "+", "+"]`, the function returns `27`.
+
+10. **Example Walkthrough:**
+    - **Input:** `operations = ["5", "-2", "4", "C", "D", "9", "+", "+"]`
+    - **Steps:**
+      - `"5"` → `record = [5]`
+      - `"-2"` → `record = [5, -2]`
+      - `"4"` → `record = [5, -2, 4]`
+      - `"C"` → `record = [5, -2]` (removes `4`)
+      - `"D"` → `record = [5, -2, -4]` (doubles `-2`)
+      - `"9"` → `record = [5, -2, -4, 9]`
+      - `"+"` → `record = [5, -2, -4, 9, 5]` (adds `5` which is `-4 + 9`)
+      - `"+"` → `record = [5, -2, -4, 9, 5, 14]` (adds `14` which is `9 + 5`)
+    - **Final Sum:** `5 + (-2) + (-4) + 9 + 5 + 14 = 27`
+    - **Output:** `27`

@@ -43,7 +43,7 @@ For `nums = [0, 1, 2, 4, 5, 7]`:
    - `start` is `0`.
    - Inner loop extends `i` to `2`.
    - Append `"0->2"` to `ans`.
-
+ 
 2. **Range `[4, 5]`:**
    - `start` is `4`.
    - Inner loop extends `i` to `5`.

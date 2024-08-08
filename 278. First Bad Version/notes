@@ -1,0 +1,55 @@
+
+
+1. **Purpose:** The function finds the first bad version in a sequence of versions, where all versions after the first bad one are also bad.
+
+2. **Binary Search Setup:**
+   - Initialize `left` to 1 (the first version).
+   - Initialize `right` to `n` (the total number of versions).
+
+3. **Binary Search Loop:**
+   - Continue the loop while `left < right`.
+   - Calculate the midpoint `mid` as `(left + right) // 2`.
+
+4. **Check Midpoint:**
+   - If `isBadVersion(mid)` is `True`, it means that the first bad version is at `mid` or before it. So, set `right = mid`.
+   - If `isBadVersion(mid)` is `False`, it means the first bad version is after `mid`. So, set `left = mid + 1`.
+
+5. **Termination:**
+   - The loop exits when `left` equals `right`, which will point to the first bad version.
+   - Return `left`, which represents the index of the first bad version.
+
+6. **Time Complexity:** The algorithm runs in O(log n) time, which is efficient even for large `n`.
+
+7. **Edge Cases:**
+   - If `n` is 1, the function will correctly handle it.
+   - If the first version is bad, the function will return 1.
+   - If no bad version exists, the problem's constraints guarantee that this won't happen, so we don't need to handle it.
+
+### Example:
+
+**Scenario:**
+Suppose you have 5 versions, and the first bad version is version 4.
+
+- Versions: `[1, 2, 3, 4, 5]`
+- `isBadVersion(4)` returns `True`.
+- `isBadVersion(3)` returns `False`.
+
+**Steps:**
+
+1. **Initial Setup:**
+   - `left = 1`, `right = 5`
+
+2. **First Iteration:**
+   - `mid = (1 + 5) // 2 = 3`
+   - Check `isBadVersion(3)` → `False`
+   - Set `left = 3 + 1 = 4`
+
+3. **Second Iteration:**
+   - `mid = (4 + 5) // 2 = 4`
+   - Check `isBadVersion(4)` → `True`
+   - Set `right = 4`
+
+4. **Termination:**
+   - Now, `left = right = 4`
+   - The loop exits, and the function returns `4`, which is the index of the first bad version.
+

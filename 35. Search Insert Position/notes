@@ -1,0 +1,25 @@
+
+
+1. **Purpose:** Finds the index at which `target` should be inserted in `nums` to maintain sorted order, or returns the index if the `target` is found.
+
+2. **Initialization:** Set `first` to 0 and `last` to the last index of the list.
+
+3. **Loop Condition:** Continue while `first <= last`.
+
+4. **Mid Calculation:** Compute `mid` as `(first + last) // 2`.
+
+5. **Target Comparison:**
+   - If `target == nums[mid]`, return `mid` (target is found).
+   - If `target < nums[mid]`, adjust `last` to `mid - 1` (search in the left half).
+   - If `target > nums[mid]`, adjust `first` to `mid + 1` (search in the right half).
+
+6. **Exit Condition:** If the loop exits without finding the target, `first` will be the correct insertion index.
+
+7. **Return Value:** Return `first`, which is the position where `target` should be inserted.
+
+8. **Time Complexity:** The algorithm runs in O(log n) time.
+
+9. **Edge Cases:** Handles cases where the target is smaller than the smallest element or larger than the largest element.
+
+10. **Efficiency:** Efficient for large sorted lists, with logarithmic time complexity.
+
