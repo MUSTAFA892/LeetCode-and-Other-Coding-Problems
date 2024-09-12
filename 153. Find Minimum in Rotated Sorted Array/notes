@@ -1,0 +1,37 @@
+
+
+### 1. **Problem**:
+   The problem is to find the minimum element in a rotated sorted array. The array was initially sorted in increasing order and then rotated at an unknown pivot.
+
+### 2. **Approach**:
+   - **Binary Search**: The solution uses a binary search approach to find the minimum in the rotated sorted array efficiently.
+
+### 3. **Initial Setup**:
+   - `left` pointer starts at index 0.
+   - `right` pointer starts at the last index of the array (`len(nums) - 1`).
+
+### 4. **Binary Search Condition**:
+   The loop runs while `left` is less than `right`, ensuring that the search space remains valid.
+
+### 5. **Finding Midpoint**:
+   - `mid` is calculated as the midpoint between `left` and `right` using integer division: `mid = (left + right) // 2`.
+
+### 6. **Comparison with Right**:
+   - If `nums[mid] > nums[right]`, it indicates that the minimum element is to the right of `mid`, so `left` is updated to `mid + 1`.
+   - Otherwise, the minimum is on the left side or could be `mid` itself, so `right` is updated to `mid`.
+
+### 7. **Termination**:
+   - The loop continues until `left == right`. At this point, `left` (or `right`, since they are equal) will point to the minimum element in the array.
+
+### 8. **Return Value**:
+   The function returns `nums[right]`, which is the minimum value in the rotated sorted array.
+
+### 9. **Time Complexity**:
+   - The time complexity is **O(log n)** due to the binary search approach.
+
+### 10. **Space Complexity**:
+   - The space complexity is **O(1)**, as the algorithm uses only a constant amount of additional space for pointers and variables.
+
+---
+
+The code avoids a direct `min(nums)` call, which would have an O(n) complexity, and instead uses binary search to optimize for O(log n), making it more efficient for large inputs.

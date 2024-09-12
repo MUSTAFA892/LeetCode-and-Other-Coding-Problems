@@ -1,0 +1,75 @@
+Here's a detailed explanation of how the `searchMatrix` function works:
+
+### 1. **Problem Statement**:
+   - The `searchMatrix` function searches for a target value in a 2D matrix. The matrix is sorted in a way where each row is sorted in ascending order, and the first integer of each row is greater than the last integer of the previous row.
+
+### 2. **Matrix Dimensions**:
+   - The function first calculates the number of rows `m` and the number of columns `n` in the matrix:
+     ```python
+     m, n = len(matrix), len(matrix[0])
+     ```
+   - This information is used to navigate the matrix during the search.
+
+### 3. **Total Elements**:
+   - The total number of elements in the matrix is calculated as `m * n`. This helps to treat the matrix as a 1D array conceptually:
+     ```python
+     total = m * n
+     ```
+
+### 4. **Binary Search Initialization**:
+   - `left` and `right` pointers are initialized to the start and end of the 1D array, respectively:
+     ```python
+     left, right = 0, total - 1
+     ```
+   - The `left` pointer starts at the first element, and the `right` pointer starts at the last element.
+
+### 5. **Binary Search Loop**:
+   - The function performs a binary search, which repeatedly divides the search space in half until the target is found or the search space is exhausted:
+     ```python
+     while left <= right:
+     ```
+
+### 6. **Midpoint Calculation**:
+   - The middle index `mid` is calculated by averaging `left` and `right`:
+     ```python
+     mid = (left + right) // 2
+     ```
+   - The 1D index `mid` is then mapped back to the 2D matrix using the following calculations:
+     ```python
+     i = mid // n  # Row index
+     j = mid % n   # Column index
+     ```
+   - This allows us to access the middle element of the current search space.
+
+### 7. **Comparison with Target**:
+   - The value at the midpoint, `mid_element`, is extracted:
+     ```python
+     mid_element = matrix[i][j]
+     ```
+   - The target is then compared with `mid_element`:
+     - If the target equals `mid_element`, the function returns `True`, indicating that the target has been found.
+     - If the target is less than `mid_element`, the search space is reduced to the left half:
+       ```python
+       right = mid - 1
+       ```
+     - If the target is greater than `mid_element`, the search space is reduced to the right half:
+       ```python
+       left = mid + 1
+       ```
+
+### 8. **Return Statement**:
+   - If the loop completes without finding the target, the function returns `False`, indicating that the target is not present in the matrix:
+     ```python
+     return False
+     ```
+
+### 9. **Efficiency**:
+   - **Time Complexity**: The time complexity is O(log(m * n)) because binary search is used, which efficiently narrows down the search space.
+   - **Space Complexity**: The space complexity is O(1) since the search is done in place without requiring additional storage.
+
+### 10. **Handling Edge Cases**:
+   - The function handles edge cases such as:
+     - An empty matrix.
+     - The target being smaller than the smallest element or larger than the largest element in the matrix.
+
+This explanation covers how the function works, leveraging binary search to efficiently find the target in a 2D matrix by treating it as a 1D array.
