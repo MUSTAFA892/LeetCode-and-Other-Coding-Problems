@@ -1,0 +1,40 @@
+
+
+1. **Class Definition**: The class `Solution` is defined, following the structure commonly used in coding problems like LeetCode.
+
+2. **Method Definition**: Inside the class, the method `twoSum` is defined, which takes two arguments:
+   - `numbers`: A list of integers (`List[int]`), assumed to be sorted in non-decreasing order.
+   - `target`: The target integer that the sum of two numbers should equal.
+
+3. **Two-pointer Approach**: Two pointers are initialized:
+   - `left` starts at the beginning of the list (`0`).
+   - `right` starts at the end of the list (`len(numbers) - 1`).
+
+4. **While Loop Condition**: The loop continues as long as `left < right`. This ensures that the pointers move inward toward each other without overlapping.
+
+5. **Sum Calculation**: Inside the loop, the sum of the elements at the `left` and `right` pointers is stored in the variable `total`:
+   ```python
+   total = numbers[left] + numbers[right]
+   ```
+
+6. **Target Check**:
+   - If `total == target`, the indices of the two elements are returned as `left+1` and `right+1` (1-based indexing as required in certain coding problems).
+   - `left+1` and `right+1` adjust the 0-based indices to 1-based indexing.
+
+7. **Break Condition**: Once the target is found and the values are returned, the loop breaks, though the `break` statement is unnecessary after `return`.
+
+8. **Move Right Pointer**: If the sum `total` is greater than the `target`, it means the current pair of numbers are too large. The `right` pointer is decremented (`right -= 1`) to reduce the sum:
+   ```python
+   elif total > target:
+       right -= 1
+   ```
+
+9. **Move Left Pointer**: If the sum `total` is less than the `target`, it means the current pair of numbers are too small. The `left` pointer is incremented (`left += 1`) to increase the sum:
+   ```python
+   else:
+       left += 1
+   ```
+
+10. **Efficiency**: The method uses a two-pointer approach, which takes advantage of the sorted nature of the list. This results in an efficient \(O(n)\) time complexity, as the list is traversed only once from both ends.
+
+This implementation efficiently solves the two-sum problem using a two-pointer approach on a sorted list, providing a clean and fast solution.

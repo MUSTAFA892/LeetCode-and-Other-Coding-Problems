@@ -1,0 +1,22 @@
+
+1. **Class Definition**: The method is part of a class named `Solution`, which is a common pattern in competitive programming and coding challenges.
+
+2. **Method Signature**: The method `isPalindrome` takes a single argument, `s`, which is expected to be a string.
+
+3. **Cleaning the String**: The line `cleaned = ''.join(char.lower() for char in s if char.isalnum())` utilizes a generator expression to iterate over each character in the string `s`.
+
+4. **Lowercasing Characters**: Each character is converted to lowercase using the `lower()` method, ensuring that the comparison is case insensitive.
+
+5. **Filtering Non-Alphanumeric Characters**: The condition `if char.isalnum()` checks whether each character is alphanumeric (letters or digits). This effectively removes spaces, punctuation, and special characters.
+
+6. **Joining Cleaned Characters**: The cleaned characters are combined into a single string using `''.join()`, which concatenates them without any separators.
+
+7. **Palindrome Check**: The return statement `return cleaned == cleaned[::-1]` compares the cleaned string to its reverse (obtained by slicing with `[::-1]`).
+
+8. **Efficiency**: The method performs the cleaning and palindrome check in a single pass through the string, making it efficient in terms of time complexity (O(n), where n is the length of the string).
+
+9. **Simplicity and Readability**: The use of list comprehension and straightforward logic makes the code easy to read and understand, which is essential in collaborative coding environments.
+
+10. **Use Cases**: This method can handle a wide variety of input strings, including those with mixed cases, spaces, punctuation, and special characters, making it versatile for checking valid palindromes in natural language.
+
+This implementation effectively addresses the problem of identifying palindromes in a user-friendly manner.

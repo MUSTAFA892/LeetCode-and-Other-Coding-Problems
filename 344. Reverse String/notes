@@ -1,0 +1,34 @@
+
+
+1. **Class Definition**: The class `Solution` is defined, following a common structure used in coding challenges (e.g., LeetCode).
+
+2. **Method Definition**: Inside the class, the method `reverseString` is defined. It takes `s`, a list of characters (`List[str]`), as input.
+
+3. **In-place Modification**: The method modifies the list `s` in-place, meaning it doesn't return a new list but alters the original list directly.
+
+4. **Two-pointer Approach**: Two pointers, `left` and `right`, are initialized. 
+   - `left` starts at the beginning of the list (`0`).
+   - `right` starts at the end of the list (`len(s) - 1`).
+
+5. **While Loop Condition**: The loop continues as long as `left < right`, meaning the two pointers move inward toward the center of the list, swapping elements along the way.
+
+6. **Swapping Elements**: Inside the loop, the elements at positions `left` and `right` are swapped using the Python tuple swap: 
+   ```python
+   s[left], s[right] = s[right], s[left]
+   ```
+
+7. **Increment and Decrement**: After each swap:
+   - `left` is incremented by 1 (`left += 1`), moving the pointer inward from the left.
+   - `right` is decremented by 1 (`right -= 1`), moving the pointer inward from the right.
+
+8. **List Fully Reversed**: When the loop completes, the list `s` is fully reversed in-place.
+
+9. **Alternative Approach**: The comment section of the code mentions an alternative one-liner using Python’s built-in `reverse()` method:
+   ```python
+   s.reverse()
+   ```
+   This method also reverses the list in-place.
+
+10. **Return Value**: In both cases (two-pointer method and `s.reverse()`), the function doesn't return anything (`None`). The list `s` is modified in place, as per the problem requirement.
+
+This implementation provides an efficient way to reverse a list of characters either manually (using two pointers) or with Python's built-in list method.

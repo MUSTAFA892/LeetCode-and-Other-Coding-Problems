@@ -1,0 +1,20 @@
+
+1. **Method Definition**: The method `sortedSquares` is defined within the `Solution` class, taking `nums` (a list of integers) as input.
+
+2. **Empty List `st`**: An empty list `st` is initialized to store the squared values of elements in `nums`.
+
+3. **For Loop Start**: The `for` loop iterates over each element `i` in the `nums` list.
+
+4. **Square Calculation**: Inside the loop, the square of the current element `i` is computed using `i**2`.
+
+5. **Appending Squared Values**: The squared result is appended to the list `st` using `st.append(i**2)`.
+
+6. **Loop Repeats**: This process continues for each element in `nums`, effectively building a list of squared values.
+
+7. **Sorting**: After the loop finishes, the `sorted()` function is called to sort the list `st`, which contains the squared values.
+
+8. **Return Statement**: The sorted list of squared values is returned as the final result.
+
+9. **Sorted Function**: The `sorted()` function sorts in ascending order by default, ensuring the squares are arranged from smallest to largest.
+
+10. **Return Value**: The method ultimately returns the sorted squared list, providing the desired output.
