@@ -1,0 +1,60 @@
+
+
+### Workflow:
+
+1. **Sorting the List**:
+   - The first thing the function does is sort the input list `nums`. This helps in efficiently finding the triplets using the two-pointer technique.
+   
+   Example: If `nums = [-1, 0, 1, 2, -1, -4]`, the sorted version will be `[-4, -1, -1, 0, 1, 2]`.
+
+2. **Iterating Through the List**:
+   - A `for` loop is used to iterate over each element in the sorted list. The index of the current element is `i`, and this element will act as the first number in the triplet.
+   
+   - If `nums[i] > 0`, the loop breaks because we can't form a triplet that sums to zero with positive numbers (since the list is sorted, everything after `i` would also be positive).
+   
+   - The condition `i > 0 and nums[i] == nums[i-1]` is used to skip duplicate elements, ensuring no duplicate triplets are included in the result.
+
+3. **Two-Pointer Approach**:
+   - After selecting the element `nums[i]`, the two-pointer approach is applied to find the other two numbers.
+   - The left pointer `lo` starts just after `i` (`i+1`), and the right pointer `hi` starts at the end of the list (`n-1`).
+   - The sum of the current triplet (`nums[i] + nums[lo] + nums[hi]`) is calculated. Based on whether the sum is less than, equal to, or greater than zero:
+     - If the sum is 0, we add the triplet to the result.
+     - If the sum is less than 0, the left pointer `lo` is moved to the right (i.e., `lo += 1`) to increase the sum.
+     - If the sum is greater than 0, the right pointer `hi` is moved to the left (i.e., `hi -= 1`) to decrease the sum.
+   - After finding a valid triplet, the left and right pointers are adjusted to skip over any duplicates.
+
+4. **Returning the Result**:
+   - Once the loop finishes, the list `answer` contains all the unique triplets that sum to zero.
+
+### Example:
+
+Let's take `nums = [-1, 0, 1, 2, -1, -4]` to explain step by step:
+
+1. **Sort the List**:
+   - Sorted `nums`: `[-4, -1, -1, 0, 1, 2]`
+
+2. **Iterate through the list**:
+   - **First Iteration (i = 0, nums[i] = -4)**:
+     - The two pointers are `lo = 1 (nums[lo] = -1)` and `hi = 5 (nums[hi] = 2)`.
+     - Sum = `-4 + (-1) + 2 = -3`. Since the sum is less than zero, move `lo` to the right.
+     - `lo = 2 (nums[lo] = -1)` and `hi = 5 (nums[hi] = 2)`. Sum = `-4 + (-1) + 2 = -3`. Move `lo` to the right again.
+     - Now, `lo = 3 (nums[lo] = 0)` and `hi = 5`. Sum = `-4 + 0 + 2 = -2`. Move `lo` to the right.
+     - Continue this process but no triplet sums to zero.
+
+   - **Second Iteration (i = 1, nums[i] = -1)**:
+     - Now, `lo = 2 (nums[lo] = -1)` and `hi = 5 (nums[hi] = 2)`.
+     - Sum = `-1 + (-1) + 2 = 0`. This is a valid triplet, so add `[-1, -1, 2]` to `answer`.
+     - Move both `lo` and `hi` to skip duplicates.
+     - Now, `lo = 3 (nums[lo] = 0)` and `hi = 4 (nums[hi] = 1)`. Sum = `-1 + 0 + 1 = 0`. This is another valid triplet, so add `[-1, 0, 1]` to `answer`.
+     - Continue this process but no more triplets are found in this iteration.
+
+   - **Subsequent Iterations**:
+     - For `i = 2`, `nums[i]` is `-1`, which is the same as the previous element, so it is skipped.
+     - For `i = 3`, `nums[i] = 0`, but no more valid triplets are found.
+
+3. **Final Result**:
+   - The unique triplets that sum to zero are `answer = [[-1, -1, 2], [-1, 0, 1]]`.
+
+### Final Notes:
+- Sorting helps reduce the problem complexity and enables the use of the two-pointer technique.
+- The two-pointer technique allows us to find pairs of numbers that, when added to `nums[i]`, sum to zero efficiently.

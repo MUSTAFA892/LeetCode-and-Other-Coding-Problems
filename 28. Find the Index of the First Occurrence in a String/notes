@@ -1,0 +1,51 @@
+
+### Explanation Points:
+
+1. **Function Purpose**:
+   - The function `strStr` aims to find the first occurrence of the substring `needle` within the string `haystack`.
+   - If the substring `needle` is found, it returns the starting index of the first occurrence in `haystack`.
+   - If `needle` is not found, it returns `-1`.
+
+2. **Iterate Over `haystack`**:
+   ```python
+   for i in range(len(haystack)):
+   ```
+   - A `for` loop is used to iterate over each index `i` in `haystack` from `0` to `len(haystack) - 1`.
+   - This loop will check for a match starting at every possible index in `haystack`.
+
+3. **Slice and Compare Substrings**:
+   ```python
+   if haystack[i:i+(len(needle))] == needle:
+   ```
+   - For each index `i`, the code extracts a substring of length equal to `needle` starting at `i` in `haystack` using `haystack[i:i+len(needle)]`.
+   - This substring is compared with `needle`. If they are equal, it means the `needle` is found starting at index `i`.
+   
+   Example:
+   - `haystack = "hello", needle = "ll"`
+     - At `i = 2`, `haystack[2:4]` results in `"ll"`, which matches `needle`.
+     - The function returns `2` as the index of the first occurrence.
+
+4. **Return the Starting Index**:
+   ```python
+   return i
+   ```
+   - If a match is found, the function immediately returns `i`, which is the index where the first occurrence of `needle` starts in `haystack`.
+
+5. **Handle Case When `needle` is Not Found**:
+   ```python
+   return -1
+   ```
+   - If the loop finishes without finding a match, the function returns `-1` to indicate that `needle` is not present in `haystack`.
+
+### Example Scenarios:
+
+1. **Example 1:**
+   - `haystack = "hello", needle = "ll"`
+   - At `i = 2`, `haystack[2:4] = "ll"`, so the function returns `2`.
+
+2. **Example 2:**
+   - `haystack = "abcdef", needle = "gh"`
+   - There is no substring in `haystack` that matches `needle`, so after iterating through the entire string, the function returns `-1`.
+
+3. **Edge Case:**
+   - If `needle` is an empty string (`needle = ""`), according to the problem, the function should return `0`, but the code provided does not handle this explicitly, so this could be an improvement to consider.

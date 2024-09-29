@@ -1,0 +1,64 @@
+
+
+1. **Loop through the list backwards**:
+   ```python
+   for i in range(len(digits) - 1, -1, -1):
+   ```
+   - This loop starts from the last index of `digits` (which is `len(digits) - 1`) and goes backward to `0`.
+   - The `-1` indicates that we’re decrementing the index `i` in each iteration.
+
+2. **Check if the current digit is less than 9**:
+   ```python
+   if digits[i] < 9:
+   ```
+   - If the digit at index `i` is less than `9`, we can simply add `1` to it without worrying about carry-over.
+
+3. **Increment the current digit**:
+   ```python
+   digits[i] += 1
+   return digits
+   ```
+   - If the digit is less than `9`, we increment it by `1` and return the modified list. This also ends the function's execution.
+
+4. **Handle the carry-over**:
+   ```python
+   else:
+       digits[i] = 0
+   ```
+   - If the digit is `9`, we set it to `0`, since adding `1` would carry over to the next left digit.
+
+5. **Final Step for All 9's**:
+   ```python
+   return [1] + digits
+   ```
+   - If the loop completes without returning (which means all digits were `9`), we return a new list that starts with `1` followed by all zeros (e.g., from `[9, 9, 9]` to `[1, 0, 0, 0]`).
+
+### Example Walkthrough: Input `[1, 2, 3, 9]`
+Let’s see how the function works with this input:
+
+1. **Initial State**:
+   - Input: `digits = [1, 2, 3, 9]`
+
+2. **Iteration 1 (i = 3)**:
+   - **Current Digit**: `digits[3] = 9`
+   - Check if `9 < 9`: **False**.
+   - Since it’s `9`, set `digits[3]` to `0`.
+   - List now becomes: `[1, 2, 3, 0]`.
+
+3. **Iteration 2 (i = 2)**:
+   - **Current Digit**: `digits[2] = 3`
+   - Check if `3 < 9`: **True**.
+   - Increment `digits[2]` by `1`.
+   - List now becomes: `[1, 2, 4, 0]`.
+   - Return this modified list.
+
+### Output:
+- The function outputs `[1, 2, 4, 0]`, which represents the number 1240.
+
+### Summary of Workflow:
+- The function processes the list of digits from right to left.
+- It checks each digit:
+  - If less than `9`, it increments and returns.
+  - If `9`, it turns it into `0` and moves left.
+- If all digits are `9`, it constructs the new list `[1, 0, 0, 0]` after the loop completes.
+

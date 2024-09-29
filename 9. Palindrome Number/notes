@@ -1,0 +1,34 @@
+
+
+1. **Convert the integer to a string**:
+   ```python
+   a = str(x)
+   ```
+   - This converts the input integer `x` into its string representation `a`.
+   - For example, if `x = 121`, `a` will be `"121"`.
+   - This step is necessary because checking for a palindrome can be easily done with string manipulation.
+
+2. **Check if the string is equal to its reverse**:
+   ```python
+   return str(x) == a[::-1]
+   ```
+   - `a[::-1]` is a Pythonic way to reverse a string. The slicing operation `[::-1]` takes all the characters of `a` and reverses their order.
+   - The function then compares the original string `str(x)` with its reversed version.
+   - If they are the same, it means the integer is a palindrome, and the function returns `True`.
+   - Otherwise, it returns `False`.
+
+### Example 1: 
+- Input: `x = 121`
+  - `a = "121"`, and `a[::-1]` is also `"121"`.
+  - Since both are equal, the function returns `True`.
+
+### Example 2:
+- Input: `x = -121`
+  - `a = "-121"`, and `a[::-1]` is `"121-"`.
+  - Since `"-121"` is not equal to `"121-"`, the function returns `False`.
+
+### Example 3:
+- Input: `x = 10`
+  - `a = "10"`, and `a[::-1]` is `"01"`.
+  - Since `"10"` is not equal to `"01"`, the function returns `False`.
+

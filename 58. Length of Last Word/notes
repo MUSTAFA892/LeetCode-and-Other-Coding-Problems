@@ -1,0 +1,63 @@
+
+### Explanation:
+
+1. **Splitting the String into Words**:
+   ```python
+   word_splitting = s.split()
+   ```
+   - The `split()` function splits the string `s` into a list of words based on spaces. It automatically handles multiple spaces between words and trims any leading or trailing whitespace.
+   - For example:
+     - If `s = "Hello World"`, then `word_splitting` becomes `["Hello", "World"]`.
+     - If `s = "   fly me   to   the moon  "`, then `word_splitting` becomes `["fly", "me", "to", "the", "moon"]`.
+
+2. **Access the Last Word**:
+   ```python
+   word_splitting[-1]
+   ```
+   - After splitting the string into words, `word_splitting[-1]` retrieves the last word in the list.
+   - In the above examples:
+     - For `s = "Hello World"`, `word_splitting[-1]` is `"World"`.
+     - For `s = "   fly me   to   the moon  "`, `word_splitting[-1]` is `"moon"`.
+
+3. **Return the Length of the Last Word**:
+   ```python
+   return len(word_splitting[-1])
+   ```
+   - The `len()` function is used to calculate the length of the last word.
+   - In the above examples:
+     - For `s = "Hello World"`, `len("World")` is `5`, so the function returns `5`.
+     - For `s = "   fly me   to   the moon  "`, `len("moon")` is `4`, so the function returns `4`.
+
+4. **Handling Edge Cases**:
+   - If the input string contains only spaces (e.g., `"     "`), `split()` would return an empty list, and `word_splitting[-1]` would raise an `IndexError`. To handle this, you could add a check for an empty list:
+   ```python
+   if not word_splitting:
+       return 0
+   ```
+
+### Example 1:
+```python
+s = "Hello World"
+# Split: ["Hello", "World"]
+# Last word: "World"
+# Length of "World": 5
+```
+Output: `5`
+
+### Example 2:
+```python
+s = "   fly me   to   the moon  "
+# Split: ["fly", "me", "to", "the", "moon"]
+# Last word: "moon"
+# Length of "moon": 4
+```
+Output: `4`
+
+### Example 3 (Edge Case):
+```python
+s = "     "
+# Split: []
+# Since there's no word, handle this with a check and return 0.
+```
+Output: `0`
+
