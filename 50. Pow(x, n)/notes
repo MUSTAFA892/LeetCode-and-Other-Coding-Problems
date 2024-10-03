@@ -1,0 +1,19 @@
+
+
+### Breakdown:
+1. **Function signature**:
+   - `x: float`: The base, a floating-point number.
+   - `n: int`: The exponent, an integer.
+   - The function returns the result of `x` raised to the power `n` (`x^n`).
+
+2. **Core logic**:
+   - `x**n`: In Python, the `**` operator computes the exponentiation of a number. Here, `x` is raised to the power `n`. This handles positive, negative, and zero values for `n`.
+     - If `n` is positive, it multiplies `x` by itself `n` times.
+     - If `n` is zero, any number raised to `0` results in `1` (except when `x` is `0`, where it results in `0`).
+     - If `n` is negative, it returns the reciprocal of `x` raised to the absolute value of `n` (i.e., `1 / (x ** abs(n))`).
+
+### Example Usage:
+- `myPow(2, 3)` will return `2 ** 3 = 8`.
+- `myPow(2, -2)` will return `1 / (2 ** 2) = 0.25`.
+- `myPow(2, 0)` will return `1`.
+

@@ -1,0 +1,10 @@
+
+### Explanation:
+1. **Length Check**: 
+   - The first condition checks if the lengths of the two strings are equal. If not, they cannot be anagrams, so it returns `False`.
+
+2. **Sorting the Strings**: 
+   - The strings `s` and `t` are sorted. If they are anagrams, sorting them will result in the same order of characters. For example, sorting `"listen"` and `"silent"` will give the same result: `['e', 'i', 'l', 'n', 's', 't']`.
+
+3. **Comparison**:
+   - The sorted versions of the strings are compared. If they are the same, the function returns `True`, indicating that the strings are anagrams. If they are different, it returns `False`.

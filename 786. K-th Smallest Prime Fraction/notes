@@ -1,0 +1,47 @@
+
+
+1. **Class and Function Definition**:
+   - You define a class `Solution` with a method `kthSmallestPrimeFraction` that takes two arguments: a sorted list `arr` of prime numbers (with `1` as its first element) and an integer `k` representing which smallest fraction you need to return.
+
+2. **Initializing the List**:
+   - `ans = []` initializes an empty list called `ans` which will store the fractions in the form of tuples `(fraction_value, numerator, denominator)`.
+
+3. **First `for` Loop**:
+   - The outer loop `for i in range(len(arr))` iterates over the array `arr`. The index `i` points to the numerator `arr[i]` for the fraction to be generated.
+
+4. **Second `for` Loop**:
+   - The inner loop `for j in range(i + 1, len(arr))` ensures that the denominator `arr[j]` is always greater than the numerator `arr[i]` by starting `j` from `i + 1`. This prevents generating improper or duplicate fractions like `arr[i] / arr[i]` or repeating combinations.
+
+5. **Appending Fractions**:
+   - Inside the nested loop, the expression `arr[i] / arr[j]` computes the value of the fraction formed by the elements at index `i` and `j`. 
+   - The tuple `(fraction_value, numerator, denominator)` is appended to the list `ans`, where `fraction_value` is the actual computed fraction.
+
+6. **Storing Tuples**:
+   - The tuples stored in `ans` consist of three parts: the fraction value, the numerator `arr[i]`, and the denominator `arr[j]`. 
+   - Example: If `arr = [1, 2, 3, 5]`, one tuple could be `(1/5, 1, 5)`.
+
+7. **Sorting the List**:
+   - After both loops complete, `ans` contains all possible fractions formed by `arr[i] / arr[j]` where `i < j`.
+   - `ans.sort()` sorts the list of tuples based on the fraction value (the first element in each tuple). Python’s default sorting will order the tuples by their first element, which is the fraction value.
+
+8. **Accessing the k-th Smallest Fraction**:
+   - Since `ans` is sorted in increasing order of fraction values, the `k-th` smallest fraction will be at index `k - 1` (because Python uses zero-based indexing).
+   - You access this fraction using `ans[k-1]`.
+
+9. **Returning the Result**:
+   - The method returns a list containing the numerator and denominator of the `k-th` smallest fraction: `[ans[k-1][1], ans[k-1][2]]`. This extracts the second and third elements (the numerator and denominator) from the tuple at `ans[k-1]`.
+
+10. **Final Output**:
+    - The output will be a list `[numerator, denominator]` of the k-th smallest fraction. For example, if `arr = [1, 2, 3, 5]` and `k = 3`, the third smallest fraction is `2/5`, so the output will be `[2, 5]`.
+
+---
+
+### Example Walkthrough:
+
+For `arr = [1, 2, 3, 5]` and `k = 3`:
+
+- The fractions generated are: `1/5, 1/3, 2/5, 1/2, 3/5, 2/3`.
+- After sorting, these fractions are in this order: `1/5, 1/3, 2/5, 1/2, 3/5, 2/3`.
+- The third smallest fraction is `2/5`, so the output will be `[2, 5]`.
+
+This approach generates all possible fractions, sorts them, and returns the desired fraction in terms of the numerator and denominator.

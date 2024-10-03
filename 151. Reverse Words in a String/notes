@@ -1,0 +1,34 @@
+
+
+1. **Input**: The function takes a string `s` as input, which contains words separated by spaces.
+
+2. **Task**: The goal of the function is to reverse the order of the words in the string while preserving each word's characters.
+
+3. **Step 1 – Splitting the string**: 
+   - `a = s.split()` splits the input string `s` into a list `a` of words based on spaces. The `split()` function breaks the string wherever there is whitespace.
+
+4. **Step 2 – Initializing final string**: 
+   - `final = " "` initializes an empty string with a single space, where the reversed words will be stored.
+
+5. **Step 3 – Looping through words in reverse**: 
+   - The loop `for i in range(len(a) - 1, -1, -1):` iterates through the list `a` from the last word to the first. The `range()` function is used to create a decreasing sequence of indices.
+
+6. **Step 4 – Concatenating words**:
+   - Inside the loop, `final += a[i] + " "` appends each word from the list `a` to the `final` string, followed by a space.
+
+7. **Step 5 – Stripping trailing space**: 
+   - `final.strip()` removes any leading or trailing whitespace from the `final` string. This is necessary because an extra space is added after the last word during the loop.
+
+8. **Return value**: The function returns the `final` string, which contains the reversed words.
+
+9. **Efficiency**: The function splits the string once, iterates over the words, and then concatenates them in reverse order, making it a relatively efficient solution for this problem.
+
+10. **Example**: 
+   - Input: `"Hello world"`
+   - Step-by-step: 
+     - After splitting: `a = ['Hello', 'world']`
+     - After reversing: `final = " world Hello "`
+     - After stripping: `final = "world Hello"`
+   - Output: `"world Hello"`
+
+This approach successfully reverses the words in the input string!
