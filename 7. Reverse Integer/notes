@@ -1,0 +1,41 @@
+
+
+1. **Class Definition (`Solution`)**:
+   - The function is part of the `Solution` class, which is a typical format for coding challenges (e.g., on LeetCode).
+
+2. **Function Signature (`reverse(self, x: int) -> int`)**:
+   - The function takes an integer `x` as input and returns an integer.
+   - It specifies that the return type is an integer using type hints (`-> int`).
+
+3. **Initialization (`res = 0`)**:
+   - The variable `res` is initialized to `0`. This variable will store the reversed integer.
+
+4. **Negative Number Handling**:
+   - If `x` is negative, the condition `if x < 0:` is triggered.
+   - The absolute value of the number is taken using `str(x)[1:]` (removing the negative sign).
+   - The number is reversed using string slicing `[::-1]`.
+   - The result is multiplied by `-1` to restore the negative sign.
+
+5. **Positive Number Handling**:
+   - If `x` is positive, the `else` block is executed.
+   - The number is reversed directly using `str(x)[::-1]` and converted back to an integer.
+
+6. **Overflow Check**:
+   - After reversing the number, the code checks if the result exceeds the 32-bit signed integer range.
+   - The range is from `-2^31` to `2^31 - 1` (i.e., from `-2147483648` to `2147483647`).
+   - If the reversed number is outside this range, the function returns `0` to prevent overflow.
+
+7. **Final Return Statement**:
+   - If the reversed number is within the valid range, it is returned as the output.
+
+8. **Use of String Manipulation**:
+   - The number is converted to a string for reversing, which is a simple and effective approach for this problem.
+   - Python handles string slicing easily, making the reverse operation straightforward.
+
+9. **Edge Case Handling**:
+   - The function correctly handles both positive and negative numbers.
+   - It also addresses the case where the reversed integer would exceed the 32-bit integer limits.
+
+10. **Time Complexity**:
+   - The time complexity is `O(n)`, where `n` is the number of digits in `x`. This is because converting a number to a string and reversing it takes linear time with respect to the number of digits.
+
