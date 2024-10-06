@@ -1,0 +1,91 @@
+
+
+### Code Breakdown
+
+```python
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        dummy_list = ListNode()      # Step 1: Initialize a dummy node to build the merged list
+        current = dummy_list         # Step 2: Create a pointer 'current' to traverse and build the list
+
+        while list1 and list2:       # Step 3: Traverse both lists until one of them becomes empty
+            if list1.val > list2.val:    # Step 4: Compare the current values of list1 and list2
+                current.next = list2     # Step 5: Add the smaller node to the merged list
+                list2 = list2.next       # Step 6: Move the pointer of list2 ahead
+            else:
+                current.next = list1     # Step 7: Add the smaller or equal node from list1
+                list1 = list1.next       # Step 8: Move the pointer of list1 ahead
+            current = current.next       # Step 9: Move the 'current' pointer ahead in the merged list
+
+        if list1:                    # Step 10: If list1 has remaining elements, append them
+            current.next = list1
+        else:                        # Step 11: If list2 has remaining elements, append them
+            current.next = list2
+
+        return dummy_list.next        # Step 12: Return the merged list, skipping the dummy node
+```
+
+### Example Walkthrough
+
+Consider two linked lists:
+- **list1:** 1 → 3 → 5
+- **list2:** 2 → 4 → 6
+
+#### Step-by-Step Execution
+
+1. **Initialization:**
+   - `dummy_list = ListNode()` creates a new dummy node with value `0` to start the merged list.
+   - `current = dummy_list` initializes a pointer `current` to the dummy node, which will be used to build the final merged list.
+
+2. **First iteration of the `while` loop:**
+   - `list1.val = 1`, `list2.val = 2`.
+   - Since `1 < 2`, the node with value `1` from `list1` is added to the merged list:
+     - `current.next = list1` → the dummy list now looks like: `0 → 1`.
+   - Move the pointer of `list1`: `list1 = list1.next` (now pointing to node `3`).
+   - Move `current` pointer to the next node in the merged list: `current = current.next` (now pointing to node `1`).
+
+3. **Second iteration:**
+   - `list1.val = 3`, `list2.val = 2`.
+   - Since `2 < 3`, the node with value `2` from `list2` is added to the merged list:
+     - `current.next = list2` → the list now looks like: `0 → 1 → 2`.
+   - Move the pointer of `list2`: `list2 = list2.next` (now pointing to node `4`).
+   - Move `current` to node `2`.
+
+4. **Third iteration:**
+   - `list1.val = 3`, `list2.val = 4`.
+   - Since `3 < 4`, the node with value `3` from `list1` is added to the merged list:
+     - `current.next = list1` → the list now looks like: `0 → 1 → 2 → 3`.
+   - Move `list1` to node `5`, move `current` to node `3`.
+
+5. **Fourth iteration:**
+   - `list1.val = 5`, `list2.val = 4`.
+   - Since `4 < 5`, the node with value `4` from `list2` is added to the merged list:
+     - `current.next = list2` → the list now looks like: `0 → 1 → 2 → 3 → 4`.
+   - Move `list2` to node `6`, move `current` to node `4`.
+
+6. **Fifth iteration:**
+   - `list1.val = 5`, `list2.val = 6`.
+   - Since `5 < 6`, the node with value `5` from `list1` is added to the merged list:
+     - `current.next = list1` → the list now looks like: `0 → 1 → 2 → 3 → 4 → 5`.
+   - Move `list1` to `None` (end of list), move `current` to node `5`.
+
+7. **Exit the `while` loop:**
+   - Now `list1` is `None`, and `list2` is still pointing to `6`.
+
+8. **Append remaining nodes:**
+   - Since `list1` is `None`, the remaining node `6` from `list2` is appended to the merged list:
+     - `current.next = list2` → the final list looks like: `0 → 1 → 2 → 3 → 4 → 5 → 6`.
+
+9. **Return the result:**
+   - The merged list starts after the dummy node, so `dummy_list.next` is returned.
+   - The final result is: `1 → 2 → 3 → 4 → 5 → 6`.
+
+### Final Merged List
+The merged list is: **1 → 2 → 3 → 4 → 5 → 6**.
+
+### Key Points:
+- The `dummy_list` is used as a placeholder to simplify the logic of merging the two lists.
+- `current` is used to keep track of where the next smallest element should be added.
+- After the loop, any remaining elements from either list are directly appended to the merged list.
+
+This approach ensures that the merged list remains sorted in ascending order.
