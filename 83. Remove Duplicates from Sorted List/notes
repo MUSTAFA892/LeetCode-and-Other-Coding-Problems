@@ -1,0 +1,78 @@
+
+
+1. **Definition of the ListNode Class**:
+   - Each node in the linked list is an instance of `ListNode`, which has two attributes:
+     - `val`: The value of the node.
+     - `next`: A pointer/reference to the next node in the list.
+
+2. **Initialize `result`**:
+   - A pointer `result` is set to reference the head of the linked list. This will allow returning the modified linked list after duplicates are removed.
+
+3. **While Loop for Traversing the List**:
+   - The loop continues until the end of the list (`head` becomes `None`), and it checks the current node and the next node for duplicates.
+
+4. **Duplicate Detection**:
+   - Inside the loop, if the current node’s value (`head.val`) is equal to the next node’s value (`head.next.val`), a duplicate is found. The `head.next` pointer is updated to skip the duplicate node (`head.next = head.next.next`).
+
+5. **Moving the Pointer**:
+   - If no duplicate is found, the pointer `head` moves to the next node (`head = head.next`) to continue checking the rest of the list.
+
+6. **Return the Modified List**:
+   - After all duplicates are removed, the modified linked list is returned by returning the `result` pointer, which still points to the head of the list.
+
+### Example Workflow:
+
+#### Input:
+```python
+Linked List: 1 -> 1 -> 2 -> 3 -> 3
+```
+
+#### Step-by-Step Process:
+
+1. **Initial Setup**:
+   - `result` points to the head: `1`.
+   - `head` starts at the first node with value `1`.
+
+2. **First Comparison** (`head = 1`):
+   - `head.val == head.next.val`: `1 == 1` (True, duplicate found).
+   - Skip the duplicate by updating the next pointer: `head.next = head.next.next`.
+   - Now the list looks like: `1 -> 2 -> 3 -> 3`.
+   - `head` still points to the first node (`1`).
+
+3. **Move to Next Node**:
+   - No more duplicates at `head.val = 1`, so move `head = head.next`.
+   - `head` now points to the node with value `2`.
+
+4. **Second Comparison** (`head = 2`):
+   - `head.val == head.next.val`: `2 == 3` (False, no duplicate).
+   - Move `head = head.next`.
+   - `head` now points to the node with value `3`.
+
+5. **Third Comparison** (`head = 3`):
+   - `head.val == head.next.val`: `3 == 3` (True, duplicate found).
+   - Skip the duplicate by updating the next pointer: `head.next = head.next.next`.
+   - Now the list looks like: `1 -> 2 -> 3`.
+   - `head` still points to the first `3`.
+
+6. **End of List**:
+   - No more duplicates, move `head = head.next`.
+   - `head` becomes `None` (end of the list), and the loop terminates.
+
+#### Output:
+```python
+Linked List after removing duplicates: 1 -> 2 -> 3
+```
+
+### 10 Key Points of Explanation:
+
+1. **ListNode Definition**: Each node has a value (`val`) and a pointer to the next node (`next`).
+2. **Initial Pointer Setup**: `result` is a pointer that keeps track of the head of the list.
+3. **Traversal**: The list is traversed using the `head` pointer, which moves from node to node.
+4. **Duplicate Detection**: The function checks if the current node’s value is equal to the next node’s value.
+5. **Removing Duplicates**: When duplicates are found, the `next` pointer of the current node is updated to skip the duplicate.
+6. **Skipping Nodes**: When a duplicate is skipped, the list is shortened without affecting the original order.
+7. **Advancing the Pointer**: If no duplicates are found, the `head` pointer moves to the next node.
+8. **Termination**: The loop terminates when `head` becomes `None` (i.e., end of the list).
+9. **Returning the Result**: The function returns `result`, which points to the modified list with duplicates removed.
+10. **Time Complexity**: The time complexity is **O(n)**, where `n` is the number of nodes in the list since the list is traversed once.
+
