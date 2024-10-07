@@ -1,0 +1,69 @@
+
+
+1. **Sorting the Array**:
+   - The input array `nums` is sorted in ascending order using `nums.sort()`. Sorting helps manage duplicates and allows efficient use of two pointers in the inner loop.
+
+2. **Fixing Two Numbers (`i` and `j`)**:
+   - The outer loop (`i` from 0 to n-1) and the second loop (`j` from `i+1` to n-1) fix the first two numbers of the quadruplet. These loops also skip duplicates using `if` conditions (`i > 0 and nums[i] == nums[i-1]` and `j > i+1 and nums[j] == nums[j-1]`) to ensure that duplicate quadruplets are avoided.
+
+3. **Two-Pointer Approach (`lo` and `hi`)**:
+   - After fixing `i` and `j`, the two pointers `lo` and `hi` are used to find the remaining two numbers that sum up to the target. The `lo` pointer starts at `j + 1` and `hi` starts at `n - 1`.
+
+4. **Calculating the Sum**:
+   - The sum of the four numbers `nums[i] + nums[j] + nums[lo] + nums[hi]` is calculated. If the sum equals the target, the quadruplet is added to the result list `ans`.
+
+5. **Avoiding Duplicates**:
+   - After finding a valid quadruplet, the code moves both pointers `lo` and `hi` and skips any duplicate values to avoid including the same quadruplet multiple times.
+
+6. **Adjusting Pointers**:
+   - If the sum is less than the target, the `lo` pointer is incremented to increase the sum. If the sum is greater than the target, the `hi` pointer is decremented to reduce the sum.
+
+7. **Final Result**:
+   - The result list `ans` contains all unique quadruplets that sum up to the target.
+
+8. **Edge Cases**:
+   - The solution handles cases like an empty array, arrays with fewer than four elements, and cases with all duplicates efficiently due to the sorting and duplicate skipping logic.
+
+### Example:
+
+#### Input:
+```python
+nums = [1, 0, -1, 0, -2, 2]
+target = 0
+```
+
+#### Step-by-step breakdown:
+
+1. **Sort the array**: `nums = [-2, -1, 0, 0, 1, 2]`.
+2. **Outer loop (`i`)**:
+   - Fix `nums[i] = -2` (first element of quadruplet).
+3. **Second loop (`j`)**:
+   - Fix `nums[j] = -1` (second element of quadruplet).
+4. **Inner loop (two-pointer approach)**:
+   - `lo = 2` (`nums[lo] = 0`), `hi = 5` (`nums[hi] = 2`).
+   - Sum: `-2 + (-1) + 0 + 2 = -1` (less than target), so increment `lo` to `3`.
+   - New sum: `-2 + (-1) + 0 + 2 = -1` (less than target), so increment `lo` to `4`.
+   - Sum: `-2 + (-1) + 1 + 2 = 0` (equal to target), so append `[-2, -1, 1, 2]` to `ans`.
+5. **Continue**:
+   - Fix `nums[i] = -2`, `nums[j] = 0` (second loop iteration), and use two pointers to find quadruplets.
+   - Continue until all possibilities are checked.
+
+#### Output:
+```python
+ans = [[-2, -1, 1, 2], [-2, 0, 0, 2], [-1, 0, 0, 1]]
+```
+
+### 10 Key Points of Explanation:
+
+1. **Sorting**: Sorting simplifies the two-pointer logic and helps avoid duplicates.
+2. **Outer Loop**: The first loop (`i`) fixes the first number of the quadruplet.
+3. **Second Loop**: The second loop (`j`) fixes the second number, ensuring it’s after `i`.
+4. **Skipping Duplicates**: Both loops skip over duplicates to avoid redundant calculations.
+5. **Two-Pointer Search**: After fixing `i` and `j`, the `lo` and `hi` pointers are used to find two other numbers that, together with `i` and `j`, meet the target sum.
+6. **Sum Calculation**: The sum of the four numbers is compared with the target. Depending on the result, either the pointers are adjusted or a quadruplet is found.
+7. **Adjusting Pointers**: If the sum is less than the target, move `lo` right to increase the sum. If the sum is greater, move `hi` left to decrease the sum.
+8. **Appending Result**: If a valid quadruplet is found, it is added to the result list `ans`.
+9. **Edge Case Handling**: The code handles edge cases such as empty input, insufficient elements, or arrays with only duplicates.
+10. **Final Result**: The function returns a list of unique quadruplets that sum up to the target.
+
+This approach ensures that the problem is solved efficiently with time complexity of **O(n³)** due to the two nested loops and the two-pointer technique in the inner loop.
