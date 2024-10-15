@@ -1,0 +1,52 @@
+
+1. **Class Declaration**:  
+   `class Solution:` defines a class named `Solution`. This is a common practice in competitive programming or coding platforms to encapsulate functions or solutions to problems.
+
+2. **Method Definition**:  
+   `def minimumSteps(self, s: str) -> int:` is a method that takes in a string `s` as an argument, which consists of characters '0' (black) and '1' (white). It returns an integer representing the minimum number of swaps required.
+
+3. **Variable Initialization**:  
+   `swap, white = 0, 0` initializes two variables. `swap` will track the total number of swaps, and `white` keeps track of how many '1's (whites) have been encountered so far in the string.
+
+4. **Loop Through Characters**:  
+   `for i in s:` iterates over each character in the string `s`.
+
+5. **If Character is '0' (Black)**:  
+   When `i == '0'`, it means a black ('0') is encountered.  
+   **Action**: Add the number of whites (`white`) encountered so far to `swap`. This simulates the swapping of the current '0' with the '1's before it.
+
+6. **If Character is '1' (White)**:  
+   When `i == '1'`, it means a white ('1') is encountered.  
+   **Action**: Increment the `white` counter, keeping track of the number of white pieces seen up to this point.
+
+7. **Return the Swap Count**:  
+   `return swap` returns the total number of swaps needed to move all '1's to the left of all '0's.
+
+8. **Key Idea**:  
+   The goal is to minimize swaps by counting how many whites are seen before each black and moving that many whites left.
+
+9. **Efficiency**:  
+   This method runs in O(n) time complexity, where `n` is the length of the string. It scans the string once, updating counters along the way.
+
+10. **Application**:  
+    This solution is useful in problems where you need to group items by minimizing the number of rearrangements or swaps.
+
+---
+
+### Working Examples
+
+#### Example 1:
+```python
+s = "11001"
+```
+- Loop through the string:
+  - First character: '1' → `white = 1`
+  - Second character: '1' → `white = 2`
+  - Third character: '0' → Encounter '0', add `white` to `swap` → `swap = 2`
+  - Fourth character: '0' → Encounter '0', add `white` to `swap` → `swap = 4`
+  - Fifth character: '1' → `white = 3`
+  
+- Final `swap = 4`
+  
+**Output**: `4`
+
