@@ -1,0 +1,180 @@
+
+
+1. **`class Solution:`**
+   - Defines the class `Solution` which contains the method `longestPalindrome`.
+
+2. **`def longestPalindrome(self, s: str) -> str:`**
+   - Defines the function `longestPalindrome` that takes a string `s` as input and returns the longest palindromic substring within it.
+
+3. **`res = ""`**
+   - Initializes `res` as an empty string. This will hold the result—the longest palindromic substring found so far.
+
+4. **`resLen = 0`**
+   - Initializes `resLen` as `0`. This keeps track of the length of the longest palindrome found so far.
+
+5. **`for i in range(len(s)):`**
+   - Loops through each character in the string `s` using its index `i`.
+
+6. **First Expansion: Center at Single Character (`l, r = i, i`)**
+   - **`l, r = i, i`**: Sets `l` (left pointer) and `r` (right pointer) both to `i`, meaning we are treating the current character `s[i]` as the center of a potential odd-length palindrome.
+   - **`while l >= 0 and r < len(s) and s[l] == s[r]:`**
+     - This loop expands outwards as long as the characters at `l` and `r` are the same (checking for palindrome).
+     - The loop ensures that the expansion stays within the bounds of the string (`l >= 0` and `r < len(s)`).
+   - **`if (r - l + 1) > resLen:`**
+     - If the current palindrome (length `r - l + 1`) is longer than the previously found longest palindrome (`resLen`), we update the result:
+     - **`res = s[l:r+1]`**: Updates `res` with the current palindrome substring.
+     - **`resLen = r - l + 1`**: Updates the length of the longest palindrome found so far.
+   - **`l -= 1` and `r += 1`**: Expands the window outward by decrementing `l` (moving left) and incrementing `r` (moving right).
+
+7. **Second Expansion: Center Between Two Characters (`l, r = i, i + 1`)**
+   - **`l, r = i, i + 1`**: Sets `l` to `i` and `r` to `i + 1`, treating the center as a pair of characters (checking for even-length palindromes).
+   - The same process of expanding outward, checking if the characters at `l` and `r` are equal, and updating the result if a longer palindrome is found happens here, just like in the first expansion.
+
+8. **`return res`**
+   - Once the loop has checked all possible centers (both single and pairs of characters), the function returns the longest palindrome found (`res`).
+
+### Example Walkthrough: Input `"babad"`
+
+Let's walk through how the code works with an example where `s = "babad"`.
+
+1. **Initial Setup:**
+   - `res = ""`
+   - `resLen = 0`
+
+2. **First loop iteration (`i = 0`):**
+   - The first character is `"b"`.
+
+   - **Odd-length palindrome check:**
+     - Set `l = 0`, `r = 0`.
+     - Expand outward: `s[l] == s[r]` → `"b" == "b"`.
+     - Update `res = "b"`, `resLen = 1`.
+     - Try to expand further: `l = -1` (out of bounds), so exit the loop.
+
+   - **Even-length palindrome check:**
+     - Set `l = 0`, `r = 1`.
+     - `s[l] != s[r]` → `"b" != "a"`, so exit the loop.
+
+3. **Second loop iteration (`i = 1`):**
+   - The second character is `"a"`.
+
+   - **Odd-length palindrome check:**
+     - Set `l = 1`, `r = 1`.
+     - `s[l] == s[r]` → `"a" == "a"`.
+     - Update `res = "a"`, `resLen = 1` (no change since it's still length 1).
+     - Try to expand further: `l = 0`, `r = 2`, `s[l] == s[r]` → `"b" == "b"`.
+     - Update `res = "bab"`, `resLen = 3` (we found a longer palindrome).
+     - Try to expand further: `l = -1` (out of bounds), so exit the loop.
+
+   - **Even-length palindrome check:**
+     - Set `l = 1`, `r = 2`.
+     - `s[l] != s[r]` → `"a" != "b"`, so exit the loop.
+
+4. **Third loop iteration (`i = 2`):**
+   - The third character is `"b"`.
+
+   - **Odd-length palindrome check:**
+     - Set `l = 2`, `r = 2`.
+     - `s[l] == s[r]` → `"b" == "b"`.
+     - No update to `res` because `resLen` is still 3.
+     - Try to expand further: `l = 1`, `r = 3`, `s[l] == s[r]` → `"a" == "a"`.
+     - Update `res = "aba"`, `resLen = 3` (same length as "bab").
+     - Try to expand further: `l = 0`, `r = 4`, `s[l] != s[r]` → `"b" != "d"`, so exit the loop.
+
+   - **Even-length palindrome check:**
+     - Set `l = 2`, `r = 3`.
+     - `s[l] != s[r]` → `"b" != "a"`, so exit the loop.
+
+5. **Fourth loop iteration (`i = 3`):**
+   - The fourth character is `"a"`.
+
+   - **Odd-length palindrome check:**
+     - Set `l = 3`, `r = 3`.
+     - `s[l] == s[r]` → `"a" == "a"`, but no update to `res` since the palindrome length is not greater than 3.
+     - Expand further: `l = 2`, `r = 4`, `s[l] != s[r]` → `"b" != "d"`, so exit the loop.
+
+   - **Even-length palindrome check:**
+     - Set `l = 3`, `r = 4`.
+     - `s[l] != s[r]` → `"a" != "d"`, so exit the loop.
+
+6. **Fifth loop iteration (`i = 4`):**
+   - The fifth character is `"d"`.
+
+   - **Odd-length palindrome check:**
+     - Set `l = 4`, `r = 4`.
+     - `s[l] == s[r]` → `"d" == "d"`.
+     - No update to `res` because the length of the palindrome is not greater than 3.
+     - Try to expand further: `l = 3`, `r = 5` (out of bounds), so exit the loop.
+
+   - **Even-length palindrome check:**
+     - Set `l = 4`, `r = 5` (out of bounds), so exit the loop.
+
+### Final Result: `"bab"` or `"aba"`
+
+After iterating through the string, the function identifies either `"bab"` or `"aba"` as the longest palindromic substring (both are of length 3).
+
+---
+
+### New Example Walkthrough: Input `"cbbd"`
+
+1. **Initial Setup:**
+   - `res = ""`
+   - `resLen = 0`
+
+2. **First loop iteration (`i = 0`):**
+   - The first character is `"c"`.
+
+   - **Odd-length palindrome check:**
+     - Set `l = 0`, `r = 0`.
+     - `s[l] == s[r]` → `"c" == "c"`.
+     - Update `res = "c"`, `resLen = 1`.
+     - Expand further: `l = -1` (out of bounds), so exit the loop.
+
+   - **Even-length palindrome check:**
+     - Set `l = 0`, `r = 1`.
+     - `s[l] != s[r]` → `"c" != "b"`, so exit the loop.
+
+3. **Second loop iteration (`i = 1`):**
+   - The second character is `"b"`.
+
+   - **Odd-length palindrome check:**
+     - Set `l = 1`, `r = 1`.
+     - `s[l] == s[r]` → `"b" == "b"`.
+     - No update to `res` because `resLen` is still 1.
+     - Expand further: `l
+
+ = 0`, `r = 2`, `s[l] != s[r]` → `"c" != "b"`, so exit the loop.
+
+   - **Even-length palindrome check:**
+     - Set `l = 1`, `r = 2`.
+     - `s[l] == s[r]` → `"b" == "b"`.
+     - Update `res = "bb"`, `resLen = 2`.
+     - Expand further: `l = 0`, `r = 3`, `s[l] != s[r]` → `"c" != "d"`, so exit the loop.
+
+4. **Third loop iteration (`i = 2`):**
+   - The third character is `"b"`.
+
+   - **Odd-length palindrome check:**
+     - Set `l = 2`, `r = 2`.
+     - `s[l] == s[r]` → `"b" == "b"`.
+     - No update to `res` because the palindrome length is still 2.
+     - Expand further: `l = 1`, `r = 3`, `s[l] != s[r]` → `"b" != "d"`, so exit the loop.
+
+   - **Even-length palindrome check:**
+     - Set `l = 2`, `r = 3`.
+     - `s[l] != s[r]` → `"b" != "d"`, so exit the loop.
+
+5. **Fourth loop iteration (`i = 3`):**
+   - The fourth character is `"d"`.
+
+   - **Odd-length palindrome check:**
+     - Set `l = 3`, `r = 3`.
+     - `s[l] == s[r]` → `"d" == "d"`.
+     - No update to `res` because the length of the palindrome is still 2.
+     - Expand further: `l = 2`, `r = 4` (out of bounds), so exit the loop.
+
+   - **Even-length palindrome check:**
+     - Set `l = 3`, `r = 4` (out of bounds), so exit the loop.
+
+### Final Result: `"bb"`
+
+In this case, the longest palindromic substring is `"bb"`, which has a length of 2.

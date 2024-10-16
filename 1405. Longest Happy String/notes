@@ -1,0 +1,210 @@
+
+
+1. **`class Solution:`**
+   - Defines a class named `Solution`, which will contain the method to solve the problem.
+  
+2. **`def longestDiverseString(self, a: int, b: int, c: int) -> str:`**
+   - Defines the method `longestDiverseString` that takes three integers (`a`, `b`, and `c`) representing the number of characters `'a'`, `'b'`, and `'c'` respectively.
+
+3. **`res, maxHeap = "", []`**
+   - `res` is initialized as an empty string which will eventually hold the result (the "happy" string).
+   - `maxHeap` is initialized as an empty list which will be used as a max heap (priority queue) to store the counts of characters.
+
+4. **`for count, char in [(-a, "a"), (-b, "b"), (-c, "c")]:`**
+   - This loop goes over each character count (negative of `a`, `b`, `c`) and their corresponding characters `'a'`, `'b'`, and `'c'`.
+   - The counts are negated because Python's `heapq` is a **min heap** by default, so using negative values allows us to simulate a max heap.
+  
+5. **`if count != 0:`**
+   - This checks if the count is non-zero (meaning there are some occurrences of the character left). If true, it proceeds.
+
+6. **`heapq.heappush(maxHeap, (count, char))`**
+   - Adds the `(count, char)` tuple into the max heap (with the negative count). The heap will always pop the character with the highest (most negative) count, simulating a max heap.
+
+7. **`while maxHeap:`**
+   - This loop will continue as long as there are characters left in the heap.
+
+8. **`count, char = heapq.heappop(maxHeap)`**
+   - Retrieves the character with the highest available count from the heap.
+   - `count` is the negative count of the character (indicating the remaining occurrences).
+   - `char` is the character itself.
+
+9. **`if len(res) > 1 and res[-1] == res[-2] == char:`**
+   - This checks if the last two characters in the result string are the same as the current character. If they are, appending the same character would violate the "happy" string condition (no three consecutive same characters).
+  
+10. **`if not maxHeap:`**
+    - If there are no other characters available to use (heap is empty), it breaks out of the loop since we can't form a valid string.
+
+11. **`count2, char2 = heapq.heappop(maxHeap)`**
+    - Pops the next character from the heap to use instead of the current character (`char`) to avoid having three consecutive identical characters.
+  
+12. **`res += char2`**
+    - Adds the alternate character (`char2`) to the result string.
+
+13. **`count2 += 1`**
+    - Increments `count2` because the count in the heap is stored as a negative number, so incrementing it brings it closer to 0 (reducing its negative magnitude).
+
+14. **`if count2:`**
+    - If the count of `char2` is still not zero after adding it to the result string, it gets pushed back into the heap.
+
+15. **`else:`**
+    - If the last two characters in `res` are not the same as the current `char`, we simply add this character to the result.
+
+16. **`res += char`**
+    - Adds the current character (`char`) to the result string.
+
+17. **`count += 1`**
+    - Increments the count for the current character (bringing the negative value closer to 0) because we have used one occurrence of the character.
+
+18. **`if count:`**
+    - If the current character still has remaining occurrences after being used, we push it back into the heap.
+
+19. **`return res`**
+    - Once the loop finishes (heap is empty or no more valid characters can be added), the function returns the result string (`res`), which is the longest "happy" string that can be formed.
+
+### Example Walkthrough
+
+Suppose we call the function with `a = 6`, `b = 1`, `c = 1`.
+
+1. The initial counts of each character are:
+   - `'a'`: 6
+   - `'b'`: 1
+   - `'c'`: 1
+
+2. We push the counts and characters into the heap:
+   - Heap: `[(−6, 'a'), (−1, 'b'), (−1, 'c')]`
+
+3. Start popping characters from the heap:
+   - First, pop `'a'` (count = -6). Add `'a'` to the result string:
+     - Result: `"a"`
+     - Heap after pushing updated count for `'a'`: `[(−1, 'b'), (−1, 'c'), (−5, 'a')]`
+
+4. Next, pop `'a'` again (count = -5). Add another `'a'` to the result string:
+   - Result: `"aa"`
+   - Heap: `[(−1, 'b'), (−1, 'c'), (−4, 'a')]`
+
+5. We can't add another `'a'` because it would violate the "happy" condition (`"aaa"` is not allowed). So, we pop another character from the heap. In this case, let's pop `'b'` (count = -1):
+   - Result: `"aab"`
+   - Heap: `[(−1, 'c'), (−4, 'a')]`
+
+6. Then, we can safely add `'a'` again:
+   - Result: `"aaba"`
+   - Heap: `[(−1, 'c'), (−3, 'a')]`
+
+7. Add `'a'` again:
+   - Result: `"aabaa"`
+   - Heap: `[(−1, 'c'), (−2, 'a')]`
+
+8. Next, since we can't add another `'a'`, we pop `'c'`:
+   - Result: `"aabaac"`
+   - Heap: `[(−2, 'a')]`
+
+9. Finally, add `'a'` two more times to the result:
+   - Result: `"aabaacaa"`
+
+At this point, the heap is empty, and we return the result.
+
+### Final result: `"aabaacaa"`
+
+
+Let's go line by line through the code with the example inputs `a = 6`, `b = 1`, `c = 1` and compare how each part of the code operates step-by-step, with an additional new example (`a = 5`, `b = 3`, `c = 2`) at the end.
+
+### Example 1: Code Walkthrough for `a = 6`, `b = 1`, `c = 1`
+
+1. **`res, maxHeap = "", []`**
+   - We initialize the result string `res` as an empty string.
+   - `maxHeap` is an empty list that will be used to store characters along with their counts.
+
+2. **`for count, char in [(-a, "a"), (-b, "b"), (-c, "c")]:`**
+   - We iterate over the counts and corresponding characters.
+     - First, for `'a'`: `(-6, 'a')`
+     - Second, for `'b'`: `(-1, 'b')`
+     - Third, for `'c'`: `(-1, 'c')`
+   - This gives us the tuple pairs `(count, char)` as `(-6, 'a')`, `(-1, 'b')`, and `(-1, 'c')`.
+
+3. **`if count != 0: heapq.heappush(maxHeap, (count, char))`**
+   - We check if the count is non-zero for each character and push them into the heap:
+     - Push `(-6, 'a')`
+     - Push `(-1, 'b')`
+     - Push `(-1, 'c')`
+   - After this step, `maxHeap = [(-6, 'a'), (-1, 'b'), (-1, 'c')]`. This is a heap where `'a'` has the highest count (most negative count, which simulates max heap behavior).
+
+4. **`while maxHeap:`**
+   - The loop runs while there are elements in the heap. Initially, `maxHeap` is not empty, so we enter the loop.
+
+5. **`count, char = heapq.heappop(maxHeap)`**
+   - In each iteration, we pop the character with the highest count:
+     - First pop: `(-6, 'a')`, so `count = -6` and `char = 'a'`.
+
+6. **`if len(res) > 1 and res[-1] == res[-2] == char:`**
+   - This checks if the last two characters in `res` are the same as the current character (`char`). 
+   - Initially, `res` is empty, so this condition is false.
+
+7. **`res += char`**
+   - We append `'a'` to the result string.
+   - `res = "a"`
+
+8. **`count += 1`**
+   - We increase the count of `'a'` to -5 (`count = -5`).
+
+9. **`if count:`**
+   - Since `count` is still negative (meaning there are more occurrences of `'a'`), we push it back into the heap.
+   - `heapq.heappush(maxHeap, (-5, 'a'))`
+   - After this step, `maxHeap = [(-5, 'a'), (-1, 'b'), (-1, 'c')]`.
+
+10. **Repeat the process:**
+    - Pop `'a'` again: `(-5, 'a')`
+    - Add `'a'` to `res`: `res = "aa"`
+    - Update count to -4, push back `(-4, 'a')` into the heap.
+
+11. **Now, the condition for three consecutive characters is checked:**
+    - The next time `'a'` is popped, `res` is `"aa"`, so we can't add `'a'` again.
+    - Instead, we pop the next character in the heap: `(-1, 'b')` (alternate character).
+    - Add `'b'` to `res`: `res = "aab"`
+
+12. **Continue appending characters:**
+    - Pop `'a'` again: `res = "aaba"`
+    - Add another `'a'`: `res = "aabaa"`
+    - Pop `'c'`: `res = "aabaac"`
+    - Add remaining `'a'`: `res = "aabaacaa"`
+
+### Final Result: `"aabaacaa"`
+
+This example shows how the heap ensures that the character with the highest count is used first but prevents three consecutive characters by switching to the next character if needed.
+
+---
+
+### Example 2: New Example `a = 5, b = 3, c = 2`
+
+1. **`res, maxHeap = "", []`**
+   - `res` starts empty, and `maxHeap` is empty.
+
+2. **`for count, char in [(-a, "a"), (-b, "b"), (-c, "c")]:`**
+   - We get the counts and characters as `(-5, 'a')`, `(-3, 'b')`, and `(-2, 'c')`.
+
+3. **`heapq.heappush(maxHeap, (count, char))`**
+   - Push each pair into the heap:
+     - Heap after pushing: `maxHeap = [(-5, 'a'), (-3, 'b'), (-2, 'c')]`
+
+4. **Start the main loop:**
+   - **Pop first element:** `(-5, 'a')`, `res = "a"`, update `count = -4`, push back `(-4, 'a')`.
+   - **Pop again:** `(-4, 'a')`, `res = "aa"`, update `count = -3`, push back `(-3, 'a')`.
+   - Now we can't add another `'a'` because of the consecutive constraint.
+
+5. **Pop alternate character:**
+   - **Pop `(-3, 'b')`:** `res = "aab"`, update `count = -2`, push back `(-2, 'b')`.
+   - **Pop `(-3, 'a')`:** `res = "aaba"`, update `count = -2`, push back `(-2, 'a')`.
+   - **Pop `(-2, 'a')`:** `res = "aabaa"`, update `count = -1`, push back `(-1, 'a')`.
+
+6. **Switch characters as needed:**
+   - **Pop `(-2, 'b')`:** `res = "aabaab"`, update `count = -1`, push back `(-1, 'b')`.
+   - **Pop `(-2, 'c')`:** `res = "aabaabc"`, update `count = -1`, push back `(-1, 'c')`.
+
+7. **Final characters:**
+   - **Pop `(-1, 'a')`:** `res = "aabaabca"`, update `count = 0` (do not push back).
+   - **Pop `(-1, 'b')`:** `res = "aabaabcab"`, update `count = 0`.
+   - **Pop `(-1, 'c')`:** `res = "aabaabcabc"`.
+
+### Final Result: `"aabaabcabc"`
+
+This step-by-step example shows how the algorithm dynamically switches between characters to maximize the string length without violating the "happy" string condition.
+
