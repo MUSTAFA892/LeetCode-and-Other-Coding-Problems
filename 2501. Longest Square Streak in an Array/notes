@@ -1,0 +1,102 @@
+
+
+### Code Explanation
+
+1. **Sorting the Array**:
+   ```python
+   nums.sort()
+   ```
+   - The `sort()` method arranges the numbers in ascending order. This helps in maintaining the order when checking for square relationships.
+
+2. **Creating a Set for Quick Look-Up**:
+   ```python
+   nums_set = set(nums)
+   ```
+   - By converting the list into a set, we enable O(1) average time complexity for membership checks. This allows us to quickly determine if a squared number exists in the original list.
+
+3. **Initializing the Maximum Length**:
+   ```python
+   max_length = 0
+   ```
+   - This variable keeps track of the length of the longest valid square streak found during the iteration through the numbers.
+
+4. **Iterating Through Each Number**:
+   ```python
+   for num in nums:
+   ```
+   - This loop goes through each number in the sorted array one by one.
+
+5. **Starting the Current Length**:
+   ```python
+   current_length = 1
+   ```
+   - We initialize `current_length` to 1 because the streak starts with the current number itself.
+
+6. **Setting Up for the Square Streak Check**:
+   ```python
+   current_number = num
+   ```
+   - We use `current_number` to track the number we're currently evaluating for potential streaks.
+
+7. **Checking for the Square Streak**:
+   ```python
+   while current_number * current_number in nums_set:
+       current_number = current_number * current_number
+       current_length += 1
+   ```
+   - This while loop checks if the square of `current_number` exists in the set. If it does:
+     - We update `current_number` to its square.
+     - We increment `current_length` to reflect the addition of another valid number in the streak.
+
+8. **Updating Maximum Length**:
+   ```python
+   if current_length >= 2:
+       max_length = max(max_length, current_length)
+   ```
+   - After exiting the while loop, if `current_length` is at least 2, we update `max_length` to ensure it holds the longest streak found.
+
+9. **Final Check and Return**:
+   ```python
+   if max_length >= 2:
+       return max_length
+   else:
+       return -1
+   ```
+   - Finally, we check if `max_length` is at least 2 (indicating a valid streak was found). If yes, return it; otherwise, return -1 to indicate no valid streak exists.
+
+### Working Example
+
+Let’s use the following example to illustrate the code in action:
+
+**Input:** `nums = [2, 4, 16, 256, 1]`
+
+1. **Sorting**: 
+   - The sorted array becomes `[1, 2, 4, 16, 256]`.
+
+2. **Creating Set**: 
+   - The set is `{1, 2, 4, 16, 256}`.
+
+3. **Iterating**:
+   - For `num = 1`: 
+     - No square streak (1 doesn't have a square in the set).
+   - For `num = 2`: 
+     - `2^2 = 4` (exists in the set).
+     - `4^2 = 16` (exists in the set).
+     - `16^2 = 256` (exists in the set).
+     - The current streak length is 4: `[2, 4, 16, 256]`.
+   - For `num = 4`: 
+     - `4^2 = 16` (exists in the set).
+     - `16^2 = 256` (exists in the set).
+     - The current streak length is 3: `[4, 16, 256]`.
+   - For `num = 16`: 
+     - `16^2 = 256` (exists in the set).
+     - The current streak length is 2: `[16, 256]`.
+   - For `num = 256`: 
+     - `256^2` is not in the set, so no streak.
+   
+4. **Updating Maximum Length**:
+   - After checking all numbers, `max_length` is updated to 4 (from the streak starting with `2`).
+
+5. **Returning the Result**:
+   - Since `max_length` is 4, the function returns `4`.
+
