@@ -1,0 +1,37 @@
+
+
+1. **Class Definition**: 
+   ```python
+   class Solution:
+   ```
+   - Defines a class `Solution` where the `multiply` method is implemented.
+
+2. **Method Definition**:
+   ```python
+   def multiply(self, num1: str, num2: str) -> str:
+   ```
+   - `multiply` is a method that belongs to the `Solution` class.
+   - It takes `self` (the instance of the class), `num1`, and `num2` as parameters.
+   - The type hints (`num1: str` and `num2: str`) indicate that `num1` and `num2` are expected to be strings, and `-> str` specifies that the method will return a string.
+
+3. **Conversion to Integers and Multiplication**:
+   ```python
+   mul = int(num1) * int(num2)
+   ```
+   - `int(num1)` converts `num1` from a string to an integer.
+   - `int(num2)` converts `num2` from a string to an integer.
+   - The two integers are multiplied, and the result is stored in `mul`.
+
+4. **Convert Result Back to String and Return**:
+   ```python
+   return str(mul)
+   ```
+   - `str(mul)` converts the result of the multiplication back to a string.
+   - The method returns this string, which is the final product of `num1` and `num2` as a string.
+
+### Example Usage
+
+If `num1 = "3"` and `num2 = "4"`, then:
+1. `int(num1) * int(num2)` would compute `3 * 4 = 12`.
+2. `str(mul)` converts `12` back to `"12"`.
+3. The function returns `"12"` as the final output.
