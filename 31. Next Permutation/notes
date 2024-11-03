@@ -1,0 +1,60 @@
+
+
+1. **Function Signature**:
+   - The method `nextPermutation` takes a list of integers `nums` as input and modifies it in-place to produce the next lexicographical permutation.
+
+2. **Check Length**:
+   - The first step checks the length of `nums`. If the length is less than or equal to 1, the function returns immediately since there are no permutations possible.
+
+3. **Find the Pivot**:
+   - The next step is to identify the largest index `i` such that `nums[i] < nums[i + 1]`. This indicates the point where the sequence starts to decrease.
+   - Starting from the second-to-last element (`n - 2`), a while loop checks each pair from right to left until it finds such an `i` or reaches the beginning of the list.
+
+4. **Check if i is Valid**:
+   - If `i` is still valid (i.e., `i >= 0`), it means we have found the pivot, and we can proceed to find the next largest number to swap with.
+
+5. **Find the Right Element to Swap**:
+   - A second index `j` is initialized to the last index of the list.
+   - A while loop runs to find the largest index `j` such that `nums[j] > nums[i]`. This will give us the smallest number that is greater than `nums[i]` to swap with.
+
+6. **Perform the Swap**:
+   - The elements at indices `i` and `j` are swapped, bringing the next permutation closer to the desired state.
+
+7. **Reverse the Suffix**:
+   - Finally, the sequence after index `i` (from `i + 1` to the end of the list) is reversed to get the smallest lexicographical order for that suffix.
+
+### Working Example
+
+Let’s illustrate this with an example.
+
+#### Example Input
+
+```python
+nums = [1, 2, 3]
+```
+
+1. **Initialization**:
+   - The length `n` is `3`.
+   - `i` is initialized to `1` (`n - 2`).
+
+2. **Finding the Pivot**:
+   - Check if `nums[1] < nums[2]` (`2 < 3`), which is **true**. Thus, we do not decrement `i`. Now `i` is `1`.
+
+3. **Finding the Right Element to Swap**:
+   - Initialize `j` to `2` (the last index).
+   - Check if `nums[2] > nums[1]` (`3 > 2`), which is **true**. Therefore, we proceed with the swap.
+
+4. **Performing the Swap**:
+   - Swap `nums[i]` and `nums[j]`:
+     ```python
+     nums[1], nums[2] = nums[2], nums[1]  # nums becomes [1, 3, 2]
+     ```
+
+5. **Reversing the Suffix**:
+   - Reverse the sublist from `i + 1` (index `2`) to the end:
+     ```python
+     nums[i + 1:] = reversed(nums[i + 1:])  # nums[2:] = reversed(nums[2:]), but it's just [2]
+     ```
+
+6. **Final Result**:
+   - The modified `nums` is now `[1, 3, 2]`.

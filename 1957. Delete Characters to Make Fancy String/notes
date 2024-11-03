@@ -1,0 +1,105 @@
+
+1. **Initialize Result List**:
+   - `result` is initialized as an empty list, which will store characters to form the final "fancy" string without any three consecutive identical characters.
+
+2. **Initialize Counters**:
+   - `count` is initialized to `0` to keep track of the number of consecutive occurrences of the current character.
+   - `previous_char` is initialized as an empty string to store the last character processed.
+
+3. **Loop Through Each Character**:
+   - The `for` loop iterates over each character in the string `s`.
+
+4. **Check for Consecutive Characters**:
+   - For each `char`, it checks if `char` is the same as `previous_char` (the last character added to `result`).
+
+5. **Increment Count for Consecutive Characters**:
+   - If `char` is the same as `previous_char`, it increments `count` by 1, indicating consecutive characters.
+
+6. **Reset Count for New Characters**:
+   - If `char` is different from `previous_char`, it resets `count` to `1` because this is a new character, and it starts counting from 1 again.
+
+7. **Limit to Two Consecutive Characters**:
+   - If `count` is less than or equal to 2, it appends `char` to `result`. This ensures no three consecutive identical characters are added to `result`.
+
+8. **Update Previous Character**:
+   - `previous_char` is updated to the current `char` to keep track of the last character processed.
+
+9. **Join and Return Result**:
+   - After the loop finishes, `''.join(result)` combines all characters in `result` into a single string, which is returned as the final "fancy" string.
+
+10. **Output**:
+   - The function returns the processed string that meets the requirement of having no three consecutive identical characters.
+
+---
+
+### Example: `s = "leeetcode"`
+
+Let’s go through each step of the loop to see how `result` is built.
+
+1. **Initial Setup**:
+   - `result = []`, `count = 0`, `previous_char = ''`
+
+2. **Character 'l'**:
+   - `previous_char` is empty, so this is a new character.
+   - `count` is set to `1`.
+   - `count <= 2`, so `'l'` is appended to `result`.
+   - **Result**: `result = ['l']`
+   - `previous_char` is updated to `'l'`.
+
+3. **Character 'e'**:
+   - `previous_char` is `'l'`, which is different from `'e'`.
+   - `count` is reset to `1`.
+   - `count <= 2`, so `'e'` is appended to `result`.
+   - **Result**: `result = ['l', 'e']`
+   - `previous_char` is updated to `'e'`.
+
+4. **Next Character 'e'**:
+   - `previous_char` is `'e'`, so this is a consecutive character.
+   - `count` is incremented to `2`.
+   - `count <= 2`, so another `'e'` is appended to `result`.
+   - **Result**: `result = ['l', 'e', 'e']`
+   - `previous_char` remains `'e'`.
+
+5. **Next Character 'e'**:
+   - `previous_char` is `'e'`, so this is another consecutive character.
+   - `count` is incremented to `3`.
+   - `count > 2`, so this `'e'` is skipped (not added to `result`).
+   - **Result**: `result = ['l', 'e', 'e']`
+
+6. **Character 't'**:
+   - `previous_char` is `'e'`, which is different from `'t'`.
+   - `count` is reset to `1`.
+   - `count <= 2`, so `'t'` is appended to `result`.
+   - **Result**: `result = ['l', 'e', 'e', 't']`
+   - `previous_char` is updated to `'t'`.
+
+7. **Character 'c'**:
+   - `previous_char` is `'t'`, which is different from `'c'`.
+   - `count` is reset to `1`.
+   - `count <= 2`, so `'c'` is appended to `result`.
+   - **Result**: `result = ['l', 'e', 'e', 't', 'c']`
+   - `previous_char` is updated to `'c'`.
+
+8. **Character 'o'**:
+   - `previous_char` is `'c'`, which is different from `'o'`.
+   - `count` is reset to `1`.
+   - `count <= 2`, so `'o'` is appended to `result`.
+   - **Result**: `result = ['l', 'e', 'e', 't', 'c', 'o']`
+   - `previous_char` is updated to `'o'`.
+
+9. **Character 'd'**:
+   - `previous_char` is `'o'`, which is different from `'d'`.
+   - `count` is reset to `1`.
+   - `count <= 2`, so `'d'` is appended to `result`.
+   - **Result**: `result = ['l', 'e', 'e', 't', 'c', 'o', 'd']`
+   - `previous_char` is updated to `'d'`.
+
+10. **Character 'e'**:
+    - `previous_char` is `'d'`, which is different from `'e'`.
+    - `count` is reset to `1`.
+    - `count <= 2`, so `'e'` is appended to `result`.
+    - **Result**: `result = ['l', 'e', 'e', 't', 'c', 'o', 'd', 'e']`
+
+### Final Output
+
+- **Join the List**: `''.join(result)` gives the final output: `"leetcode"`.

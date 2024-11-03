@@ -1,0 +1,47 @@
+
+
+1. **Class Definition**: This code defines a class called `Solution`, which contains a method to solve the problem.
+
+2. **Method Name**: The method `isCircularSentence` is responsible for checking if a sentence is circular.
+
+3. **Input Parameter**: The method takes a single parameter `sentence`, which is a string of words separated by spaces.
+
+4. **Splitting the Sentence**: `word = sentence.split()` splits the sentence into a list of words by spaces. Each element in `word` is a word from the sentence.
+
+5. **Loop through Words**: The loop `for i in range(len(word))` iterates through each word in the list by its index. This ensures we can access both the current and the next word.
+
+6. **Circular Comparison**: `word[i][-1]` gets the last character of the current word, and `word[(i+1) % len(word)][0]` gets the first character of the next word, using modulo indexing to wrap around to the first word when it reaches the end.
+
+7. **Modulo Wrapping**: `(i+1) % len(word)` allows the last word to check its last character with the first word’s first character, creating the circular effect.
+
+8. **Return Condition**: If any word’s last character doesn’t match the next word’s first character, `return False` is executed, indicating the sentence isn’t circular.
+
+9. **Final Return Statement**: If the loop completes without finding any mismatches, `return True` is executed, meaning the sentence is circular.
+
+10. **Efficiency**: This approach is efficient because it only checks each word once, making it `O(n)` in time complexity, where `n` is the number of words.
+
+### Example
+
+#### Input
+```python
+sentence = "round dusk keep playing gourd"
+```
+
+#### Execution
+
+1. The `split()` method breaks down the sentence into words: `["round", "dusk", "keep", "playing", "gourd"]`.
+  
+2. The loop iterates through each word index:
+   - `i = 0`: Compare last character of `"round"` (`'d'`) with the first character of `"dusk"` (`'d'`) - match.
+   - `i = 1`: Compare last character of `"dusk"` (`'k'`) with the first character of `"keep"` (`'k'`) - match.
+   - `i = 2`: Compare last character of `"keep"` (`'p'`) with the first character of `"playing"` (`'p'`) - match.
+   - `i = 3`: Compare last character of `"playing"` (`'g'`) with the first character of `"gourd"` (`'g'`) - match.
+   - `i = 4`: Compare last character of `"gourd"` (`'d'`) with the first character of `"round"` (`'r'`) - **no match**.
+
+3. Since there is a mismatch, the function returns `False`.
+
+#### Output
+```python
+False
+```
+

@@ -1,0 +1,36 @@
+
+1. **Class Definition**:
+   - The method is defined within a class named `Solution`, which is a common structure for problems on platforms like LeetCode.
+
+2. **Method Signature**:
+   - The method `rotateString` takes two parameters: `s` (the original string) and `goal` (the string we want to check if it can be formed by rotating `s`).
+
+3. **Length Check**:
+   - The first part of the return statement checks if the lengths of `s` and `goal` are equal: `len(s) == len(goal)`.
+   - This is essential because if the lengths differ, one string cannot be a rotation of the other.
+
+4. **Concatenation of `s`**:
+   - The expression `(s + s)` creates a new string that consists of two copies of `s` concatenated together. For example, if `s = "abcde"`, then `s + s = "abcdeabcde"`.
+   - This concatenation contains all possible rotations of the original string.
+
+5. **Substring Check**:
+   - The second part of the return statement checks if `goal` is a substring of the concatenated string: `goal in (s + s)`.
+   - If `goal` can be found in `s + s`, it implies that `goal` is a valid rotation of `s`.
+
+6. **Return Value**:
+   - The method returns a boolean value (`True` or `False`) based on the result of the combined checks.
+
+### Example Walkthrough
+
+Let’s consider an example to see how this method works:
+
+#### Example 1:
+- **Input**: `s = "abcde"`, `goal = "cdeab"`
+- **Step 1**: Check Length
+  - `len("abcde") == len("cdeab")` → `5 == 5` → **True**
+- **Step 2**: Concatenate and Check Substring
+  - `s + s` → `"abcdeabcde"`
+  - Check if `"cdeab"` is a substring of `"abcdeabcde"`:
+    - Yes, `"cdeab"` can be found within `"abcdeabcde"`.
+- **Final Output**: The method returns **True**.
+
