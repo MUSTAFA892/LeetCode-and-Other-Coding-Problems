@@ -1,0 +1,48 @@
+
+1. **Input Handling**:
+   - The function accepts a single string `word` as input and processes it for compression.
+   
+2. **Appending Sentinel Character**:
+   - `word += "["`: Adds an extra character at the end (here, `"["`). This helps prevent index out-of-bounds errors when checking `word[i + 1]` at the end of the loop.
+
+3. **Initialization**:
+   - `comp = ""` initializes an empty string to store the compressed result.
+   - `i = 0` initializes the index to traverse through the string.
+
+4. **Outer Loop**:
+   - `while i < len(word) - 1`: Ensures the loop runs until the second-to-last character of the string. This avoids accessing an out-of-bounds index when checking the next character.
+
+5. **Character Tracking**:
+   - `temp = word[i]` stores the current character being evaluated to compare with the next character in the string.
+
+6. **Counting Consecutive Characters**:
+   - `count = 1` starts the count at 1 for the current character.
+   - `while count < 9 and temp == word[i + 1]`: A nested loop to count consecutive identical characters up to a maximum of 9.
+
+7. **Index Increment in Nested Loop**:
+   - `i += 1`: Moves the index to the next character when the current character matches the next one.
+   - `count += 1`: Increments the count for each matching character.
+
+8. **Appending to Compressed String**:
+   - `comp += str(count) + temp`: Appends the count followed by the character to `comp`. This forms the compressed part of the string.
+
+9. **Moving to the Next Character**:
+   - `i += 1`: Moves to the next new character to start a new count.
+
+10. **Return Statement**:
+    - `return comp`: Returns the compressed version of the string after processing all characters.
+
+### Working Example:
+**Input**: `"aaaabbcdddde"`
+
+- Initial `word` after appending `"["`: `"aaaabbcdddde["`
+- Initial `comp`: `""`
+- Process breakdown:
+  - `temp = 'a'`, count = 4 → `comp = "4a"`
+  - `temp = 'b'`, count = 2 → `comp = "4a2b"`
+  - `temp = 'c'`, count = 1 → `comp = "4a2b1c"`
+  - `temp = 'd'`, count = 4 → `comp = "4a2b1c4d"`
+  - `temp = 'e'`, count = 1 → `comp = "4a2b1c4d1e"`
+- **Final Output**: `"4a2b1c4d1e"`
+
+**Explanation**: The function compresses consecutive identical characters in the string, appending the count followed by the character. For non-repeating characters, the count `1` is used.
