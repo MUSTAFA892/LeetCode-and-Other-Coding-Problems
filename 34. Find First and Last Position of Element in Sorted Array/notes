@@ -1,0 +1,134 @@
+
+### 1. **Loop Through the List**
+   - The solution uses a `for` loop to iterate through the list `nums` and find the indices where `target` appears.
+   
+   **Example:**
+   ```python
+   nums = [5, 7, 7, 8, 8, 10]
+   target = 8
+   ```
+   During the loop, the indices of `target = 8` will be found at `3` and `4`.
+
+### 2. **Checking for Target in List**
+   - In each iteration of the loop, we compare the current element (`nums[i]`) with the `target`. If they match, the index is appended to the `result` list.
+   
+   **Example:**
+   - At `i=3`, `nums[3] = 8` matches `target = 8`, so `3` is added to `result`.
+   - At `i=4`, `nums[4] = 8` matches again, so `4` is added.
+
+### 3. **Result List** 
+   - The `result` list stores all indices where the target is found.
+   
+   **Example:**
+   - After the loop finishes, `result = [3, 4]` because `target = 8` is found at indices 3 and 4.
+
+### 4. **Handling Empty Result (Target Not Found)**
+   - If `result` is empty, meaning the `target` is not found in the list, the function returns `[-1, -1]`.
+   
+   **Example:**
+   ```python
+   nums = [1, 2, 3]
+   target = 4
+   ```
+   - `result = []` because `4` is not found in `nums`. So the function will return `[-1, -1]`.
+
+### 5. **Return First and Last Occurrence**
+   - After the loop, if the target is found, the function returns the first and last index where the target occurs.
+   - This is done using `result[0]` for the first index and `result[-1]` for the last index.
+   
+   **Example:**
+   ```python
+   nums = [5, 7, 7, 8, 8, 10]
+   target = 8
+   ```
+   - `result = [3, 4]`, so the function returns `[3, 4]` as the first and last occurrence of `8`.
+
+### 6. **Checking List Length of `result`**
+   - By checking whether `result` is empty, the function determines whether the target exists in the list.
+   
+   **Example:**
+   ```python
+   nums = [1, 3, 5]
+   target = 2
+   ```
+   - Since `result = []`, the function will return `[-1, -1]`.
+
+### 7. **Efficient Handling of Multiple Occurrences**
+   - The `result` list collects all indices where the `target` appears, so the solution handles cases where the target appears multiple times.
+
+   **Example:**
+   ```python
+   nums = [5, 7, 7, 8, 8, 10]
+   target = 7
+   ```
+   - `result = [1, 2]`, and the function will return `[1, 2]` as the first and last occurrence.
+
+### 8. **Space Complexity** 
+   - The space complexity is O(n) in the worst case, where `n` is the number of occurrences of the `target` in the list.
+   - If the target appears every time, the `result` will store all the indices.
+
+   **Example:**
+   ```python
+   nums = [7, 7, 7, 7]
+   target = 7
+   ```
+   - `result = [0, 1, 2, 3]`, so the function will return `[0, 3]`.
+
+### 9. **Time Complexity**
+   - The time complexity is O(n) because the list is iterated through once to find the target, where `n` is the length of the list `nums`.
+   
+   **Example:**
+   ```python
+   nums = [5, 7, 7, 8, 8, 10]
+   target = 8
+   ```
+   - The loop runs `n = 6` times to find the target, and the total time complexity is O(6).
+
+### 10. **Handles Edge Cases**
+   - The code is robust against edge cases like:
+     - An empty list (`nums = []`).
+     - The target appearing once.
+     - The target not being in the list.
+     - The target appearing multiple times.
+   
+   **Examples:**
+   - Empty list: `nums = []`, `target = 3` → `[-1, -1]`.
+   - Single element list: `nums = [1]`, `target = 1` → `[0, 0]`.
+
+### Full Example Test Cases
+1. **Target found multiple times**:
+   ```python
+   nums = [5, 7, 7, 8, 8, 10]
+   target = 8
+   ```
+   **Output**: `[3, 4]`
+
+2. **Target not found**:
+   ```python
+   nums = [1, 2, 3]
+   target = 4
+   ```
+   **Output**: `[-1, -1]`
+
+3. **Target found once**:
+   ```python
+   nums = [1]
+   target = 1
+   ```
+   **Output**: `[0, 0]`
+
+4. **Empty list**:
+   ```python
+   nums = []
+   target = 0
+   ```
+   **Output**: `[-1, -1]`
+
+5. **Target found at first and last position**:
+   ```python
+   nums = [7, 7, 7, 7]
+   target = 7
+   ```
+   **Output**: `[0, 3]`
+
+---
