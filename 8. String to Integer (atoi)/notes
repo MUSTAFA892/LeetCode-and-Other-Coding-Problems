@@ -1,0 +1,94 @@
+
+
+1. **Initialize Index and String Length**:
+   - `i = 0`: Start processing from the first character.
+   - `n = len(s)`: Find the length of the string to ensure we don't go beyond the end.
+
+2. **Skip Leading Spaces**:
+   - The `while` loop checks if the current character is a space (`" "`) and skips over all leading spaces.
+   - This is important because spaces before the number don't affect the integer conversion.
+
+3. **Check for Empty String**:
+   - If all characters are spaces and no digits are found (`i == n`), the function returns `0`.
+
+4. **Handle Sign (`+` or `-`)**:
+   - If the first non-space character is `-`, set the `sign = -1` (indicating a negative number).
+   - If the first non-space character is `+`, leave `sign = 1` (positive number).
+   - After detecting the sign, increment `i` to move past the sign character.
+
+5. **Initialize Result**:
+   - `result = 0`: This is the variable where the resulting integer will be stored.
+
+6. **Convert Digits to Integer**:
+   - A `while` loop processes each character, checking if it’s a digit using `isdigit()`.
+   - The digits are converted into an integer and combined into the final result using `result = result * 10 + int(s[i])`.
+
+7. **Handle End of String or Non-Digit**:
+   - The loop terminates when a non-digit is encountered or the string ends.
+
+8. **Apply the Sign**:
+   - Once all digits are processed, the sign (`1` or `-1`) is applied by multiplying the `result` by the `sign`.
+
+9. **Handle Integer Overflow and Underflow**:
+   - If the result exceeds the range of a 32-bit signed integer (`INT_MIN` or `INT_MAX`), the function returns the respective boundary value.
+   - `INT_MIN = -2^31`, `INT_MAX = 2^31 - 1`.
+
+10. **Return Final Result**:
+    - The final computed integer is returned, either clamped within the 32-bit integer range or as is.
+
+---
+
+### **Example Walkthrough**:
+
+#### Input: `"  -42"`
+
+1. **Initialize Variables**:
+   - `i = 0`, `n = 5` (the length of `"  -42"`).
+
+2. **Skip Leading Spaces**:
+   - The loop skips the first two spaces, so `i = 2`.
+
+3. **Check for Empty String**:
+   - Since `i != n`, the string isn't empty, so we continue.
+
+4. **Handle Sign (`+` or `-`)**:
+   - The character at `s[i]` (at `i = 2`) is `-`, so set `sign = -1` and move to the next character (`i = 3`).
+
+5. **Initialize Result**:
+   - `result = 0`.
+
+6. **Convert Digits to Integer**:
+   - `s[i] = '4'`: `result = 0 * 10 + 4 = 4` (after processing the first digit).
+   - `s[i] = '2'`: `result = 4 * 10 + 2 = 42` (after processing the second digit).
+   - Now `i = 5` (end of string).
+
+7. **Handle End of String or Non-Digit**:
+   - The loop terminates as `i = 5` (the string has no more digits).
+
+8. **Apply the Sign**:
+   - Multiply `result = 42` by `sign = -1`, resulting in `result = -42`.
+
+9. **Handle Integer Overflow and Underflow**:
+   - `result = -42` is within the valid range for a 32-bit signed integer, so no adjustments are made.
+
+10. **Return Final Result**:
+    - The final result is `-42`, which is returned.
+
+#### Final Output: `-42`
+
+---
+
+### **Additional Example**:
+
+#### Input: `"4193 with words"`
+
+1. **Skip Leading Spaces**: `i = 0`, no spaces to skip.
+2. **Handle Sign**: `sign = 1` (positive number, no sign specified).
+3. **Convert Digits**: Process digits `4`, `1`, `9`, and `3` to form the number `4193`.
+4. **Stop at Non-Digit**: Encounter the character `' '` (space), so stop processing.
+5. **Apply the Sign**: `result = 4193 * 1 = 4193`.
+6. **Overflow/Underflow**: No overflow or underflow.
+7. **Return Final Result**: Return `4193`.
+
+#### Final Output: `4193`
+
