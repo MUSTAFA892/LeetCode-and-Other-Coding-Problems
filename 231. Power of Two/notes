@@ -1,0 +1,72 @@
+
+
+1. **Method Definition**:
+   - The method `isPowerOfTwo` is defined inside the `Solution` class and takes an integer `n` as an argument.
+   - It returns `True` if `n` is a power of two, and `False` otherwise.
+
+2. **Range of Exponent**:
+   - The `for` loop iterates over the range `31`, which means the exponent `i` will take values from `0` to `30`. This is because `2^30` is the largest power of two that fits within a standard 32-bit signed integer range.
+
+3. **Powers of Two Calculation**:
+   - In each iteration, the code calculates `2^i` using Python's exponentiation operator `**`.
+   - For example, when `i = 0`, it calculates `2^0 = 1`; when `i = 1`, it calculates `2^1 = 2`; and so on.
+
+4. **Comparing with `n`**:
+   - After calculating `2^i`, the code checks if the result equals `n` (`if ans == n`).
+   - If the current power of two equals `n`, the function returns `True`, indicating that `n` is a power of two.
+
+5. **Exiting Early**:
+   - As soon as a match is found (i.e., `ans == n`), the loop terminates, and the function immediately returns `True`. This ensures efficiency in case the answer is found early.
+
+6. **Loop Termination**:
+   - If no power of two matches `n` after checking all powers from `2^0` to `2^30`, the loop will finish, and the function will return `False`, indicating that `n` is not a power of two.
+
+7. **Handling Edge Cases**:
+   - The code doesn't explicitly check for negative numbers or zero, but since all powers of two are positive integers, it will never match these cases.
+   - The check is based on whether `n` matches any power of two, and negative numbers and zero will never match.
+
+8. **Computational Efficiency**:
+   - The loop runs at most 31 iterations, which is constant time (`O(1)`), because we know the number of iterations is fixed and does not depend on the value of `n`.
+
+9. **Space Complexity**:
+   - The space complexity of the algorithm is `O(1)` because the only additional memory used is for the variable `ans`, which stores the result of `2^i` for each iteration.
+
+10. **Limitations**:
+   - The method is somewhat inefficient compared to other approaches like bitwise operations because it performs exponentiation and comparisons in a loop. For larger inputs, the alternative methods (like bitwise operations) can be more efficient.
+
+---
+
+### Working Example:
+
+Let’s go through the function with an example to see how it works.
+
+#### Example 1:
+**Input**: `n = 8`
+
+- **Step 1**: The function starts with `i = 0`. It calculates `2^0 = 1`. This is not equal to `n` (which is `8`), so it moves to the next iteration.
+- **Step 2**: The function calculates `2^1 = 2`. This is still not equal to `n`, so it continues.
+- **Step 3**: The function calculates `2^2 = 4`. This is not equal to `n`, so it moves on.
+- **Step 4**: The function calculates `2^3 = 8`. This is equal to `n`, so the function returns `True`.
+
+#### Output:
+```python
+True
+```
+
+---
+
+#### Example 2:
+**Input**: `n = 6`
+
+- **Step 1**: The function starts with `i = 0`. It calculates `2^0 = 1`. This is not equal to `n` (which is `6`), so it moves to the next iteration.
+- **Step 2**: The function calculates `2^1 = 2`. This is still not equal to `n`, so it continues.
+- **Step 3**: The function calculates `2^2 = 4`. This is not equal to `n`, so it moves on.
+- **Step 4**: The function calculates `2^3 = 8`. This is still not equal to `n`, and at this point, the loop reaches `i = 30` without finding a match. Therefore, the function returns `False`.
+
+#### Output:
+```python
+False
+```
+
+---
+
