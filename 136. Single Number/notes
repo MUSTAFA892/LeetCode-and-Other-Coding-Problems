@@ -1,0 +1,114 @@
+
+1. **Function Definition**:
+   - The method `singleNumber` is defined inside the `Solution` class and takes a list `nums` as input.
+   - The return type is `int`, as it returns the unique number that appears once in the list.
+
+2. **Input**:
+   - The input is a list of integers `nums` where all numbers except one appear twice, and one number appears once.
+
+3. **Use of `set(nums)`**:
+   - `set(nums)` converts the list `nums` into a set, which removes all duplicate numbers.
+   - If the list has duplicates, the set will only keep one instance of each unique number.
+
+4. **Summing the Set**:
+   - `sum(set(nums))` calculates the sum of all unique numbers in the set.
+   - This sum will be the sum of all distinct elements in the original list, with duplicates removed.
+
+5. **Double the Sum of Unique Numbers**:
+   - `2 * sum(set(nums))` computes the sum of all unique numbers **doubled**.
+   - In the case where every number appears twice, this doubles the total sum of the numbers, because each number will be counted twice when the list is reformed from the set.
+
+6. **Original Sum**:
+   - `sum(nums)` computes the sum of all numbers in the original list, including duplicates.
+
+7. **Mathematical Insight**:
+   - When you subtract `sum(nums)` from `2 * sum(set(nums))`, the effect is that:
+     - The duplicate numbers (which appear twice) will cancel each other out, leaving only the single number that appears once.
+
+8. **Why This Works**:
+   - If the array contains numbers `a, a, b, b, c`, where `c` is the single number that appears once, then:
+     - `sum(set(nums)) = a + b + c`
+     - `sum(nums) = 2a + 2b + c`
+     - So, `2 * sum(set(nums)) = 2a + 2b + 2c` and subtracting `sum(nums)` gives:
+       - `(2a + 2b + 2c) - (2a + 2b + c) = c`, the unique number.
+
+9. **Efficiency**:
+   - The time complexity of this approach is **O(n)**, where `n` is the number of elements in `nums`, because:
+     - Creating a set from the list takes O(n).
+     - Summing the set and the list both take O(n).
+   - The space complexity is **O(n)**, due to the space required for storing the set of unique numbers.
+
+10. **Edge Case**:
+   - The function works even if the input list has only one element because `set(nums)` will just be that one element, and `sum(nums)` will also be the same, resulting in the correct output.
+
+---
+
+### Working Example:
+
+#### Example 1:
+```python
+nums = [4, 1, 2, 1, 2]
+sol = Solution()
+print(sol.singleNumber(nums))  # Output: 4
+```
+
+#### Step-by-Step Breakdown:
+
+1. **Input List**: `nums = [4, 1, 2, 1, 2]`
+   
+2. **Step 1: Convert List to Set**:
+   - `set(nums)` → `{1, 2, 4}` (Duplicates are removed).
+
+3. **Step 2: Sum of Unique Elements**:
+   - `sum(set(nums)) = 1 + 2 + 4 = 7`
+
+4. **Step 3: Sum of All Elements in the List**:
+   - `sum(nums) = 4 + 1 + 2 + 1 + 2 = 10`
+
+5. **Step 4: Apply Formula**:
+   - `2 * sum(set(nums)) = 2 * 7 = 14`
+   - `sum(nums) = 10`
+   - `2 * sum(set(nums)) - sum(nums) = 14 - 10 = 4`
+
+6. **Result**: The unique number is `4`.
+
+#### Output:
+```
+4
+```
+
+---
+
+#### Example 2:
+```python
+nums = [2, 2, 3]
+sol = Solution()
+print(sol.singleNumber(nums))  # Output: 3
+```
+
+#### Step-by-Step Breakdown:
+
+1. **Input List**: `nums = [2, 2, 3]`
+   
+2. **Step 1: Convert List to Set**:
+   - `set(nums)` → `{2, 3}` (Duplicates are removed).
+
+3. **Step 2: Sum of Unique Elements**:
+   - `sum(set(nums)) = 2 + 3 = 5`
+
+4. **Step 3: Sum of All Elements in the List**:
+   - `sum(nums) = 2 + 2 + 3 = 7`
+
+5. **Step 4: Apply Formula**:
+   - `2 * sum(set(nums)) = 2 * 5 = 10`
+   - `sum(nums) = 7`
+   - `2 * sum(set(nums)) - sum(nums) = 10 - 7 = 3`
+
+6. **Result**: The unique number is `3`.
+
+#### Output:
+```
+3
+```
+
+---

@@ -1,0 +1,67 @@
+
+
+1. **Function Definition**:  
+   - The function `checkIfExist` is defined as a method inside a `Solution` class.
+   - It accepts one argument, `arr`, which is a list of integers (`List[int]`).
+
+2. **Set Initialization (`checked`)**:  
+   - The variable `checked` is initialized as an empty set. This set will be used to store the numbers we've seen so far as we iterate through the array.
+
+3. **Iteration over the List**:  
+   - The `for num in arr:` loop iterates through each number in the given list `arr`.
+
+4. **Check for Double**:  
+   - Inside the loop, the first condition `if num * 2 in checked:` checks if the double of the current number (`num * 2`) exists in the set `checked`. 
+   - This means, if we have already seen a number that is half of the current number, we have found a valid pair where one number is twice the other.
+
+5. **Check for Half**:  
+   - The second condition `num / 2 in checked` checks if the current number's half (`num / 2`) exists in the `checked` set. This works because, if the current number is even, the half of the number could have appeared earlier in the list.
+   - We need to ensure that we check for the division by 2 only for even numbers, but this will work for both cases.
+
+6. **Return True if Found**:  
+   - If either of the two conditions (`num * 2 in checked` or `num / 2 in checked`) is true, the function returns `True`, meaning we've found a pair where one number is twice the other.
+
+7. **Add Current Number to Set**:  
+   - If no match is found for the current number, it is added to the `checked` set using `checked.add(num)` so we can check it against future numbers.
+
+8. **Loop Continues**:  
+   - The loop continues checking each number in the list until we find a valid pair or finish checking all numbers.
+
+9. **Return False if No Pair Found**:  
+   - If the loop completes without finding a valid pair (i.e., no number is twice another), the function returns `False`.
+
+10. **Efficient Lookup**:  
+   - The set `checked` allows for **constant-time lookups** (`O(1)` on average), making the solution efficient. This avoids the need for nested loops to check every possible pair in the array.
+
+---
+
+### Working Example:
+
+#### Example: `arr = [10, 2, 5, 3]`
+
+1. **Initial Setup**:
+   - `checked = {}` (an empty set).
+   
+2. **First Iteration** (`num = 10`):
+   - Check if `10 * 2 = 20` exists in the set → **no**.
+   - Check if `10 / 2 = 5` exists in the set → **no**.
+   - Add `10` to the set → `checked = {10}`.
+   
+3. **Second Iteration** (`num = 2`):
+   - Check if `2 * 2 = 4` exists in the set → **no**.
+   - Check if `2 / 2 = 1` exists in the set → **no**.
+   - Add `2` to the set → `checked = {10, 2}`.
+   
+4. **Third Iteration** (`num = 5`):
+   - Check if `5 * 2 = 10` exists in the set → **yes**, `10` is in the set.
+   - We found that `10 = 2 * 5`. Return `True` immediately.
+
+Since we found a valid pair where one number is **twice** the other (10 is twice 5), the output is `True`.
+
+#### Output:
+```python
+True
+```
+
+---
+
