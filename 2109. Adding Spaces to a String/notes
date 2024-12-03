@@ -1,0 +1,111 @@
+"""Sure! Here's the explanation and working example in a plain text format that you can copy and paste into a text file:
+
+---
+
+### First Approach:
+
+**Explanation:**
+1. **Initialization:**
+   - `result = []`: A list to store parts of the string and spaces.
+   - `slicing = 0`: A pointer that keeps track of the last index before the next space insertion.
+
+2. **Loop through spaces:**
+   - For each index `i` in the `spaces` list, the part of the string between the `slicing` pointer and `i` is appended to `result`.
+   - After that, a space is appended to `result`.
+   - The `slicing` pointer is updated to the current index `i`, meaning the next part of the string will start from `i`.
+
+3. **Remaining String:**
+   - After processing all spaces, append the remaining part of the string (from `slicing` to the end) to `result`.
+
+4. **Return Result:**
+   - Finally, the list `result` is joined into a string using `"".join(result)` and returned.
+
+**Working Example (First Approach):**
+
+**Input:**
+```
+s = "LeetcodeHelpsMeLearn"
+spaces = [8, 13, 15]
+```
+
+**Steps:**
+- `slicing = 0`: The initial starting point of the string.
+- First iteration: `i = 8`
+    - Append `s[slicing:i]` → `'Leetcode'`
+    - Append space → `' '`
+    - Update `slicing = 8`
+    - `result = ['Leetcode', ' ']`
+  
+- Second iteration: `i = 13`
+    - Append `s[slicing:i]` → `'Helps'`
+    - Append space → `' '`
+    - Update `slicing = 13`
+    - `result = ['Leetcode', ' ', 'Helps', ' ']`
+  
+- Third iteration: `i = 15`
+    - Append `s[slicing:i]` → `'Me'`
+    - Append space → `' '`
+    - Update `slicing = 15`
+    - `result = ['Leetcode', ' ', 'Helps', ' ', 'Me', ' ']`
+
+- Append the remaining part of the string → `'Learn'`
+
+**Final Result:**
+```
+"Leetcode Helps Me Learn"
+```
+
+---
+
+### Second Approach:
+
+**Explanation:**
+1. **Initialization:**
+   - `result = []`: A list to store the final string as we build it.
+   - `spaces_identified = 0`: A counter to track how many spaces have been inserted so far.
+   - `n = len(s)`: The length of the string `s`.
+
+2. **Loop through each character in `s`:**
+   - For each index `i` in the string, check if `i` matches the current space index `spaces[spaces_identified]`.
+   - If they match, append a space to the `result` and increment `spaces_identified`.
+   - In each iteration, append the current character `s[i]` to `result`.
+
+3. **Return Result:**
+   - After processing all characters in the string, the list `result` is joined into a string using `"".join(result)` and returned.
+
+**Working Example (Second Approach):**
+
+**Input:**
+```
+s = "LeetcodeHelpsMeLearn"
+spaces = [8, 13, 15]
+```
+
+**Steps:**
+- `spaces_identified = 0`: Initially no spaces inserted.
+- First iteration: `i = 0`
+    - Append `'L'` to `result` → `result = ['L']`
+- Second iteration: `i = 1`
+    - Append `'e'` to `result` → `result = ['L', 'e']`
+- Continue appending characters until `i = 8`:
+    - `result = ['L', 'e', 't', 'c', 'o', 'd', 'e', 'H']`
+- When `i = 8`:
+    - Space inserted → `result = ['L', 'e', 't', 'c', 'o', 'd', 'e', ' ', 'H']`
+    - Increment `spaces_identified = 1`
+- Continue appending characters until `i = 13`:
+    - `result = ['L', 'e', 't', 'c', 'o', 'd', 'e', ' ', 'H', 'e', 'l', 'p', 's']`
+- When `i = 13`:
+    - Space inserted → `result = ['L', 'e', 't', 'c', 'o', 'd', 'e', ' ', 'H', 'e', 'l', 'p', 's', ' ']`
+    - Increment `spaces_identified = 2`
+- Continue appending characters until `i = 15`:
+    - `result = ['L', 'e', 't', 'c', 'o', 'd', 'e', ' ', 'H', 'e', 'l', 'p', 's', ' ', 'M', 'e']`
+- When `i = 15`:
+    - Space inserted → `result = ['L', 'e', 't', 'c', 'o', 'd', 'e', ' ', 'H', 'e', 'l', 'p', 's', ' ', 'M', 'e', ' ']`
+    - Increment `spaces_identified = 3`
+- Append the remaining characters `'L', 'e', 'a', 'r', 'n'`:
+    - `result = ['L', 'e', 't', 'c', 'o', 'd', 'e', ' ', 'H', 'e', 'l', 'p', 's', ' ', 'M', 'e', ' ', 'L', 'e', 'a', 'r', 'n']`
+
+**Final Result:**
+```
+"Leetcode Helps Me Learn"
+```"""
