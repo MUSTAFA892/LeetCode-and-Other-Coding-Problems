@@ -1,0 +1,151 @@
+
+
+```
+You are given a list `code` of integers, and an integer `k`. The goal is to decrypt the list using the following rules:
+
+1. If `k > 0`, you need to sum the next `k` elements of `code` for each position, starting from the next index of the current index.
+2. If `k < 0`, you need to sum the previous `|k|` elements for each position, starting from the previous index of the current index.
+3. If `k == 0`, the result is a list of zeros, because there are no elements to sum.
+
+The solution needs to return the resulting decrypted list.
+
+### Code Walkthrough:
+
+```python
+class Solution:
+    def decrypt(self, code: List[int], k: int) -> List[int]:
+        n = len(code)          # Step 1: Get the length of the input list 'code'
+        i, j = 0, 0            # Step 2: Initialize two pointers 'i' and 'j' to 0
+        result = [0] * n       # Step 3: Create an array 'result' of zeros to store the output
+        sum_ = 0               # Step 4: Initialize the variable 'sum_' to 0 (this will hold the sum of elements)
+
+        if k == 0:
+            return result      # Step 5: If k is 0, return the result array as all zeros
+
+        elif k > 0:           # Step 6: If k is positive, set the initial 'i' and 'j' values to sum the next k elements
+            i = 1
+            j = k
+
+        else:                  # Step 7: If k is negative, set 'i' and 'j' to sum the previous |k| elements
+            i = n - abs(k)
+            j = n - 1
+
+        # Step 8: Compute the initial sum for the range from 'i' to 'j'
+        for pointer in range(i , j + 1):
+            sum_ += code[pointer]
+
+        # Step 9: Iterate through the code list and generate the result array
+        for k in range(0, n):
+            result[k] = sum_
+
+            sum_ -= code[i % n]   # Step 10: Remove the element at index 'i'
+            i += 1
+
+            sum_ += code[(j + 1) % n]  # Step 11: Add the element at index 'j + 1'
+            j += 1
+
+        return result          # Step 12: Return the decrypted result list
+```
+
+### Explanation of Each Step:
+
+1. **`n = len(code)`**:
+   - Calculate the length of the input list `code`. This helps us know the boundaries of the list for further operations.
+
+2. **`i, j = 0, 0`**:
+   - Initialize two pointers `i` and `j` to zero. These pointers will help define the window of elements from which the sum will be calculated.
+
+3. **`result = [0] * n`**:
+   - Create a list `result` of size `n` (the length of the input list) and initialize it with zeros. This will hold the final decrypted values.
+
+4. **`sum_ = 0`**:
+   - Initialize a variable `sum_` to zero. This will store the sum of elements in the current window that we are considering.
+
+5. **`if k == 0:`**:
+   - If `k` is zero, then there are no elements to sum for any index. Hence, return the result list which is filled with zeros.
+
+6. **`elif k > 0:`**:
+   - If `k` is positive, it means we are summing the next `k` elements for each index. Thus, we set `i = 1` and `j = k`.
+
+7. **`else:`**:
+   - If `k` is negative, it means we are summing the previous `|k|` elements for each index. Set `i = n - |k|` (start from the index where we can sum the last `|k|` elements) and `j = n - 1`.
+
+8. **`for pointer in range(i, j + 1):`**:
+   - This loop computes the sum of elements in the window defined by `i` and `j`. Initially, we sum the elements starting from `i` and going up to `j`. This gives the first sum for the decrypted list.
+
+9. **Second `for k in range(0, n):`**:
+   - This loop iterates through the entire list and updates the `result` list by shifting the window of sum. In each iteration, we:
+     - Assign the current `sum_` to `result[k]`.
+     - Remove the element at index `i` from `sum_` and move `i` to the next index.
+     - Add the element at index `j+1` to `sum_` and move `j` to the next index.
+
+10. **Return `result`**:
+    - Finally, the `result` array, which contains the decrypted values, is returned.
+
+---
+
+### Working Example:
+
+#### Input:
+
+```python
+code = [5, 7, 1, 4]
+k = 3
+```
+
+#### Step-by-Step Execution:
+
+1. **Initialization**:
+   - `n = len(code) = 4` (there are 4 elements in the list).
+   - `i, j = 0, 0` (pointers initialized to zero).
+   - `result = [0, 0, 0, 0]` (initial result list with zeros).
+   - `sum_ = 0` (the initial sum is 0).
+
+2. **Check if `k == 0`**:
+   - Since `k = 3`, which is not zero, we proceed to the next condition.
+
+3. **Check if `k > 0`**:
+   - Since `k = 3 > 0`, we set `i = 1` and `j = 3` (the next `k = 3` elements from index 1).
+
+4. **Initial Sum Calculation**:
+   - For `pointer in range(i, j + 1)` (i.e., from `i = 1` to `j = 3`), we sum the elements at indices `1`, `2`, and `3`:
+     - `sum_ = code[1] + code[2] + code[3] = 7 + 1 + 4 = 12`.
+
+5. **Main Loop (for k in range(0, n))**:
+   - The second loop begins and goes from `k = 0` to `k = 3` (because the length of `code` is 4).
+
+   - **First iteration (`k = 0`)**:
+     - `result[0] = sum_ = 12` (assign the current sum to the first element of the result list).
+     - Remove `code[i % n] = code[1 % 4] = code[1] = 7` from `sum_`, so `sum_ = 12 - 7 = 5`.
+     - Add `code[(j + 1) % n] = code[(3 + 1) % 4] = code[0] = 5` to `sum_`, so `sum_ = 5 + 5 = 10`.
+     - Move `i` to `i = 2` and `j` to `j = 4`.
+
+   - **Second iteration (`k = 1`)**:
+     - `result[1] = sum_ = 10`.
+     - Remove `code[i % n] = code[2 % 4] = code[2] = 1` from `sum_`, so `sum_ = 10 - 1 = 9`.
+     - Add `code[(j + 1) % n] = code[(4 + 1) % 4] = code[1] = 7` to `sum_`, so `sum_ = 9 + 7 = 16`.
+     - Move `i` to `i = 3` and `j` to `j = 5`.
+
+   - **Third iteration (`k = 2`)**:
+     - `result[2] = sum_ = 16`.
+     - Remove `code[i % n] = code[3 % 4] = code[3] = 4` from `sum_`, so `sum_ = 16 - 4 = 12`.
+     - Add `code[(j + 1) % n] = code[(5 + 1) % 4] = code[2] = 1` to `sum_`, so `sum_ = 12 + 1 = 13`.
+     - Move `i` to `i = 4` and `j` to `j = 6`.
+
+   - **Fourth iteration (`k = 3`)**:
+     - `result[3] = sum_ = 13`.
+     - Remove `code[i % n] = code[4 % 4] = code[0] = 5` from `sum_`, so `sum_ = 13 - 5 = 8`.
+     - Add `code[(j + 1) % n
+
+] = code[(6 + 1) % 4] = code[3] = 4` to `sum_`, so `sum_ = 8 + 4 = 12`.
+     - Move `i` to `i = 5` and `j` to `j = 7`.
+
+6. **Final `result`**:
+   - The final `result` array after the loop ends is `[12, 10, 16, 13]`.
+
+#### Output:
+
+```python
+[12, 10, 16, 13]
+```
+```
