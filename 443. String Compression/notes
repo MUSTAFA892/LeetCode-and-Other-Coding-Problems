@@ -1,0 +1,124 @@
+
+### **Approach 1: Using `write_index`**
+
+#### Code:
+```python
+class Solution:
+    def compress(self, chars: List[str]) -> int:
+        write_index = 0  # Pointer for writing to chars
+        count = 1  # Initialize count for the first character
+
+        for i in range(1, len(chars) + 1):
+            if i < len(chars) and chars[i] == chars[i - 1]:
+                count += 1  # Increment count if consecutive chars are same
+            else:
+                chars[write_index] = chars[i - 1]  # Write current character to chars
+                write_index += 1
+                if count > 1:  # If count > 1, append the count as a string
+                    for digit in str(count):
+                        chars[write_index] = digit
+                        write_index += 1
+                count = 1  # Reset count for the next group of characters
+
+        return write_index  # Return the new length of the modified chars list
+```
+
+#### **10 Key Points:**
+1. **`write_index` Pointer**: Used to keep track of where the next character (or digit for counts) will be written in the `chars` list.
+2. **Count Initialization**: The count is initialized to 1 as we begin with the first character.
+3. **Looping Through the List**: We start iterating from the second character (index 1) to compare it with the previous character.
+4. **Count Update**: If two consecutive characters are the same, `count` is incremented.
+5. **Character Write**: When the characters change (or we reach the end), the previous character is written to the `chars` list at the `write_index`.
+6. **Count Write**: If `count > 1`, we convert the count to a string and write each digit to `chars`.
+7. **Resetting Count**: The count is reset to 1 after processing each group of consecutive characters.
+8. **Edge Case Handling**: This method can handle cases with no repeating characters, a single repeating character, or characters with a count greater than 9.
+9. **No Extra Space**: The solution modifies the `chars` array in place without using any extra space for a separate result array.
+10. **Time Complexity**: The time complexity is O(n), where n is the length of the input string, as we go through the list once.
+
+#### **Working Example:**
+
+Input: `["a", "a", "b", "b", "c", "c", "c"]`
+
+1. **Initial State**: 
+   - `chars = ["a", "a", "b", "b", "c", "c", "c"]`
+   - `write_index = 0`, `count = 1`
+   
+2. **Iteration**:
+   - `i = 1`: `"a" == "a"`, increment `count = 2`
+   - `i = 2`: `"a" != "b"`, write `"a"` to `chars[0]`, `write_index = 1`, append `2` to `chars[1]`, `write_index = 2`, reset `count = 1`
+   - `i = 3`: `"b" == "b"`, increment `count = 2`
+   - `i = 4`: `"b" != "c"`, write `"b"` to `chars[2]`, `write_index = 3`, append `2` to `chars[3]`, `write_index = 4`, reset `count = 1`
+   - `i = 5`: `"c" == "c"`, increment `count = 2`
+   - `i = 6`: `"c" != "c"`, write `"c"` to `chars[4]`, `write_index = 5`, append `3` to `chars[5]`, `write_index = 6`, reset `count = 1`
+   
+3. **Final Output**:
+   - `chars = ["a", "2", "b", "2", "c", "3"]`
+   - Return value: `6` (new length of the compressed list)
+
+---
+
+### **Approach 2: Using a `result` List**
+
+#### Code:
+```python
+class Solution:
+    def compress(self, chars: List[str]) -> int:
+        result = []
+        count = 1  # Initialize count for the first character
+
+        for i in range(len(chars) - 1):
+            if chars[i] == chars[i + 1]:
+                count += 1  # Increment count if consecutive chars are the same
+            else:
+                result.append(chars[i])  # Append current character to result
+                if count > 1:
+                    result.append(str(count))  # Append the count as a string
+                count = 1  # Reset count for the next group of characters
+
+        # Handle the last character
+        result.append(chars[-1])
+        if count > 1:
+            result.append(str(count))
+
+        # Copy result back to chars
+        for i in range(len(result)):
+            chars[i] = result[i]
+
+        return len(result)  # Return the new length of the modified chars list
+```
+
+#### **10 Key Points:**
+1. **`result` List**: A new list (`result`) is used to store the compressed characters.
+2. **Count Initialization**: The count is initialized to 1, as we start with the first character.
+3. **Looping Through the List**: The loop iterates through the list of characters, comparing adjacent characters.
+4. **Count Update**: The count is incremented for consecutive characters.
+5. **Character Write**: When the characters change, the previous character is added to `result`.
+6. **Count Write**: If the count is greater than 1, the count is converted to a string and added to `result`.
+7. **Last Character Handling**: After the loop, the last character is handled, and its count (if greater than 1) is added to `result`.
+8. **Copying to `chars`**: The contents of `result` are copied back into the original `chars` list.
+9. **No Extra Space**: The solution uses an extra list (`result`) to hold the intermediate compressed characters.
+10. **Time Complexity**: The time complexity is O(n), where n is the length of the input string.
+
+#### **Working Example:**
+
+Input: `["a", "a", "b", "b", "c", "c", "c"]`
+
+1. **Initial State**: 
+   - `chars = ["a", "a", "b", "b", "c", "c", "c"]`
+   - `result = []`, `count = 1`
+   
+2. **Iteration**:
+   - `i = 0`: `"a" == "a"`, increment `count = 2`
+   - `i = 1`: `"a" != "b"`, append `"a"` to `result`, append `"2"` to `result`, reset `count = 1`
+   - `i = 2`: `"b" == "b"`, increment `count = 2`
+   - `i = 3`: `"b" != "c"`, append `"b"` to `result`, append `"2"` to `result`, reset `count = 1`
+   - `i = 4`: `"c" == "c"`, increment `count = 2`
+   - `i = 5`: `"c" != "c"`, append `"c"` to `result`, append `"3"` to `result`, reset `count = 1`
+   
+3. **Final Output**:
+   - `result = ["a", "2", "b", "2", "c", "3"]`
+   - Copy back to `chars`: `chars = ["a", "2", "b", "2", "c", "3"]`
+   - Return value: `6` (new length of the compressed list)
+
+---
+

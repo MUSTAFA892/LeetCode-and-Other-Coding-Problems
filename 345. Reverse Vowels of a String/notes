@@ -1,0 +1,90 @@
+
+
+1. **Method Definition**:  
+   The method `reverseVowels` is defined within a class `Solution` and takes one parameter, `s`, which is a string.
+
+2. **Convert String to List**:  
+   The string `s` is converted to a list of characters using `list(s)`. This allows modification of individual characters (as strings are immutable in Python).
+
+3. **Vowel List**:  
+   A list `vowels` is defined that contains both uppercase and lowercase vowels: `['A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u']`.
+
+4. **Collect Vowels and Their Indices**:  
+   The loop `for i in range(len(s))` iterates through the list `s`, checking if each character is a vowel. If it is, the vowel is appended to the `result` list, and the index is appended to the `index` list.
+
+5. **Reverse Vowels**:  
+   After collecting the vowels, `result.reverse()` is called to reverse the order of vowels.
+
+6. **Replace Vowels**:  
+   Using `zip(index, result)`, the method iterates over the original indices of the vowels and the reversed vowels from `result`. It then replaces the vowels in the original list `s` with the reversed vowels.
+
+7. **Return Modified String**:  
+   After replacing the vowels, `return "".join(s)` is used to join the list of characters back into a string and return it.
+
+8. **Time Complexity**:  
+   The time complexity is O(n) where `n` is the length of the input string `s`. This is because we iterate through the string a few times (once to collect vowels, once to reverse, and once to replace vowels).
+
+9. **Space Complexity**:  
+   The space complexity is also O(n), as we store additional lists (`result`, `index`, and the modified list `s`).
+
+10. **Edge Case Handling**:  
+   The method handles edge cases such as when the input string has no vowels or is empty. The reversed vowels will be the same as the original vowels if there's no vowel to reverse.
+
+---
+
+### Working Walkthrough Example:
+
+Let's walk through the method with an example input: `s = "hello world"`.
+
+**Input:**
+```python
+s = "hello world"
+```
+
+1. **Convert String to List:**  
+   - Convert the string into a list of characters:
+   ```python
+   s = ['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
+   ```
+
+2. **Vowel List and Initialization:**  
+   - Initialize `vowels` as `['A', 'a', 'E', 'e', 'I', 'i', 'O', 'o', 'U', 'u']`.  
+   - Initialize `result` as an empty list and `index` as an empty list.
+
+3. **Collect Vowels and Their Indices:**  
+   - Loop through the string and collect vowels and their indices:  
+     - At index `1`, we have the vowel `'e'`, so `result = ['e']` and `index = [1]`.  
+     - At index `4`, we have the vowel `'o'`, so `result = ['e', 'o']` and `index = [1, 4]`.  
+     - At index `7`, we have the vowel `'o'`, so `result = ['e', 'o', 'o']` and `index = [1, 4, 7]`.  
+   - After looping through the string, `result = ['e', 'o', 'o']` and `index = [1, 4, 7]`.
+
+4. **Reverse Vowels:**  
+   - Reverse the `result` list:
+   ```python
+   result.reverse()
+   # result = ['o', 'o', 'e']
+   ```
+
+5. **Replace Vowels with Reversed Vowels:**  
+   - Using `zip(index, result)`, we iterate over the indices `[1, 4, 7]` and the reversed vowels `['o', 'o', 'e']`:  
+     - Replace the vowel at index `1` with `'o'`: `s[1] = 'o'`  
+     - Replace the vowel at index `4` with `'o'`: `s[4] = 'o'`  
+     - Replace the vowel at index `7` with `'e'`: `s[7] = 'e'`  
+   - The modified list `s` becomes:
+   ```python
+   s = ['h', 'o', 'l', 'l', 'o', ' ', 'w', 'e', 'r', 'l', 'd']
+   ```
+
+6. **Return Modified String:**  
+   - Join the list `s` back into a string:
+   ```python
+   "".join(s)  # "hollo werld"
+   ```
+
+**Output:**
+```python
+"hollo werld"
+```  
+
+--- 
+
