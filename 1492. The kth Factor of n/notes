@@ -1,0 +1,66 @@
+
+
+1. **Problem Context**:
+   - The method `kthFactor` finds the `k`th smallest factor of a given number `n`.
+
+2. **Input Parameters**:
+   - `n`: The number whose factors are being searched.
+   - `k`: The position of the factor you want to retrieve (1-based index).
+
+3. **Factor List Initialization**:
+   - An empty list, `factors`, is initialized to store all factors of `n`.
+
+4. **Finding Factors**:
+   - A `for` loop iterates over numbers from `1` to `n` to check which numbers divide `n` evenly (i.e., `n % i == 0`).
+   - If `i` is a factor of `n`, it is added to the `factors` list.
+
+5. **Checking Factor Count**:
+   - After collecting all factors, the function checks whether the total number of factors is less than `k` using the condition `if len(factors) < k`.
+   - If the list of factors contains fewer than `k` elements, it returns `-1`, indicating that the `k`th factor does not exist.
+
+6. **Accessing the k-th Factor**:
+   - If there are enough factors (i.e., `len(factors) >= k`), the method returns the `k`th factor.
+   - Since list indexing is 0-based and `k` is 1-based, it returns `factors[k-1]`.
+
+7. **Time Complexity**:
+   - The time complexity of this solution is **O(n)**, where `n` is the input number. This is because the algorithm checks all numbers from `1` to `n` to find factors.
+
+8. **Space Complexity**:
+   - The space complexity is **O(d)**, where `d` is the number of divisors of `n`. In the worst case, the space used could be proportional to `n`.
+
+9. **Edge Case Considerations**:
+   - If `k` is greater than the total number of factors of `n`, the function returns `-1`.
+   - If `k` is 1, it returns the smallest factor, which is always 1.
+
+10. **Potential Optimizations**:
+   - For larger values of `n`, the solution can be optimized by iterating only up to the square root of `n` and collecting both the divisor and its complement (`n // i`) simultaneously, reducing the time complexity to **O(sqrt(n))**.
+
+### Working Example:
+
+Let's walk through an example where `n = 12` and `k = 3`:
+
+1. **Input**: `n = 12`, `k = 3`
+2. **Finding Factors**:
+   - Start with `factors = []`
+   - Check for divisibility:
+     - 1 divides 12 → `factors = [1]`
+     - 2 divides 12 → `factors = [1, 2]`
+     - 3 divides 12 → `factors = [1, 2, 3]`
+     - 4 divides 12 → `factors = [1, 2, 3, 4]`
+     - 5 does not divide 12 → no change
+     - 6 divides 12 → `factors = [1, 2, 3, 4, 6]`
+     - 7 does not divide 12 → no change
+     - 8 does not divide 12 → no change
+     - 9 does not divide 12 → no change
+     - 10 does not divide 12 → no change
+     - 11 does not divide 12 → no change
+     - 12 divides 12 → `factors = [1, 2, 3, 4, 6, 12]`
+3. **Check if k-th Factor Exists**:
+   - The total number of factors is 6 (`[1, 2, 3, 4, 6, 12]`), and `k = 3`.
+   - Since there are 6 factors, the 3rd factor exists.
+4. **Return k-th Factor**:
+   - The 3rd factor is `factors[3 - 1] = factors[2] = 3`.
+
+**Output**: `3`
+
+Thus, the function correctly returns `3` as the 3rd factor of `12`.
