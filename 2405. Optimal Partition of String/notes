@@ -1,0 +1,142 @@
+
+
+### Approach 1: Using a Temporary Substring (`temp`):
+
+**Code Overview:**
+```python
+class Solution:
+    def partitionString(self, s: str) -> int:
+        result = []  # To store the partitions
+        temp = ""  # Temporary string to build each partition
+        for char in s:
+            if char in temp:  # If character is already in the temp partition
+                result.append(temp)  # Save the current partition
+                temp = char  # Start a new partition with the current character
+            temp += char  # Add the current character to the temp substring
+        if temp:  # If any leftover characters in temp, add them as a partition
+            result.append(temp)
+        return len(result)  # Return the number of partitions
+```
+
+#### 1. **Result Storage**:
+   - Uses a list `result` to store the substrings (partitions) as we process the input string.
+   
+#### 2. **Building Substrings**:
+   - `temp` is used to build each partition one character at a time.
+   
+#### 3. **Partition Condition**:
+   - When a character is **repeated** in `temp` (i.e., a character already exists in the current partition), the current partition (`temp`) is added to the `result` list.
+   
+#### 4. **Start New Partition**:
+   - When a repeated character is found, a new substring (`temp`) starts from that repeated character, and the old one is closed off.
+
+#### 5. **Appending Final Partition**:
+   - After finishing the loop, any leftover characters in `temp` (i.e., the last partition) are appended to `result`.
+
+#### 6. **Time Complexity**:
+   - The approach involves iterating through the string once, so the time complexity is **O(n)**, where `n` is the length of the string.
+
+#### 7. **Space Complexity**:
+   - The space complexity is also **O(n)** because we're storing the partitions in the `result` list.
+
+#### 8. **Easy to Understand**:
+   - The approach is straightforward because it simply builds substrings and adds them to a list when they are complete.
+
+#### 9. **String Concatenation**:
+   - String concatenation (`temp += char`) is done to build each substring, which is simple but can be inefficient in some cases due to the creation of new strings.
+
+#### 10. **Final Return**:
+   - The result is the **length of the `result` list**, which tells us how many partitions we have.
+
+---
+
+### Approach 2: Using a Set (`partition`):
+
+**Code Overview:**
+```python
+class Solution:
+    def partitionString(self, s: str) -> int:
+        partition = set()  # Set to track unique characters in the current partition
+        count = 1  # Start with one partition
+        for char in s:
+            if char in partition:  # If character is already in the set
+                count += 1  # Start a new partition
+                partition.clear()  # Clear the set for the new partition
+            partition.add(char)  # Add character to the current partition set
+        return count  # Return the number of partitions
+```
+
+#### 1. **Result Storage**:
+   - A counter (`count`) is used to keep track of the number of partitions.
+   
+#### 2. **Tracking Unique Characters**:
+   - A **set (`partition`)** is used to track which characters have been seen in the current partition.
+
+#### 3. **When to Start a New Partition**:
+   - If the current character is already in the set (meaning it has appeared in the current partition), a new partition is started, and the set is cleared.
+
+#### 4. **Efficiency of Sets**:
+   - Sets allow for **O(1)** average time complexity for both checking membership and adding elements, making the approach efficient.
+
+#### 5. **Clear and Restart**:
+   - When a repeat character is encountered, the set is cleared, and a new partition begins.
+
+#### 6. **Time Complexity**:
+   - The time complexity is **O(n)**, where `n` is the length of the string, because each character is processed once and set operations (membership check, insertion) are **O(1)**.
+
+#### 7. **Space Complexity**:
+   - The space complexity is **O(k)**, where `k` is the number of unique characters in the string (since we're using a set to store characters in the current partition).
+
+#### 8. **Compact**:
+   - The code is more compact because it only uses a counter and a set to track partitions.
+
+#### 9. **Efficient with Space**:
+   - Unlike the first approach, where substrings are stored in a list, this approach only uses a set and a counter, saving space.
+
+#### 10. **Final Return**:
+   - The result is simply the **number of partitions** (`count`), which is returned at the end.
+
+---
+
+### Walkthrough Examples:
+
+#### **Example 1: `"abacaba"`**
+
+- **Input**: `"abacaba"`
+- **Goal**: Partition into as many substrings as possible such that each substring has unique characters.
+
+---
+
+### Approach 1 Walkthrough (`temp`):
+
+1. Start with `temp = ""` and `result = []`.
+2. **Character 'a'**: Add it to `temp`, `temp = "a"`.
+3. **Character 'b'**: Add it to `temp`, `temp = "ab"`.
+4. **Character 'a'**: It's already in `temp`, so add `temp` (`"ab"`) to `result`, and start a new `temp = "a"`.
+5. **Character 'c'**: Add it to `temp`, `temp = "ac"`.
+6. **Character 'a'**: It's already in `temp`, so add `temp` (`"ac"`) to `result`, and start a new `temp = "a"`.
+7. **Character 'b'**: Add it to `temp`, `temp = "ab"`.
+8. **Character 'a'**: It's already in `temp`, so add `temp` (`"ab"`) to `result`, and start a new `temp = "a"`.
+9. The final partition (`"a"`) is added to `result`.
+
+**Partitions**: `["ab", "a", "ac", "ab", "a"]`  
+**Result**: Length is 5 partitions.
+
+---
+
+### Approach 2 Walkthrough (Set `partition`):
+
+1. Start with `partition = set()` and `count = 1`.
+2. **Character 'a'**: It's not in `partition`, so add it to `partition`, `partition = {'a'}`.
+3. **Character 'b'**: It's not in `partition`, so add it to `partition`, `partition = {'a', 'b'}`.
+4. **Character 'a'**: It's already in `partition`, so increase `count` to 2 and clear the set. Start a new partition with `partition = {'a'}`.
+5. **Character 'c'**: It's not in `partition`, so add it to `partition`, `partition = {'a', 'c'}`.
+6. **Character 'a'**: It's already in `partition`, so increase `count` to 3 and clear the set. Start a new partition with `partition = {'a'}`.
+7. **Character 'b'**: It's not in `partition`, so add it to `partition`, `partition = {'a', 'b'}`.
+8. **Character 'a'**: It's already in `partition`, so increase `count` to 4 and clear the set. Start a new partition with `partition = {'a'}`.
+
+**Partitions**: 4  
+**Result**: Length is 4 partitions.
+
+---
+
