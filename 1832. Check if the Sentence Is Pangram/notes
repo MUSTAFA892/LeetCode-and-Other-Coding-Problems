@@ -1,0 +1,91 @@
+
+
+1. **Input**: The function takes a string `sentence` as input, which represents a sentence that may or may not contain all the letters of the English alphabet.
+2. **Goal**: The goal is to determine whether the given `sentence` is a **pangram**. A **pangram** is a sentence that contains every letter of the English alphabet at least once.
+3. **Set for Uniqueness**: A set `s` is used to store the unique characters in the sentence. The set automatically handles duplicates, so each character is only stored once.
+4. **Iterating Over the Sentence**: The function iterates through each character `i` in the sentence using a `for` loop.
+5. **Adding Characters to Set**: For each character `i`, if it is not already in the set `s`, it is added to the set.
+6. **Checking the Set Length**: After iterating through the sentence, the length of the set `s` is checked.
+7. **Comparing to 26**: If the length of the set `s` is `26`, it means that the sentence contains all 26 letters of the English alphabet, and it is a pangram.
+8. **Returning True or False**: If the set has exactly 26 characters, return `True`. If not, return `False`.
+9. **Time Complexity**: The time complexity is **O(n)** where `n` is the length of the sentence, because we iterate through each character in the string once.
+10. **Space Complexity**: The space complexity is **O(1)**, since the size of the set will never exceed 26 (the number of letters in the English alphabet).
+
+---
+
+### **Walkthrough Example**:
+
+Let's walk through the code with the example `sentence = "the quick brown fox jumps over the lazy dog"`.
+
+**Step 1: Initialize the Set**
+
+```python
+s = set()
+```
+
+At this point, `s` is an empty set.
+
+**Step 2: Iterating Over the Sentence**
+
+We iterate through each character in the sentence and add it to the set `s` if it's not already present:
+
+- `'t'`: Add `'t'` to the set: `s = {'t'}`
+- `'h'`: Add `'h'` to the set: `s = {'t', 'h'}`
+- `'e'`: Add `'e'` to the set: `s = {'t', 'h', 'e'}`
+- `' '`: Space is not added (it's not a letter).
+- `'q'`: Add `'q'` to the set: `s = {'t', 'h', 'e', 'q'}`
+- `'u'`: Add `'u'` to the set: `s = {'t', 'h', 'e', 'q', 'u'}`
+- `'i'`: Add `'i'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i'}`
+- `'c'`: Add `'c'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c'}`
+- `'k'`: Add `'k'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k'}`
+- `' '`: Space is not added.
+- `'b'`: Add `'b'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b'}`
+- `'r'`: Add `'r'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r'}`
+- `'o'`: Add `'o'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o'}`
+- `'w'`: Add `'w'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o', 'w'}`
+- `'n'`: Add `'n'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o', 'w', 'n'}`
+- `' '`: Space is not added.
+- `'f'`: Add `'f'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o', 'w', 'n', 'f'}`
+- `'o'`: `'o'` is already in the set (no action taken).
+- `'x'`: Add `'x'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o', 'w', 'n', 'f', 'x'}`
+- `' '`: Space is not added.
+- `'j'`: Add `'j'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o', 'w', 'n', 'f', 'x', 'j'}`
+- `'u'`: `'u'` is already in the set (no action taken).
+- `'m'`: Add `'m'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o', 'w', 'n', 'f', 'x', 'j', 'm'}`
+- `'p'`: Add `'p'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o', 'w', 'n', 'f', 'x', 'j', 'm', 'p'}`
+- `'s'`: Add `'s'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o', 'w', 'n', 'f', 'x', 'j', 'm', 'p', 's'}`
+- `' '`: Space is not added.
+- `'o'`: `'o'` is already in the set (no action taken).
+- `'v'`: Add `'v'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o', 'w', 'n', 'f', 'x', 'j', 'm', 'p', 's', 'v'}`
+- `'e'`: `'e'` is already in the set (no action taken).
+- `'r'`: `'r'` is already in the set (no action taken).
+- `' '`: Space is not added.
+- `'t'`: `'t'` is already in the set (no action taken).
+- `'h'`: `'h'` is already in the set (no action taken).
+- `'e'`: `'e'` is already in the set (no action taken).
+- `' '`: Space is not added.
+- `'l'`: Add `'l'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o', 'w', 'n', 'f', 'x', 'j', 'm', 'p', 's', 'v', 'l'}`
+- `'a'`: Add `'a'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o', 'w', 'n', 'f', 'x', 'j', 'm', 'p', 's', 'v', 'l', 'a'}`
+- `'z'`: Add `'z'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o', 'w', 'n', 'f', 'x', 'j', 'm', 'p', 's', 'v', 'l', 'a', 'z'}`
+- `'y'`: Add `'y'` to the set: `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o', 'w', 'n', 'f', 'x', 'j', 'm', 'p', 's', 'v', 'l', 'a', 'z', 'y'}`
+- `' '`: Space is not added.
+- `'d'`: Add `'d'` to the set:
+
+ `s = {'t', 'h', 'e', 'q', 'u', 'i', 'c', 'k', 'b', 'r', 'o', 'w', 'n', 'f', 'x', 'j', 'm', 'p', 's', 'v', 'l', 'a', 'z', 'y', 'd'}`
+
+**Step 3: Check the Set Length**
+
+After processing all characters, the length of the set `s` is `26` (since all letters of the alphabet are present in the sentence).
+
+**Step 4: Return `True`**
+
+Since the length of `s` is `26`, the function returns `True`.
+
+**Output**:
+
+```python
+Output = True
+```
+
+---
+

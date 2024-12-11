@@ -1,0 +1,84 @@
+
+
+1. **Function Definition**: The function `sumOfMultiples(self, n: int)` takes an integer `n` as input and calculates the sum of all numbers from 1 to `n` that are divisible by 3, 5, or 7.
+
+2. **Result Initialization**: An empty list `result` is initialized to store numbers that are divisible by 3, 5, or 7.
+
+3. **Loop Through Numbers**: The function uses a `for` loop to iterate through all integers `i` from `1` to `n`.
+
+4. **Check Divisibility**: Inside the loop, the function checks if `i` is divisible by 3, 5, or 7 using the modulus operator (`%`). Specifically, `i % 3 == 0`, `i % 5 == 0`, and `i % 7 == 0`.
+
+5. **Adding to Result**: If any of the conditions (divisibility by 3, 5, or 7) are true, `i` is added to the `result` list using `result.append(i)`.
+
+6. **Summing the Multiples**: After the loop finishes, the function calculates the sum of all numbers in the `result` list using `sum(result)`.
+
+7. **Returning the Sum**: The function returns the sum of the numbers that were divisible by 3, 5, or 7.
+
+8. **Time Complexity**: The time complexity of the function is **O(n)** because the function iterates through each number from 1 to `n` once and performs constant time operations for each number.
+
+9. **Space Complexity**: The space complexity is **O(n)** in the worst case because we store up to `n` numbers in the `result` list (if every number is divisible by 3, 5, or 7).
+
+10. **Edge Cases**: If `n` is small (e.g., `n = 1`), the function handles this gracefully by returning `0` because no numbers will be divisible by 3, 5, or 7. Similarly, if there are no multiples of 3, 5, or 7 up to `n`, the sum will also be `0`.
+
+---
+
+### **Walkthrough Example:**
+
+Let's walk through the code with the example `n = 10`.
+
+**Step 1: Initialize `result`**
+
+```python
+result = []
+```
+
+At this point, `result` is an empty list.
+
+**Step 2: Loop Through Numbers from 1 to 10**
+
+We iterate over each number `i` from 1 to 10:
+
+- `i = 1`: `1 % 3 != 0`, `1 % 5 != 0`, `1 % 7 != 0` → No addition to `result`.
+- `i = 2`: `2 % 3 != 0`, `2 % 5 != 0`, `2 % 7 != 0` → No addition to `result`.
+- `i = 3`: `3 % 3 == 0` → Add `3` to `result`: `result = [3]`.
+- `i = 4`: `4 % 3 != 0`, `4 % 5 != 0`, `4 % 7 != 0` → No addition to `result`.
+- `i = 5`: `5 % 5 == 0` → Add `5` to `result`: `result = [3, 5]`.
+- `i = 6`: `6 % 3 == 0` → Add `6` to `result`: `result = [3, 5, 6]`.
+- `i = 7`: `7 % 7 == 0` → Add `7` to `result`: `result = [3, 5, 6, 7]`.
+- `i = 8`: `8 % 3 != 0`, `8 % 5 != 0`, `8 % 7 != 0` → No addition to `result`.
+- `i = 9`: `9 % 3 == 0` → Add `9` to `result`: `result = [3, 5, 6, 7, 9]`.
+- `i = 10`: `10 % 5 == 0` → Add `10` to `result`: `result = [3, 5, 6, 7, 9, 10]`.
+
+**Step 3: Sum the Multiples**
+
+After the loop, the `result` list contains `[3, 5, 6, 7, 9, 10]`. We now calculate the sum:
+
+```python
+sum(result) = 3 + 5 + 6 + 7 + 9 + 10 = 40
+```
+
+**Step 4: Return the Sum**
+
+The function returns the sum of the multiples, which is `40`.
+
+**Output**:
+
+```python
+Output = 40
+```
+
+---
+
+### **Edge Case Example:**
+
+**Input**: `n = 1`
+
+- There are no numbers between 1 and 1 that are divisible by 3, 5, or 7.
+- Therefore, `result = []`.
+- `sum(result) = 0`.
+
+**Output**:
+
+```python
+Output = 0
+```

@@ -1,0 +1,100 @@
+Sure! Here's the explanation in text format. You can copy and paste the following:
+
+---
+
+### **10 Key Points of Explanation**:
+
+1. **Input**: The function receives a string `s` where you need to find the index of the first non-repeating character.
+2. **Goal**: The goal is to return the **index** of the first character in the string `s` that does not repeat. If no such character exists, return `-1`.
+3. **Dictionary for Counting**: A dictionary `freq` is used to store the **frequency** of each character in the string.
+4. **First Loop (Frequency Count)**: You loop through the string and count how many times each character appears using the `freq` dictionary.
+5. **Update the Dictionary**: If a character already exists in `freq`, you increment its count. If it's a new character, you set its count to `1`.
+6. **Second Loop (Check for Unique)**: After counting frequencies, you loop through the string again to check for the first character that has a frequency of `1` (i.e., it is unique).
+7. **Return the Index**: The first character with a frequency of `1` is the first non-repeating character. Return its index.
+8. **Return `-1` if No Unique Character**: If no character has a frequency of `1` (i.e., all characters repeat), return `-1`.
+9. **Time Complexity**: The time complexity is **O(n)** where `n` is the length of the string because you make two passes through the string (one for counting and one for checking).
+10. **Space Complexity**: The space complexity is **O(n)** because you store the frequencies of characters in a dictionary, which takes up space proportional to the number of unique characters in the string.
+
+---
+
+### **Walkthrough Example:**
+
+Let’s walk through the code with the example string `s = "leetcode"`.
+
+**Step 1: Initialize the Frequency Dictionary**
+
+```python
+freq = {}
+```
+
+At this point, `freq` is an empty dictionary.
+
+**Step 2: First Loop - Count the Frequencies**
+
+We iterate through each character in the string `s = "leetcode"` and update the `freq` dictionary:
+
+- `'l'`: `freq = {'l': 1}` (First occurrence of `'l'`, so its count is 1).
+- `'e'`: `freq = {'l': 1, 'e': 1}` (First occurrence of `'e'`, so its count is 1).
+- `'e'`: `freq = {'l': 1, 'e': 2}` (Second occurrence of `'e'`, so its count is now 2).
+- `'t'`: `freq = {'l': 1, 'e': 2, 't': 1}` (First occurrence of `'t'`, so its count is 1).
+- `'c'`: `freq = {'l': 1, 'e': 2, 't': 1, 'c': 1}` (First occurrence of `'c'`, so its count is 1).
+- `'o'`: `freq = {'l': 1, 'e': 2, 't': 1, 'c': 1, 'o': 1}` (First occurrence of `'o'`, so its count is 1).
+- `'d'`: `freq = {'l': 1, 'e': 2, 't': 1, 'c': 1, 'o': 1, 'd': 1}` (First occurrence of `'d'`, so its count is 1).
+- `'e'`: `freq = {'l': 1, 'e': 3, 't': 1, 'c': 1, 'o': 1, 'd': 1}` (Third occurrence of `'e'`, so its count becomes 3).
+
+After this loop, the frequency dictionary looks like this:
+
+```python
+freq = {'l': 1, 'e': 3, 't': 1, 'c': 1, 'o': 1, 'd': 1}
+```
+
+**Step 3: Second Loop - Find the First Unique Character**
+
+Now, we iterate through the string again to find the first character with a frequency of 1.
+
+- At index `0`, `'l'` has a frequency of 1 (`freq['l'] == 1`), so we return index `0`.
+
+**Output**:
+```python
+Output = 0
+```
+
+Thus, the first non-repeating character is `'l'` at index `0`.
+
+---
+
+### **Final Walkthrough Example:**
+
+Let's try another example for a string where all characters are repeated:
+
+**Input**: `s = "aabb"`
+
+1. **First Loop - Count the Frequencies**:
+
+- `'a'`: `freq = {'a': 1}`
+- `'a'`: `freq = {'a': 2}`
+- `'b'`: `freq = {'a': 2, 'b': 1}`
+- `'b'`: `freq = {'a': 2, 'b': 2}`
+
+At the end of the first loop, `freq` looks like:
+
+```python
+freq = {'a': 2, 'b': 2}
+```
+
+2. **Second Loop - Find the First Unique Character**:
+   - At index `0`, `'a'` has a frequency of `2` (`freq['a'] == 2`), so it is not unique.
+   - At index `1`, `'a'` has a frequency of `2` (`freq['a'] == 2`), so it is not unique.
+   - At index `2`, `'b'` has a frequency of `2` (`freq['b'] == 2`), so it is not unique.
+   - At index `3`, `'b'` has a frequency of `2` (`freq['b'] == 2`), so it is not unique.
+
+Since all characters are repeating, we return `-1`.
+
+**Output**:
+```python
+Output = -1
+```
+
+---
+
+I hope this helps! You can now copy and paste this explanation into a `.txt` file. Let me know if you need further assistance!

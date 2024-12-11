@@ -1,0 +1,73 @@
+
+
+1. **Class Definition**:
+   - The code defines a class `Solution` that contains the method `addDigits` which implements the logic to repeatedly sum the digits of a number until it becomes a single digit.
+
+2. **Method Definition**:
+   - `addDigits(self, num: int) -> int` is the method that takes an integer `num` and returns an integer, which is the final single-digit result after repeatedly summing its digits.
+
+3. **While Loop**:
+   - The loop `while num >= 10` runs as long as the number has more than one digit (i.e., `num` is greater than or equal to 10).
+
+4. **Convert Number to String**:
+   - `str(num)` converts the number to a string, which allows easy iteration over its digits.
+
+5. **List to Store Digits**:
+   - `result = []` initializes an empty list where each digit of the number will be stored as an integer.
+
+6. **For Loop to Iterate Over Digits**:
+   - The loop `for i in str(num)` iterates over each digit of the number (converted to a string), and `int(i)` converts the digit back into an integer.
+
+7. **Appending Digits to the List**:
+   - `result.append(int(i))` appends the integer form of each character (digit) to the `result` list.
+
+8. **Sum of Digits**:
+   - `num = sum(result)` calculates the sum of the digits stored in the list `result`, and assigns it back to `num`.
+
+9. **Repetition of Process**:
+   - This process repeats until `num` becomes a single-digit number (i.e., `num < 10`).
+
+10. **Return Final Result**:
+   - After the loop exits, meaning `num` is a single-digit number, the method returns `num`.
+
+### Walking Example:
+
+Let’s walk through an example where `num = 38`:
+
+1. **Initial Input**:  
+   `num = 38`
+
+2. **First Iteration** (`while num >= 10`):
+   - **Step 1**: Convert `38` to string: `'38'`.
+   - **Step 2**: Initialize `result = []`.
+   - **Step 3**: Iterate over the string `'38'`:
+     - For `i = '3'`: append `int('3')` → `result = [3]`
+     - For `i = '8'`: append `int('8')` → `result = [3, 8]`
+   - **Step 4**: Sum the digits: `sum([3, 8]) = 11`.
+   - **Step 5**: Set `num = 11`.
+   
+   Now, `num = 11` and the while loop will continue.
+
+3. **Second Iteration** (`while num >= 10`):
+   - **Step 1**: Convert `11` to string: `'11'`.
+   - **Step 2**: Initialize `result = []`.
+   - **Step 3**: Iterate over the string `'11'`:
+     - For `i = '1'`: append `int('1')` → `result = [1]`
+     - For `i = '1'`: append `int('1')` → `result = [1, 1]`
+   - **Step 4**: Sum the digits: `sum([1, 1]) = 2`.
+   - **Step 5**: Set `num = 2`.
+
+   Now, `num = 2` which is a single digit, so the while loop terminates.
+
+4. **Final Step**: Return `num = 2` since it is now a single-digit number.
+
+### Final Output:
+- The function returns `2`, which is the single-digit result after repeatedly summing the digits of `38`.
+
+### Example Walkthrough Recap:
+- **Input**: `38`
+- **Process**:
+  - `38 → 3 + 8 = 11`
+  - `11 → 1 + 1 = 2`
+- **Final Output**: `2`
+
