@@ -1,0 +1,97 @@
+
+1. **Class Definition**: 
+   - The solution is defined inside a class `Solution` with a method `permute()` that takes a list `nums` as input and returns all possible permutations of that list.
+
+2. **Input**:
+   - The input parameter `nums` is a list of integers.
+
+3. **Using `itertools.permutations()`**:
+   - `itertools.permutations(nums)` is used to generate all possible permutations of the list `nums`. This function returns an iterator of tuples where each tuple represents a permutation of the elements in `nums`.
+
+4. **Iterating Over Permutations**:
+   - We iterate over each permutation in the `perm` iterator (which is the result of `itertools.permutations(nums)`).
+
+5. **Converting Tuples to Lists**:
+   - Inside the loop, each permutation is a tuple. The code appends each permutation (as a tuple) directly to the `result` list. In this case, the list contains tuples, but they can easily be converted to lists if needed.
+
+6. **Storing Permutations**:
+   - Each permutation is appended to the `result` list. By the end of the loop, `result` contains all permutations of `nums`.
+
+7. **Return Statement**:
+   - The `result` list, which holds all the permutations, is returned at the end of the function.
+
+8. **`itertools.permutations()`**:
+   - This function generates all permutations of the input list, and the time complexity for generating all permutations is **O(n!)**, where `n` is the number of elements in `nums`.
+
+9. **Time Complexity**:
+   - **Time Complexity**: Generating all permutations has a time complexity of **O(n!)** because there are `n!` permutations of `n` distinct elements.
+   - **Space Complexity**: The space complexity is also **O(n!)**, as we store all the permutations.
+
+10. **Edge Cases**:
+   - If the input list `nums` is empty (`[]`), the function will return an empty list (`[]`).
+   - If the list contains repeated elements, `itertools.permutations()` will still generate all permutations, but they might include duplicates.
+
+---
+
+### Working Example:
+
+Let’s walk through the code with a specific example to understand how it works.
+
+#### Input:
+```python
+nums = [1, 2, 3]
+```
+
+#### Code Execution:
+
+1. **Initialization**:
+   - We start by initializing an empty list `result` to store the permutations.
+   - The `perm` variable is assigned the iterator returned by `itertools.permutations(nums)`. This will generate permutations of the list `[1, 2, 3]`.
+
+2. **Calling `itertools.permutations()`**:
+   - `itertools.permutations([1, 2, 3])` generates the following iterator:
+     ```
+     (1, 2, 3)
+     (1, 3, 2)
+     (2, 1, 3)
+     (2, 3, 1)
+     (3, 1, 2)
+     (3, 2, 1)
+     ```
+
+3. **Iterating Over Permutations**:
+   - In the `for` loop, we iterate over each permutation produced by `itertools.permutations(nums)`:
+   
+     - **First iteration**: `i = (1, 2, 3)`
+       - Append `(1, 2, 3)` to `result`, so `result = [(1, 2, 3)]`.
+     
+     - **Second iteration**: `i = (1, 3, 2)`
+       - Append `(1, 3, 2)` to `result`, so `result = [(1, 2, 3), (1, 3, 2)]`.
+     
+     - **Third iteration**: `i = (2, 1, 3)`
+       - Append `(2, 1, 3)` to `result`, so `result = [(1, 2, 3), (1, 3, 2), (2, 1, 3)]`.
+     
+     - **Fourth iteration**: `i = (2, 3, 1)`
+       - Append `(2, 3, 1)` to `result`, so `result = [(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1)]`.
+     
+     - **Fifth iteration**: `i = (3, 1, 2)`
+       - Append `(3, 1, 2)` to `result`, so `result = [(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2)]`.
+     
+     - **Sixth iteration**: `i = (3, 2, 1)`
+       - Append `(3, 2, 1)` to `result`, so `result = [(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]`.
+
+4. **Return**:
+   - After completing all iterations, the `result` list contains all the permutations of `[1, 2, 3]`. The method then returns `result`:
+   
+   ```python
+   return [(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]
+   ```
+
+#### Final Output:
+
+```python
+[(1, 2, 3), (1, 3, 2), (2, 1, 3), (2, 3, 1), (3, 1, 2), (3, 2, 1)]
+```
+
+---
+

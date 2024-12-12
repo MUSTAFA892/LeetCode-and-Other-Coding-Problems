@@ -1,0 +1,92 @@
+
+
+1. **Class Definition**:
+   - The solution is wrapped inside a class `Solution`, with a method `pickGifts()` that takes the list of gifts and the integer `k` (number of seconds).
+
+2. **Input Parameters**:
+   - `gifts`: A list of integers where each element represents the number of gifts in different piles.
+   - `k`: The number of seconds during which the operation is performed.
+
+3. **Initial Setup**:
+   - `count = 0`: A counter variable to keep track of the number of operations performed (seconds).
+
+4. **Main Loop**:
+   - `while count < k`: The loop runs exactly `k` times, corresponding to the `k` seconds during which the operation is repeated.
+
+5. **Finding Maximum Gifts**:
+   - `max_ = max(gifts)`: In each iteration, the pile with the maximum number of gifts is identified using Python's `max()` function.
+
+6. **Removing the Maximum Pile**:
+   - `gifts.remove(max_)`: The pile with the maximum number of gifts is removed from the list `gifts`.
+
+7. **Replacing with Floor of Square Root**:
+   - `gifts.append(math.floor(math.sqrt(max_)))`: The pile is replaced by the **floor of the square root** of the maximum number of gifts, calculated using `math.sqrt(max_)` and `math.floor()`.
+
+8. **Counting the Operation**:
+   - `count += 1`: The counter `count` is incremented after each operation (second), and the loop continues until `k` operations have been performed.
+
+9. **Returning the Result**:
+   - `return sum(gifts)`: After all `k` operations, the sum of the remaining gifts in the piles is returned. This is the total number of gifts left after the specified number of operations.
+
+10. **Time Complexity**:
+   - **Finding max**: `O(n)` where `n` is the number of piles (length of `gifts`).
+   - **Removing an element**: `O(n)` because removing an element from a list is O(n) in the worst case.
+   - The loop runs `k` times, so the overall time complexity is approximately `O(k * n)`.
+
+---
+
+### Working Example:
+
+Let’s walk through the code with an example:
+
+#### Input:
+```python
+gifts = [25, 64, 9, 4, 100]
+k = 4
+```
+
+1. **Initial Setup**:
+   - `gifts = [25, 64, 9, 4, 100]`
+   - `k = 4`
+   - `count = 0`
+
+2. **First Iteration** (`count = 0`):
+   - Find the maximum pile: `max_ = max(gifts)` → `max_ = 100`.
+   - Remove `100` from the list: `gifts.remove(max_)` → `gifts = [25, 64, 9, 4]`.
+   - Replace `100` with the floor of its square root: `math.floor(math.sqrt(100)) = 10`.
+   - Add `10` to the list: `gifts.append(10)` → `gifts = [25, 64, 9, 4, 10]`.
+   - Increment `count`: `count = 1`.
+
+3. **Second Iteration** (`count = 1`):
+   - Find the maximum pile: `max_ = max(gifts)` → `max_ = 64`.
+   - Remove `64` from the list: `gifts.remove(max_)` → `gifts = [25, 9, 4, 10]`.
+   - Replace `64` with the floor of its square root: `math.floor(math.sqrt(64)) = 8`.
+   - Add `8` to the list: `gifts.append(8)` → `gifts = [25, 9, 4, 10, 8]`.
+   - Increment `count`: `count = 2`.
+
+4. **Third Iteration** (`count = 2`):
+   - Find the maximum pile: `max_ = max(gifts)` → `max_ = 25`.
+   - Remove `25` from the list: `gifts.remove(max_)` → `gifts = [9, 4, 10, 8]`.
+   - Replace `25` with the floor of its square root: `math.floor(math.sqrt(25)) = 5`.
+   - Add `5` to the list: `gifts.append(5)` → `gifts = [9, 4, 10, 8, 5]`.
+   - Increment `count`: `count = 3`.
+
+5. **Fourth Iteration** (`count = 3`):
+   - Find the maximum pile: `max_ = max(gifts)` → `max_ = 10`.
+   - Remove `10` from the list: `gifts.remove(max_)` → `gifts = [9, 4, 8, 5]`.
+   - Replace `10` with the floor of its square root: `math.floor(math.sqrt(10)) = 3`.
+   - Add `3` to the list: `gifts.append(3)` → `gifts = [9, 4, 8, 5, 3]`.
+   - Increment `count`: `count = 4`.
+
+6. **Final Step**:
+   - The loop has now completed `k = 4` iterations.
+   - Return the sum of the remaining gifts:
+     ```python
+     sum(gifts) = 9 + 4 + 8 + 5 + 3 = 29
+     ```
+
+#### Output:
+```python
+29
+```
+

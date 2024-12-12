@@ -1,0 +1,96 @@
+
+
+1. **Class Definition**:
+   - The solution is defined inside a class `Solution`, with the method `maximumWealth()` that will be used to solve the problem.
+
+2. **Input Parameter**:
+   - The method takes a 2D list `accounts`, where each sublist represents a customer and the elements inside that sublist represent the amount of money in the customer's bank accounts.
+
+3. **Initial `max_wealth` Variable**:
+   - `max_wealth` is initialized to `0` at the start. This variable will hold the maximum wealth encountered during the iteration through all customers.
+
+4. **For Loop Iteration**:
+   - The outer loop iterates through each **customer** in the `accounts` list. Each customer is represented as a sublist of bank account balances.
+
+5. **Calculate Wealth for Each Customer**:
+   - Inside the loop, the total wealth of each customer is calculated using `sum(customer)`. This gives the sum of all account balances for that customer.
+
+6. **Update `max_wealth`**:
+   - For each customer, `max_wealth` is updated using `max(customer_wealth, max_wealth)`. This ensures that after each iteration, `max_wealth` holds the maximum wealth encountered so far.
+
+7. **Time Complexity**:
+   - The time complexity is **O(n * m)**, where `n` is the number of customers (i.e., the number of sublists in `accounts`) and `m` is the number of bank accounts per customer (i.e., the length of each sublist).
+
+8. **Space Complexity**:
+   - The space complexity is **O(1)** because we only use a fixed amount of extra space (`max_wealth`), irrespective of the input size.
+
+9. **Return Statement**:
+   - After the loop finishes, `max_wealth` holds the maximum wealth across all customers, and it is returned as the final result.
+
+10. **Edge Case Considerations**:
+   - If the `accounts` list is empty, the method will return `0` since `max_wealth` starts as `0` and no customer wealth will be calculated.
+   - If each customer has a wealth of 0, the method will correctly return `0`.
+
+---
+
+### Example Walkthrough:
+
+#### Input:
+
+```python
+accounts = [[1, 2, 3], [3, 2, 1], [2, 3, 1]]
+```
+
+#### Code Execution:
+
+1. **Initialize `max_wealth = 0`**:
+   - At the beginning, the maximum wealth is set to `0`.
+
+2. **First Iteration (Customer 1)**:
+   - `customer = [1, 2, 3]`
+   - `customer_wealth = sum([1, 2, 3]) = 6`
+   - `max_wealth = max(6, 0) = 6`
+   - Now, `max_wealth` is updated to `6`.
+
+3. **Second Iteration (Customer 2)**:
+   - `customer = [3, 2, 1]`
+   - `customer_wealth = sum([3, 2, 1]) = 6`
+   - `max_wealth = max(6, 6) = 6`
+   - `max_wealth` remains `6` because the second customer's wealth is equal to the current `max_wealth`.
+
+4. **Third Iteration (Customer 3)**:
+   - `customer = [2, 3, 1]`
+   - `customer_wealth = sum([2, 3, 1]) = 6`
+   - `max_wealth = max(6, 6) = 6`
+   - Again, `max_wealth` remains `6` because the third customer's wealth is also equal to the current `max_wealth`.
+
+5. **Return the Result**:
+   - After iterating over all customers, the maximum wealth is `6`, so the method returns `6`.
+
+#### Output:
+
+```python
+6
+```
+
+### Detailed Explanation:
+
+- **First Iteration**:
+  - The first customer has account balances `[1, 2, 3]`.
+  - The wealth of the first customer is `1 + 2 + 3 = 6`.
+  - We compare this wealth with the current `max_wealth` (which is initially 0). Since `6 > 0`, we update `max_wealth` to `6`.
+
+- **Second Iteration**:
+  - The second customer has account balances `[3, 2, 1]`.
+  - The wealth of the second customer is `3 + 2 + 1 = 6`.
+  - We compare `6` with the current `max_wealth` (which is 6). Since `6` is not greater than `6`, `max_wealth` remains `6`.
+
+- **Third Iteration**:
+  - The third customer has account balances `[2, 3, 1]`.
+  - The wealth of the third customer is `2 + 3 + 1 = 6`.
+  - Again, `6` is not greater than `6`, so `max_wealth` stays `6`.
+
+After all iterations, the final value of `max_wealth` is `6`, which is returned as the result.
+
+---
+
