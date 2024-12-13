@@ -1,0 +1,88 @@
+
+
+1. **Initialization of Variables**:
+   - `score`: This keeps track of the accumulated score. It starts at 0.
+   - `list_`: A temporary list that will store tuples of each element's value along with its index.
+   - `n`: The length of the `nums` list (number of elements in the array).
+   - `marked`: A list of booleans to track which elements have been marked. Initially, all elements are unmarked (`False`).
+
+2. **Creating the List of Tuples**:
+   - The list `list_` is populated with tuples of the form `(nums[i], i)` where `i` is the index of each element in the `nums` list.
+   - This step helps in preserving the original indices of the elements when sorting the array.
+
+3. **Sorting the List**:
+   - The list `list_` is sorted based on the values of the elements in `nums`. This ensures that the algorithm processes the smallest unmarked element first.
+   
+4. **Marking Process**:
+   - As we traverse the sorted list, if an element has already been marked, it is skipped.
+   - If the element is unmarked, it is added to the score and then marked as well as its adjacent elements (if they exist).
+
+5. **Adding the Value to the Score**:
+   - For every unmarked element, the value of that element is added to `score`.
+
+6. **Marking the Element and Its Neighbors**:
+   - After an element is selected and added to the score, we mark it and also mark its adjacent elements (left and right neighbors if they exist).
+
+7. **Skip Already Marked Elements**:
+   - If an element has already been marked, it is skipped in the next iteration to avoid re-processing.
+
+8. **Ensuring Efficient Marking**:
+   - When an element is marked, its immediate neighbors (if they exist) are also marked, so they won’t be selected again.
+
+9. **Iterating Through the Sorted List**:
+   - The traversal is done on the sorted `list_` to ensure that the smallest unmarked element is processed first. This ensures the greedy choice.
+
+10. **Returning the Final Score**:
+    - After the entire array has been processed, the accumulated score is returned.
+
+---
+
+### Working Example:
+
+Let’s walk through the example step by step with the array `nums = [3, 1, 4, 2, 5]`.
+
+1. **Initialization**:
+   - `nums = [3, 1, 4, 2, 5]`
+   - `score = 0`
+   - `marked = [False, False, False, False, False]`
+   - `list_ = []`
+
+2. **Create the List of Tuples**:
+   - `list_` becomes: `[(3, 0), (1, 1), (4, 2), (2, 3), (5, 4)]`
+   
+3. **Sort the List**:
+   - Sorting the list `list_` gives: `[(1, 1), (2, 3), (3, 0), (4, 2), (5, 4)]`
+
+4. **Start Iterating through the Sorted List**:
+   
+   - **First Iteration (value = 1, index = 1)**:
+     - `marked[1]` is `False`, so:
+       - Add `1` to the score: `score = 0 + 1 = 1`
+       - Mark the element at index 1: `marked[1] = True`
+       - Mark the left neighbor (index 0): `marked[0] = True`
+       - Mark the right neighbor (index 2): `marked[2] = True`
+     - Updated `marked = [True, True, True, False, False]`
+   
+   - **Second Iteration (value = 2, index = 3)**:
+     - `marked[3]` is `False`, so:
+       - Add `2` to the score: `score = 1 + 2 = 3`
+       - Mark the element at index 3: `marked[3] = True`
+       - Mark the left neighbor (index 2): `marked[2] = True` (already marked)
+       - Mark the right neighbor (index 4): `marked[4] = True`
+     - Updated `marked = [True, True, True, True, True]`
+   
+   - **Third Iteration (value = 3, index = 0)**:
+     - `marked[0]` is `True`, so skip this element.
+   
+   - **Fourth Iteration (value = 4, index = 2)**:
+     - `marked[2]` is `True`, so skip this element.
+   
+   - **Fifth Iteration (value = 5, index = 4)**:
+     - `marked[4]` is `True`, so skip this element.
+
+5. **End of Iteration**:
+   - All elements are either marked or skipped.
+   - The final score is `3`.
+
+### Final Output:
+- **Score = 3**

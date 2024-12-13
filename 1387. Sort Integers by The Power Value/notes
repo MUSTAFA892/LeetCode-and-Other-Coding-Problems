@@ -1,0 +1,138 @@
+
+
+1. **Function Definition:**
+   ```python
+   def getKth(self, lo: int, hi: int, k: int) -> int:
+   ```
+   The method `getKth` takes three arguments:
+   - `lo`: The lower bound of the range.
+   - `hi`: The upper bound of the range.
+   - `k`: The position of the number we need to find after sorting by steps (Collatz steps).
+
+2. **Initialize an Empty Dictionary (`map_`):**
+   ```python
+   map_ = {}
+   ```
+   An empty dictionary `map_` is created to store each number in the range `[lo, hi]` as the key, and the number of steps it takes to reduce that number to 1 as the value.
+
+3. **Iterate Through the Range `[lo, hi]`:**
+   ```python
+   for i in range(lo, hi + 1):
+   ```
+   A loop is used to iterate through all integers from `lo` to `hi`, inclusive. For each number `i`, the number of steps it takes to reduce it to 1 is calculated using the Collatz conjecture.
+
+4. **Calculate the Number of Steps Using Collatz Conjecture:**
+   ```python
+   num = i
+   steps = 0
+   while num != 1:
+       if num % 2 == 0:
+           num //= 2
+       else:
+           num = 3 * num + 1
+       steps += 1
+   ```
+   For each number `i`, the steps are calculated based on the **Collatz conjecture**:
+   - If the number is even, divide it by 2.
+   - If the number is odd, multiply it by 3 and add 1.
+   This process continues until the number reaches 1.
+
+5. **Store the Number of Steps in `map_`:**
+   ```python
+   map_[i] = steps
+   ```
+   After calculating the number of steps for the current number `i`, store the result in the dictionary `map_` where the key is the number `i`, and the value is the number of steps.
+
+6. **Sort the Numbers by the Number of Steps:**
+   ```python
+   sort = sorted(map_.items(), key=lambda items: items[1])
+   ```
+   The dictionary `map_` is sorted by the number of steps (values) in ascending order. This creates a list of tuples where each tuple is a `(number, steps)` pair, sorted by `steps`.
+
+7. **Return the `k`-th Number:**
+   ```python
+   return sort[k - 1][0]
+   ```
+   After sorting, the `k`-th smallest number by steps is accessed using `sort[k-1][0]`. The `-1` is used because Python uses **0-based indexing**, so the `k`-th element is at index `k-1`.
+
+8. **Return the Result:**
+   The function returns the number from the range `[lo, hi]` that is the `k`-th smallest when sorted by the number of steps required to reduce it to 1.
+
+9. **Edge Case Considerations:**
+   - If `k` exceeds the number of numbers in the range `[lo, hi]`, there will be an `IndexError`. However, this function assumes valid input, so `k` will always be valid within the range.
+
+10. **Time Complexity:**
+    - Calculating steps for each number is **O(log n)** for each number `i`, where `n` is the size of the number. Sorting the dictionary takes **O(m log m)**, where `m` is the size of the range (`hi - lo + 1`).
+
+---
+
+### **Working Example:**
+
+Let’s go through an example with `lo = 7`, `hi = 10`, and `k = 2`.
+
+#### Input:
+```python
+lo = 7
+hi = 10
+k = 2
+```
+
+#### Step-by-Step Execution:
+
+1. **Initialize `map_`:**
+   - The dictionary `map_` is empty at the start.
+
+2. **Process Numbers from `7` to `10`:**
+
+   - **For `i = 7`**:
+     - Start with `num = 7`, steps = 0.
+     - 7 is odd → `num = 3 * 7 + 1 = 22`, steps = 1.
+     - 22 is even → `num = 22 // 2 = 11`, steps = 2.
+     - 11 is odd → `num = 3 * 11 + 1 = 34`, steps = 3.
+     - 34 is even → `num = 34 // 2 = 17`, steps = 4.
+     - 17 is odd → `num = 3 * 17 + 1 = 52`, steps = 5.
+     - 52 is even → `num = 52 // 2 = 26`, steps = 6.
+     - 26 is even → `num = 26 // 2 = 13`, steps = 7.
+     - 13 is odd → `num = 3 * 13 + 1 = 40`, steps = 8.
+     - 40 is even → `num = 40 // 2 = 20`, steps = 9.
+     - 20 is even → `num = 20 // 2 = 10`, steps = 10.
+     - 10 is even → `num = 10 // 2 = 5`, steps = 11.
+     - 5 is odd → `num = 3 * 5 + 1 = 16`, steps = 12.
+     - 16 is even → `num = 16 // 2 = 8`, steps = 13.
+     - 8 is even → `num = 8 // 2 = 4`, steps = 14.
+     - 4 is even → `num = 4 // 2 = 2`, steps = 15.
+     - 2 is even → `num = 2 // 2 = 1`, steps = 16.
+     - Steps = 16.
+     - `map_[7] = 16`.
+
+   - **For `i = 8`**:
+     - `8 → 4 → 2 → 1` (steps = 3).
+     - `map_[8] = 3`.
+
+   - **For `i = 9`**:
+     - `9 → 28 → 14 → 7 → 22 → 11 → 34 → 17 → 52 → 26 → 13 → 40 → 20 → 10 → 5 → 16 → 8 → 4 → 2 → 1` (steps = 19).
+     - `map_[9] = 19`.
+
+   - **For `i = 10`**:
+     - `10 → 5 → 16 → 8 → 4 → 2 → 1` (steps = 6).
+     - `map_[10] = 6`.
+
+3. **Dictionary `map_` After Processing All Numbers:**
+   ```python
+   map_ = {7: 16, 8: 3, 9: 19, 10: 6}
+   ```
+
+4. **Sort the Dictionary by Steps:**
+   ```python
+   sort = sorted(map_.items(), key=lambda items: items[1])
+   sort = [(8, 3), (10, 6), (7, 16), (9, 19)]
+   ```
+
+5. **Access the 2nd Smallest Element (k=2):**
+   - `k = 2`, so we access the second element in the sorted list, which is `(10, 6)`.
+   - The key (number) corresponding to the second smallest number of steps is `10`.
+
+#### Output:
+```python
+10
+```
