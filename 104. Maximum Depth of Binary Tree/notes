@@ -1,0 +1,200 @@
+
+
+#### Code Explanation
+
+```python
+class Solution:
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+```
+This is the main class `Solution` that contains the method `maxDepth`. The method takes a single argument `root`, which is the root of the binary tree (a `TreeNode` object or `None`).
+
+```python
+        def is_level(node):
+            if node is None:
+                return 0  # Base case: depth of None is 0
+```
+This is a helper function `is_level`, which calculates the depth of a given node. It starts by checking if the node is `None`. If it is `None`, this means we've reached the end of a branch (or the tree is empty), so it returns `0`, which represents the depth of an empty tree or subtree.
+
+```python
+            left_depth = is_level(node.left)
+            right_depth = is_level(node.right)
+```
+Now, if the node is not `None`, the function recursively calculates the depth of the left and right subtrees by calling `is_level` on the left and right child nodes (`node.left` and `node.right`). This is the key part of the recursion.
+
+```python
+            return max(left_depth, right_depth) + 1
+```
+The depth of the current node is 1 plus the maximum depth of its left and right subtrees. The `max(left_depth, right_depth)` part ensures that we are considering the longest path from this node to a leaf. Adding `1` accounts for the current node itself.
+
+```python
+        return is_level(root)
+```
+Finally, the `maxDepth` function returns the result of `is_level(root)`, which gives the maximum depth of the binary tree starting from the root.
+
+---
+
+### Example Walkthrough
+
+Let's work through an example with the following binary tree:
+
+```
+       1
+     /   \
+    2     3
+   / \     \
+  4   5     6
+```
+
+- **Step 1**: Call `maxDepth(root)` where `root` is the node with value `1`.
+
+```python
+maxDepth(root)
+```
+This calls `is_level(root)` with the root node (value `1`).
+
+---
+
+#### Inside `is_level(root)` (node 1):
+
+```python
+is_level(1)
+```
+
+- `node` is `1`, so it is not `None`.
+- We then recursively call `is_level` on the left and right children of node `1` (nodes `2` and `3`).
+
+```python
+left_depth = is_level(node.left)  # is_level(2)
+right_depth = is_level(node.right)  # is_level(3)
+```
+
+---
+
+#### Inside `is_level(2)` (left child of node 1):
+
+```python
+is_level(2)
+```
+
+- `node` is `2`, so it is not `None`.
+- We recursively call `is_level` on the left and right children of node `2` (nodes `4` and `5`).
+
+```python
+left_depth = is_level(node.left)  # is_level(4)
+right_depth = is_level(node.right)  # is_level(5)
+```
+
+---
+
+##### Inside `is_level(4)` (left child of node 2):
+
+```python
+is_level(4)
+```
+
+- `node` is `4`, so it is not `None`.
+- `node.left` and `node.right` are both `None` (leaf node), so we return `0` for both.
+- The depth of node `4` is `max(0, 0) + 1 = 1`.
+
+```python
+return 1  # Depth of node 4 is 1
+```
+
+---
+
+##### Inside `is_level(5)` (right child of node 2):
+
+```python
+is_level(5)
+```
+
+- `node` is `5`, so it is not `None`.
+- `node.left` and `node.right` are both `None` (leaf node), so we return `0` for both.
+- The depth of node `5` is `max(0, 0) + 1 = 1`.
+
+```python
+return 1  # Depth of node 5 is 1
+```
+
+---
+
+#### Back to `is_level(2)`:
+
+Now, with the depths of the left and right children of node `2` calculated (both `1`), we compute the depth of node `2`:
+
+```python
+return max(1, 1) + 1 = 2  # Depth of node 2 is 2
+```
+
+---
+
+#### Inside `is_level(3)` (right child of node 1):
+
+```python
+is_level(3)
+```
+
+- `node` is `3`, so it is not `None`.
+- We recursively call `is_level` on the left and right children of node `3`. `node.left` is `None`, and `node.right` is `6`.
+
+```python
+left_depth = is_level(node.left)  # is_level(None)
+right_depth = is_level(node.right)  # is_level(6)
+```
+
+---
+
+##### Inside `is_level(None)` (left child of node 3):
+
+```python
+is_level(None)
+```
+
+- Since the node is `None`, we return `0`.
+
+```python
+return 0  # Depth of None is 0
+```
+
+---
+
+##### Inside `is_level(6)` (right child of node 3):
+
+```python
+is_level(6)
+```
+
+- `node` is `6`, so it is not `None`.
+- `node.left` and `node.right` are both `None` (leaf node), so we return `0` for both.
+- The depth of node `6` is `max(0, 0) + 1 = 1`.
+
+```python
+return 1  # Depth of node 6 is 1
+```
+
+---
+
+#### Back to `is_level(3)`:
+
+Now, with the depths of the left and right children of node `3` calculated (`0` and `1`), we compute the depth of node `3`:
+
+```python
+return max(0, 1) + 1 = 2  # Depth of node 3 is 2
+```
+
+---
+
+#### Back to `is_level(1)`:
+
+Finally, with the depths of the left and right children of node `1` calculated (`2` and `2`), we compute the depth of node `1`:
+
+```python
+return max(2, 2) + 1 = 3  # Depth of node 1 is 3
+```
+
+---
+
+### Final Result
+
+The maximum depth of the tree is `3`, which is the correct result for this tree.
+

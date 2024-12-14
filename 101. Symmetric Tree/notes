@@ -1,0 +1,112 @@
+
+
+1. **Recursive Approach**:
+   - **Explanation**: The function uses a **recursive approach** to check if two trees (or subtrees) are mirror images of each other. It starts by comparing the left and right children of the root and then recursively checks the left and right subtrees of the corresponding nodes.
+   - **Why it's important**: Recursion naturally works for tree structures and simplifies the comparison of two subtrees by breaking down the problem into smaller, manageable pieces.
+
+2. **Base Case: Both Nodes are None**:
+   - **Code**: `if n1 is None and n2 is None: return True`
+   - **Explanation**: If both `n1` and `n2` are `None` (i.e., both subtrees are empty), then they are considered symmetric (since two empty trees are symmetric).
+   - **Why it's important**: This ensures that if both subtrees are empty, we treat them as mirror images of each other.
+
+3. **Base Case: One Node is None**:
+   - **Code**: `if n1 is None or n2 is None: return False`
+   - **Explanation**: If one of the nodes is `None` and the other is not, the subtrees are not symmetric because an empty subtree cannot be a mirror image of a non-empty subtree.
+   - **Why it's important**: This case immediately returns `False` if one subtree is empty while the other is not.
+
+4. **Compare Node Values**:
+   - **Code**: `return n1.val == n2.val`
+   - **Explanation**: If both nodes are not `None`, their values are compared. If they are not equal, the trees are not symmetric at this level.
+   - **Why it's important**: This is the core condition for checking symmetry — the values of the nodes must be equal for the trees to be considered mirror images.
+
+5. **Recursive Calls for Mirror Symmetry**:
+   - **Code**: `symmetric(n1.left, n2.right) and symmetric(n1.right, n2.left)`
+   - **Explanation**: For the trees to be symmetric:
+     - The left subtree of `n1` should be a mirror image of the right subtree of `n2` (`n1.left` with `n2.right`).
+     - The right subtree of `n1` should be a mirror image of the left subtree of `n2` (`n1.right` with `n2.left`).
+   - **Why it's important**: This ensures that we check the symmetry at each level of the tree by comparing corresponding nodes in a mirrored manner.
+
+6. **Helper Function**:
+   - **Explanation**: The helper function `symmetric(n1, n2)` is defined within `isSymmetric` to handle the recursion. It compares two nodes and their subtrees, returning `True` if they are symmetric and `False` otherwise.
+   - **Why it's important**: This helper function allows the recursion to operate efficiently on pairs of nodes.
+
+7. **Main Function Call**:
+   - **Code**: `return symmetric(root.left, root.right)`
+   - **Explanation**: The main function starts the recursive check by calling `symmetric(root.left, root.right)`. It compares the left and right subtrees of the root to see if they are symmetric.
+   - **Why it's important**: This is the entry point of the recursive process, where we begin by comparing the left and right children of the root.
+
+### Time and Space Complexity:
+
+- **Time Complexity**: **O(n)**, where `n` is the number of nodes in the tree. In the worst case, the function visits each node once to check for symmetry.
+- **Space Complexity**: **O(h)**, where `h` is the height of the tree. This is due to the space used by the recursion call stack, which can grow up to the height of the tree in the worst case (for an unbalanced tree).
+
+---
+
+### Working Example:
+
+Let's consider the following example:
+
+#### Tree 1 (Symmetric):
+
+```
+        1
+       / \
+      2   2
+     / \ / \
+    3  4 4  3
+```
+
+#### Tree 2 (Non-Symmetric):
+
+```
+        1
+       / \
+      2   2
+     / \  \
+    3   4  3
+```
+
+### Example 1: Symmetric Tree
+
+For the first tree, we have:
+
+- The root is `1`, so we compare the left subtree (`2 3 4`) with the right subtree (`2 3 4`).
+- The left and right subtrees are mirror images of each other.
+- Each recursive call checks pairs of nodes in a mirrored fashion, confirming that they are equal in value and structure.
+
+- **Step-by-step Check**:
+  - `root.left = 2`, `root.right = 2` → `2 == 2` → True
+  - `2.left = 3`, `2.right = 3` → `3 == 3` → True
+  - `2.right = 4`, `2.left = 4` → `4 == 4` → True
+
+Thus, the tree is symmetric, and the function returns `True`.
+
+### Example 2: Non-Symmetric Tree
+
+For the second tree:
+
+- The root is `1`, so we compare the left subtree (`2 3 4`) with the right subtree (`2 3`).
+- The left and right subtrees are not mirror images because the right subtree of `2` has no left child, while the left subtree of `2` has a left child.
+
+- **Step-by-step Check**:
+  - `root.left = 2`, `root.right = 2` → `2 == 2` → True
+  - `2.left = 3`, `2.right = 3` → `3 == 3` → True
+  - `2.right = 4`, but the right subtree of `2` is missing a left child.
+
+Thus, the tree is **not symmetric**, and the function returns `False`.
+
+### Output:
+
+1. For the **symmetric tree**, the output is:
+   ```python
+   True
+   ```
+
+2. For the **non-symmetric tree**, the output is:
+   ```python
+   False
+   ```
+
+---
+
+
