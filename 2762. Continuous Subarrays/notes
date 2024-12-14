@@ -1,0 +1,149 @@
+
+
+### Step-by-Step Example with Visual Representation:
+
+1. **Initial Setup**:
+   - `left = 0` (starts at the first element)
+   - `right = 0` (also starts at the first element)
+   - **Deques**:
+     - `min_deque = []` (empty)
+     - `max_deque = []` (empty)
+   - We will iterate over the `right` pointer and expand the window, adjusting `left` when necessary to maintain a valid subarray.
+
+2. **First Iteration (`right = 0`):**
+
+   - `nums[right] = nums[0] = 1`
+   - **Deques Update**:
+     - `min_deque` will store indices of elements in increasing order. For `nums[0] = 1`, `min_deque = [0]`.
+     - `max_deque` will store indices of elements in decreasing order. For `nums[0] = 1`, `max_deque = [0]`.
+   - **Validity Check**:
+     - `max(nums[left...right]) - min(nums[left...right]) = 1 - 1 = 0` which is **valid**.
+   - **Count**:
+     - There is one valid subarray: `[1]`.
+     - `count += (right - left + 1) = 0 + (0 - 0 + 1) = 1`.
+   - **Deques** after this step:
+     - `min_deque = [0]`
+     - `max_deque = [0]`
+
+   **Visual Representation**:
+
+   ```
+   left = 0, right = 0
+   Window: [1]  (valid)
+   Count = 1
+   min_deque = [0]
+   max_deque = [0]
+   ```
+
+---
+
+3. **Second Iteration (`right = 1`):**
+
+   - `nums[right] = nums[1] = 3`
+   - **Deques Update**:
+     - `min_deque` will store indices of elements in increasing order. We remove any indices where `nums[min_deque[-1]] >= nums[1]`. So, we add `1` to `min_deque`: `min_deque = [0, 1]`.
+     - `max_deque` will store indices of elements in decreasing order. We remove any indices where `nums[max_deque[-1]] <= nums[1]`. So, we update `max_deque`: `max_deque = [1]`.
+   - **Validity Check**:
+     - `max(nums[left...right]) - min(nums[left...right]) = 3 - 1 = 2` which is **valid**.
+   - **Count**:
+     - There are two valid subarrays: `[1, 3]` and `[3]`.
+     - `count += (right - left + 1) = 1 + (1 - 0 + 1) = 3`.
+   - **Deques** after this step:
+     - `min_deque = [0, 1]`
+     - `max_deque = [1]`
+
+   **Visual Representation**:
+
+   ```
+   left = 0, right = 1
+   Window: [1, 3] (valid)
+   Count = 3
+   min_deque = [0, 1]
+   max_deque = [1]
+   ```
+
+---
+
+4. **Third Iteration (`right = 2`):**
+
+   - `nums[right] = nums[2] = 5`
+   - **Deques Update**:
+     - `min_deque` will store indices of elements in increasing order. We remove `1` from `min_deque` because `nums[1] = 3` is greater than `nums[2] = 5`. So, we just add `2`: `min_deque = [0, 1, 2]`.
+     - `max_deque` will store indices of elements in decreasing order. We remove `1` from `max_deque` because `nums[1] = 3` is smaller than `nums[2] = 5`. So, we add `2`: `max_deque = [2]`.
+   - **Validity Check**:
+     - `max(nums[left...right]) - min(nums[left...right]) = 5 - 1 = 4` which is **invalid**.
+   - **Adjust `left`**:
+     - Since the difference exceeds 2, we move `left` to `1` and update the deques:
+       - `left = 1`
+       - **Deques** after adjusting `left`:
+         - `min_deque = [1, 2]`
+         - `max_deque = [2]`
+   - **Validity Check** again:
+     - Now, `max(nums[left...right]) - min(nums[left...right]) = 5 - 3 = 2` which is **valid**.
+   - **Count**:
+     - There is one valid subarray: `[3, 5]`.
+     - `count += (right - left + 1) = 3 + (2 - 1 + 1) = 4`.
+   - **Deques** after this step:
+     - `min_deque = [1, 2]`
+     - `max_deque = [2]`
+
+   **Visual Representation**:
+
+   ```
+   left = 1, right = 2
+   Window: [3, 5] (valid)
+   Count = 4
+   min_deque = [1, 2]
+   max_deque = [2]
+   ```
+
+---
+
+5. **Fourth Iteration (`right = 3`):**
+
+   - `nums[right] = nums[3] = 2`
+   - **Deques Update**:
+     - `min_deque` will store indices of elements in increasing order. We remove `2` from `min_deque` because `nums[2] = 5` is greater than `nums[3] = 2`. So, we just add `3`: `min_deque = [1, 2, 3]`.
+     - `max_deque` will store indices of elements in decreasing order. We remove `2` from `max_deque` because `nums[2] = 5` is greater than `nums[3] = 2`. So, we add `3`: `max_deque = [2, 3]`.
+   - **Validity Check**:
+     - `max(nums[left...right]) - min(nums[left...right]) = 5 - 1 = 4` which is **invalid**.
+   - **Adjust `left`**:
+     - Since the difference exceeds 2, we move `left` to `2` and update the deques:
+       - `left = 2`
+       - **Deques** after adjusting `left`:
+         - `min_deque = [2, 3]`
+         - `max_deque = [2, 3]`
+   - **Validity Check** again:
+     - Now, `max(nums[left...right]) - min(nums[left...right]) = 5 - 2 = 3` which is **invalid**.
+   - **Adjust `left`** again:
+     - Move `left` to `3` and update the deques.
+     - `left = 3`
+     - **Deques** after adjusting `left`:
+       - `min_deque = [3]`
+       - `max_deque = [3]`
+   - **Validity Check**:
+     - Now, `max(nums[left...right]) - min(nums[left...right]) = 2 - 2 = 0` which is **valid**.
+   - **Count**:
+     - There is one valid subarray: `[2]`.
+     - `count += (right - left + 1) = 4 + (3 - 3 + 1) = 5`.
+   - **Deques** after this step:
+     - `min_deque = [3]`
+     - `max_deque = [3]`
+
+   **Visual Representation**:
+
+   ```
+   left = 3, right = 3
+   Window: [2] (valid)
+   Count = 5
+   min_deque = [3]
+   max_deque = [3]
+   ```
+
+---
+
+### Final Count:  
+After going through all elements, the total number of valid subarrays is **5**.
+
+
+
