@@ -1,0 +1,83 @@
+
+1. **Class Definition**:
+   - The code is wrapped inside a class `Solution`. This is typical in coding challenges like those on LeetCode, where the solution is usually structured inside a class.
+
+2. **Method Signature**:
+   - The method `getFinalState` takes three parameters:
+     - `nums`: A list of integers representing the array that will be modified.
+     - `k`: The number of operations to perform.
+     - `multiplier`: The integer value used to multiply the minimum element found during each operation.
+
+3. **Initialization**:
+   - `count = 0` initializes a counter to track how many operations have been performed.
+
+4. **While Loop**:
+   - The `while count != k:` loop ensures that exactly `k` operations are performed. The loop runs until `count` reaches `k`.
+
+5. **Finding Minimum Value**:
+   - Inside the loop, the line `min_index = nums.index(min(nums))` finds the index of the minimum value in the array `nums`. 
+     - `min(nums)` finds the minimum value.
+     - `nums.index(min(nums))` gives the index of the first occurrence of this minimum value.
+
+6. **Multiplying the Minimum Value**:
+   - After finding the minimum value's index, `nums[min_index] *= multiplier` multiplies the value at the found index by the `multiplier` and updates the array.
+
+7. **Incrementing the Operation Counter**:
+   - `count += 1` increments the operation counter after each modification of the array.
+
+8. **Returning the Result**:
+   - After completing the `k` operations, the modified `nums` array is returned with `return nums`.
+
+9. **Time Complexity**:
+   - The time complexity is **O(k * n)**, where `n` is the length of the list `nums`. This is because for each of the `k` operations, finding the minimum value requires scanning the entire list (`O(n)`).
+
+10. **Space Complexity**:
+    - The space complexity is **O(1)** (ignoring the space used by the input array) since the algorithm modifies the input array in place without using extra space.
+
+### Working Example:
+
+Let's go through an example to understand how the function works step-by-step:
+
+**Input**:
+- `nums = [2, 1, 3, 5, 6]`
+- `k = 5`
+- `multiplier = 2`
+
+**Execution Steps**:
+
+1. **Initial State**: `nums = [2, 1, 3, 5, 6]`, `count = 0`
+   - Find the minimum value: `min(nums) = 1` at index `1`.
+   - Multiply the minimum value by `2`: `1 * 2 = 2`.
+   - Updated `nums = [2, 2, 3, 5, 6]`.
+   - Increment `count = 1`.
+
+2. **Second Operation**: `nums = [2, 2, 3, 5, 6]`, `count = 1`
+   - Find the minimum value: `min(nums) = 2` at index `0`.
+   - Multiply the minimum value by `2`: `2 * 2 = 4`.
+   - Updated `nums = [4, 2, 3, 5, 6]`.
+   - Increment `count = 2`.
+
+3. **Third Operation**: `nums = [4, 2, 3, 5, 6]`, `count = 2`
+   - Find the minimum value: `min(nums) = 2` at index `1`.
+   - Multiply the minimum value by `2`: `2 * 2 = 4`.
+   - Updated `nums = [4, 4, 3, 5, 6]`.
+   - Increment `count = 3`.
+
+4. **Fourth Operation**: `nums = [4, 4, 3, 5, 6]`, `count = 3`
+   - Find the minimum value: `min(nums) = 3` at index `2`.
+   - Multiply the minimum value by `2`: `3 * 2 = 6`.
+   - Updated `nums = [4, 4, 6, 5, 6]`.
+   - Increment `count = 4`.
+
+5. **Fifth Operation**: `nums = [4, 4, 6, 5, 6]`, `count = 4`
+   - Find the minimum value: `min(nums) = 4` at index `0`.
+   - Multiply the minimum value by `2`: `4 * 2 = 8`.
+   - Updated `nums = [8, 4, 6, 5, 6]`.
+   - Increment `count = 5`.
+
+**Final Output**:
+- After 5 operations, the modified array is `nums = [8, 4, 6, 5, 6]`.
+
+**Return Value**:
+- The method returns the final state of the array: `[8, 4, 6, 5, 6]`.
+
