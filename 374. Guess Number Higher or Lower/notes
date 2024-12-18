@@ -1,0 +1,163 @@
+
+
+1. **Purpose**:  
+   The `guessNumber` function aims to guess a hidden number between `1` and `n` using a binary search strategy. The number is guessed using the `guess` API, which returns feedback on each guess.
+
+2. **Initial Range**:  
+   The search range starts from `low = 1` to `high = n`.
+
+3. **Binary Search**:  
+   The function employs a **binary search** to efficiently narrow down the range by halving it at each step.
+
+4. **Mid Calculation**:  
+   - The middle of the range is calculated using `mid = (low + high) // 2`.  
+   - The `//` operator ensures **integer division** (no decimals).
+
+5. **Guess Evaluation**:  
+   The `guess(mid)` function returns:  
+   - `0` if `mid` is the correct number.  
+   - `-1` if `mid` is **higher** than the target.  
+   - `1` if `mid` is **lower** than the target.
+
+6. **Correct Guess**:  
+   If `guess(mid)` returns `0`, `mid` is returned as the correct number.
+
+7. **Adjusting the Search Range**:  
+   - If `guess(mid)` returns `-1` (guess too high), set `high = mid - 1`.  
+   - If `guess(mid)` returns `1` (guess too low), set `low = mid + 1`.
+
+8. **Termination Condition**:  
+   The loop continues as long as `low <= high`. When the correct number is found, the function returns immediately.
+
+9. **Efficiency**:  
+   The binary search approach ensures that the function runs in **O(log n)** time complexity, making it efficient for large values of `n`.
+
+10. **Edge Cases**:  
+    - If the number is at the lower or upper bound (`1` or `n`), the function still efficiently finds the correct number.  
+    - If `n = 1`, the function handles this case correctly.
+
+---
+
+### Working Examples
+
+#### Example 1
+
+Suppose the target number is `6`, and `n = 10`.
+
+```python
+# Mock `guess` API for demonstration
+def guess(num: int) -> int:
+    picked_number = 6
+    if num < picked_number:
+        return 1
+    elif num > picked_number:
+        return -1
+    else:
+        return 0
+
+# Instantiate the Solution class
+solution = Solution()
+print(solution.guessNumber(10))  # Output: 6
+```
+
+**Step-by-Step Execution**:
+
+1. **Initial State**:  
+   - `low = 1`, `high = 10`
+
+2. **First Iteration**:  
+   - `mid = (1 + 10) // 2 = 5`  
+   - `guess(5)` returns `1` (too low)  
+   - Update: `low = 5 + 1 = 6`
+
+3. **Second Iteration**:  
+   - `mid = (6 + 10) // 2 = 8`  
+   - `guess(8)` returns `-1` (too high)  
+   - Update: `high = 8 - 1 = 7`
+
+4. **Third Iteration**:  
+   - `mid = (6 + 7) // 2 = 6`  
+   - `guess(6)` returns `0` (correct)  
+   - Return `6`
+
+---
+
+#### Example 2
+
+Suppose the target number is `1`, and `n = 3`.
+
+```python
+def guess(num: int) -> int:
+    picked_number = 1
+    if num < picked_number:
+        return 1
+    elif num > picked_number:
+        return -1
+    else:
+        return 0
+
+solution = Solution()
+print(solution.guessNumber(3))  # Output: 1
+```
+
+**Step-by-Step Execution**:
+
+1. **Initial State**:  
+   - `low = 1`, `high = 3`
+
+2. **First Iteration**:  
+   - `mid = (1 + 3) // 2 = 2`  
+   - `guess(2)` returns `-1` (too high)  
+   - Update: `high = 2 - 1 = 1`
+
+3. **Second Iteration**:  
+   - `mid = (1 + 1) // 2 = 1`  
+   - `guess(1)` returns `0` (correct)  
+   - Return `1`
+
+---
+
+#### Example 3
+
+Suppose the target number is `10`, and `n = 10`.
+
+```python
+def guess(num: int) -> int:
+    picked_number = 10
+    if num < picked_number:
+        return 1
+    elif num > picked_number:
+        return -1
+    else:
+        return 0
+
+solution = Solution()
+print(solution.guessNumber(10))  # Output: 10
+```
+
+**Step-by-Step Execution**:
+
+1. **Initial State**:  
+   - `low = 1`, `high = 10`
+
+2. **First Iteration**:  
+   - `mid = (1 + 10) // 2 = 5`  
+   - `guess(5)` returns `1` (too low)  
+   - Update: `low = 5 + 1 = 6`
+
+3. **Second Iteration**:  
+   - `mid = (6 + 10) // 2 = 8`  
+   - `guess(8)` returns `1` (too low)  
+   - Update: `low = 8 + 1 = 9`
+
+4. **Third Iteration**:  
+   - `mid = (9 + 10) // 2 = 9`  
+   - `guess(9)` returns `1` (too low)  
+   - Update: `low = 9 + 1 = 10`
+
+5. **Fourth Iteration**:  
+   - `mid = (10 + 10) // 2 = 10`  
+   - `guess(10)` returns `0` (correct)  
+   - Return `10`
+
+---

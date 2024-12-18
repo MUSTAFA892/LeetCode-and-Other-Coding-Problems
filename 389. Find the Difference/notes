@@ -1,0 +1,95 @@
+
+
+1. **Purpose of the Method**:  
+   The `findTheDifference` method takes two strings, `s` and `t`, and returns the character that is different (i.e., the extra character present in `t` but not in `s`).
+
+2. **Use of `Counter`**:  
+   The `Counter` from the `collections` module counts the occurrences of each character in both strings:
+   - `s_ = Counter(s)` creates a `Counter` for string `s`.
+   - `t_ = Counter(t)` creates a `Counter` for string `t`.
+
+3. **Finding the Difference**:  
+   - `diff = t_ - s_` subtracts the counts of characters in `s_` from `t_`. The result is a `Counter` containing the extra character(s) in `t` that are not in `s`.
+
+4. **Extracting the Extra Character**:  
+   - `list(diff.keys())[0]` converts the keys of `diff` to a list and gets the first character (since there's only one extra character).
+
+5. **Return Value**:  
+   The method returns the extra character found in `t`.
+
+---
+
+### Working Example
+
+#### Example 1
+
+```python
+from collections import Counter
+
+class Solution:
+    def findTheDifference(self, s: str, t: str) -> str:
+        s_ = Counter(s)
+        t_ = Counter(t)
+        diff = t_ - s_
+        return list(diff.keys())[0]
+
+# Test Case
+s = "abcd"
+t = "abcde"
+
+solution = Solution()
+print(solution.findTheDifference(s, t))
+```
+
+**Explanation**:
+- `s = "abcd"` → `Counter(s)` becomes `Counter({'a': 1, 'b': 1, 'c': 1, 'd': 1})`
+- `t = "abcde"` → `Counter(t)` becomes `Counter({'a': 1, 'b': 1, 'c': 1, 'd': 1, 'e': 1})`
+- `t_ - s_` results in `Counter({'e': 1})`
+- The method returns `'e'`
+
+**Output**:
+```
+e
+```
+
+---
+
+#### Example 2
+
+```python
+s = "aabb"
+t = "aabbc"
+
+solution = Solution()
+print(solution.findTheDifference(s, t))
+```
+
+**Explanation**:
+- `s = "aabb"` → `Counter(s)` becomes `Counter({'a': 2, 'b': 2})`
+- `t = "aabbc"` → `Counter(t)` becomes `Counter({'a': 2, 'b': 2, 'c': 1})`
+- `t_ - s_` results in `Counter({'c': 1})`
+- The method returns `'c'`
+
+**Output**:
+```
+c
+```
+
+---
+
+### Edge Cases
+
+1. **Single Extra Character**:
+   ```python
+   s = ""
+   t = "x"
+   print(solution.findTheDifference(s, t))  # Output: 'x'
+   ```
+
+2. **Characters in Different Orders**:
+   ```python
+   s = "xyz"
+   t = "yxzw"
+   print(solution.findTheDifference(s, t))  # Output: 'w'
+   ```
+
