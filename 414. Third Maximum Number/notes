@@ -1,0 +1,100 @@
+
+
+1. **Input List (`nums`)**:
+   - The function takes an input list of integers called `nums`.
+
+2. **Removing Duplicates (`nums = set(nums)`)**:
+   - The first step is to convert the list `nums` into a set using `set(nums)`. 
+   - This automatically removes all duplicate values because a set only stores unique elements.
+   - Example: If `nums = [1, 2, 2, 3, 3]`, after converting to a set, `nums` becomes `{1, 2, 3}`.
+
+3. **Sorting in Descending Order (`sorted_nums = sorted(nums, reverse=True)`)**:
+   - The next step is sorting the distinct numbers in descending order (from largest to smallest) using `sorted(nums, reverse=True)`.
+   - This makes it easy to access the maximum, second maximum, and third maximum by indexing the sorted list.
+   - Example: If `nums = {1, 2, 3}`, after sorting, `sorted_nums` becomes `[3, 2, 1]`.
+
+4. **Check if There are at Least 3 Elements (`if len(sorted_nums) >= 3`)**:
+   - We then check whether the sorted list of distinct numbers has at least 3 elements. If it does, we can safely return the third largest number.
+   - Example: If `sorted_nums = [5, 4, 3, 2, 1]`, there are 5 distinct numbers, so the third largest number is at index `2`.
+
+5. **Return the Third Largest Number (`return sorted_nums[2]`)**:
+   - If there are 3 or more distinct elements, we return the number at index `2` of the sorted list (third largest).
+   - Example: If `sorted_nums = [5, 4, 3, 2, 1]`, `sorted_nums[2]` is `3`, so the third maximum is `3`.
+
+6. **Return the Largest Number if Less Than 3 Distinct Numbers (`return sorted_nums[0]`)**:
+   - If there are fewer than 3 distinct elements, we simply return the largest number (index `0` of the sorted list).
+   - Example: If `nums = [2, 2, 2]`, after converting to a set, we get `{2}`, and since there's only one distinct number, we return `2`.
+
+7. **Edge Cases Handled**:
+   - If there are fewer than 3 distinct numbers (like `[1, 1, 2]`), the function returns the maximum number (e.g., `2`).
+   - If there are exactly 3 distinct numbers, the function will return the third largest.
+   - The function correctly handles lists with duplicates, negative numbers, and already sorted lists.
+
+8. **Time Complexity**:
+   - **O(n log n)**: Converting the list to a set takes O(n), where `n` is the length of the list. Sorting the set takes O(k log k), where `k` is the number of distinct elements. Since `k <= n`, this leads to a time complexity of **O(n log n)**.
+
+9. **Space Complexity**:
+   - **O(n)**: The space complexity is O(n) because we are using a set to store the distinct elements of the array.
+
+10. **Robustness**:
+   - The solution is robust because it handles cases where there are fewer than 3 distinct elements and always returns a valid result.
+
+---
+
+### Walkthrough Example:
+
+Let's go through a couple of examples to clearly understand how the code works.
+
+#### Example 1:
+Input: `[3, 2, 1, 3, 4, 5]`
+
+1. **Step 1**: Remove duplicates by converting `nums` to a set:
+   - `nums = set([3, 2, 1, 3, 4, 5])` → `{1, 2, 3, 4, 5}`
+
+2. **Step 2**: Sort the distinct numbers in descending order:
+   - `sorted_nums = sorted({1, 2, 3, 4, 5}, reverse=True)` → `[5, 4, 3, 2, 1]`
+
+3. **Step 3**: Check if there are at least 3 distinct elements:
+   - The list `sorted_nums` has 5 distinct numbers, so we proceed.
+
+4. **Step 4**: Return the third largest number:
+   - The third largest number is `sorted_nums[2]` → `3`.
+
+**Output**: `3`
+
+#### Example 2:
+Input: `[1, 2, 2, 3, 3]`
+
+1. **Step 1**: Remove duplicates by converting `nums` to a set:
+   - `nums = set([1, 2, 2, 3, 3])` → `{1, 2, 3}`
+
+2. **Step 2**: Sort the distinct numbers in descending order:
+   - `sorted_nums = sorted({1, 2, 3}, reverse=True)` → `[3, 2, 1]`
+
+3. **Step 3**: Check if there are at least 3 distinct elements:
+   - The list `sorted_nums` has exactly 3 distinct numbers, so we proceed.
+
+4. **Step 4**: Return the third largest number:
+   - The third largest number is `sorted_nums[2]` → `1`.
+
+**Output**: `1`
+
+#### Example 3:
+Input: `[2, 2, 2]`
+
+1. **Step 1**: Remove duplicates by converting `nums` to a set:
+   - `nums = set([2, 2, 2])` → `{2}`
+
+2. **Step 2**: Sort the distinct numbers in descending order:
+   - `sorted_nums = sorted({2}, reverse=True)` → `[2]`
+
+3. **Step 3**: Check if there are at least 3 distinct elements:
+   - The list `sorted_nums` has only 1 distinct element.
+
+4. **Step 4**: Since there are fewer than 3 distinct elements, return the largest number:
+   - The largest number is `sorted_nums[0]` → `2`.
+
+**Output**: `2`
+
+---
+

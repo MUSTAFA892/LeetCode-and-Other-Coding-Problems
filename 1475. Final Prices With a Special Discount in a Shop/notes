@@ -1,0 +1,80 @@
+
+
+1. **List `final`**:
+   - We initialize an empty list `final` to store the calculated final prices for each item.
+
+2. **Outer Loop (`for i in range(len(prices))`)**:
+   - This loop iterates over each item in the `prices` list using the index `i`. This allows us to check every item one by one and apply the necessary discount.
+
+3. **Initial Discount (`discount = prices[i]`)**:
+   - For each item, we start by assuming that the final price is the same as the current price (`prices[i]`). This is our starting point, and we will reduce it if we find a valid discount.
+
+4. **Inner Loop (`for j in range(i+1, len(prices))`)**:
+   - The inner loop starts from `i + 1` to check all subsequent items (after the current item `i`) to see if they meet the condition for the discount.
+   - This means we're looking at future items to apply the discount if their price is less than or equal to the current item's price.
+
+5. **Discount Condition (`if prices[i] >= prices[j]`)**:
+   - The key part of the discount logic is this condition. If we find a future item `prices[j]` that is less than or equal to the current item `prices[i]`, we apply a discount by subtracting `prices[j]` from `prices[i]`.
+
+6. **Apply Discount (`discount = prices[i] - prices[j]`)**:
+   - Once the discount condition is met (i.e., `prices[j]` is less than or equal to `prices[i]`), we calculate the final price for the current item by subtracting the future item's price from the current price.
+
+7. **Break (`break`)**:
+   - After we find the first future item that satisfies the condition, we stop checking further future items. The reason is that we only need to find the first valid discount, and there's no need to continue checking further.
+
+8. **Appending the Final Price (`final.append(discount)`)**:
+   - After the inner loop completes (or breaks), we append the `discount` (final price) to the `final` list for the current item.
+
+9. **Return Statement (`return final`)**:
+   - After processing all items in the `prices` list, the `final` list contains the final price for each item, and we return it as the output.
+
+10. **Time Complexity**:
+   - This approach has a time complexity of **O(n²)** because for each item in the list (outer loop), we check every subsequent item (inner loop). This results in a nested loop structure.
+
+---
+
+### Working Example:
+
+Let's walk through an example to clearly understand how this code works.
+
+#### Input: `[8, 4, 6, 2, 3]`
+
+We will walk through the code and apply the steps:
+
+1. **Initialize `final = []`**.
+
+2. **First Iteration (`i = 0`, price = 8)**:
+   - Initially, `discount = 8`.
+   - Inner loop starts from `j = 1` to `4`:
+     - `j = 1` (price = 4): Since `prices[0] (8) >= prices[1] (4)`, apply discount `8 - 4 = 4`.
+     - Break the inner loop (no further checks needed).
+   - Final price for item 0: `4`. Append to `final`, so `final = [4]`.
+
+3. **Second Iteration (`i = 1`, price = 4)**:
+   - Initially, `discount = 4`.
+   - Inner loop starts from `j = 2` to `4`:
+     - `j = 2` (price = 6): Since `prices[1] (4) < prices[2] (6)`, no discount.
+     - `j = 3` (price = 2): Since `prices[1] (4) >= prices[3] (2)`, apply discount `4 - 2 = 2`.
+     - Break the inner loop.
+   - Final price for item 1: `2`. Append to `final`, so `final = [4, 2]`.
+
+4. **Third Iteration (`i = 2`, price = 6)**:
+   - Initially, `discount = 6`.
+   - Inner loop starts from `j = 3` to `4`:
+     - `j = 3` (price = 2): Since `prices[2] (6) >= prices[3] (2)`, apply discount `6 - 2 = 4`.
+     - Break the inner loop.
+   - Final price for item 2: `4`. Append to `final`, so `final = [4, 2, 4]`.
+
+5. **Fourth Iteration (`i = 3`, price = 2)**:
+   - Initially, `discount = 2`.
+   - Inner loop starts from `j = 4`:
+     - `j = 4` (price = 3): Since `prices[3] (2) < prices[4] (3)`, no discount.
+   - Final price for item 3: `2`. Append to `final`, so `final = [4, 2, 4, 2]`.
+
+6. **Fifth Iteration (`i = 4`, price = 3)**:
+   - Initially, `discount = 3`.
+   - Inner loop has no items left to check.
+   - Final price for item 4: `3`. Append to `final`, so `final = [4, 2, 4, 2, 3]`.
+
+#### Final Output: `[4, 2, 4, 2, 3]`
+
