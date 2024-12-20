@@ -1,0 +1,83 @@
+
+
+1. **TreeNode Definition**:
+   - A class `TreeNode` is assumed to be defined that represents a node in a binary tree. Each node has a `val` (value), and pointers to `left` and `right` children.
+
+2. **Reverse Odd Levels**:
+   - The goal is to reverse the values at **odd levels** (level 1, 3, 5...) of a perfect binary tree. We do this using a **DFS traversal**.
+
+3. **Starting Point**:
+   - The function `reverseOddLevels` starts by calling the helper function `_dfs` on the left and right children of the root node, passing the current level as `0`.
+
+4. **Recursive DFS Traversal**:
+   - The `_dfs` function is designed to recursively traverse the tree. It accepts two children (`left_child` and `right_child`) at each level, as well as the current level.
+
+5. **Base Case**:
+   - If either of the children is `None`, the function returns without doing anything. This is to handle leaf nodes, which do not have children.
+
+6. **Swapping Values at Odd Levels**:
+   - The condition `if level % 2 == 0` is used to check if the level is **odd** (since the level starts from 0, it checks for levels 1, 3, 5...).
+   - If the current level is odd, it swaps the `val` attributes of the left and right children.
+
+7. **Recursive Calls**:
+   - After checking and possibly swapping the node values at the current level, the function proceeds to make recursive calls on the children.
+   - The `left_child.right` and `right_child.left` are passed into the next recursive call, which means the function is exploring nodes deeper into the tree.
+
+8. **Increasing Level**:
+   - The `level` argument is incremented by 1 in each recursive call, ensuring that the depth of the tree is tracked.
+
+9. **Tree Structure Preservation**:
+   - The function performs the value swapping, but it does not modify the tree structure. Only the node values are reversed at odd levels.
+
+10. **End of Traversal**:
+    - Once all recursive calls have been made, the tree is processed, and the modified root is returned.
+
+### Working Example:
+
+Let's walk through an example using the following tree:
+
+```
+        1
+      /   \
+     2     3
+    / \   / \
+   4   5 6   7
+```
+
+1. **Starting Point**:
+   - The root node is 1.
+   - We begin by calling `_dfs(root.left, root.right, level=0)` with nodes `2` (left child of root) and `3` (right child of root) at level 0.
+
+2. **Level 0**:
+   - At level 0, there is no swap, since we're only interested in swapping at **odd levels**. So we move to the next recursive calls.
+
+3. **Level 1** (Odd Level):
+   - Now we call `_dfs(left_child=4, right_child=7, level=1)`, where nodes 4 and 7 are at level 1.
+   - Since it's an odd level (`level % 2 == 1`), we **swap the values** of 4 and 7.
+   - After the swap:
+     ```
+     Node 4's value becomes 7.
+     Node 7's value becomes 4.
+     ```
+
+4. **Level 2** (Even Level):
+   - Now we recurse further and reach level 2. Since it's an even level, we don't swap any values.
+   - We call `_dfs(left_child=5, right_child=6, level=2)` and proceed further down.
+
+5. **Level 2 (continued)**:
+   - No values are swapped at level 2 because it's an even level. We just proceed down the tree without making any changes.
+
+6. **Returning to Previous Levels**:
+   - After the recursion reaches the leaf nodes (level 2), we backtrack through the tree, and the function returns to the root.
+
+7. **Final Tree**:
+   After all recursive calls, the tree is updated as follows:
+
+```
+        1
+      /   \
+     2     3
+    / \   / \
+   7   5 6   4
+```
+
