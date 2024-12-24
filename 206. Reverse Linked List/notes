@@ -1,0 +1,94 @@
+
+
+1. **Initialization**:
+   - `prev = None`: This will eventually point to the previous node in the list as we reverse the `next` pointers.
+   - `current = head`: This will start at the head of the linked list and traverse each node one by one.
+
+2. **While Loop** (`while current:`):
+   - The loop will continue until `current` becomes `None`, i.e., until we've reached the end of the list.
+
+3. **Save the Next Node**:
+   - `next_node = current.next`: Since we are changing `current.next`, we first save the next node to `next_node`. This is necessary to not lose the reference to the rest of the list.
+   
+4. **Reverse the `next` Pointer**:
+   - `current.next = prev`: This is the core of the reversal. For each node, we change its `next` pointer to point to the previous node instead of the next node. Initially, the first node's `next` will be set to `None` (since `prev` is `None`).
+
+5. **Move the `prev` Pointer**:
+   - `prev = current`: After reversing the `current.next` pointer, we move `prev` to `current` for the next iteration. This allows us to keep track of the previously visited node.
+
+6. **Move the `current` Pointer**:
+   - `current = next_node`: We move the `current` pointer to the next node (which we saved earlier as `next_node`). This is necessary to continue processing the rest of the list.
+
+7. **Repeat the Process**: The loop continues to repeat steps 3–6 for all nodes in the list, effectively reversing the list.
+
+8. **Return the New Head**:
+   - Once `current` becomes `None`, `prev` will point to the last node in the original list, which is now the new head of the reversed list. We return `prev` as the new head of the reversed list.
+
+9. **Time Complexity**:
+   - The algorithm runs in O(n) time where `n` is the number of nodes in the list because we process each node exactly once.
+
+10. **Space Complexity**:
+   - The space complexity is O(1) since we are only using a few pointers (`prev`, `current`, and `next_node`), and we are not using any extra space that grows with the size of the input.
+
+---
+
+### Working Example:
+
+Let’s take an example linked list `1 -> 2 -> 3 -> 4 -> 5 -> None` and reverse it using the code.
+
+#### Initial Linked List:
+
+```
+1 -> 2 -> 3 -> 4 -> 5 -> None
+```
+
+#### Step-by-Step Breakdown:
+
+1. **First Iteration**:
+   - `prev = None`
+   - `current = 1 -> 2 -> 3 -> 4 -> 5 -> None`
+   - Save `next_node = current.next = 2 -> 3 -> 4 -> 5 -> None`
+   - Reverse `1.next = prev = None`
+   - Move `prev = current = 1 -> None`
+   - Move `current = next_node = 2 -> 3 -> 4 -> 5 -> None`
+
+2. **Second Iteration**:
+   - `prev = 1 -> None`
+   - `current = 2 -> 3 -> 4 -> 5 -> None`
+   - Save `next_node = current.next = 3 -> 4 -> 5 -> None`
+   - Reverse `2.next = prev = 1 -> None`
+   - Move `prev = current = 2 -> 1 -> None`
+   - Move `current = next_node = 3 -> 4 -> 5 -> None`
+
+3. **Third Iteration**:
+   - `prev = 2 -> 1 -> None`
+   - `current = 3 -> 4 -> 5 -> None`
+   - Save `next_node = current.next = 4 -> 5 -> None`
+   - Reverse `3.next = prev = 2 -> 1 -> None`
+   - Move `prev = current = 3 -> 2 -> 1 -> None`
+   - Move `current = next_node = 4 -> 5 -> None`
+
+4. **Fourth Iteration**:
+   - `prev = 3 -> 2 -> 1 -> None`
+   - `current = 4 -> 5 -> None`
+   - Save `next_node = current.next = 5 -> None`
+   - Reverse `4.next = prev = 3 -> 2 -> 1 -> None`
+   - Move `prev = current = 4 -> 3 -> 2 -> 1 -> None`
+   - Move `current = next_node = 5 -> None`
+
+5. **Fifth Iteration**:
+   - `prev = 4 -> 3 -> 2 -> 1 -> None`
+   - `current = 5 -> None`
+   - Save `next_node = current.next = None`
+   - Reverse `5.next = prev = 4 -> 3 -> 2 -> 1 -> None`
+   - Move `prev = current = 5 -> 4 -> 3 -> 2 -> 1 -> None`
+   - Move `current = next_node = None` (end of list)
+
+#### Final Reversed Linked List:
+
+```
+5 -> 4 -> 3 -> 2 -> 1 -> None
+```
+
+At the end of the loop, `prev` points to the new head of the reversed list, which is `5`. We return `prev`.
+
