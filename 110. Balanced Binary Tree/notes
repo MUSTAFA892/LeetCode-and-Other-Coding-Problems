@@ -1,0 +1,71 @@
+
+1. **TreeNode Class**: The `TreeNode` class represents a binary tree node, with a `val` for storing its value, and two pointers (`left` and `right`) for its left and right children.
+
+2. **isBalanced Method**: The `isBalanced` method in the `Solution` class determines if a binary tree is balanced. A balanced binary tree is one where the height difference between the left and right subtrees of any node is at most 1.
+
+3. **Helper Function**: The `helper` function recursively calculates the height of a subtree. It returns the height of the node if the subtree is balanced, and if it's not balanced, it immediately returns `0` to stop further recursion.
+
+4. **Base Case**: The base case for the recursive `helper` function is when a node is `None` (empty), in which case it returns `0`, indicating no height.
+
+5. **Left Subtree Height**: The height of the left subtree is calculated first by calling `helper(node.left)`.
+
+6. **Early Termination on Imbalance**: After calculating the left height, it checks if the `check[0]` variable is `False` (indicating that an imbalance has already been detected). If so, it terminates early and returns `0`.
+
+7. **Right Subtree Height**: If the left subtree is balanced, the function proceeds to calculate the height of the right subtree using `helper(node.right)`.
+
+8. **Balance Condition Check**: After both left and right subtree heights are computed, it checks if the absolute difference between the two heights exceeds `1`. If it does, the tree is marked as unbalanced (`check[0] = False`), and the recursion stops further calculations.
+
+9. **Return Height**: If the subtree is balanced, the function returns the height of the current node, which is `1 + max(left_height, right_height)`.
+
+10. **Global State**: The `check` list is used to maintain the state of whether the tree is balanced. It's passed as a reference, so any changes inside the `helper` function will affect the value outside of it.
+
+### Working Example:
+
+Let's walk through an example with a simple tree to see how the function works.
+
+#### Example Tree:
+
+```
+        1
+       / \
+      2   3
+     / \
+    4   5
+```
+
+- **Step 1**: Call `isBalanced(root)` with the root node (value `1`).
+  
+- **Step 2**: The `helper` function is called with node `1`.
+  - It first calls `helper(node.left)` (node `2`).
+  
+- **Step 3**: The `helper` function is called with node `2`.
+  - It calls `helper(node.left)` (node `4`).
+  
+- **Step 4**: The `helper` function is called with node `4`.
+  - It calls `helper(node.left)` (which is `None`), returning a height of `0`.
+  - It calls `helper(node.right)` (which is `None`), returning a height of `0`.
+  - The height of node `4` is `1 + max(0, 0) = 1`, and it returns this value.
+  
+- **Step 5**: The `helper` function now moves back to node `2`.
+  - It calls `helper(node.right)` (node `5`).
+  
+- **Step 6**: The `helper` function is called with node `5`.
+  - It calls `helper(node.left)` (which is `None`), returning a height of `0`.
+  - It calls `helper(node.right)` (which is `None`), returning a height of `0`.
+  - The height of node `5` is `1 + max(0, 0) = 1`, and it returns this value.
+  
+- **Step 7**: Now, at node `2`, the heights of the left (`1` from node `4`) and right (`1` from node `5`) subtrees are compared. The absolute difference is `|1 - 1| = 0`, so the subtree is balanced. The height of node `2` is `1 + max(1, 1) = 2`, and it returns this value.
+  
+- **Step 8**: The `helper` function now moves back to the root node `1`.
+  - It calls `helper(node.right)` (node `3`).
+  
+- **Step 9**: The `helper` function is called with node `3`.
+  - It calls `helper(node.left)` (which is `None`), returning a height of `0`.
+  - It calls `helper(node.right)` (which is `None`), returning a height of `0`.
+  - The height of node `3` is `1 + max(0, 0) = 1`, and it returns this value.
+  
+- **Step 10**: Now, at node `1`, the heights of the left (`2` from node `2`) and right (`1` from node `3`) subtrees are compared. The absolute difference is `|2 - 1| = 1`, which is within the allowed limit, so the tree is balanced. The height of node `1` is `1 + max(2, 1) = 3`, and it returns this value.
+
+Since the `check[0]` remained `True` throughout the recursion, the tree is balanced, and the final result is `True`.
+
+### Final Output: `True` (The tree is balanced)
