@@ -1,0 +1,129 @@
+
+
+1. **Initialization of `dp`**:  
+   The `dp` dictionary is initialized as a `defaultdict(int)` where the default value for any key is `0`.  
+   The dictionary keeps track of the number of ways to achieve different sums at each step.  
+   Initially, `dp[0] = 1` because there's exactly one way to achieve a sum of `0` — by selecting no numbers (the base case).
+
+2. **Outer Loop** (`for i in range(len(nums))`):  
+   The loop iterates through each number in the `nums` list. This is the main loop where we process each number and update possible sums accordingly.
+
+3. **Inner Loop** (`for curr_sum, count in dp.items()`):  
+   The inner loop iterates over each current sum (`curr_sum`) and the count of ways to achieve that sum (`count`) from the previous step.  
+   - This is necessary because each number in `nums` can either be added (`+nums[i]`) or subtracted (`-nums[i]`).
+   
+4. **Next `dp` state** (`next_dp = defaultdict(int)`):  
+   A new dictionary `next_dp` is created at the start of each outer loop iteration. This is where the new sums (after considering the current number) will be stored.
+   
+5. **Updating `next_dp` for Addition and Subtraction**:
+   - For each sum in the current `dp`, two new sums are generated:
+     - **`curr_sum + nums[i]`**: This represents adding the current number to the sum.
+     - **`curr_sum - nums[i]`**: This represents subtracting the current number from the sum.
+   - For each of these new sums, we increment their count in `next_dp` by the number of ways to get the original `curr_sum` (stored in `dp`).
+
+6. **Transitioning to the Next State** (`dp = next_dp`):  
+   After processing all possible sums for the current number, `dp` is updated to `next_dp`, which now holds the new possible sums.
+
+7. **Final Answer** (`return dp[target]`):  
+   After processing all numbers, the number of ways to achieve the target sum is stored in `dp[target]`. This value is returned.
+
+8. **Time Complexity**:  
+   - Let `n` be the length of `nums`.  
+   - For each number in `nums`, we are iterating through all sums in `dp`. In the worst case, `dp` could hold sums from `-sum(nums)` to `sum(nums)`.  
+   - Hence, the time complexity is approximately `O(n * 2^n)`.
+
+9. **Space Complexity**:  
+   - The space complexity is `O(2^n)` because `dp` stores sums that range from `-sum(nums)` to `sum(nums)`.
+
+10. **Edge Case**:  
+    - If `target` is `0`, then `dp[0]` will always be `1` at the start, meaning there is at least one way (by choosing no numbers) to achieve the sum.
+
+---
+
+### Working Example:
+
+Let's go through a detailed example to illustrate how the algorithm works.
+
+#### Example Input:
+```python
+nums = [1, 1, 1, 1]
+target = 2
+```
+
+#### Initial Setup:
+
+- **`dp`**: At the start, `dp = defaultdict(int)` with `dp[0] = 1`.  
+  (This means there is one way to achieve a sum of `0` — by selecting no elements.)
+
+#### First Iteration (`i = 0`, nums[i] = 1):
+
+- **`dp`**: `{0: 1}`  
+- Now, we need to consider the possible sums after adding or subtracting `1`.
+  - For `curr_sum = 0`, we can create the sums:
+    - `curr_sum + nums[i] = 0 + 1 = 1` → increment `next_dp[1]` by 1.
+    - `curr_sum - nums[i] = 0 - 1 = -1` → increment `next_dp[-1]` by 1.
+
+- **`next_dp`** after this iteration: `{1: 1, -1: 1}`  
+- Update `dp` to `next_dp`: `dp = {1: 1, -1: 1}`.
+
+#### Second Iteration (`i = 1`, nums[i] = 1):
+
+- **`dp`**: `{1: 1, -1: 1}`  
+- Now, we process the sums created in the previous iteration.
+  - For `curr_sum = 1`, we can create the sums:
+    - `curr_sum + nums[i] = 1 + 1 = 2` → increment `next_dp[2]` by 1.
+    - `curr_sum - nums[i] = 1 - 1 = 0` → increment `next_dp[0]` by 1.
+  - For `curr_sum = -1`, we can create the sums:
+    - `curr_sum + nums[i] = -1 + 1 = 0` → increment `next_dp[0]` by 1.
+    - `curr_sum - nums[i] = -1 - 1 = -2` → increment `next_dp[-2]` by 1.
+
+- **`next_dp`** after this iteration: `{2: 1, 0: 2, -2: 1}`  
+- Update `dp` to `next_dp`: `dp = {2: 1, 0: 2, -2: 1}`.
+
+#### Third Iteration (`i = 2`, nums[i] = 1):
+
+- **`dp`**: `{2: 1, 0: 2, -2: 1}`  
+- Now, we process the sums created in the previous iteration.
+  - For `curr_sum = 2`, we can create the sums:
+    - `curr_sum + nums[i] = 2 + 1 = 3` → increment `next_dp[3]` by 1.
+    - `curr_sum - nums[i] = 2 - 1 = 1` → increment `next_dp[1]` by 1.
+  - For `curr_sum = 0`, we can create the sums:
+    - `curr_sum + nums[i] = 0 + 1 = 1` → increment `next_dp[1]` by 2 (since `dp[0] = 2`).
+    - `curr_sum - nums[i] = 0 - 1 = -1` → increment `next_dp[-1]` by 2.
+  - For `curr_sum = -2`, we can create the sums:
+    - `curr_sum + nums[i] = -2 + 1 = -1` → increment `next_dp[-1]` by 1.
+    - `curr_sum - nums[i] = -2 - 1 = -3` → increment `next_dp[-3]` by 1.
+
+- **`next_dp`** after this iteration: `{3: 1, 1: 3, -1: 3, -3: 1}`  
+- Update `dp` to `next_dp`: `dp = {3: 1, 1: 3, -1: 3, -3: 1}`.
+
+#### Fourth Iteration (`i = 3`, nums[i] = 1):
+
+- **`dp`**: `{3: 1, 1: 3, -1: 3, -3: 1}`  
+- Now, we process the sums created in the previous iteration.
+  - For `curr_sum = 3`, we can create the sums:
+    - `curr_sum + nums[i] = 3 + 1 = 4` → increment `next_dp[4]` by 1.
+    - `curr_sum - nums[i] = 3 - 1 = 2` → increment `next_dp[2]` by 1.
+  - For `curr_sum = 1`, we can create the sums:
+    - `curr_sum + nums[i] = 1 + 1 = 2` → increment `next_dp[2]` by 3.
+    - `curr_sum - nums[i] = 1 - 1 = 0` → increment `next_dp[0]` by 3.
+  - For `curr_sum = -1`, we can create the sums:
+    - `curr_sum + nums[i] = -1 + 1 = 0` → increment `next_dp[0]` by 3.
+    - `curr_sum - nums[i] = -1 - 1 = -2` → increment `next_dp[-2]` by 3.
+  - For `curr_sum = -3`, we can create the sums:
+    - `curr_sum + nums[i] = -3 + 1 = -2` → increment `next_dp[-2]` by 1.
+    - `curr_sum - nums[i] = -3 - 1 = -4` → increment `next_dp[-4]` by 1.
+
+- **`next_dp`** after this iteration: `{4: 1, 2: 4, 0: 6, -2: 4, -4: 1}`  
+- Update `dp` to `next_dp`: `dp = {4: 1, 2: 4, 0: 6, -2: 4, -4: 1}`.
+
+#### Final Step:
+
+- **`dp[target]`** is `dp[2]`, which is `4`.  
+  This means there are 4 different ways to assign `+` and `-` to the elements of `nums` such that their sum equals the target `2`.
+
+### Final Output:
+```python
+4
+```
+
