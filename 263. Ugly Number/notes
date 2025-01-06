@@ -1,0 +1,63 @@
+
+1. **Class Definition (`Solution`):**
+   - The code defines a class `Solution` containing a method `isUgly` which determines if a given number `n` is an ugly number.
+
+2. **Method Signature (`def isUgly(self, n: int) -> bool`):**
+   - `n: int` is the input number, and the method returns a boolean (`True` or `False`) to indicate whether `n` is an ugly number.
+   - The method checks if the number is divisible only by the prime factors 2, 3, and 5.
+
+3. **Initial Check (`if n <= 0:`):**
+   - If `n` is less than or equal to 0, the method immediately returns `False`. Ugly numbers are positive integers, so negative numbers and zero are not considered ugly.
+
+4. **Prime Factors List (`factors = [2, 3, 5]`):**
+   - This list stores the prime factors `2`, `3`, and `5`. We are only interested in dividing the number by these primes to check if it is an ugly number.
+
+5. **Loop Over Factors (`for i in factors:`):**
+   - The loop iterates through the factors list, which contains the prime numbers `2`, `3`, and `5`.
+   - For each prime factor, the code checks if `n` is divisible by it.
+
+6. **Dividing the Number (`while n % i == 0:`):**
+   - Inside the loop, the `while` statement keeps dividing `n` by the current prime factor `i` (i.e., 2, 3, or 5) as long as `n` is divisible by `i`.
+   - This process removes all factors of `i` from `n`. If `n` is divisible by `2`, it divides `n` by `2`, and similarly for `3` and `5`.
+
+7. **Reducing `n`:**
+   - After repeatedly dividing `n` by 2, 3, or 5, `n` is reduced.
+   - For example, if `n = 12`, after dividing by `2` twice, `n` becomes `3`, which is then divided by `3` to become `1`.
+
+8. **Return Statement (`return n == 1`):**
+   - After the loop finishes, the code checks if the value of `n` is equal to `1`.
+   - If `n` has been reduced to `1`, then the original number was only divisible by 2, 3, or 5, meaning it is an ugly number.
+   - If `n` is not `1`, it means `n` had prime factors other than 2, 3, or 5, so it's not an ugly number.
+
+9. **Efficiency Consideration:**
+   - The code efficiently reduces `n` by dividing by the prime factors directly without needing any additional checks, making it a fast approach.
+   
+10. **Edge Cases:**
+   - The check for `n <= 0` handles cases for negative numbers and zero.
+   - If `n` is already `1`, the function will return `True` because `1` is considered an ugly number.
+
+### Working Example:
+
+Let's take `n = 6` as an example.
+
+#### Steps:
+1. **Initial Check:**  
+   `n = 6`, which is greater than 0, so we proceed.
+
+2. **Loop Over Factors (`factors = [2, 3, 5]`):**
+   - **First factor, `i = 2`:**  
+     - `6 % 2 == 0`, so we divide `n` by 2.  
+     - `n = 6 // 2 = 3`.
+   - **Second factor, `i = 3`:**
+     - `3 % 3 == 0`, so we divide `n` by 3.  
+     - `n = 3 // 3 = 1`.
+   - **Third factor, `i = 5`:**  
+     - `n = 1`, so no division is needed.
+
+3. **Final Check (`return n == 1`):**  
+   - After the loop, `n = 1`, so the method returns `True`, indicating that `6` is an ugly number.
+
+#### Output:
+```python
+True
+```
