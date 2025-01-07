@@ -1,0 +1,60 @@
+
+
+1. **Class Definition**:
+   - The class `Solution` is created to encapsulate the solution for the problem.
+
+2. **Method Definition**:
+   - The method `stringMatching` takes a list of strings `words` as input and returns a list of strings that are substrings of any other word in the list.
+
+3. **Initialization**:
+   - The list `result` is initialized to store the words that meet the condition of being a substring of another word.
+
+4. **Outer Loop**:
+   - The outer loop iterates over each word in the list. The index `i` keeps track of the current word being processed.
+
+5. **Inner Loop**:
+   - The inner loop also iterates over each word in the list. The index `j` is used to compare the current word `words[i]` against all other words `words[j]`.
+
+6. **Condition `i != j`**:
+   - The condition `i != j` ensures that the current word `words[i]` is not compared with itself. It avoids checking if a word is a substring of itself.
+
+7. **Substring Check**:
+   - The condition `words[i] in words[j]` checks if the word at index `i` is a substring of the word at index `j`.
+
+8. **Adding to Result**:
+   - If `words[i]` is found to be a substring of `words[j]`, it is added to the result list.
+
+9. **Break Statement**:
+   - The `break` statement ensures that once a match is found for `words[i]` (i.e., it is a substring of another word), it is added to the result, and no further comparisons for `words[i]` are done in the inner loop.
+
+10. **Return Statement**:
+    - The `result` list, containing the substrings found, is returned as the output of the method.
+
+---
+
+### Example:
+
+#### Input:
+```python
+words = ["mass", "as", "hero", "superhero"]
+```
+
+#### Execution:
+1. First, the word `mass` is compared against each word in the list.
+   - It is not a substring of itself (since `i != j`).
+   - It is a substring of `superhero`, so `mass` is added to the result list and the inner loop is exited.
+   
+2. Next, the word `as` is compared against each word in the list.
+   - It is a substring of `mass`, so `as` is added to the result list and the inner loop is exited.
+
+3. The word `hero` is compared with each word in the list.
+   - It is a substring of `superhero`, so `hero` is added to the result list and the inner loop is exited.
+
+4. Finally, `superhero` is compared with each word in the list.
+   - It is not a substring of any other word, so it is not added to the result.
+
+#### Output:
+```python
+["mass", "as", "hero"]
+```
+
