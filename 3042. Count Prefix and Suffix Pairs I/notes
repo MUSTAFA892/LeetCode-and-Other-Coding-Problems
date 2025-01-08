@@ -1,0 +1,70 @@
+
+
+1. **Class Definition**:  
+   - The class `Solution` encapsulates the function `countPrefixSuffixPairs` to solve the problem as part of a solution framework.
+
+2. **Function Purpose**:  
+   - The function `countPrefixSuffixPairs` calculates the number of pairs \((i, j)\) where \( i < j \), and `words[i]` is both a prefix and a suffix of `words[j]`.
+
+3. **Inputs**:  
+   - `words`: A list of strings, where each string needs to be evaluated for prefix-suffix pair conditions with other strings in the list.
+
+4. **Output**:  
+   - An integer representing the count of valid prefix-suffix pairs.
+
+5. **Outer Loop**:
+   - Iterates through the indices of `words` using `i`. This is the first string (`words[i]`) to compare.
+
+6. **Inner Loop**:
+   - Starts from `j = i + 1` (to ensure \(i < j\)), iterating over the remaining strings in the list. This avoids duplicate pair checking and ensures the condition \(i < j\).
+
+7. **Prefix Check**:
+   - `words[j][:len(words[i])] == words[i]`:  
+     Checks if the first `len(words[i])` characters of `words[j]` match `words[i]`.
+
+8. **Suffix Check**:
+   - `words[j][-len(words[i]):] == words[i]`:  
+     Checks if the last `len(words[i])` characters of `words[j]` match `words[i]`.
+
+9. **Increment Counter**:
+   - If both prefix and suffix conditions are met, increment the `count`.
+
+10. **Return Result**:
+    - The function returns the total count of valid prefix-suffix pairs after evaluating all possible combinations of \((i, j)\).
+
+---
+
+### Working Example:
+#### Input:
+```python
+words = ["abab", "ab", "baba", "ababab"]
+```
+
+#### Steps:
+1. **Outer Loop** (\(i\)):
+   - \(i = 0\), \(i = 1\), \(i = 2\), \(i = 3\).
+
+2. **Inner Loop** (\(j\)):
+   - \(j = i + 1\) to avoid duplicate checks and ensure \(i < j\).
+
+3. **Prefix and Suffix Check**:
+   - For each pair \((i, j)\), check if:
+     - `words[j]` starts with `words[i]`.
+     - `words[j]` ends with `words[i]`.
+
+#### Iterations:
+| \(i\) | \(j\) | words[i] | words[j] | Prefix Check | Suffix Check | Count Increment |
+|------|------|----------|----------|--------------|--------------|-----------------|
+| 0    | 1    | "abab"   | "ab"     | False        | False        | 0               |
+| 0    | 2    | "abab"   | "baba"   | False        | False        | 0               |
+| 0    | 3    | "abab"   | "ababab" | True         | False        | 0               |
+| 1    | 2    | "ab"     | "baba"   | False        | False        | 0               |
+| 1    | 3    | "ab"     | "ababab" | True         | True         | 1               |
+| 2    | 3    | "baba"   | "ababab" | False        | False        | 0               |
+
+#### Output:
+```python
+1
+```
+
+---
