@@ -1,0 +1,81 @@
+
+1. **Imports**:
+   - The code uses the `Counter` class from Python's `collections` module, which allows counting the occurrences of elements in an iterable (like a string or list).
+
+2. **Function Definition**:
+   - The function `wordSubsets` takes two lists of strings as input, `words1` and `words2`, and returns a list of strings from `words1` that are "universal" with respect to `words2`.
+
+3. **Initialize the Result List**:
+   - The list `result` is initialized as an empty list. This will hold the strings from `words1` that satisfy the conditions.
+
+4. **Count the Required Characters from `words2`**:
+   - `counter_words2` is initialized as an empty `Counter` object. This will accumulate the character counts from all the words in `words2`.
+   - For each word in `words2`, the `Counter(word)` generates a frequency count for the characters in that word, and the `|=` operator updates `counter_words2` to include the maximum required count of each character. This ensures that `counter_words2` reflects the total minimum number of occurrences needed for each character to make a word "universal".
+
+5. **Iterating Over `words1`**:
+   - The algorithm then iterates over each word in `words1`. For each word, the count of its characters is computed using `Counter(word)` and stored in `word_count`.
+
+6. **Check if `word` is a Universal Word**:
+   - The variable `found` is initialized as `True` and is used to track if the current word from `words1` contains all the necessary characters as specified by `counter_words2`.
+   - For each character (`char`) and its required count (`count`) in `counter_words2`, it checks if `word_count[char]` (the number of occurrences of `char` in the current word) is less than the required `count`. If so, it sets `found` to `False` and breaks out of the loop.
+
+7. **Add Valid Word to Result**:
+   - If the word meets all the character requirements, `found` remains `True`, and the word is added to the `result` list.
+
+8. **Return the Final Result**:
+   - Once all words from `words1` are processed, the `result` list is returned, containing the words that are universal with respect to `words2`.
+
+9. **Key Operations**:
+   - `Counter(word)` is used to get the frequency count of characters in each word.
+   - `|= Counter(word)` ensures that `counter_words2` contains the maximum frequency of each character across all words in `words2`.
+   - The `found` flag helps to track if the current word meets all the requirements from `words2`.
+
+10. **Time Complexity**:
+    - Let `n` be the total number of characters across all words in `words1` and `words2`. The time complexity of the function is O(n), since we perform counting operations for each word and compare the character frequencies efficiently.
+
+### Working Example:
+
+```python
+words1 = ["amazon", "apple", "facebook", "google", "leetcode"]
+words2 = ["e", "o"]
+
+solution = Solution()
+result = solution.wordSubsets(words1, words2)
+
+print(result)
+```
+
+### Example Walkthrough:
+
+1. **Step 1: Build `counter_words2`**:
+   - For each word in `words2`, we build the `Counter`:
+     - Word `"e"` → `Counter({'e': 1})`
+     - Word `"o"` → `Counter({'o': 1})`
+   - Now, `counter_words2` should contain the maximum counts of each character that appear in any word from `words2`:
+     - `counter_words2 = Counter({'e': 1, 'o': 1})`.
+
+2. **Step 2: Check Each Word in `words1`**:
+   - **For `"amazon"`**: 
+     - `Counter("amazon") = Counter({'a': 1, 'm': 1, 'z': 1, 'o': 1, 'n': 1})`.
+     - It contains `'e'` (0 occurrences) and `'o'` (1 occurrence). Since `'e'` is required, `"amazon"` is not a valid word.
+   - **For `"apple"`**: 
+     - `Counter("apple") = Counter({'a': 1, 'p': 2, 'l': 1, 'e': 1})`.
+     - It contains `'e'` (1 occurrence) and `'o'` (0 occurrences). Since `'o'` is required, `"apple"` is not valid.
+   - **For `"facebook"`**:
+     - `Counter("facebook") = Counter({'f': 1, 'a': 1, 'c': 1, 'e': 1, 'b': 1, 'o': 2, 'k': 1})`.
+     - It contains `'e'` (1 occurrence) and `'o'` (2 occurrences). Both requirements are satisfied, so `"facebook"` is valid.
+   - **For `"google"`**:
+     - `Counter("google") = Counter({'g': 2, 'o': 2, 'l': 1, 'e': 1})`.
+     - It contains `'e'` (1 occurrence) and `'o'` (2 occurrences). Both requirements are satisfied, so `"google"` is valid.
+   - **For `"leetcode"`**:
+     - `Counter("leetcode") = Counter({'e': 3, 't': 2, 'l': 1, 'c': 1, 'o': 1, 'd': 1})`.
+     - It contains `'e'` (3 occurrences) and `'o'` (1 occurrence). Both requirements are satisfied, so `"leetcode"` is valid.
+
+3. **Step 3: Return Result**:
+   - The valid words are `["facebook", "google", "leetcode"]`.
+
+### Final Output:
+
+```python
+['facebook', 'google', 'leetcode']
+```
