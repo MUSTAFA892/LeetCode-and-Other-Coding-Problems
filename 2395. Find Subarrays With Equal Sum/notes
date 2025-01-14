@@ -1,0 +1,101 @@
+
+
+1. **Class Definition**:
+   - The solution is implemented within the `Solution` class. This is a standard format in many coding platforms like LeetCode.
+
+2. **Function Definition**:
+   - The function `findSubarrays` takes one argument: `nums`, which is a list of integers.
+
+3. **Initialization of the `repeatation` set**:
+   - A set called `repeatation` is initialized to store the sum of every pair of consecutive elements in the array `nums`.
+   - A set is used because it allows for O(1) time complexity for membership checks and insertions.
+
+4. **Outer Loop (`for i in range(len(nums) - 1)`)**:
+   - The loop iterates over the indices of the list `nums`, but it stops at `len(nums) - 1`. This is because the code compares consecutive pairs of elements, so we need `i` and `i+1` for each iteration.
+
+5. **Summing Consecutive Elements (`total = nums[i] + nums[i+1]`)**:
+   - In each iteration, the sum of the consecutive elements `nums[i]` and `nums[i+1]` is calculated and stored in the variable `total`.
+
+6. **Checking for Duplicates (`if total in repeatation`)**:
+   - The program checks if this sum (`total`) has already been seen (i.e., it is already in the `repeatation` set). If it has, it means the same sum has occurred for another pair of consecutive numbers before. In this case, the function returns `True`, indicating that there is a pair of consecutive subarrays with the same sum.
+
+7. **Adding the Sum to the Set**:
+   - If the sum is not already in the `repeatation` set, it is added to the set. This ensures that we keep track of all sums of consecutive pairs as we iterate through the list.
+
+8. **Returning `False` if No Duplicates**:
+   - If no duplicate sum is found after going through all the consecutive pairs, the function returns `False`, indicating there are no subarrays with the same sum.
+
+9. **Edge Case Handling**:
+   - The code assumes that the input list has at least two elements, as the loop starts at `i=0` and checks `nums[i]` and `nums[i+1]`.
+   - If the list has fewer than 2 elements, the loop will not run, and the function will return `False` immediately.
+
+10. **Time Complexity**:
+   - The time complexity is O(n), where `n` is the length of the `nums` array, because each element is processed once, and set operations (checking for existence and adding elements) are O(1) on average.
+
+### Working Example:
+
+Let’s walk through an example to see how the code works:
+
+**Example Input**:
+```python
+nums = [4, 2, 4, 5, 6]
+```
+
+### Iteration Breakdown:
+
+1. **Index 0**:
+   - `nums[0] = 4`, `nums[1] = 2`
+   - Sum = `4 + 2 = 6`
+   - `6` is not in `repeatation`, so add `6` to the set.
+   - `repeatation = {6}`
+
+2. **Index 1**:
+   - `nums[1] = 2`, `nums[2] = 4`
+   - Sum = `2 + 4 = 6`
+   - `6` **is** in `repeatation` (it was added earlier), so return `True`.
+
+The function returns `True` because the sum `6` has appeared twice as the sum of consecutive elements.
+
+### Example 2 (No Duplicates):
+```python
+nums = [1, 2, 3, 4, 5]
+```
+
+### Iteration Breakdown:
+
+1. **Index 0**:
+   - `nums[0] = 1`, `nums[1] = 2`
+   - Sum = `1 + 2 = 3`
+   - `3` is not in `repeatation`, so add `3` to the set.
+   - `repeatation = {3}`
+
+2. **Index 1**:
+   - `nums[1] = 2`, `nums[2] = 3`
+   - Sum = `2 + 3 = 5`
+   - `5` is not in `repeatation`, so add `5` to the set.
+   - `repeatation = {3, 5}`
+
+3. **Index 2**:
+   - `nums[2] = 3`, `nums[3] = 4`
+   - Sum = `3 + 4 = 7`
+   - `7` is not in `repeatation`, so add `7` to the set.
+   - `repeatation = {3, 5, 7}`
+
+4. **Index 3**:
+   - `nums[3] = 4`, `nums[4] = 5`
+   - Sum = `4 + 5 = 9`
+   - `9` is not in `repeatation`, so add `9` to the set.
+   - `repeatation = {3, 5, 7, 9}`
+
+Since no sum is repeated, the function returns `False`.
+
+### Final Answer:
+For the input `[4, 2, 4, 5, 6]`, the output is:
+```python
+True
+```
+
+For the input `[1, 2, 3, 4, 5]`, the output is:
+```python
+False
+```
