@@ -1,0 +1,136 @@
+
+
+### Code Explanation for `countNegatives` (Using Optimized Approach with Two Pointers)
+
+```python
+class Solution:
+    def countNegatives(self, grid: List[List[int]]) -> int:
+        len_row, len_col = len(grid), len(grid[0])  # Get dimensions of the grid
+        row, col = 0, len_col - 1  # Start at the top-right corner of the grid
+        count = 0  # Initialize the negative count
+        
+        while row < len_row and col >= 0:  # Traverse the grid from top-right to bottom-left
+            if grid[row][col] < 0:  # If the current element is negative
+                count += len_row - row  # All elements in this column (below this row) are negative
+                col -= 1  # Move left to the next column
+            else:
+                row += 1  # Move down to the next row
+        
+        return count  # Return the total count of negative numbers
+```
+
+### Explanation of Optimized Approach:
+
+1. **Initialization**:
+   - `len_row` and `len_col`: Get the number of rows and columns in the grid.
+   - `row = 0`: Start at the first row.
+   - `col = len_col - 1`: Start at the last column (top-right corner of the grid).
+   - `count = 0`: Initialize the counter for negative numbers.
+
+2. **Two Pointers**:
+   - The algorithm uses two pointers, `row` and `col`, to traverse the grid starting from the top-right corner.
+
+3. **While Loop**:
+   - The loop continues while `row` is within the bounds of the rows (`row < len_row`) and `col` is within the bounds of the columns (`col >= 0`).
+   
+4. **Negative Element Check**:
+   - If `grid[row][col] < 0`, then all elements in the current column from `row` to the bottom are negative (because rows are sorted in non-increasing order). Thus, we add the count of these elements (`len_row - row`) to the `count`.
+   - We then move `col -= 1` to check the next column to the left.
+   
+5. **Non-Negative Element**:
+   - If `grid[row][col] >= 0`, then we move down to the next row (`row += 1`), since all values to the right in the same row are non-negative.
+
+6. **Return the Count**:
+   - The loop finishes when we have traversed the entire grid, and we return the `count`, which gives the number of negative numbers.
+
+### Example Walkthrough for Optimized Approach:
+
+**Input**: 
+```python
+grid = [
+    [ 4,  3,  2, -1],
+    [ 3,  2,  1, -1],
+    [ 1,  1, -1, -2],
+    [-1, -1, -2, -3]
+]
+```
+
+- **Start at row 0, col 3** (`grid[0][3] = -1`):
+  - Since `-1` is negative, we add `len_row - row = 4 - 0 = 4` to `count` (all elements in this column from `row 0` to `row 3` are negative).
+  - `count = 4`, move left: `col = 2`.
+  
+- **Now at row 0, col 2** (`grid[0][2] = 2`):
+  - `2` is positive, move down: `row = 1`.
+  
+- **Now at row 1, col 2** (`grid[1][2] = 1`):
+  - `1` is positive, move down: `row = 2`.
+  
+- **Now at row 2, col 2** (`grid[2][2] = -1`):
+  - Since `-1` is negative, we add `len_row - row = 4 - 2 = 2` to `count` (elements from `row 2` to `row 3` are negative).
+  - `count = 6`, move left: `col = 1`.
+
+- **Now at row 2, col 1** (`grid[2][1] = 1`):
+  - `1` is positive, move down: `row = 3`.
+  
+- **Now at row 3, col 1** (`grid[3][1] = -1`):
+  - Since `-1` is negative, we add `len_row - row = 4 - 3 = 1` to `count`.
+  - `count = 7`, move left: `col = 0`.
+  
+- **Now at row 3, col 0** (`grid[3][0] = -1`):
+  - `-1` is negative, we add `len_row - row = 4 - 3 = 1` to `count`.
+  - `count = 8`, move left: `col = -1`.
+
+- **Exit Loop**:
+  - The loop exits as `col < 0`, and we return `count = 8`.
+
+**Output**: `8`.
+
+---
+
+### Code Explanation for `countNegatives` (Using Brute Force)
+
+```python
+# Brute force approach
+count = 0
+for i in range(len(grid)):
+    for j in range(len(grid[i])):
+        if grid[i][j] < 0:
+            count += 1
+return count
+```
+
+### Explanation of Brute Force Approach:
+
+1. **Initialization**:
+   - `count = 0`: Initialize the counter for negative numbers.
+
+2. **Nested Loops**:
+   - We iterate through each row (`i`) and each column (`j`) in the grid.
+
+3. **Negative Element Check**:
+   - For each element `grid[i][j]`, if it is negative (`grid[i][j] < 0`), we increment `count`.
+
+4. **Return the Count**:
+   - After both loops finish, we return the `count` which gives the total number of negative numbers.
+
+### Example Walkthrough for Brute Force Approach:
+
+**Input**: 
+```python
+grid = [
+    [ 4,  3,  2, -1],
+    [ 3,  2,  1, -1],
+    [ 1,  1, -1, -2],
+    [-1, -1, -2, -3]
+]
+```
+
+- We loop through each element in the grid and count the negatives:
+  - `-1`, `-1`, `-1`, `-2`, `-1`, `-1`, `-2`, `-3`.
+  
+- There are `8` negative numbers in total.
+
+**Output**: `8`.
+
+---
+

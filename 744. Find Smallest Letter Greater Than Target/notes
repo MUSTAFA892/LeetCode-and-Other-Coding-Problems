@@ -1,0 +1,109 @@
+
+
+### Code Explanation for `nextGreatestLetter` (Using Binary Search)
+
+```python
+class Solution:
+    def nextGreatestLetter(self, letters: List[str], target: str) -> str:
+        left, right = 0, len(letters)
+        while left < right:
+            mid = (left + right) // 2
+            if ord(letters[mid]) > ord(target):
+                right = mid
+            else:
+                left = mid + 1
+
+        return letters[left % len(letters)]
+```
+
+### Explanation of Binary Search Approach:
+
+1. **Problem Understanding**: 
+   - Given a list of sorted letters (e.g., `['a', 'c', 'f', 'j']`) and a target letter (`'c'`), the goal is to find the smallest letter in the list that is **greater** than the target letter.
+   - If no letter is greater than the target, we return the first letter from the list (i.e., wrap around).
+
+2. **Binary Search**:
+   - We perform binary search on the sorted list to find the next letter greater than the target.
+
+3. **Initialization**:
+   - `left = 0`: The starting index of the list.
+   - `right = len(letters)`: The ending index (one past the last element in the list).
+
+4. **Binary Search Loop**:
+   - The loop runs until `left` is no longer less than `right`.
+   - In each iteration, we calculate the middle index: `mid = (left + right) // 2`.
+
+5. **Comparison**:
+   - `ord(letters[mid]) > ord(target)` checks whether the middle letter is greater than the target letter.
+   - If it is, we move `right` to `mid`, reducing the search range to the left half (since the smallest letter greater than the target might be on the left side).
+   - Otherwise, we move `left` to `mid + 1` to search the right half of the list.
+
+6. **Wrap-Around**:
+   - After exiting the loop, `left` will be the smallest index where `letters[left]` is greater than `target`. However, we need to handle the case when no such letter exists.
+   - We return `letters[left % len(letters)]` to ensure we handle the wrap-around case (e.g., if the target is greater than or equal to all letters in the list, we return the first letter).
+
+### Example Walkthrough for Binary Search:
+
+**Input**: `letters = ['a', 'c', 'f', 'j']`, `target = 'c'`
+
+- **Initial Values**: `left = 0`, `right = 4` (length of the list).
+
+**First Iteration**:
+- `mid = (0 + 4) // 2 = 2`, `letters[mid] = 'f'`.
+- `ord('f') > ord('c')` is true, so we set `right = mid = 2`.
+
+**Second Iteration**:
+- `left = 0`, `right = 2`.
+- `mid = (0 + 2) // 2 = 1`, `letters[mid] = 'c'`.
+- `ord('c') > ord('c')` is false, so we set `left = mid + 1 = 2`.
+
+**Exit Loop**:
+- The loop exits with `left = 2` and `right = 2`.
+- `letters[left % len(letters)] = letters[2 % 4] = 'f'`.
+
+**Output**: `'f'`.
+
+---
+
+### Code Explanation for `nextGreatestLetter` (Using Linear Search)
+
+```python
+# Linear search approach
+for i in letters:
+    if ord(target) < ord(i):
+        return i
+        break
+
+return letters[0]
+```
+
+### Explanation of Linear Search Approach:
+
+1. **Problem Understanding**:
+   - Same as before: we need to find the smallest letter that is greater than the `target` in the sorted list.
+
+2. **Iterating Over the List**:
+   - We iterate through each letter in the list using a `for` loop.
+
+3. **Comparison**:
+   - For each letter `i` in `letters`, we compare `ord(target)` with `ord(i)` to check if the letter `i` is greater than the target.
+
+4. **First Greater Letter**:
+   - If `ord(target) < ord(i)` is true, then `i` is the first letter greater than the target. We return it immediately.
+
+5. **Return First Letter**:
+   - If no letter is greater than the target, the loop finishes, and we return the first letter from the list (`letters[0]`).
+
+### Example Walkthrough for Linear Search:
+
+**Input**: `letters = ['a', 'c', 'f', 'j']`, `target = 'c'`
+
+- **First Iteration**: `i = 'a'`, `ord('c') < ord('a')` is false.
+- **Second Iteration**: `i = 'c'`, `ord('c') < ord('c')` is false.
+- **Third Iteration**: `i = 'f'`, `ord('c') < ord('f')` is true.
+  - We return `'f'`.
+
+**Output**: `'f'`.
+
+---
+
