@@ -1,0 +1,104 @@
+
+
+1. **Understanding the Problem:**
+   - You are given a 2D matrix (`heightMap`) where each value represents the height of a cell. The goal is to calculate how much water can be trapped between the cells after raining.
+
+2. **Key Observations:**
+   - Water will accumulate in valleys or depressions surrounded by higher cells.
+   - The border cells can't trap any water because they act as the boundary.
+   - The trapped water depends on the minimum height boundary surrounding the valley.
+
+3. **Priority Queue (Min-Heap):**
+   - A min-heap (priority queue) is used to process cells from the lowest boundary height to the highest. This helps in simulating how water can accumulate from the lowest boundary outwards.
+
+4. **Start with Border Cells:**
+   - The outermost cells are the boundary and serve as the boundary for water trapping. We initialize the min-heap with these border cells and mark them as visited by setting their values to `-1`.
+
+5. **Process from the Border Inwards:**
+   - By processing the lowest boundary cell first (because of the min-heap), we can ensure that we are considering the minimum height available to trap water.
+
+6. **Max Height Tracking:**
+   - As we process the cells, we keep track of the highest cell we've encountered (`max_h`). The difference between `max_h` and the current cell height gives us the amount of trapped water.
+
+7. **Neighbor Exploration:**
+   - For each cell, we look at its neighbors (up, down, left, right). If a neighbor hasn’t been visited, we add it to the heap for future processing.
+
+8. **Boundary Conditions:**
+   - We ensure that we don't go out of bounds when exploring neighbors and that we only process unvisited cells.
+
+9. **Accumulate Trapped Water:**
+   - For each processed cell, we calculate the potential water trapped above it, using the formula: `max_h - current_height`, where `max_h` is the maximum height encountered so far.
+
+10. **Return Result:**
+   - The total amount of trapped water is accumulated in a result variable (`res`) and returned at the end.
+
+---
+
+### **Working Virtual Example:**
+
+Let’s take an example of a 2D grid (`heightMap`) where water can be trapped:
+
+#### **Input:**
+
+```
+heightMap = [
+  [1, 4, 3, 1, 3, 2],
+  [3, 2, 1, 4, 2, 4],
+  [2, 3, 3, 2, 3, 1]
+]
+```
+
+#### **Steps:**
+
+1. **Initialize Border Cells in the Min-Heap:**
+   - We first add all the border cells to the min-heap. These are cells in the first and last row, and the first and last column.
+   
+   The min-heap will contain:
+   ```
+   [(1, 0, 0), (1, 0, 5), (2, 2, 5), (3, 0, 1), (4, 0, 3), (3, 2, 0), (3, 2, 4), (2, 1, 0), (2, 2, 3), (3, 1, 5), (1, 0, 4), (4, 2, 4), (3, 3, 1), (3, 1, 1)]
+   ```
+
+2. **Processing the Min-Heap:**
+   - We begin processing cells starting from the smallest height in the heap.
+   - First, pop `(1, 0, 0)` from the heap. The current maximum height `max_h` is 1.
+     - The current trapped water: `max_h - height = 1 - 1 = 0`
+     - Check the neighbors: Right `(0, 1)` which has height `4`, push `(4, 0, 1)` into the heap.
+     - No water is trapped here.
+
+3. **Proceeding to the Next Cell:**
+   - Now pop `(1, 0, 5)` from the heap. The current `max_h` is still 1.
+     - The current trapped water: `max_h - height = 1 - 1 = 0`
+     - Neighbors: Left `(0, 4)` with height `3`, push `(3, 0, 4)` into the heap.
+     - Still no trapped water.
+
+4. **Process Next Border Cells:**
+   - Continue with the border cells, adding neighbors to the heap and updating `max_h`.
+   - Eventually, you will reach cells that are lower than their neighbors, indicating trapped water.
+
+5. **Trapping Water Between Lower and Higher Cells:**
+   - As we move to cells with lower heights surrounded by higher cells, we begin calculating the trapped water. For example, when processing a cell in the interior like `(1, 1)` (height `2`), it is surrounded by higher cells, so trapped water can be calculated:
+     - If the highest boundary around it is `4`, the water trapped here would be `4 - 2 = 2`.
+
+6. **Continue Until All Cells Are Processed:**
+   - Keep processing cells, updating the `max_h`, pushing neighbors into the heap, and calculating trapped water.
+
+#### **Final Calculation:**
+
+- After processing all cells, the total trapped water is accumulated in `res`.
+- The final trapped water for the given example is **10 units**.
+
+#### **Visual Breakdown:**
+
+```
+heightMap = [
+  [1, 4, 3, 1, 3, 2],
+  [3, 2, 1, 4, 2, 4],
+  [2, 3, 3, 2, 3, 1]
+]
+```
+
+- The water is trapped in the valleys (cells surrounded by higher heights).
+- As we simulate the process step by step, the `max_h` increases as we explore cells. Water accumulates where there is a difference between the current height and `max_h`.
+
+---
+ 
