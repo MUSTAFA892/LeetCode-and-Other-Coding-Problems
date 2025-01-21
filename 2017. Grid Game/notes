@@ -1,0 +1,222 @@
+
+---
+### Approach 1
+
+### Problem:
+We have a grid:
+```
+grid = [[2, 5, 4],
+        [1, 5, 1]]
+```
+
+A robot starts at the top-left cell (row 0, column 0) and moves to the top-right (row 0, column n-1), then it can jump to any column in row 1 (bottom row), and moves from there to the bottom-right (row 1, column n-1). We want to find the column in row 1 where the jump should happen to minimize the **maximum sum** of coins collected on the robot's two paths.
+
+---
+
+### Step-by-Step Breakdown:
+
+#### 1. Prefix Sum Calculation:
+The **prefix sum** arrays help quickly calculate the sum of elements in a row up to or after a given column.
+
+**Top Row Prefix Sum:**
+- Prefix sums for row 0: `[2, 7, 11]`  
+  - `2 = 2`
+  - `7 = 2 + 5`
+  - `11 = 2 + 5 + 4`
+
+**Bottom Row Prefix Sum:**
+- Prefix sums for row 1: `[1, 6, 7]`  
+  - `1 = 1`
+  - `6 = 1 + 5`
+  - `7 = 1 + 5 + 1`
+
+---
+
+#### 2. Iterating Over Each Column `i`:
+We evaluate each column `i` as the potential "jump point" from row 0 to row 1. For each column:
+- Calculate:
+  - `top`: Sum of coins collected in row 0 **after column `i`**.
+  - `bottom`: Sum of coins collected in row 1 **up to column `i`**.
+- Find the **maximum** (`max(top, bottom)`) because the robot's goal is to minimize the worst-case scenario (largest sum).
+
+#### 3. Update the Result:
+- Keep track of the minimum value of `max(top, bottom)` across all possible jump points.
+
+---
+
+### Visualization for Each Step:
+
+#### Example: For `grid = [[2, 5, 4], [1, 5, 1]]`
+Prefix Sums:
+```
+Top Row Prefix Sum:     [2, 7, 11]
+Bottom Row Prefix Sum:  [1, 6, 7]
+```
+
+---
+
+#### Column `i = 0`:
+- **`top`** = Sum of elements in row 0 after column 0:
+  `top = prefixRow1[-1] - prefixRow1[0] = 11 - 2 = 9`
+- **`bottom`** = Sum of elements in row 1 up to column 0:
+  `bottom = 0` (nothing before column 0)
+- **`max(top, bottom)`** = `max(9, 0) = 9`
+- Update `res = min(res, 9) = 9`.
+
+---
+
+#### Column `i = 1`:
+- **`top`** = Sum of elements in row 0 after column 1:
+  `top = prefixRow1[-1] - prefixRow1[1] = 11 - 7 = 4`
+- **`bottom`** = Sum of elements in row 1 up to column 1:
+  `bottom = prefixRow2[0] = 1`
+- **`max(top, bottom)`** = `max(4, 1) = 4`
+- Update `res = min(res, 4) = 4`.
+
+---
+
+#### Column `i = 2`:
+- **`top`** = Sum of elements in row 0 after column 2:
+  `top = prefixRow1[-1] - prefixRow1[2] = 11 - 11 = 0`
+- **`bottom`** = Sum of elements in row 1 up to column 2:
+  `bottom = prefixRow2[1] = 6`
+- **`max(top, bottom)`** = `max(0, 6) = 6`
+- Update `res = min(res, 6) = 4`.
+
+---
+
+### Final Result:
+The minimum possible value for the maximum sum is `4`. The optimal jump point is at column `i = 1`.
+
+---
+
+### Diagram:
+```
+Top Row:      2    5    4      Prefix: [2, 7, 11]
+                      ^
+                     Jump Point
+Bottom Row:   1    5    1      Prefix: [1, 6, 7]
+```
+
+At jump point `i = 1`:
+- Top row after `i` = `[4]` → Sum = `4`.
+- Bottom row up to `i` = `[1]` → Sum = `1`.
+
+The maximum of the two is `4`, which is minimized.
+
+
+### Approach 2
+
+
+
+### Code Overview:
+This code is for solving a problem where a robot moves on a grid. It begins at the top-left corner, moves along the top row, and then switches to the bottom row at a certain column. The goal is to minimize the **maximum coins** collected in the two paths.
+
+---
+
+### Example Input:
+```python
+grid = [
+    [2, 5, 4],
+    [1, 5, 1]
+]
+```
+
+---
+
+### Step-by-Step Explanation:
+
+#### **Initial Setup:**
+- **`topSum`** = Sum of the top row: `sum(grid[0]) = 2 + 5 + 4 = 11`.
+- **`bottomSum`** = Sum of the bottom row up to the current column: initially `0`.
+
+We iterate over all columns except the last one (index `len(grid[0]) - 1`).
+
+---
+
+#### **Iterating Over Each Column:**
+
+1. **Subtract Current Column from `topSum`:**
+   At each column, subtract the coins from `topSum` because the robot has already passed that column on the top row.
+
+2. **Add Current Column to `bottomSum`:**
+   Add the coins to `bottomSum` because the robot might switch to the bottom row at this column.
+
+3. **Compare `topSum` and `bottomSum`:**
+   - If the robot switches at this column, we compare the remaining coins collected in the top row (`topSum`) with the coins collected in the bottom row so far (`bottomSum`).
+   - The maximum of the two is considered.
+
+4. **Adjust Return Logic:**
+   - If `bottomSum >= topSum`, and after reversing the addition of the last column to `bottomSum`, compare the values again to decide the result.
+
+---
+
+#### Example Walkthrough:
+Given the input:
+```python
+grid = [
+    [2, 5, 4],
+    [1, 5, 1]
+]
+```
+
+**Initial Values:**
+- `topSum = 11`
+- `bottomSum = 0`
+
+---
+
+**Iteration 1 (Column 0):**
+- Subtract `grid[0][0]` from `topSum`:  
+  `topSum = 11 - 2 = 9`
+- Add `grid[1][0]` to `bottomSum`:  
+  `bottomSum = 0 + 1 = 1`
+
+Comparison:
+- `topSum = 9`
+- `bottomSum = 1`
+- Since `bottomSum < topSum`, continue.
+
+---
+
+**Iteration 2 (Column 1):**
+- Subtract `grid[0][1]` from `topSum`:  
+  `topSum = 9 - 5 = 4`
+- Add `grid[1][1]` to `bottomSum`:  
+  `bottomSum = 1 + 5 = 6`
+
+Comparison:
+- `topSum = 4`
+- `bottomSum = 6`
+- Since `bottomSum >= topSum`, remove the last addition:  
+  `bottomSum = 6 - grid[1][1] = 1`
+- Compare again:
+  - If `topSum > bottomSum`: return `topSum = 4`.
+  - Otherwise: return `bottomSum`.
+
+**Result:** `4`.
+
+---
+
+### Final Output:
+The robot minimizes the maximum coins collected by switching at column 1, and the result is `4`.
+
+---
+
+### Diagram:
+
+```
+Initial Grid:
+Top Row:      2    5    4      (topSum = 11)
+Bottom Row:   1    5    1      (bottomSum = 0)
+
+Column 1 (Switch Point):
+Top Row:           5    4      (Remaining topSum = 4)
+Bottom Row:   1    5           (Accumulated bottomSum = 6)
+
+Result:
+Minimum of max(topSum, bottomSum) = min(max(4, 6)) = 4
+```
+
+---
+
