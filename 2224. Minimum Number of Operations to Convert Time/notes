@@ -1,0 +1,89 @@
+
+
+1. **Convert Time to Minutes:**
+   - `current_time` and `correct_time` are calculated by converting the `current` and `correct` time strings (formatted as "HH:MM") into total minutes.
+     - Example: "02:30" → `2 * 60 + 30 = 150 minutes`.
+
+2. **Calculate the Difference in Minutes:**
+   - Find the difference between the `correct_time` and `current_time`:
+     ```python
+     diff = correct_time - current_time
+     ```
+     - Example: `150 (correct) - 120 (current) = 30 minutes`.
+
+3. **Use Greedy Approach:**
+   - The goal is to minimize the number of operations needed to match the `current_time` to the `correct_time`.
+   - The allowed operations are increments of 60, 15, 5, and 1 minute(s).
+
+4. **Iterate Over Operation Values:**
+   - Iterate through the list `[60, 15, 5, 1]`:
+     ```python
+     for i in [60, 15, 5, 1]:
+     ```
+     - For each `i`, calculate how many times the operation can be applied:
+       ```python
+       count += diff // i
+       ```
+     - Update `diff` to the remaining difference after applying the operation:
+       ```python
+       diff %= i
+       ```
+
+5. **Greedy Works Optimally:**
+   - This approach works because using the largest possible increment reduces the remaining difference the fastest.
+
+6. **Count Tracks the Total Steps:**
+   - `count` keeps track of how many operations were applied in total.
+
+7. **Handle Edge Cases:**
+   - If `current` and `correct` are the same, `diff` will be `0`, and the function will directly return `0`.
+
+8. **Efficiency:**
+   - The time complexity is `O(1)` since we iterate through a fixed list of four operations.
+
+9. **Output the Total Steps:**
+   - The final `count` is returned, representing the minimum number of operations needed.
+
+10. **General Use Case:**
+    - The function works for any valid time inputs in "HH:MM" format and efficiently calculates the result.
+
+---
+
+### **Working Example:**
+
+#### Input:
+```python
+current = "02:30"
+correct = "03:35"
+```
+
+#### Steps:
+1. Convert `current` and `correct` to minutes:
+   - `current_time = 2 * 60 + 30 = 150 minutes`
+   - `correct_time = 3 * 60 + 35 = 215 minutes`
+
+2. Calculate the difference:
+   - `diff = 215 - 150 = 65 minutes`
+
+3. Apply operations greedily:
+   - Use `60`: `65 // 60 = 1` → Add 1 to `count`, `diff = 65 % 60 = 5`
+   - Use `15`: `5 // 15 = 0` → Add 0 to `count`, `diff = 5 % 15 = 5`
+   - Use `5`: `5 // 5 = 1` → Add 1 to `count`, `diff = 5 % 5 = 0`
+   - Use `1`: `0 // 1 = 0` → Add 0 to `count`
+
+4. Total `count = 1 (60 minutes) + 1 (5 minutes) = 2`.
+
+#### Output:
+```python
+2
+```
+
+---
+
+### Full Working Example Code:
+```python
+solution = Solution()
+current = "02:30"
+correct = "03:35"
+print(solution.convertTime(current, correct))  # Output: 2
+```
