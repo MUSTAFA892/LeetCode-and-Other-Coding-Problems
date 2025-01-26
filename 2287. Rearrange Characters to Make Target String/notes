@@ -1,0 +1,66 @@
+
+1. **Class Definition:**
+   - `class Solution:` — This defines a class called `Solution`. This is a standard way to structure the code when using certain coding platforms like LeetCode, where the function `rearrangeCharacters` is part of a class.
+
+2. **Method Definition:**
+   - `def rearrangeCharacters(self, s: str, target: str) -> int:` — This defines the method `rearrangeCharacters` within the class. The method takes two string arguments, `s` (the source string) and `target` (the string we want to form using characters from `s`).
+   - The `-> int` part specifies that the function will return an integer.
+
+3. **Counting Characters in `s`:**
+   - `s_count = Counter(s)` — This creates a `Counter` object for `s`. The `Counter` class from the `collections` module counts the frequency of each character in the string `s` and stores it as a dictionary-like object. 
+     Example: For `s = "ilovecodingonleetcode"`, the output would be a dictionary with the frequency of each character.
+
+4. **Counting Characters in `target`:**
+   - `target_count = Counter(target)` — Similarly, this counts the frequency of characters in the string `target`. For instance, if `target = "code"`, the `target_count` would be `{'c': 1, 'o': 1, 'd': 1, 'e': 1}`.
+
+5. **Initialize `result`:**
+   - `result = float('inf')` — This initializes the variable `result` to infinity. The goal is to find the minimum number of times we can form `target` from the characters in `s`. Starting with infinity ensures that any valid number of times (i.e., a finite number) will be smaller than infinity.
+
+6. **Iterate Over Each Character in `target_count`:**
+   - `for char in target_count:` — This iterates through each character in `target_count` (the frequency dictionary of `target`). The loop checks for each character in `target` how many times it can be used based on its frequency in `s`.
+
+7. **Calculate How Many Times Each Character Can Be Used:**
+   - `result = min(result, s_count[char] // target_count[char])` — For each character `char`, it calculates how many times the character can be used to form the target string. This is done by performing integer division:
+     - `s_count[char]` gives the number of available characters in `s`.
+     - `target_count[char]` gives the number of required characters in `target`.
+     - The result of the integer division `s_count[char] // target_count[char]` tells us how many times we can use that character to form the target string.
+   - The `min(result, ...)` ensures that we are finding the limiting factor — the character that we can use the least number of times.
+
+8. **Handle Missing Characters in `s`:**
+   - If a character from `target` is not found in `s`, `s_count[char]` will be `0`. In such a case, the integer division will return `0` and the minimum result will be `0`, meaning it’s impossible to form the target string even once.
+
+9. **Return the Final Result:**
+   - `return result` — This returns the final result, which is the maximum number of times we can form the target string using characters from `s`.
+
+10. **Edge Case Handling:**
+    - The code implicitly handles edge cases like when characters from `target` are absent in `s` (in which case it returns `0`), and when there are enough characters to form `target` multiple times.
+
+### Example:
+
+1. **Input:**
+   - `s = "ilovecodingonleetcode"`
+   - `target = "code"`
+
+2. **Counting Frequencies:**
+   - `s_count = Counter("ilovecodingonleetcode")` results in:
+     ```
+     {'i': 1, 'l': 2, 'o': 2, 'v': 1, 'e': 3, 'c': 1, 'd': 1, 'n': 2, 'g': 1, 't': 2}
+     ```
+   - `target_count = Counter("code")` results in:
+     ```
+     {'c': 1, 'o': 1, 'd': 1, 'e': 1}
+     ```
+
+3. **Iteration and Calculation:**
+   - For `'c'`: `s_count['c'] // target_count['c'] = 1 // 1 = 1`
+   - For `'o'`: `s_count['o'] // target_count['o'] = 2 // 1 = 2`
+   - For `'d'`: `s_count['d'] // target_count['d'] = 1 // 1 = 1`
+   - For `'e'`: `s_count['e'] // target_count['e'] = 3 // 1 = 3`
+
+4. **Result:**
+   - The limiting character is `'c'` and `'d'`, which can be used **1 time**. So, the final result is `1`.
+
+### Output:
+```
+2
+```

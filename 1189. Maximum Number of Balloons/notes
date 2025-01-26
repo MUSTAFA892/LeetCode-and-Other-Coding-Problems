@@ -1,0 +1,71 @@
+
+This code solves the problem of counting how many times you can form the word "balloon" from the characters in the given `text`. The word "balloon" consists of the following characters:
+- 'b' → 1 time
+- 'a' → 1 time
+- 'l' → 2 times
+- 'o' → 2 times
+- 'n' → 1 time
+
+### Steps in the Code:
+
+1. **Initial Dictionary Setup:**
+   - `ans = {'b': 0, 'a': 0, 'l': 0, 'o': 0, 'n': 0}` — We initialize a dictionary `ans` to count the occurrences of the necessary characters for the word "balloon" (i.e., 'b', 'a', 'l', 'o', 'n') in the input `text`. Each key in `ans` corresponds to a character in the word "balloon," and its value is initialized to `0`.
+
+2. **Count Occurrences in `text`:**
+   - `for i in text:` — This loops over each character in the input string `text`.
+   - `if i in ans:` — If the character `i` is one of the characters in the word "balloon" (i.e., 'b', 'a', 'l', 'o', 'n'), we increment its corresponding count in the dictionary `ans`:
+     ```python
+     ans[i] += 1
+     ```
+   - This ensures that for every character in `text` that belongs to the word "balloon," we count its occurrence.
+
+3. **Adjust for Multiple Occurrences of 'l' and 'o':**
+   - Since the word "balloon" contains 2 'l's and 2 'o's, we need to account for this:
+     - `ans['l'] //= 2` — We divide the count of 'l' by 2 (using integer division) to account for the fact that we need 2 'l's to form one "balloon."
+     - `ans['o'] //= 2` — Similarly, we divide the count of 'o' by 2.
+   
+4. **Return the Minimum Number of Full "balloon" Words:**
+   - `return min(ans.values())` — The minimum value from the dictionary `ans` represents the maximum number of times we can form the word "balloon." Since we need at least one of each required character, the limiting character will determine how many full "balloon" words we can form.
+
+#### Example:
+
+1. **Input:**
+   - `text = "balloonballoonballoon"`
+
+2. **Count Occurrences:**
+   - Looping over each character in `text`:
+     - After processing all characters in `text`, the dictionary `ans` will look like this:
+       ```python
+       ans = {'b': 3, 'a': 3, 'l': 6, 'o': 6, 'n': 3}
+       ```
+
+3. **Adjust Counts for 'l' and 'o':**
+   - `ans['l'] //= 2` → `ans['l'] = 6 // 2 = 3`
+   - `ans['o'] //= 2` → `ans['o'] = 6 // 2 = 3`
+
+   So, the updated dictionary becomes:
+   ```python
+   ans = {'b': 3, 'a': 3, 'l': 3, 'o': 3, 'n': 3}
+   ```
+
+4. **Find the Limiting Character:**
+   - The minimum value from `ans` is `3`, which means we can form the word "balloon" exactly **3 times**.
+
+#### Output:
+
+```
+3
+```
+
+### Edge Case:
+
+If `text` contains fewer occurrences of any necessary character, the output will be limited by the character that appears the least. For example:
+
+```python
+text = "ballon"
+# The count of 'o' is 1, which limits the number of "balloon" words that can be formed
+print(solution.maxNumberOfBalloons(text))  # Output: 0
+```
+
+In this case, the output is `0` because we can't form even one "balloon" due to the lack of sufficient 'o's.
+
