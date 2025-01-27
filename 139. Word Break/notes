@@ -1,0 +1,70 @@
+
+1. **Initialization:**
+   - `dp[0] = True`: An empty string can always be segmented (since no segmentation is required for an empty string).
+   - All other entries of `dp` are initially `False`, because we haven't yet determined if those substrings can be segmented.
+
+2. **Fill the DP Table:**
+   - Iterate through the string `s` and try to find words from `wordDict` that match each prefix of `s`.
+   - For each position `i` in `s`, check every possible starting point `j` before it (i.e., for each substring `s[j:i]`).
+   - If `dp[j] = True` (meaning the substring `s[0:j]` can be segmented) and `s[j:i]` is a valid word in `wordDict`, then set `dp[i] = True` (meaning `s[0:i]` can be segmented).
+   
+3. **Final Check:**
+   - After filling the `dp` table, the value of `dp[len(s)]` will tell us whether the entire string `s` can be segmented into words from `wordDict`.
+
+### Example Walkthrough (with s = "leetcode" and wordDict = ["leet", "code"]):
+
+#### Initial Setup:
+- `s = "leetcode"`
+- `wordDict = ["leet", "code"]`
+- `wordSet = set(wordDict)` for quick lookup: `wordSet = {"leet", "code"}`
+- `dp = [True, False, False, False, False, False, False, False, False]` (length of `dp` is `len(s) + 1`)
+
+#### Iterations:
+
+1. **Iteration 1 (i = 1):**
+   - We check `dp[1]` (i.e., whether `s[0:1] = "l"` can be segmented).
+   - No word in `wordDict` starts with `"l"`, so `dp[1] = False`.
+
+2. **Iteration 2 (i = 2):**
+   - We check `dp[2]` (i.e., whether `s[0:2] = "le"` can be segmented).
+   - No word in `wordDict` starts with `"le"`, so `dp[2] = False`.
+
+3. **Iteration 3 (i = 3):**
+   - We check `dp[3]` (i.e., whether `s[0:3] = "lee"` can be segmented).
+   - No word in `wordDict` starts with `"lee"`, so `dp[3] = False`.
+
+4. **Iteration 4 (i = 4):**
+   - We check `dp[4]` (i.e., whether `s[0:4] = "leet"` can be segmented).
+   - The word `"leet"` is in `wordDict` and `dp[0] = True` (meaning `s[0:0]` is a valid segmentation).
+   - So, we set `dp[4] = True`.
+
+5. **Iteration 5 (i = 5):**
+   - We check `dp[5]` (i.e., whether `s[0:5] = "leetc"` can be segmented).
+   - No word in `wordDict` starts with `"leetc"`, so `dp[5] = False`.
+
+6. **Iteration 6 (i = 6):**
+   - We check `dp[6]` (i.e., whether `s[0:6] = "leetco"` can be segmented).
+   - No word in `wordDict` starts with `"leetco"`, so `dp[6] = False`.
+
+7. **Iteration 7 (i = 7):**
+   - We check `dp[7]` (i.e., whether `s[0:7] = "leetcod"` can be segmented).
+   - No word in `wordDict` starts with `"leetcod"`, so `dp[7] = False`.
+
+8. **Iteration 8 (i = 8):**
+   - We check `dp[8]` (i.e., whether `s[0:8] = "leetcode"` can be segmented).
+   - The word `"code"` is in `wordDict` and `dp[4] = True` (meaning `s[0:4] = "leet"` is a valid segmentation).
+   - So, we set `dp[8] = True`.
+
+#### Final DP Array:
+After all iterations, the final `dp` array is:
+
+```python
+dp = [True, False, False, False, True, False, False, False, True]
+```
+
+- `dp[len(s)] = dp[8] = True`, which means that the entire string `"leetcode"` **can** be segmented into words from `wordDict` (in this case, `"leet"` and `"code"`).
+
+### Output:
+```python
+True
+```
