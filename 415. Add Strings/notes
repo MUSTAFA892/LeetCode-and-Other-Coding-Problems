@@ -1,0 +1,60 @@
+
+1. **Class Definition**:  
+   The `Solution` class is defined. This is a common structure in coding problems where you encapsulate the solution in a class.
+
+2. **Method Definition**:  
+   The method `addStrings` is defined within the class. It takes two arguments: `num1` and `num2`, which are both strings representing non-negative integers.
+
+3. **Type Annotations**:  
+   The `:type` and `:rtype` annotations indicate that both `num1` and `num2` are strings (`str`), and the function is expected to return a string (`str`).
+
+4. **Sum Calculation**:  
+   The expression `int(num1) + int(num2)` converts both input strings `num1` and `num2` into integers using `int()`, then adds them together. This is essentially performing integer addition.
+
+5. **Return Statement**:  
+   After the sum is computed, the `sum_` variable contains the result. The `return str(sum_)` statement converts the sum back to a string and returns it as the result.
+
+6. **Input Data**:  
+   The function expects two strings representing non-negative integers. For example, `num1 = "123"` and `num2 = "456"`.
+
+7. **Int Conversion**:  
+   The function converts the string values of `num1` and `num2` into integers. This is crucial because strings cannot be directly added like integers. 
+
+8. **Adding Integers**:  
+   Once the strings are converted to integers, Python’s built-in `+` operator is used to sum the two numbers.
+
+9. **Output Conversion**:  
+   After obtaining the sum, the result (which is an integer) is converted back to a string to match the expected return type.
+
+10. **Final Output**:  
+    The method returns the sum as a string, which is what is expected based on the problem’s requirements.
+
+### Working Example:
+
+Let’s go through an example where `num1 = "123"` and `num2 = "456"`:
+
+1. **Input**:  
+   `num1 = "123"`  
+   `num2 = "456"`
+
+2. **Convert Strings to Integers**:  
+   `int(num1)` becomes `123`  
+   `int(num2)` becomes `456`
+
+3. **Add the Integers**:  
+   `123 + 456 = 579`
+
+4. **Convert the Result to a String**:  
+   `str(579)` becomes `"579"`
+
+5. **Return the Result**:  
+   The method returns `"579"` as a string.
+
+### Example Usage:
+```python
+solution = Solution()
+result = solution.addStrings("123", "456")
+print(result)  # Output: "579"
+```
+
+This gives the expected output of `"579"`.

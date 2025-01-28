@@ -1,0 +1,47 @@
+
+
+1. **Class Definition**:  
+   The `Solution` class contains the method `longestPalindrome` that takes a string `s` and returns the length of the longest possible palindrome that can be formed using the characters of the string.
+
+2. **Initial Variables**:  
+   - `center_added`: This is a boolean variable that tracks if a character has been added to the center of the palindrome (initialized to `False`).
+   - `frequency`: This is a `Counter` object that counts the frequency of each character in the string `s`.
+   - `ans`: This is an empty string that will hold the characters of the longest palindrome.
+
+3. **Main Loop**:  
+   The `for` loop iterates over each character and its count from the `frequency` counter:
+   - If the count of a character is **even**, all occurrences of that character can be used in the palindrome symmetrically, so they are added to `ans`.
+   - If the count of a character is **odd**, the maximum even count (`count - 1`) is added to `ans`, and if no character has been added to the center yet (`center_added` is `False`), the character is added as the center of the palindrome, and `center_added` is set to `True`.
+
+4. **Final Output**:  
+   The method returns the length of the `ans` string, which represents the length of the longest palindrome that can be formed from the characters of `s`.
+
+### Example Walkthrough:
+
+Let’s go through an example where `s = "abccccdd"`.
+
+1. **Input**:  
+   `s = "abccccdd"`
+
+2. **Frequency Count**:  
+   Using `Counter(s)`, we get:
+   ```python
+   frequency = {'a': 1, 'b': 1, 'c': 4, 'd': 2}
+   ```
+
+3. **Processing Characters**:
+   - For `'a'`: The count is 1 (odd), so `ans += "a" * 0` (no characters added from `'a'`), and then the center gets `'a'` (as `center_added` is `False`), so `ans = "a"`.
+   - For `'b'`: The count is 1 (odd), so `ans += "b" * 0` (no characters added from `'b'`), and then the center gets `'b'` (as `center_added` is `False`), so `ans = "ab"`.
+   - For `'c'`: The count is 4 (even), so we add all occurrences of `'c'`, so `ans = "abcccc"`.
+   - For `'d'`: The count is 2 (even), so we add all occurrences of `'d'`, so `ans = "abccccdd"`.
+
+4. **Final Output**:  
+   The longest palindrome that can be formed is `"abccccdd"`.  
+   Its length is `8`.
+
+### Example Usage:
+```python
+solution = Solution()
+result = solution.longestPalindrome("abccccdd")
+print(result)  # Output: 8
+```

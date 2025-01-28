@@ -1,0 +1,75 @@
+
+
+1. **Class Definition**:  
+   The `Solution` class contains the method `addToArrayForm`, which adds an integer `k` to an array form of a number `num` (where `num` is a list of digits).
+
+2. **Method Definition**:  
+   The method `addToArrayForm` accepts two arguments: 
+   - `num`: A list of integers, where each element represents a digit of a non-negative integer.
+   - `k`: An integer to be added to the number represented by the array `num`.
+
+3. **Result List**:  
+   An empty list `result` is initialized. This will be used to store the digits of the result after the sum of `num` and `k`.
+
+4. **Iterating Over the Array**:  
+   The `for` loop iterates over the digits of the `num` list in reverse order (from the least significant to the most significant digit) using the range `len(num)-1, -1, -1`.
+
+5. **Adding Corresponding Digits**:  
+   In each iteration:
+   - The current digit `num[i]` is added to `k`.
+   - The last digit of the sum is appended to the `result` list using `k % 10` (i.e., the remainder when divided by 10).
+   - The value of `k` is then reduced by dividing it by 10 (`k //= 10`), which effectively "carries over" the tens place to the next digit.
+
+6. **Handling Remaining Carry**:  
+   After the loop, if there is still any value left in `k` (i.e., if there's a carry left), the `while k > 0` loop adds the remaining digits of `k` to `result`.
+
+7. **Reversing the Result**:  
+   The final `result` list is in reverse order because we added digits starting from the least significant one. The method returns `result[::-1]` to reverse the list and get the correct order of digits.
+
+### Working Example:
+
+Let’s take an example where `num = [1, 2, 0, 0]` and `k = 34`.
+
+#### Steps:
+
+1. **Input**:  
+   `num = [1, 2, 0, 0]`  
+   `k = 34`
+
+2. **Iteration Over `num`**:
+
+   - **First iteration** (`i = 3`, num[3] = 0):
+     - `k += num[3]` → `34 + 0 = 34`
+     - `result.append(k % 10)` → `result.append(34 % 10 = 4)`
+     - `k //= 10` → `k = 3`
+   
+   - **Second iteration** (`i = 2`, num[2] = 0):
+     - `k += num[2]` → `3 + 0 = 3`
+     - `result.append(k % 10)` → `result.append(3 % 10 = 3)`
+     - `k //= 10` → `k = 0`
+
+   - **Third iteration** (`i = 1`, num[1] = 2):
+     - `k += num[1]` → `0 + 2 = 2`
+     - `result.append(k % 10)` → `result.append(2 % 10 = 2)`
+     - `k //= 10` → `k = 0`
+
+   - **Fourth iteration** (`i = 0`, num[0] = 1):
+     - `k += num[0]` → `0 + 1 = 1`
+     - `result.append(k % 10)` → `result.append(1 % 10 = 1)`
+     - `k //= 10` → `k = 0`
+
+3. **Carry Handling**:  
+   Since `k = 0` after the loop, the `while` loop is not entered because there's no remaining carry.
+
+4. **Reversing the Result**:  
+   The `result` list is `[4, 3, 2, 1]`, which is in reverse order. We reverse it using `result[::-1]` to get the correct order: `[1, 2, 3, 4]`.
+
+5. **Output**:  
+   The final result is `[1, 2, 3, 4]`.
+
+### Example Usage:
+```python
+solution = Solution()
+result = solution.addToArrayForm([1, 2, 0, 0], 34)
+print(result)  # Output: [1, 2, 3, 4]
+```

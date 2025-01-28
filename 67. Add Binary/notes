@@ -1,0 +1,86 @@
+
+
+1. **Class Definition**:  
+   The `Solution` class contains the `addBinary` method that takes two binary strings `a` and `b` as inputs and returns their sum in binary form as a string.
+
+2. **Initial Variables**:  
+   - `ans`: This will hold the final binary sum (initially an empty string).
+   - `carry`: This stores the carry-over from each addition step (initialized to `0`).
+   - `i` and `j`: These variables track the current position in the strings `a` and `b` respectively, starting from the rightmost digit (`len(a) - 1` and `len(b) - 1`).
+
+3. **Main Loop**:  
+   The `while` loop runs as long as:
+   - There are still digits left in either string (`i >= 0` or `j >= 0`), or
+   - There is a carry-over (`carry` is non-zero).
+   
+   In each iteration:
+   - If there’s still a digit left in `a` (`i >= 0`), that digit is added to the `carry`.
+   - Similarly, if there’s still a digit in `b` (`j >= 0`), that digit is added to the `carry`.
+   
+   The new sum is added to the result string `ans`. Specifically, `carry % 2` gives the current binary digit (either `0` or `1`), and this is prepended to `ans` (so the binary digits are added in the correct order).
+
+4. **Update Carry**:  
+   After each addition, the carry-over is updated by dividing `carry` by 2 (`carry //= 2`), which moves the carry for the next step.
+
+5. **Return Final Result**:  
+   Once the loop completes, the final binary sum is stored in `ans`, which is returned as the result.
+
+### Working Example:
+
+Let’s go through an example where `a = "1011"` and `b = "1101"`:
+
+#### Steps:
+
+1. **Input**:  
+   `a = "1011"`  
+   `b = "1101"`
+
+2. **Initialize**:  
+   - `ans = ""`
+   - `carry = 0`
+   - `i = 3` (last index of `a`)
+   - `j = 3` (last index of `b`)
+
+3. **Iteration Over the Strings**:
+
+   - **First iteration** (`i = 3`, `j = 3`):
+     - `carry += int(a[3]) = 0 + 1 = 1` (from `a[3] = '1'`)
+     - `carry += int(b[3]) = 1 + 1 = 2` (from `b[3] = '1'`)
+     - `ans = str(carry % 2) + ans = str(2 % 2) + "" = "0"`
+     - `carry //= 2 = 2 // 2 = 1`
+
+   - **Second iteration** (`i = 2`, `j = 2`):
+     - `carry += int(a[2]) = 1 + 0 = 1` (from `a[2] = '0'`)
+     - `carry += int(b[2]) = 1 + 1 = 2` (from `b[2] = '1'`)
+     - `ans = str(carry % 2) + "0" = str(2 % 2) + "0" = "00"`
+     - `carry //= 2 = 2 // 2 = 1`
+
+   - **Third iteration** (`i = 1`, `j = 1`):
+     - `carry += int(a[1]) = 1 + 1 = 2` (from `a[1] = '1'`)
+     - `carry += int(b[1]) = 2 + 1 = 3` (from `b[1] = '1'`)
+     - `ans = str(carry % 2) + "00" = str(3 % 2) + "00" = "100"`
+     - `carry //= 2 = 3 // 2 = 1`
+
+   - **Fourth iteration** (`i = 0`, `j = 0`):
+     - `carry += int(a[0]) = 1 + 1 = 2` (from `a[0] = '1'`)
+     - `carry += int(b[0]) = 2 + 1 = 3` (from `b[0] = '1'`)
+     - `ans = str(carry % 2) + "100" = str(3 % 2) + "100" = "1100"`
+     - `carry //= 2 = 3 // 2 = 1`
+
+   - **Fifth iteration** (`i = -1`, `j = -1`):
+     - Now `i` and `j` are out of bounds, but `carry` is still 1.
+     - `ans = str(carry % 2) + "1100" = str(1 % 2) + "1100" = "11100"`
+     - `carry //= 2 = 1 // 2 = 0`
+
+4. **Exit Loop**:  
+   The loop ends because `i`, `j`, and `carry` are all exhausted (`i < 0`, `j < 0`, `carry = 0`).
+
+5. **Final Output**:  
+   The final value of `ans` is `"11100"`, which is the binary sum of `a` and `b`.
+
+### Example Usage:
+```python
+solution = Solution()
+result = solution.addBinary("1011", "1101")
+print(result)  # Output: "11100"
+```
