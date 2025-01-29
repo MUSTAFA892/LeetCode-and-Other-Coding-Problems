@@ -1,0 +1,75 @@
+
+
+### 1. **Problem Understanding**
+   - The goal is to move all the zeros in the list to the end, while maintaining the relative order of the non-zero elements. You need to modify the list in-place, without using additional space.
+
+### 2. **Input and Output**
+   - **Input**: A list of integers, `nums`, where some of the elements may be zero.
+   - **Output**: The list should be modified in-place so that all zeros are moved to the end.
+
+### 3. **Two Pointer Approach**
+   - We use two pointers to efficiently solve the problem:
+     - `left`: Keeps track of the position where the next non-zero element should be placed.
+     - `right`: Scans through each element in the list.
+
+### 4. **Initialize `left` Pointer**
+   - We initialize `left = 0`. This pointer will be used to track where the next non-zero element should go.
+
+### 5. **Loop Over List with `right` Pointer**
+   - We loop over the list with `right` pointer to find non-zero elements. For each non-zero element, we perform the swap operation to place it at the correct position.
+
+### 6. **Condition: `nums[right] != 0`**
+   - If the current element at `nums[right]` is non-zero, we need to swap it with the element at the `left` pointer.
+
+### 7. **Swap Operation**
+   - When we find a non-zero element, we swap `nums[left]` and `nums[right]`. This brings the non-zero element to the correct position.
+   
+### 8. **Increment `left`**
+   - After the swap, increment `left` because the next non-zero element will be placed at the next position.
+
+### 9. **Why the Solution Works**
+   - By using the two pointers (`left` and `right`), we ensure that every non-zero element gets moved to the correct position in the list, and the zeros naturally accumulate at the end. This works because `right` scans the entire list while `left` ensures the non-zero elements are placed in order.
+
+### 10. **Return Statement**
+   - After completing the loop, `nums` is modified in-place, and there’s no need for a return statement because the function modifies the list directly.
+
+---
+
+### Example Walkthrough
+
+Let's use the list `[0, 1, 0, 3, 12]` as an example.
+
+1. **Initial State**:
+   ```
+   nums = [0, 1, 0, 3, 12]
+   left = 0
+   right = 0
+   ```
+
+2. **First Iteration** (`right = 0`):
+   - `nums[right] == 0` → Do nothing and move to the next element (`right = 1`).
+
+3. **Second Iteration** (`right = 1`):
+   - `nums[right] == 1` → Swap `nums[left]` and `nums[right]` → `nums = [1, 0, 0, 3, 12]`
+   - Increment `left` → `left = 1`
+
+4. **Third Iteration** (`right = 2`):
+   - `nums[right] == 0` → Do nothing and move to the next element (`right = 3`).
+
+5. **Fourth Iteration** (`right = 3`):
+   - `nums[right] == 3` → Swap `nums[left]` and `nums[right]` → `nums = [1, 3, 0, 0, 12]`
+   - Increment `left` → `left = 2`
+
+6. **Fifth Iteration** (`right = 4`):
+   - `nums[right] == 12` → Swap `nums[left]` and `nums[right]` → `nums = [1, 3, 12, 0, 0]`
+   - Increment `left` → `left = 3`
+
+7. **Final State**:
+   ```
+   nums = [1, 3, 12, 0, 0]
+   left = 3
+   right = 5 (loop ends)
+   ```
+
+### Final Output:
+After all the iterations, the list becomes `[1, 3, 12, 0, 0]`, where all zeros are moved to the end while maintaining the relative order of the non-zero elements.

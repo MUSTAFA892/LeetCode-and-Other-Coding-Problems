@@ -1,0 +1,94 @@
+
+### 1. **Problem Understanding**
+   - The task is to find the **intersection** of two lists, `nums1` and `nums2`, meaning all the unique elements that appear in both lists.
+   - The result should be a list of integers that appear in both `nums1` and `nums2`, with no duplicates in the final output.
+
+### 2. **Input and Output**
+   - **Input**: Two lists of integers: `nums1` and `nums2`.
+   - **Output**: A list containing the elements that are common to both `nums1` and `nums2` (without duplicates).
+
+### 3. **Convert Lists to Sets**
+   - First, we convert `nums1` and `nums2` into sets. This is because sets automatically eliminate duplicates and provide efficient lookups.
+   ```python
+   nums1 = set(nums1)
+   nums2 = set(nums2)
+   ```
+   - After this step, `nums1` and `nums2` contain only the unique elements from each list.
+
+### 4. **Initialize an Empty List `result`**
+   - `result` is an empty list that will be used to store the elements that appear in both sets.
+
+### 5. **Loop Through `nums1`**
+   - We loop through each element in `nums1` (since `nums1` is a set, we don’t have to worry about duplicates).
+   ```python
+   for i in nums1:
+   ```
+   - For each element `i` in `nums1`, check if `i` is also present in `nums2`.
+
+### 6. **Check if Element Exists in `nums2`**
+   - If the element `i` exists in both sets (`nums1` and `nums2`), we add it to the `result` list.
+   ```python
+   if i in nums2:
+       result.append(i)
+   ```
+   - This ensures we only keep the elements that are present in both sets.
+
+### 7. **Return the Result List**
+   - After looping through `nums1`, the `result` list will contain all the elements that are in both `nums1` and `nums2` (without duplicates).
+   ```python
+   return result
+   ```
+
+### 8. **Time Complexity**
+   - **Conversion to sets**: Converting both `nums1` and `nums2` to sets takes O(m + n), where `m` is the length of `nums1` and `n` is the length of `nums2`.
+   - **Loop through `nums1` and check membership in `nums2`**: This loop takes O(m), and each membership check (`if i in nums2`) takes O(1) on average.
+   - Thus, the overall time complexity is O(m + n), where `m` and `n` are the lengths of `nums1` and `nums2`.
+
+### 9. **Space Complexity**
+   - The space complexity is O(m + n) because we store `nums1` and `nums2` as sets and the result list.
+
+### 10. **Output**
+   - The output is a list that contains all the elements common to both `nums1` and `nums2` (unique elements only).
+
+---
+
+### Example Walkthrough
+
+Let’s use the example lists `nums1 = [1, 2, 2, 1]` and `nums2 = [2, 2]`.
+
+1. **Initial State**:
+   ```python
+   nums1 = [1, 2, 2, 1]
+   nums2 = [2, 2]
+   ```
+
+2. **Convert Lists to Sets**:
+   ```python
+   nums1 = set(nums1)  # nums1 becomes {1, 2}
+   nums2 = set(nums2)  # nums2 becomes {2}
+   ```
+
+3. **Initialize `result`**:
+   ```python
+   result = []
+   ```
+
+4. **Loop through `nums1`**:
+   - `nums1 = {1, 2}` → We loop through each element.
+
+5. **First Iteration** (`i = 1`):
+   - Check if `1` is in `nums2`. It is not, so skip to the next iteration.
+
+6. **Second Iteration** (`i = 2`):
+   - Check if `2` is in `nums2`. It is, so we append `2` to `result`:
+     ```python
+     result = [2]
+     ```
+
+7. **Return the Result**:
+   - After the loop completes, the `result` list contains `[2]`, which is the intersection of `nums1` and `nums2`.
+
+### Final Output:
+   The output is `[2]`, as `2` is the only element that appears in both lists.
+
+---
