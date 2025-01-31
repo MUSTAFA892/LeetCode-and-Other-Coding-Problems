@@ -1,0 +1,76 @@
+
+
+1. **Function Definition**:
+   - The function `findDisappearedNumbers` takes a list `nums` as input, which contains numbers from 1 to `n` (inclusive) with some numbers missing.
+   - The goal is to find the list of numbers from 1 to `n` that are missing from `nums`.
+
+2. **Convert `nums` to a Set**:
+   - `a = set(nums)`: This converts `nums` into a set `a`. Sets have an average time complexity of O(1) for lookups, so this helps to quickly check if an element exists in `nums`.
+
+3. **Initialize Result List**:
+   - `result = []`: This initializes an empty list `result` to store the numbers that are missing from the list.
+
+4. **Loop Through Numbers from 1 to `n`**:
+   - `for i in range(1, len(nums) + 1)`: The function loops through all numbers from 1 to `n` (where `n` is the length of `nums`). This range represents the full set of numbers that should be in `nums`.
+
+5. **Check for Missing Numbers**:
+   - `if i not in a`: For each number `i` in the range, it checks if `i` is not present in the set `a`. If `i` is missing from the set `nums`, it is added to the `result` list.
+
+6. **Return the Result**:
+   - After looping through all numbers from 1 to `n`, the function returns the `result` list, which contains all the missing numbers.
+
+7. **Time Complexity of `set` Lookup**:
+   - Since the set lookup `if i not in a` takes O(1) time on average, the total time complexity of this solution is **O(n)**, where `n` is the length of `nums`.
+
+8. **Space Complexity**:
+   - The space complexity is **O(n)** due to the creation of the set `a` and the `result` list, both of which can store up to `n` elements.
+
+9. **Efficient Solution**:
+   - This is an efficient solution because we only need to scan through `nums` once to create the set, and then we check the presence of each number in constant time.
+
+10. **Edge Case Handling**:
+   - The code handles cases like when `nums` is already a complete list of numbers from 1 to `n` (i.e., no missing numbers) or when `nums` has many missing numbers.
+
+---
+
+### Working Example:
+
+Let's walk through an example to better understand the behavior of the function.
+
+#### Example:
+
+```python
+nums = [4,3,2,7,8,2,3,1]
+sol = Solution()
+print(sol.findDisappearedNumbers(nums))
+```
+
+1. **Input**:
+   - `nums = [4, 3, 2, 7, 8, 2, 3, 1]`.
+
+2. **Convert `nums` to a Set**:
+   - `a = set(nums)` → `a = {1, 2, 3, 4, 7, 8}`. The set contains all unique numbers from `nums`.
+
+3. **Loop Through Numbers from 1 to 8**:
+   - The function loops through the numbers from `1` to `8` (since the length of `nums` is 8).
+
+4. **Check for Missing Numbers**:
+   - For `i = 1`: `1` is in the set, so it’s not added to the `result`.
+   - For `i = 2`: `2` is in the set, so it’s not added to the `result`.
+   - For `i = 3`: `3` is in the set, so it’s not added to the `result`.
+   - For `i = 4`: `4` is in the set, so it’s not added to the `result`.
+   - For `i = 5`: `5` is **not** in the set, so `5` is added to the `result`.
+   - For `i = 6`: `6` is **not** in the set, so `6` is added to the `result`.
+   - For `i = 7`: `7` is in the set, so it’s not added to the `result`.
+   - For `i = 8`: `8` is in the set, so it’s not added to the `result`.
+
+5. **Final Result**:
+   - The missing numbers are `5` and `6`, so the `result` is `[5, 6]`.
+
+### Final Output:
+
+```python
+[5, 6]
+```
+
+---

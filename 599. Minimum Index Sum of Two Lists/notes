@@ -1,0 +1,82 @@
+
+
+1. **Function Definition**:
+   - The function `findRestaurant` takes two lists of strings `list1` and `list2` as inputs. These lists represent restaurant names that two people like, but the restaurants are in different orders in each list. The goal is to find the restaurant(s) that appear in both lists and have the smallest index sum (i.e., `index in list1 + index in list2`).
+
+2. **Initialization of `min_sum`**:
+   - `min_sum = float('inf')`: This initializes `min_sum` to infinity, which will be used to track the smallest index sum found so far. Initially, we assume the minimum sum is infinite.
+
+3. **Initialization of `ans`**:
+   - `ans = []`: This initializes an empty list `ans` to store the restaurant names that have the smallest index sum. If multiple restaurants have the same index sum, they will be added to this list.
+
+4. **Looping Through `list1`**:
+   - `for value_list1 in range(len(list1))`: The function iterates through each element in `list1` using the index `value_list1`. For each restaurant in `list1`, we check if it exists in `list2`.
+
+5. **Check if Restaurant Exists in `list2`**:
+   - `if list1[value_list1] in list2`: If the restaurant in `list1` exists in `list2`, we proceed to calculate the index sum.
+
+6. **Finding the Index of the Restaurant in `list2`**:
+   - `value_list2 = list2.index(list1[value_list1])`: We find the index of the current restaurant from `list1` in `list2`.
+
+7. **Calculate the Index Sum**:
+   - `current_sum = value_list1 + value_list2`: We calculate the sum of the indices of the restaurant in `list1` and `list2`.
+
+8. **Update the Minimum Sum and Answer List**:
+   - If `current_sum` is smaller than `min_sum`, we update `min_sum` and reset the `ans` list with the current restaurant.
+   - If `current_sum` is equal to `min_sum`, we append the current restaurant to the `ans` list.
+
+9. **Return the Answer**:
+   - After iterating through all the restaurants in `list1`, the function returns the `ans` list, which contains the restaurants with the smallest index sum.
+
+10. **Time Complexity**:
+   - For each restaurant in `list1`, we search for it in `list2`, which takes O(n) time. So the overall time complexity of the solution is **O(m * n)**, where `m` is the length of `list1` and `n` is the length of `list2`.
+
+---
+
+### Working Example:
+
+Let’s walk through an example using this code.
+
+#### Example:
+
+```python
+list1 = ["Shogun", "Tapioca Express", "Burger King", "KFC"]
+list2 = ["Piatti", "The Grill at Torrey Pines", "Tapioca Express", "Shogun"]
+
+sol = Solution()
+print(sol.findRestaurant(list1, list2))
+```
+
+#### Step-by-Step Execution:
+
+1. **First Iteration (value_list1 = 0)**:
+   - `list1[0] = "Shogun"`, check if `"Shogun"` exists in `list2`.
+   - `"Shogun"` is found at index `3` in `list2`.
+   - `current_sum = 0 + 3 = 3`.
+   - `min_sum` is updated to `3` and `ans` is updated to `["Shogun"]`.
+   - **`ans = ["Shogun"]`**
+
+2. **Second Iteration (value_list1 = 1)**:
+   - `list1[1] = "Tapioca Express"`, check if `"Tapioca Express"` exists in `list2`.
+   - `"Tapioca Express"` is found at index `2` in `list2`.
+   - `current_sum = 1 + 2 = 3`.
+   - `current_sum == min_sum`, so `"Tapioca Express"` is added to `ans`.
+   - **`ans = ["Shogun", "Tapioca Express"]`**
+
+3. **Third Iteration (value_list1 = 2)**:
+   - `list1[2] = "Burger King"`, check if `"Burger King"` exists in `list2`.
+   - `"Burger King"` is **not found** in `list2`, so we skip this iteration.
+
+4. **Fourth Iteration (value_list1 = 3)**:
+   - `list1[3] = "KFC"`, check if `"KFC"` exists in `list2`.
+   - `"KFC"` is **not found** in `list2`, so we skip this iteration.
+
+5. **Final Answer**:
+   - The answer is `["Shogun", "Tapioca Express"]`, which are the restaurants that have the smallest index sum (3).
+
+### Final Output:
+```python
+["Shogun", "Tapioca Express"]
+```
+
+
