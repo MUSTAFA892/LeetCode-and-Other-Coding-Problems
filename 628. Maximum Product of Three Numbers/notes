@@ -1,0 +1,48 @@
+
+
+The task is to find the maximum product of **any three numbers** from the list `nums`. The key here is to recognize that the product of the largest three numbers might not always be the largest possible product. For example, if there are negative numbers in the list, multiplying two large negative numbers might result in a larger positive product when combined with the largest positive number.
+
+To solve this problem efficiently, the approach is:
+1. **Sort the list**: This helps easily access the largest and smallest numbers. After sorting, the list `nums` will have the smallest numbers at the beginning and the largest numbers at the end.
+  
+2. **Consider two possible combinations** for the maximum product:
+   - **Combination 1**: The product of the three largest numbers. This is `nums[-1] * nums[-2] * nums[-3]`, where `nums[-1]` is the largest, `nums[-2]` is the second-largest, and `nums[-3]` is the third-largest.
+   - **Combination 2**: The product of the two smallest numbers (which could be negative) and the largest number. This is `nums[0] * nums[1] * nums[-1]`, where `nums[0]` and `nums[1]` are the two smallest numbers, and `nums[-1]` is the largest number.
+
+3. Finally, the **maximum product** will be the greater of these two products.
+
+### Code:
+
+```python
+class Solution:
+    def maximumProduct(self, nums: List[int]) -> int:
+        # Step 1: Sort the array
+        nums.sort()
+
+        # Step 2: Compare the two possible maximum products
+        return max(nums[-1] * nums[-2] * nums[-3], nums[0] * nums[1] * nums[-1])
+```
+
+### Example:
+
+Let's consider an example:
+
+#### Input:
+```python
+nums = [1, 2, 3, -4, -5]
+```
+
+1. **Sort the list**: After sorting, `nums = [-5, -4, 1, 2, 3]`.
+
+2. **Two possible products**:
+   - **Combination 1 (three largest numbers)**: 
+     - `nums[-1] * nums[-2] * nums[-3] = 3 * 2 * 1 = 6`
+   - **Combination 2 (two smallest numbers and largest number)**:
+     - `nums[0] * nums[1] * nums[-1] = -5 * -4 * 3 = 60`
+
+3. **Maximum product**: `max(6, 60) = 60`.
+
+#### Output:
+```python
+60
+```
