@@ -1,0 +1,71 @@
+
+### 1. **Function Definition and Input**:
+   - The function `largestSumAfterKNegations` takes two inputs: 
+     - `nums`: A list of integers, which may contain both positive and negative numbers.
+     - `k`: The number of times you are allowed to negate (flip the sign) of one element in the list.
+
+### 2. **Objective**:
+   - The goal of the problem is to maximize the sum of the list after performing exactly `k` negations. Negating an element means changing its sign, e.g., turning `-3` into `3` or `2` into `-2`.
+
+### 3. **Iterating for `k` Negations**:
+   - A `for` loop is used to repeat the negation process `k` times. This ensures exactly `k` elements are negated.
+   - Each iteration performs one negation.
+
+### 4. **Finding the Minimum Element**:
+   - Inside the loop, `min(nums)` is used to find the minimum value in the list. 
+   - The `index(min(nums))` is used to get the index of the smallest element in the list.
+
+### 5. **Negating the Minimum Element**:
+   - The smallest element in `nums` (determined by `min_`) is then negated by changing its value to `-nums[min_]`. 
+   - This helps to increase the sum by turning a negative number into a positive one, or reducing the impact of the largest negative number in the list.
+
+### 6. **How Many Times to Negate?**:
+   - The `for` loop runs `k` times, ensuring exactly `k` negations are performed. The first negation targets the smallest element, the second negation targets the next smallest, and so on.
+
+### 7. **Post Negation Summation**:
+   - After `k` negations, the sum of the modified list `nums` is computed using `sum(nums)` and returned as the result.
+
+### 8. **Efficiency Considerations**:
+   - Finding the minimum value and its index each time inside the loop can be inefficient if done naively. The approach in the current code takes O(n) time to find the minimum and O(n) for each negation, leading to an overall time complexity of O(k * n), where `n` is the length of the list.
+
+### 9. **Edge Case Handling**:
+   - If `k` is larger than the number of negative values, negating the smallest positive or previously negated negative values could reduce the sum (especially if `k` is odd). The function still ensures that exactly `k` negations are made.
+
+### 10. **Time Complexity**:
+   - The time complexity of this solution is O(k * n), where `n` is the length of the list and `k` is the number of negations. Each iteration of the loop finds the minimum value (O(n)) and updates the list.
+
+---
+
+### Working Example
+
+#### Input:
+```python
+nums = [-8, 3, -5, 2, -1]
+k = 3
+```
+
+#### Execution:
+
+- Initial list: `[-8, 3, -5, 2, -1]`
+- We need to negate 3 elements to maximize the sum.
+
+1. **First Iteration (k = 1):**
+   - The minimum element is `-8` (index 0). We negate it to get `8`.
+   - The list becomes: `[8, 3, -5, 2, -1]`.
+
+2. **Second Iteration (k = 2):**
+   - The minimum element is `-5` (index 2). We negate it to get `5`.
+   - The list becomes: `[8, 3, 5, 2, -1]`.
+
+3. **Third Iteration (k = 3):**
+   - The minimum element is `-1` (index 4). We negate it to get `1`.
+   - The list becomes: `[8, 3, 5, 2, 1]`.
+
+- Now, the list after `k = 3` negations is: `[8, 3, 5, 2, 1]`.
+
+- The sum of this list is: `8 + 3 + 5 + 2 + 1 = 19`.
+
+#### Output:
+```python
+19
+```

@@ -1,0 +1,57 @@
+
+### 1. **Input Type and Function Definition**:
+   - The function `check` takes in a list `nums` of integers. The goal is to check if the list can be rotated to become a non-decreasing array.
+   - The list is circular, meaning the element at the last index is considered adjacent to the element at the first index.
+
+### 2. **Initialization of Count**:
+   - The variable `count` is initialized to `0`. This variable will keep track of how many times an element in the array is greater than the next element (in a circular sense).
+
+### 3. **Iterating through the List**:
+   - The `for` loop iterates through the list `nums`. For each element `nums[i]`, it checks whether it is greater than the next element `nums[(i + 1) % len(nums)]`. The modulo operation `% len(nums)` ensures the circular nature of the array.
+
+### 4. **Checking Pairwise Order**:
+   - The condition `if nums[i] > nums[(i + 1) % len(nums)]` checks if the current element is greater than the next element. If true, it implies a "decreasing" order at that position.
+   - If this condition holds, the count is incremented.
+
+### 5. **Why Modulo for Circularity**:
+   - The expression `(i + 1) % len(nums)` ensures that when `i` reaches the last index, the next index wraps around to the first element. This helps in checking the array in a circular fashion.
+
+### 6. **Count of Decreasing Pairs**:
+   - The variable `count` keeps track of how many "decreasing" transitions occur in the array. If `count` exceeds 1, the array cannot be rotated into a non-decreasing order.
+
+### 7. **Returning the Result**:
+   - After iterating through the array, the function returns whether `count <= 1`. If there is at most one decreasing transition, then the array is valid, meaning it can be rotated to be non-decreasing. If there are more than one, it is not possible to achieve a non-decreasing array with one rotation.
+
+### 8. **Edge Case Handling**:
+   - If the array has only one element or is already sorted, the function will return `True` because there are no "decreasing" pairs to count.
+
+### 9. **Time Complexity**:
+   - The time complexity of this solution is O(n), where `n` is the length of the list. This is because the loop iterates through the list exactly once.
+
+### 10. **Space Complexity**:
+   - The space complexity is O(1), as the solution only uses a few variables (no additional data structures that depend on the input size).
+
+---
+
+### Working Example
+
+#### Input:
+```python
+nums = [3, 4, 5, 1, 2]
+```
+
+#### Execution:
+
+- We iterate over the list:
+  - **First comparison (i = 0):** `nums[0] = 3`, `nums[1] = 4`. 3 is not greater than 4, so `count` remains 0.
+  - **Second comparison (i = 1):** `nums[1] = 4`, `nums[2] = 5`. 4 is not greater than 5, so `count` remains 0.
+  - **Third comparison (i = 2):** `nums[2] = 5`, `nums[3] = 1`. 5 is greater than 1, so `count` is incremented to 1.
+  - **Fourth comparison (i = 3):** `nums[3] = 1`, `nums[4] = 2`. 1 is not greater than 2, so `count` remains 1.
+  - **Fifth comparison (i = 4):** `nums[4] = 2`, `nums[0] = 3`. 2 is not greater than 3, so `count` remains 1.
+
+- The total `count` of "decreasing" transitions is 1, which is less than or equal to 1.
+
+#### Output:
+```python
+True
+```
