@@ -1,0 +1,30 @@
+
+1. **`max_sum` initialization**:  
+   I initialized `max_sum` with the first element (`nums[0]`) since at least that element is part of the result.
+
+2. **Progressive sum update**:  
+   Instead of reassigning `current_sum` each time, we **add** `nums[i]` to it if the current element is greater than the previous one, indicating that the subarray is still ascending.
+
+3. **Resetting for a new subarray**:  
+   If the current element is **not greater** than the previous one (i.e., the ascending subarray breaks), we update `max_sum` with the **maximum** of `max_sum` and `current_sum`, then reset `current_sum` to the new element (the start of the next subarray).
+
+4. **Final check after the loop**:  
+   After the loop, we check once more if the `current_sum` needs to be updated (since the longest ascending subarray might end at the last element).
+
+### Example Walkthrough:
+Given `nums = [10, 20, 30, 5, 10, 50]`, the steps will be:
+- Start with `max_sum = 10` and `current_sum = 10`.
+- `20 > 10`, so add `20` to `current_sum`: `current_sum = 30`.
+- `30 > 20`, so add `30` to `current_sum`: `current_sum = 60`.
+- `5 < 30`, so we update `max_sum` to `60` and reset `current_sum` to `5`.
+- `10 > 5`, so add `10` to `current_sum`: `current_sum = 15`.
+- `50 > 10`, so add `50` to `current_sum`: `current_sum = 65`.
+- At the end, the `max_sum` is updated to the maximum of `max_sum` and `current_sum`, which is `65`.
+
+### Output:
+The code will print:
+```
+65
+```
+
+This is the correct result, representing the maximum sum of the ascending subarray `[10, 20, 30]` or `[5, 10, 50]` with a sum of 65.
