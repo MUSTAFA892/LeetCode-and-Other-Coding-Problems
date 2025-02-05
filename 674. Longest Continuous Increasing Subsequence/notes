@@ -1,0 +1,50 @@
+
+
+1. **Function Definition**: 
+   - The function `findLengthOfLCIS` is defined inside the `Solution` class. It takes a list `nums` of integers as input and returns the length of the longest contiguous increasing subsequence (LCIS).
+
+2. **Initialize Variables**:
+   - `count = 1`: This variable keeps track of the current length of the increasing subsequence as we iterate through the list. We start with `1` because any single element is considered an increasing subsequence.
+   - `max_ = []`: This list is used to store the lengths of all increasing subsequences found during the iteration. At the end, we will find the maximum length from this list.
+
+3. **Loop Through the List**:
+   - The `for` loop starts from index `1` (second element) and iterates through the list `nums`. Each element is compared with the previous one.
+
+4. **Check for Increasing Sequence**:
+   - **If `nums[i] > nums[i-1]`**: This means the current element (`nums[i]`) is greater than the previous one (`nums[i-1]`), so the subsequence is still increasing. In this case, the `count` is incremented by `1`.
+   
+5. **End of an Increasing Subsequence**:
+   - **Else**: If the current element is not greater than the previous one, it means the increasing subsequence has ended. In this case:
+     - The length of the current subsequence (`count`) is appended to `max_` list.
+     - `count` is reset to `1` because we start a new subsequence from the current element.
+
+6. **Finalizing the Count**:
+   - After the loop finishes, `max_.append(count)` is called to add the length of the last subsequence (since the loop might end with an increasing subsequence).
+
+7. **Return the Maximum Length**:
+   - The function returns the maximum length of the increasing subsequences found by calling `max(max_)`, which finds the maximum value in the list `max_`.
+
+### Example Walkthrough:
+
+Let’s use the example `nums = [1, 3, 5, 4, 7]`.
+
+- **Step 1**: Initialize `count = 1` and `max_ = []`.
+
+- **Step 2**: Start the loop:
+  - **For i = 1**: `nums[1] = 3` and `nums[0] = 1`. Since `3 > 1`, the subsequence is increasing, so `count = 2`.
+  - **For i = 2**: `nums[2] = 5` and `nums[1] = 3`. Since `5 > 3`, the subsequence is still increasing, so `count = 3`.
+  - **For i = 3**: `nums[3] = 4` and `nums[2] = 5`. Since `4 < 5`, the subsequence ends. The current `count` (which is `3`) is added to `max_`, so `max_ = [3]`. We reset `count = 1` because a new subsequence starts from index `3`.
+  - **For i = 4**: `nums[4] = 7` and `nums[3] = 4`. Since `7 > 4`, the subsequence is increasing again, so `count = 2`.
+
+- **Step 3**: After the loop ends, `max_.append(count)` is called, adding the final count `2` to `max_`, so `max_ = [3, 2]`.
+
+- **Step 4**: The function returns the maximum value in `max_`, which is `3`.
+
+So, the output will be `3`.
+
+### Example:
+```python
+nums = [1, 3, 5, 4, 7]
+solution = Solution()
+print(solution.findLengthOfLCIS(nums))  # Output: 3
+``` 

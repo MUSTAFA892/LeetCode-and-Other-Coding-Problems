@@ -1,0 +1,56 @@
+
+1. **Function Definition**: 
+   - The function `dominantIndex` is defined inside the `Solution` class. It takes a list `nums` of integers as an input and returns an integer. 
+
+2. **Find the Maximum**:
+   - The first step inside the function is finding the maximum value in the list `nums` using the built-in `max()` function, which is stored in the variable `max_`.
+
+3. **Initialize Flag**:
+   - A flag variable, `flag`, is initialized to `True`. This will be used later to check if the condition for being the dominant element holds for the maximum value.
+
+4. **Loop Through the List**:
+   - The function uses a `for` loop to iterate over the list `nums`. It checks each element in `nums` to compare it with `max_`.
+
+5. **Skip Maximum Element**:
+   - If the current element in the loop (`nums[i]`) is equal to `max_`, the `continue` statement is used to skip that iteration and move to the next element.
+
+6. **Check Condition**:
+   - For every element other than the maximum, the function checks if the maximum number (`max_`) is at least twice as large as the current element (`nums[i]`). If not, the flag is set to `False`, and the loop breaks early.
+
+7. **Flag Status**:
+   - If `flag` remains `True` after the loop, it means that the maximum element is at least twice as large as all other elements, satisfying the condition for dominance.
+
+8. **Return the Index**:
+   - If the flag remains `True`, it returns the index of the `max_` element using `nums.index(max_)`. This is the index of the dominant number.
+
+9. **Return -1**:
+   - If the condition is not met (i.e., the flag is `False`), it returns `-1`, indicating that no element is dominant.
+
+10. **Edge Case Consideration**:
+   - The function doesn't handle cases where the list is empty, but this can be handled with additional validation if needed.
+
+### Working Example:
+
+Let's use the example `nums = [3, 6, 1, 0]`.
+
+- **Step 1**: Find the maximum value:
+  - `max_ = 6`
+
+- **Step 2**: Start the loop:
+  - **For i = 0**: `nums[0] = 3`. Check if `max_` (6) is at least twice `nums[0]` (3). `6 >= 2 * 3` is `True`, so continue.
+  - **For i = 1**: `nums[1] = 6`. Skip since it's equal to `max_`.
+  - **For i = 2**: `nums[2] = 1`. Check if `max_` (6) is at least twice `nums[2]` (1). `6 >= 2 * 1` is `True`, so continue.
+  - **For i = 3**: `nums[3] = 0`. Check if `max_` (6) is at least twice `nums[3]` (0). `6 >= 2 * 0` is `True`, so continue.
+
+- **Step 3**: The flag remains `True` after the loop, meaning the maximum is at least twice every other element.
+
+- **Step 4**: The function returns the index of the maximum element, which is `1` (since `max_ = 6` at index 1).
+
+So, the output will be `1`.
+
+### Example:
+```python
+nums = [3, 6, 1, 0]
+solution = Solution()
+print(solution.dominantIndex(nums))  # Output: 1
+```

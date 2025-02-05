@@ -1,0 +1,55 @@
+
+
+1. **Function Definition**: 
+   - The function `pivotIndex` is defined inside the `Solution` class. It takes a list `nums` of integers as input and returns an integer.
+
+2. **Initialize Left and Right Sums**:
+   - `left_sum` is initialized to `0`, which keeps track of the sum of all elements to the left of the current index.
+   - `right_sum` is initialized to the sum of all elements in the list `nums`. This keeps track of the sum of elements to the right of the current index.
+
+3. **Loop Through the List**:
+   - The function then iterates over the list `nums` using a `for` loop, with the loop variable `i` representing the current index.
+
+4. **Update Right Sum**:
+   - In each iteration, `right_sum` is reduced by the value of the current element (`nums[i]`). This ensures that `right_sum` reflects the sum of elements to the right of the current index after each loop iteration.
+
+5. **Check if Left Sum Equals Right Sum**:
+   - Inside the loop, the function checks if `left_sum == right_sum`. If this condition is met, the current index `i` is the pivot index, and it is returned immediately.
+
+6. **Update Left Sum**:
+   - If the condition is not met, the current element (`nums[i]`) is added to `left_sum`, which tracks the sum of all elements to the left of the next index in the next iteration.
+
+7. **Return -1**:
+   - If no pivot index is found by the end of the loop, the function returns `-1`, indicating that there is no pivot index where the left sum equals the right sum.
+
+8. **Early Termination**:
+   - The `break` statement after returning the index is redundant because the function will already return at that point, but it is harmless.
+
+9. **Edge Case Considerations**:
+   - The function assumes the list will not be empty. If it were possible for the input list to be empty, you might add a check at the start of the function.
+
+10. **Efficiency**:
+   - This solution runs in O(n) time, where `n` is the length of the list, because it iterates through the list once, and the sum is computed once at the beginning.
+
+### Working Example:
+
+Let’s use the example `nums = [1, 7, 3, 6, 5, 6]`.
+
+- **Step 1**: Initialize `left_sum = 0` and `right_sum = sum(nums) = 1 + 7 + 3 + 6 + 5 + 6 = 28`.
+
+- **Step 2**: Start the loop:
+  - **For i = 0**: `right_sum -= nums[0]` → `28 - 1 = 27`. `left_sum (0)` is not equal to `right_sum (27)`, so update `left_sum += nums[0]` → `0 + 1 = 1`.
+  - **For i = 1**: `right_sum -= nums[1]` → `27 - 7 = 20`. `left_sum (1)` is not equal to `right_sum (20)`, so update `left_sum += nums[1]` → `1 + 7 = 8`.
+  - **For i = 2**: `right_sum -= nums[2]` → `20 - 3 = 17`. `left_sum (8)` is not equal to `right_sum (17)`, so update `left_sum += nums[2]` → `8 + 3 = 11`.
+  - **For i = 3**: `right_sum -= nums[3]` → `17 - 6 = 11`. `left_sum (11)` is equal to `right_sum (11)`, so return index `3` as the pivot index.
+
+- **Step 3**: The function finds that index `3` satisfies the condition `left_sum == right_sum` and returns `3`.
+
+So, the output will be `3`.
+
+### Example:
+```python
+nums = [1, 7, 3, 6, 5, 6]
+solution = Solution()
+print(solution.pivotIndex(nums))  # Output: 3
+```
