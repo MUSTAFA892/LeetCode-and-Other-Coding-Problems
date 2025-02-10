@@ -1,0 +1,78 @@
+
+
+#### 1. **`while True:` loop**:
+The `while True:` loop ensures that we continuously repeat the operation of removing the first digit and the character before it until there are no digits left in the string.
+
+#### 2. **`for i in range(1, len(s)):` loop**:
+The `for` loop iterates through the string starting from index `1` (since we need to access the character to the left of the digit). It checks each character to see if it’s a digit.
+
+#### 3. **`if s[i].isnumeric():`**:
+This checks whether the character at index `i` is a numeric character (i.e., a digit). If it is, we proceed to the next step to remove it and the character before it.
+
+#### 4. **`s = s[:i-1] + s[i+1:]`**:
+Once we find a digit, we remove it and the character before it:
+- `s[:i-1]`: This gets the substring from the start of the string up to the character before the digit.
+- `s[i+1:]`: This gets the substring from the character after the digit to the end of the string.
+- We concatenate these two slices, effectively removing the digit and its preceding character.
+
+#### 5. **`break`**:
+Once a digit is found and removed, we `break` out of the `for` loop to restart the `while` loop. This ensures we start checking the string again with the updated version of `s`.
+
+#### 6. **`else:`**:
+If no digits are found (i.e., the `for` loop completes without executing the `if` condition), the `else` block is executed, which breaks out of the `while` loop. This indicates that there are no more digits left in the string, and we can stop the process.
+
+#### 7. **Return Statement**:
+Once the loop exits, the final string `s` (with all digits removed) is returned.
+
+---
+
+### Example Walkthrough:
+
+Let's consider the string `s = "cb34"`.
+
+#### Initial String:
+```python
+s = "cb34"
+```
+
+### Iteration 1:
+1. **First iteration of the `for` loop**: We start from `i = 1` and check each character:
+   - At index 2, we find the digit `'3'`.
+2. **Removing digit and character before it**:
+   - Remove `'b'` (at index 1) and `'3'` (at index 2).
+   - The string becomes: `"c4"`.
+   
+3. **Restart the `while` loop**: Since there are still digits (`'4'`), we go through the process again.
+
+### Iteration 2:
+1. **Second iteration of the `for` loop**: We start from `i = 1` again and check each character:
+   - At index 1, we find the digit `'4'`.
+2. **Removing digit and character before it**:
+   - Remove `'c'` (at index 0) and `'4'` (at index 1).
+   - The string becomes: `""` (empty string).
+
+Since no digits are left, the `else` block is triggered, and the `while` loop exits.
+
+### Final Result:
+```python
+""  # Empty string
+```
+
+### Working Example:
+
+```python
+s = "cb34"
+sol = Solution()
+result = sol.clearDigits(s)
+print(result)  # Output: ""
+```
+
+#### Step-by-step Output:
+
+1. **First pass**: Remove `'b'` and `'3'` → `"c4"`.
+2. **Second pass**: Remove `'c'` and `'4'` → `""`.
+
+The final output is an empty string.
+
+---
+
