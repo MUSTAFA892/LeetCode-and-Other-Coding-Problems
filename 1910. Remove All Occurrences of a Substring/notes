@@ -1,0 +1,60 @@
+
+
+1. **Function Signature:**
+   - The function `removeOccurrences` takes two arguments: a string `s` and a substring `part`. The goal is to repeatedly remove occurrences of `part` from `s`.
+
+2. **While Loop:**
+   - The `while` loop runs as long as `part` is found in the string `s`. This ensures that all occurrences of `part` are removed from `s`.
+
+3. **Checking for Occurrence:**
+   - `part in s` checks if the substring `part` exists anywhere within `s`. If it does, the loop continues; otherwise, it exits.
+
+4. **The Replace Method:**
+   - Inside the loop, `s.replace(part, "", 1)` is used. This method:
+     - Replaces the first occurrence of `part` with an empty string (`""`), effectively removing it.
+     - The `1` argument means that only the first occurrence of `part` is replaced, not all occurrences at once.
+
+5. **String Assignment:**
+   - The result of `s.replace(part, "", 1)` is reassigned to `s`. This means `s` is updated after each removal of `part`.
+
+6. **Termination Condition:**
+   - The loop continues to execute until no occurrences of `part` are left in `s`. When this happens, the loop terminates, and `s` is returned.
+
+7. **Efficiency:**
+   - The `replace` function, by default, runs in O(n) time complexity where `n` is the length of `s`. The loop runs until all occurrences of `part` are removed, which makes the time complexity for the overall solution potentially O(n*m), where `m` is the number of times `part` appears in `s`.
+
+8. **Edge Cases:**
+   - If `part` is not present in `s`, the `while` loop will not run, and `s` will be returned as-is.
+   - If `part` is empty, the `while` loop would run infinitely, so it's a good idea to check for that beforehand (though it's not part of the current implementation).
+
+9. **No Additional Space:**
+   - Since strings in Python are immutable, the `replace` method creates a new string every time it’s called. However, the solution does not use any additional data structures apart from the string `s`.
+
+10. **Final Output:**
+   - Once all occurrences of `part` are removed from `s`, the modified string `s` is returned.
+
+### Working Example:
+
+Let's consider an example to understand the flow of this solution:
+
+#### Input:
+```python
+s = "abacabadabacaba"
+part = "aba"
+```
+
+#### Step-by-Step Execution:
+1. Initially, `s = "abacabadabacaba"` and `part = "aba"`.
+2. The loop starts and checks if `"aba"` is in `"abacabadabacaba"`. It is, so the loop enters.
+3. Inside the loop, `s.replace("aba", "", 1)` removes the first occurrence of `"aba"`, resulting in `s = "cbadabacaba"`.
+4. The loop runs again because `"aba"` is still in the updated string `"cbadabacaba"`.
+5. `s.replace("aba", "", 1)` removes the next occurrence of `"aba"`, updating `s` to `"cbacaba"`.
+6. The loop runs again because `"aba"` is still in `"cbacaba"`.
+7. `s.replace("aba", "", 1)` removes the final occurrence of `"aba"`, resulting in `s = "cb"`.
+8. The loop terminates since `"aba"` is no longer present in `"cb"`.
+
+#### Output:
+```python
+print(s)  # "cb"
+```
+
