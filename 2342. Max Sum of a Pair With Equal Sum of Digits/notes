@@ -1,0 +1,159 @@
+
+
+### **Approach 1: Using a Dictionary to Group Numbers by Their Digit Sum**
+
+#### 1. **Function Definition:**
+```python
+def maximumSum(self, nums: List[int]) -> int:
+```
+- The function `maximumSum` takes a list of integers `nums` and aims to find the maximum sum of two numbers in the list such that their digit sums are the same.
+
+#### 2. **Initialization:**
+```python
+map_ = {}
+max_ = -1
+```
+- `map_` is a dictionary that will store numbers grouped by their digit sum.
+- `max_` is initialized to `-1` to track the maximum sum of two numbers with the same digit sum.
+
+#### 3. **Grouping Numbers by Their Digit Sum:**
+```python
+for num in nums:
+    digit_sum = sum(int(digits) for digits in str(num))
+    if digit_sum in map_:
+        map_[digit_sum].append(num)
+    else:
+        map_[digit_sum] = [num]
+```
+- For each number in `nums`, we compute the sum of its digits (`digit_sum`).
+- The `sum(int(digits) for digits in str(num))` part:
+  - Converts the number to a string, iterates over each digit, converts it back to an integer, and sums them.
+- We then group the numbers in `map_` based on their `digit_sum`. If the `digit_sum` already exists as a key in `map_`, we append the number to the list of values. If it doesn't exist, we create a new list with the number as the first element.
+
+#### 4. **Calculating the Maximum Sum of Two Numbers with the Same Digit Sum:**
+```python
+for val in map_.values():
+    if len(val) > 1:
+        val.sort(reverse=True)
+        max_ = max(max_, val[0] + val[1])
+```
+- We iterate over the values of `map_` (which are lists of numbers with the same digit sum).
+- If a list has more than one number (i.e., `len(val) > 1`), we sort it in descending order.
+- The first two numbers (`val[0]` and `val[1]`) are the largest numbers with the same digit sum.
+- We calculate their sum and compare it to the current `max_` value. If the sum is larger, we update `max_`.
+
+#### 5. **Returning the Result:**
+```python
+return max_
+```
+- Finally, the function returns the value of `max_`, which contains the maximum sum of two numbers with the same digit sum.
+
+---
+
+### **Approach 2: Brute Force Method (Commented Out)**
+
+#### 1. **Initialization:**
+```python
+a = []
+sum_ = []
+```
+- `a` will store the digit sums of all the numbers in `nums`.
+- `sum_` will store the sums of pairs of numbers with the same digit sum.
+
+#### 2. **Compute the Digit Sum for Each Number:**
+```python
+for i in nums:
+    a.append(sum(int(digit) for digit in str(i)))
+```
+- For each number `i` in `nums`, we compute the digit sum and append it to `a`. This is the same as the first approach.
+
+#### 3. **Brute Force Pairwise Sum of Numbers with the Same Digit Sum:**
+```python
+for i in range(len(nums)):
+    for j in range(i + 1, len(nums)):
+        if a[i] == a[j]:
+            sum_.append(nums[i] + nums[j])
+```
+- This is a nested loop that checks all pairs of numbers in `nums`. For each pair `(i, j)`, if their digit sums are equal (i.e., `a[i] == a[j]`), their sum is appended to `sum_`.
+
+#### 4. **Return the Maximum Pair Sum or `-1`:**
+```python
+if sum_:
+    return max(sum_)
+else:
+    return -1
+```
+- If there are any valid pairs with the same digit sum, the function returns the maximum sum found in `sum_`.
+- If no such pairs exist, the function returns `-1`.
+
+---
+
+### **Comparison of the Two Approaches:**
+
+#### **Approach 1 (Dictionary-based Solution):**
+
+1. **Time Complexity:**
+   - **O(n)** to compute the digit sum for each number (`n` is the number of elements in `nums`).
+   - **O(k log k)** where `k` is the number of numbers with the same digit sum (since we're sorting them).
+   - So, overall time complexity: **O(n + k log k)**, which is efficient.
+
+2. **Space Complexity:**
+   - **O(n)** to store the numbers in `map_`.
+
+3. **Pros:**
+   - More efficient for large lists of numbers.
+   - The logic is clear and concise, leveraging a dictionary to group the numbers by their digit sum.
+
+4. **Cons:**
+   - Requires sorting the numbers within each group, which may add some computational overhead when there are many numbers with the same digit sum.
+
+#### **Approach 2 (Brute Force Solution):**
+
+1. **Time Complexity:**
+   - **O(n^2)** due to the nested loops that check each pair of numbers.
+   - This makes it less efficient for larger lists.
+
+2. **Space Complexity:**
+   - **O(n)** to store the digit sums in `a` and the pair sums in `sum_`.
+
+3. **Pros:**
+   - Simple to implement and understand, especially for small datasets.
+   
+4. **Cons:**
+   - Inefficient for large inputs because of the **O(n^2)** time complexity.
+
+---
+
+### **Working Example for Both Approaches:**
+
+Let's consider the input `nums = [51, 71, 17, 42]`.
+
+1. **Compute Digit Sums:**
+   - `51` → digit sum is `5 + 1 = 6`
+   - `71` → digit sum is `7 + 1 = 8`
+   - `17` → digit sum is `1 + 7 = 8`
+   - `42` → digit sum is `4 + 2 = 6`
+
+2. **Group Numbers by Digit Sum:**
+   - `6`: `[51, 42]`
+   - `8`: `[71, 17]`
+
+3. **Approach 1 - Maximum Sum:**
+   - Group `6` → `51 + 42 = 93`
+   - Group `8` → `71 + 17 = 88`
+   - Maximum sum = `93`.
+
+4. **Approach 2 - Maximum Sum:**
+   - We calculate the digit sums for each pair:
+     - Pair `(51, 42)` → sum is `93`.
+     - Pair `(71, 17)` → sum is `88`.
+   - Maximum sum = `93`.
+
+Both approaches correctly return `93` as the maximum sum.
+
+---
+
+### **Conclusion:**
+
+- **Approach 1** (the dictionary-based approach) is generally more efficient and scalable for larger inputs because it avoids the **O(n^2)** complexity of brute force checking all pairs.
+- **Approach 2** works well for small inputs but becomes inefficient for larger lists.
