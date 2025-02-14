@@ -1,0 +1,59 @@
+
+1. **Sorting the Input Array**:  
+   - The algorithm begins by sorting the array `arr` to ensure that the adjacent elements are in increasing order. This is important because the minimum absolute difference will always occur between consecutive elements in a sorted array.
+
+2. **Initial Setup for Tracking Minimum Difference**:  
+   - A variable `min_diff` is initialized to infinity (`float('inf')`). This will be used to track the smallest absolute difference between any two consecutive elements in the sorted array.
+
+3. **Iterating to Find the Minimum Difference**:  
+   - The `for` loop iterates through the sorted array, comparing each adjacent pair of elements `arr[i]` and `arr[i+1]`.
+   - For each pair, the difference `diff` is calculated as `arr[i+1] - arr[i]`, and the algorithm updates `min_diff` to store the smaller of the current `min_diff` and `diff`.
+
+4. **Tracking the Pairs with Minimum Difference**:  
+   - After the first loop finishes and `min_diff` is known, the algorithm initializes an empty list `result`. This will store the pairs of elements that have the minimum absolute difference.
+
+5. **Finding All Pairs with the Minimum Difference**:  
+   - A second loop is used to iterate through the array again. For each adjacent pair `arr[i]` and `arr[i+1]`, if their difference matches `min_diff`, the pair `[arr[i], arr[i+1]]` is added to the `result` list.
+
+6. **Returning the Result**:  
+   - After collecting all pairs with the minimum absolute difference, the list `result` is returned as the output.
+
+7. **Efficiency of Sorting**:  
+   - Sorting the array initially ensures that we only need to check adjacent pairs, making the algorithm more efficient than a brute-force approach that would check all possible pairs. Sorting takes `O(n log n)` time, and the subsequent loops take linear time `O(n)`.
+
+8. **Handling Multiple Pairs with the Same Minimum Difference**:  
+   - The algorithm ensures that it can handle multiple pairs with the same minimum difference by iterating through the entire array and adding all such pairs to the result list.
+
+9. **Edge Case Considerations**:  
+   - The algorithm implicitly assumes that the input array has at least two elements. If there are fewer than two elements, the function would either throw an error or return an empty list (depending on how the function is used).
+
+10. **Space Complexity**:  
+   - The space complexity is `O(n)` because, in the worst case, the result list may contain all `n-1` adjacent pairs of elements in the sorted array.
+
+### Working Example:
+
+Let's walk through the function with an example:
+
+**Input**: `[4, 2, 1, 3]`
+
+1. **Step 1 (Sorting the Array)**:
+   - Sorted array: `[1, 2, 3, 4]`.
+
+2. **Step 2 (Finding the Minimum Difference)**:
+   - Pairs of adjacent elements:
+     - `2 - 1 = 1`
+     - `3 - 2 = 1`
+     - `4 - 3 = 1`
+   - Minimum difference: `1`.
+
+3. **Step 3 (Finding All Pairs with Minimum Difference)**:
+   - All pairs with a difference of `1`:
+     - `[1, 2]`
+     - `[2, 3]`
+     - `[3, 4]`
+
+4. **Step 4 (Returning the Result)**:
+   - Result: `[[1, 2], [2, 3], [3, 4]]`.
+
+**Output**: `[[1, 2], [2, 3], [3, 4]]`
+
