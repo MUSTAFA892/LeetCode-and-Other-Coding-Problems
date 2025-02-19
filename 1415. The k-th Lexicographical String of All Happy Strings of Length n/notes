@@ -1,0 +1,50 @@
+
+
+1. **Main Function:**
+   The function `getHappyString(n: int, k: int)` takes two parameters:
+   - `n`: The length of the desired happy string.
+   - `k`: The index (1-based) of the desired happy string in lexicographical order.
+
+2. **Helper Function `get_happy_strings(current_str)`:**
+   - This is a recursive function that generates all possible happy strings of length `n` starting with the `current_str`.
+   - If `current_str` reaches length `n`, the string is added to the `result` list.
+   - For each recursive call, the function tries adding `'a'`, `'b'`, and `'c'` to the current string, but ensures that the last character of the string is not the same as the character being added. This maintains the condition that no two adjacent characters in a happy string are the same.
+
+3. **Result List:**
+   - The `result` list stores all the valid happy strings of length `n`.
+   - Once all happy strings are generated, the function checks if `k` is less than or equal to the length of the result list. If it is, it returns the k-th happy string (note that `k` is 1-based, so we return `result[k-1]`).
+   - If `k` is greater than the length of the result list, it returns an empty string (`''`).
+
+4. **Base Case and Recursion:**
+   - The recursion continues until a string of length `n` is formed, and when it is, it adds that string to `result`.
+   - It explores all combinations of `'a'`, `'b'`, and `'c'` while respecting the rule that no adjacent characters can be the same.
+
+### Example Walkthrough:
+
+Let’s take an example with `n = 3` and `k = 5`.
+
+#### Step 1: Generate Happy Strings of Length 3
+The function generates all possible valid happy strings of length `3`. Here is how they are generated:
+- Start with an empty string, then try to append `'a'`, `'b'`, or `'c'` to it.
+- If the string becomes invalid (i.e., two adjacent characters are the same), skip that combination.
+
+Happy strings generated for `n = 3` are:
+- `['aba', 'abc', 'aca', 'acb', 'bca', 'bcb', 'bda', 'bdc', 'caa', 'cab', 'cac', 'cba', 'cbb', 'cbd']`
+
+#### Step 2: Retrieve the k-th Happy String
+For `k = 5`, the fifth string in lexicographical order is `'bca'`.
+
+So, the output of the function will be `'bca'`.
+
+### Working Example:
+
+```python
+sol = Solution()
+result = sol.getHappyString(3, 5)
+print(result)
+```
+
+**Output:**
+```
+"bca"
+```
