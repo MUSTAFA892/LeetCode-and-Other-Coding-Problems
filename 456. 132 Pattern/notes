@@ -1,0 +1,57 @@
+
+#### Explanation:
+1. **Initialization**: 
+   - The algorithm checks if the array length is less than 3 and returns `False` if it is, since a 132 pattern requires at least three elements.
+   - A variable `third` is initialized to negative infinity (`-inf`). This variable will track the smallest value found that could form the middle element of a 132 pattern.
+   - A stack is used to store potential candidates for the third element of the pattern.
+
+2. **Iterating from Right to Left**:
+   - The algorithm loops through the array in reverse order (starting from the last element to the first).
+
+3. **Checking the Current Element**:
+   - If the current element `nums[i]` is smaller than `third`, it means we found a valid 132 pattern because we have `nums[i]` as the first element, `third` as the second element, and the elements in the stack are candidates for the third element.
+
+4. **Updating the Stack**:
+   - If `nums[i]` is larger than the top of the stack, it means `nums[i]` could be the first element of a potential 132 pattern, so we pop the stack while updating `third` to the popped element.
+
+5. **Returning False**:
+   - If the loop finishes without finding a valid 132 pattern, the function returns `False`.
+
+#### Example for Optimized Approach:
+Let’s take the array `nums = [3, 1, 4, 2]`:
+
+- **First iteration (i=3)**: The current element is `2`. The stack is empty, so we add `2` to the stack.
+- **Second iteration (i=2)**: The current element is `4`. It’s greater than `2`, so we pop `2` from the stack and set `third = 2`. We then add `4` to the stack.
+- **Third iteration (i=1)**: The current element is `1`. It’s less than `third (2)`, so we have found a valid 132 pattern (`1 < 2 < 4`), and we return `True`.
+
+---
+
+### Brute-Force Approach (Using Three Nested Loops)
+
+#### Explanation:
+1. **Outer Loop**:
+   - The first loop (`i`) iterates through the elements of the array from `0` to `len(nums)-3`.
+
+2. **Middle Loop**:
+   - The second loop (`j`) iterates through the elements starting from `i+1` to `len(nums)-2`.
+
+3. **Inner Loop**:
+   - The third loop (`k`) iterates through the elements starting from `j+1` to `len(nums)-1`.
+
+4. **Checking the Pattern**:
+   - For each triplet `(i, j, k)`, the algorithm checks if `nums[i] < nums[k] < nums[j]`. If this condition holds true, we return `True`.
+
+5. **Returning False**:
+   - If no valid triplet is found after checking all combinations, the function returns `False`.
+
+#### Example for Brute-Force Approach:
+Let’s take the same array `nums = [3, 1, 4, 2]`:
+
+- **First iteration (i=0)**:
+  - `j=1`, `k=2`: `nums[0] = 3`, `nums[2] = 4`, `nums[1] = 1`. The condition `nums[0] < nums[2] < nums[1]` is false.
+  - `j=1`, `k=3`: `nums[0] = 3`, `nums[3] = 2`, `nums[1] = 1`. The condition `nums[0] < nums[3] < nums[1]` is false.
+
+- **Second iteration (i=1)**:
+  - `j=2`, `k=3`: `nums[1] = 1`, `nums[3] = 2`, `nums[2] = 4`. The condition `nums[1] < nums[3] < nums[2]` is true, so we return `True`.
+
+---

@@ -1,0 +1,32 @@
+### Explanation of the `countSegments` Function:
+
+This function aims to count the number of segments (words) in a given string `s`.
+
+1. **Input**: A string `s` which may contain words separated by spaces.
+
+2. **Splitting the String**:
+   - The method `s.split()` is used. By default, the `split()` method splits the string at any whitespace sequence (spaces, tabs, newlines, etc.), and it automatically handles multiple consecutive spaces, trimming leading and trailing spaces.
+   - The result is a list of words (segments).
+
+3. **Returning the Count**:
+   - The function returns the length of the resulting list using `len()`, which is the count of words (segments) in the string.
+
+#### Example for `countSegments`:
+
+Consider the input string `s = "Hello, how are you?"`:
+
+1. The `split()` method splits the string into words: `["Hello,", "how", "are", "you?"]`.
+2. The length of this list is `4` because there are 4 words (segments) in the string.
+
+Thus, the function returns `4`.
+
+#### Example 2 for `countSegments`:
+
+Consider the input string `s = "   Hello    world   "`:
+
+1. The `split()` method splits the string into words: `["Hello", "world"]`.
+2. The length of this list is `2` because there are 2 words in the string.
+
+Thus, the function returns `2`.
+
+---

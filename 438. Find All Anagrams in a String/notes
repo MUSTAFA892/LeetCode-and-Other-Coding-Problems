@@ -1,0 +1,118 @@
+
+---
+
+### **Approach 1: Sliding Window with Frequency Count (Optimal Solution)**
+This approach utilizes a **sliding window technique** along with a **frequency count** of characters to efficiently find anagrams in the string `s`.
+
+**Explanation:**
+
+1. **Initial Setup:**
+   - We first check the lengths of `s` and `p`. If `len(s)` is smaller than `len(p)`, we can return an empty list since there are no valid anagrams possible.
+   
+2. **Frequency Count of `p`:**
+   - We use a `Counter` to count the frequency of each character in `p` (the string whose anagrams we need to find).
+   
+3. **Initial Window (First `len(p)` characters of `s`):**
+   - We build a sliding window of size `len(p)` at the start of `s` and initialize a `window_count` Counter for the first `len(p)` characters of `s`.
+   - If the `window_count` matches the frequency count of `p`, we append `0` to the result, indicating that the substring from index 0 to `len(p)-1` is an anagram of `p`.
+
+4. **Sliding the Window:**
+   - We then slide the window one character at a time across `s`:
+     - **Adding the new character:** At each step, we increment the count of the character that enters the window.
+     - **Removing the old character:** We decrement the count of the character that exits the window (i.e., the character at the left of the window).
+     - After updating the window, if the new `window_count` matches the frequency count of `p`, it means the current window is an anagram of `p`, so we append the starting index of the window to the result.
+
+5. **Efficiency:** 
+   - This approach has a time complexity of **O(n)** where `n` is the length of string `s` since we process each character of `s` exactly once. The use of `Counter` ensures we efficiently track the frequency of characters.
+
+**Example:**
+
+```python
+s = "cbaebabacd"
+p = "abc"
+solution = Solution()
+print(solution.findAnagrams(s, p))
+```
+
+**Output:**
+```
+[0, 6]
+```
+
+**Explanation:**
+- The anagrams of `"abc"` in `"cbaebabacd"` start at indices 0 (`"cba"`) and 6 (`"bac"`).
+
+---
+
+### **Approach 2: Brute Force with Sorting (Less Efficient)**
+In this approach, we use brute force to check every possible substring of length `len(p)` in `s` and compare it with `p` by sorting both and checking if they match.
+
+**Explanation:**
+
+1. **Iterate through substrings:**
+   - We loop through all possible substrings of `s` that have the same length as `p`. This is done by taking substrings starting at index `i` and ending at index `i + len(p)` for all valid `i`.
+   
+2. **Sorting and Comparison:**
+   - For each substring of `s`, we sort it and compare it with the sorted version of `p`. If they match, it means the substring is an anagram of `p`.
+   
+3. **Efficiency:** 
+   - This approach has a time complexity of **O(n * k log k)** where `n` is the length of `s` and `k` is the length of `p`. Sorting each substring takes `O(k log k)` time, and we have `n-k+1` substrings to check. This is less efficient compared to the sliding window approach.
+
+**Example:**
+
+```python
+s = "cbaebabacd"
+p = "abc"
+solution = Solution()
+print(solution.findAnagrams(s, p))
+```
+
+**Output:**
+```
+[0, 6]
+```
+
+**Explanation:**
+- The anagrams of `"abc"` in `"cbaebabacd"` start at indices 0 (`"cba"`) and 6 (`"bac"`). This method sorts each substring and compares it with the sorted version of `p`.
+
+---
+
+### **Approach 3: Sliding Window with Sorting (Moderately Efficient)**
+This approach is similar to the first sliding window approach but uses **sorting** instead of frequency counts.
+
+**Explanation:**
+
+1. **Initial Setup:**
+   - We again check if `len(s)` is smaller than `len(p)` and return an empty list if true.
+   
+2. **Initial Window (First `len(p)` characters of `s`):**
+   - We take the first `len(p)` characters of `s`, sort them, and compare them with the sorted version of `p`.
+   - If they match, it means the current window is an anagram of `p`, so we append `0` to the result.
+   
+3. **Sliding the Window:**
+   - We then slide the window over `s` as we did in Approach 1. For each new window:
+     - We add the new character that enters the window and remove the character that leaves the window.
+     - After updating the window, we sort the characters in the window and compare them with the sorted `p`.
+     - If they match, we append the starting index of the window to the result.
+
+4. **Efficiency:**
+   - Sorting the characters in the window on each step gives this approach a time complexity of **O(n * k log k)**, similar to Approach 2. Sorting is less efficient than frequency counting.
+
+**Example:**
+
+```python
+s = "cbaebabacd"
+p = "abc"
+solution = Solution()
+print(solution.findAnagrams(s, p))
+```
+
+**Output:**
+```
+[0, 6]
+```
+
+**Explanation:**
+- The anagrams of `"abc"` in `"cbaebabacd"` start at indices 0 (`"cba"`) and 6 (`"bac"`). This method sorts the characters of the window and compares them with the sorted `p` at each step.
+
+---
