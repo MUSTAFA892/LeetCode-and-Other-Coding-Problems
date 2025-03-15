@@ -1,0 +1,135 @@
+
+
+---
+
+### **Code 1: Sliding Window Approach**
+
+```python
+class Solution:
+    def findMaxAverage(self, nums: List[int], k: int) -> float:
+        current_sum = sum(nums[:k])  # Sum of the first 'k' elements
+        ans = [current_sum / k]  # List to store the average of sums for each window
+
+        for i in range(k, len(nums)):  # Loop through the rest of the list
+            current_sum += nums[i] - nums[i - k]  # Slide the window by adding the next element and removing the first one
+            ans.append(current_sum / k)  # Calculate the average and store it
+
+        return max(ans)  # Return the maximum average from the window sums
+```
+
+#### **Explanation of the Sliding Window Approach:**
+
+1. **Initial Sum of the First Window:**
+   ```python
+   current_sum = sum(nums[:k])
+   ```
+   - We start by calculating the sum of the first `k` elements in the list `nums`. This is our first window.
+   
+2. **Store the First Average:**
+   ```python
+   ans = [current_sum / k]
+   ```
+   - The average of the first window is calculated by dividing `current_sum` by `k` and storing it in the `ans` list.
+
+3. **Sliding the Window:**
+   ```python
+   for i in range(k, len(nums)):
+       current_sum += nums[i] - nums[i - k]
+       ans.append(current_sum / k)
+   ```
+   - Starting from the `k`-th element, we slide the window over the list. This is done by:
+     - Adding the next element `nums[i]` into the `current_sum`.
+     - Subtracting the element that falls out of the window, which is `nums[i - k]`.
+   - After updating the sum, we calculate the average of the new window and append it to `ans`.
+
+4. **Return the Maximum Average:**
+   ```python
+   return max(ans)
+   ```
+   - Once all windows have been processed, we return the maximum average stored in `ans`.
+
+#### **Example:**
+
+**Input:** `nums = [1, 12, -5, -6, 50, 3]`, `k = 4`
+
+1. **Initial Window Sum:**
+   ```python
+   current_sum = sum([1, 12, -5, -6]) = 2
+   ans = [2 / 4] = [0.5]
+   ```
+
+2. **Sliding the Window:**
+   - Window `[12, -5, -6, 50]`: Sum = `51`, Average = `51 / 4 = 12.75`
+   - Window `[-5, -6, 50, 3]`: Sum = `42`, Average = `42 / 4 = 10.5`
+
+3. **Return the Maximum Average:**
+   - The maximum average is `12.75`.
+
+**Output:** `12.75`
+
+---
+
+### **Code 2: Brute Force Approach with Sliding Window**
+
+```python
+l , r = 0 , k
+ans = []
+
+while r <= len(nums):
+    sum_ = sum(nums[l:r]) / k  # Calculate the sum of the current window and divide by k to get the average
+    ans.append(sum_)
+    l += 1
+    r += 1
+
+return max(ans)  # Return the maximum average found
+```
+
+#### **Explanation of the Brute Force Sliding Window Approach:**
+
+1. **Define the Window:**
+   ```python
+   l, r = 0, k
+   ```
+   - We define the window using two pointers: `l` (left) and `r` (right). Initially, the window covers the first `k` elements (`nums[l:r]`).
+
+2. **Calculate the Average for Each Window:**
+   ```python
+   sum_ = sum(nums[l:r]) / k
+   ```
+   - We calculate the sum of the elements in the window, then divide by `k` to find the average for the current window. The average is appended to the `ans` list.
+
+3. **Slide the Window:**
+   ```python
+   l += 1
+   r += 1
+   ```
+   - We move both `l` and `r` one step to the right, which shifts the window to the next set of elements.
+
+4. **Repeat Until We Reach the End:**
+   - This process continues until the window reaches the end of the list.
+
+5. **Return the Maximum Average:**
+   ```python
+   return max(ans)
+   ```
+   - Finally, the maximum average found in the list is returned.
+
+#### **Example:**
+
+**Input:** `nums = [1, 12, -5, -6, 50, 3]`, `k = 4`
+
+1. **First Window:**
+   - Window `[1, 12, -5, -6]`: Sum = `2`, Average = `2 / 4 = 0.5`
+   
+2. **Second Window:**
+   - Window `[12, -5, -6, 50]`: Sum = `51`, Average = `51 / 4 = 12.75`
+   
+3. **Third Window:**
+   - Window `[-5, -6, 50, 3]`: Sum = `42`, Average = `42 / 4 = 10.5`
+
+4. **Return the Maximum Average:**
+   - The maximum average is `12.75`.
+
+**Output:** `12.75`
+
+---

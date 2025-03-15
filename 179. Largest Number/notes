@@ -1,0 +1,138 @@
+
+
+---
+
+### **Approach 1: Sorting with Custom Key (Optimal Approach)**
+
+**Code:**
+```python
+class Solution:
+    def largestNumber(self, nums: List[int]) -> str:
+        str_nums = [str(num) for num in nums]  # Convert each number to a string
+
+        str_nums.sort(key=lambda x: x*10, reverse=True)  # Sort the strings using a custom key
+
+        if str_nums[0] == "0":  # If the largest number is '0', the result will be '0'
+            return "0"
+
+        return ''.join(str_nums)  # Join the strings and return the result
+```
+
+#### **Explanation of the Approach:**
+
+1. **Convert the integers to strings:**
+   - Convert each integer in the `nums` list into a string. This is necessary because the sorting and concatenation will be done with string comparisons.
+
+   ```python
+   str_nums = [str(num) for num in nums]
+   ```
+
+2. **Sort the strings using a custom key:**
+   - The key is `x*10`, which repeats each string `x` 10 times. This ensures correct sorting order when strings are compared for concatenation.
+     - For example, when comparing "9" and "34", we want to compare "934" with "349".
+   - `reverse=True` sorts the list in descending order.
+
+   ```python
+   str_nums.sort(key=lambda x: x*10, reverse=True)
+   ```
+
+3. **Edge case for all zeros:**
+   - If the largest string after sorting is `"0"`, it means all numbers are zeros. Thus, return `"0"`.
+
+   ```python
+   if str_nums[0] == "0":
+       return "0"
+   ```
+
+4. **Join the sorted strings:**
+   - Concatenate the sorted strings to form the final largest number.
+
+   ```python
+   return ''.join(str_nums)
+   ```
+
+#### **Example:**
+
+- **Input:** `[3, 30, 34, 5, 9]`
+- **Steps:**
+  1. Convert to strings: `['3', '30', '34', '5', '9']`
+  2. Sort with key `x*10`: `['9', '5', '34', '3', '30']`
+  3. Concatenate: `"9534330"`
+- **Output:** `"9534330"`
+
+---
+
+### **Approach 2: Permutations (Brute Force Approach)**
+
+**Code:**
+```python
+import itertools
+
+class Solution:
+    def largestNumber(self, nums: List[int]) -> str:
+        str_nums = [str(num) for num in nums]  # Convert each number to a string
+        max_str = ""
+
+        for p in itertools.permutations(str_nums):  # Generate all possible permutations
+            num_str = ''.join(p)  # Join each permutation into a string
+            if num_str > max_str:  # Compare and keep track of the largest number
+                max_str = num_str
+
+        if max_str[0] == '0':  # If the largest number is '0', return '0'
+            return "0"
+
+        return max_str
+```
+
+#### **Explanation of the Approach:**
+
+1. **Convert integers to strings:**
+   - Convert each integer to a string, similar to Approach 1.
+
+   ```python
+   str_nums = [str(num) for num in nums]
+   ```
+
+2. **Generate all permutations:**
+   - Use `itertools.permutations` to generate all possible orderings of the strings.
+
+   ```python
+   for p in itertools.permutations(str_nums):
+   ```
+
+3. **Find the largest permutation:**
+   - For each permutation, join the tuple `p` into a string, then compare with the current largest string. Update if the new permutation is greater.
+
+   ```python
+   num_str = ''.join(p)
+   if num_str > max_str:
+       max_str = num_str
+   ```
+
+4. **Edge case for all zeros:**
+   - If the largest number is `"0"`, then all the numbers are zeros, so return `"0"`.
+
+   ```python
+   if max_str[0] == '0':
+       return "0"
+   ```
+
+5. **Return the largest permutation:**
+   - Return the largest permutation found.
+
+   ```python
+   return max_str
+   ```
+
+#### **Example:**
+
+- **Input:** `[3, 30, 34, 5, 9]`
+- **Steps:**
+  1. Convert to strings: `['3', '30', '34', '5', '9']`
+  2. Generate permutations: 
+     - `('3', '30', '34', '5', '9')`, `('9', '5', '34', '3', '30')`, etc.
+  3. Track largest permutation: `"9534330"`
+- **Output:** `"9534330"`
+
+---
+

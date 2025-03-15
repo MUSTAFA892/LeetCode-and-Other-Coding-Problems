@@ -1,0 +1,43 @@
+
+---
+
+
+
+#### **Explanation of the Approach:**
+
+1. **Find the maximum element in the list:**
+   ```python
+   greater = max(nums)
+   ```
+   - The `max()` function is used to find the largest element in the `nums` list. This element is considered a "peak" since it is the largest value in the list.
+   
+2. **Return the index of the maximum element:**
+   ```python
+   return nums.index(greater)
+   ```
+   - After finding the largest element (`greater`), the `index()` method is used to find the index of this element in the `nums` list.
+   - This index is returned as the position of the peak element.
+
+#### **Example:**
+
+Let's walk through an example to understand how the code works.
+
+**Example Input:** `[1, 2, 3, 1]`
+
+1. **Step 1:** Find the maximum element:
+   - The maximum element in the list is `3`.
+   
+   ```python
+   greater = max([1, 2, 3, 1])  # greater = 3
+   ```
+
+2. **Step 2:** Find the index of the maximum element:
+   - The index of `3` in the list `[1, 2, 3, 1]` is `2`.
+
+   ```python
+   return [1, 2, 3, 1].index(3)  # Output = 2
+   ```
+
+**Output:** `2` (the index of the peak element `3`)
+
+---

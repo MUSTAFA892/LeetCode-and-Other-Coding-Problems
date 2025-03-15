@@ -1,0 +1,61 @@
+
+---
+
+
+#### **Explanation of the Approach:**
+
+1. **Count the frequency of each number:**
+   ```python
+   frequency = Counter(nums)
+   ```
+   - The `Counter` from the `collections` module is used to count the occurrences of each element in the list `nums`. The `Counter` creates a dictionary where the keys are the numbers and the values are their respective counts in the list.
+
+   Example:
+   ```python
+   nums = [4, 1, 2, 1, 2]
+   frequency = Counter(nums)  # frequency = {4: 1, 1: 2, 2: 2}
+   ```
+
+2. **Iterate through the frequency map:**
+   ```python
+   for val, count in frequency.items():
+   ```
+   - The `items()` method returns pairs of `(key, value)` for each item in the frequency map. Here, `val` is the number, and `count` is how many times that number appears in the list.
+
+3. **Check for the single number:**
+   ```python
+   if count == 1:
+       return val
+   ```
+   - We check if the count of a particular number is `1`. If it is, that means the number is the one that appears only once in the list. We return that number immediately.
+
+4. **Breaking the loop (unnecessary):**
+   ```python
+   break
+   ```
+   - The `break` statement is redundant here since we are already returning the value from the function. Once the single number is found and returned, the function will terminate, and the loop will not continue.
+
+#### **Example:**
+
+Let's walk through an example to understand how the code works.
+
+**Example Input:** `[4, 1, 2, 1, 2]`
+
+1. **Step 1:** Count the frequencies of the numbers:
+   ```python
+   frequency = Counter([4, 1, 2, 1, 2])  # frequency = {4: 1, 1: 2, 2: 2}
+   ```
+
+2. **Step 2:** Iterate through the frequency map:
+   - First, check `val = 4` and `count = 1`. Since `count == 1`, return `4`.
+
+   ```python
+   if count == 1:  # True for val = 4
+       return 4  # Output: 4
+   ```
+
+   - No need to continue checking the rest of the numbers, as we've already found the number that appears once.
+
+**Output:** `4` (the number that appears exactly once in the list)
+
+---
