@@ -1,5 +1,5 @@
 
-
+```
 ---
 
 ### **Approach 1: Sorting with Custom Key (Optimal Approach)**
@@ -22,7 +22,6 @@ class Solution:
 
 1. **Convert the integers to strings:**
    - Convert each integer in the `nums` list into a string. This is necessary because the sorting and concatenation will be done with string comparisons.
-
    ```python
    str_nums = [str(num) for num in nums]
    ```
@@ -31,14 +30,12 @@ class Solution:
    - The key is `x*10`, which repeats each string `x` 10 times. This ensures correct sorting order when strings are compared for concatenation.
      - For example, when comparing "9" and "34", we want to compare "934" with "349".
    - `reverse=True` sorts the list in descending order.
-
    ```python
    str_nums.sort(key=lambda x: x*10, reverse=True)
    ```
 
 3. **Edge case for all zeros:**
    - If the largest string after sorting is `"0"`, it means all numbers are zeros. Thus, return `"0"`.
-
    ```python
    if str_nums[0] == "0":
        return "0"
@@ -46,7 +43,6 @@ class Solution:
 
 4. **Join the sorted strings:**
    - Concatenate the sorted strings to form the final largest number.
-
    ```python
    return ''.join(str_nums)
    ```
@@ -88,21 +84,18 @@ class Solution:
 
 1. **Convert integers to strings:**
    - Convert each integer to a string, similar to Approach 1.
-
    ```python
    str_nums = [str(num) for num in nums]
    ```
 
 2. **Generate all permutations:**
    - Use `itertools.permutations` to generate all possible orderings of the strings.
-
    ```python
    for p in itertools.permutations(str_nums):
    ```
 
 3. **Find the largest permutation:**
    - For each permutation, join the tuple `p` into a string, then compare with the current largest string. Update if the new permutation is greater.
-
    ```python
    num_str = ''.join(p)
    if num_str > max_str:
@@ -111,7 +104,6 @@ class Solution:
 
 4. **Edge case for all zeros:**
    - If the largest number is `"0"`, then all the numbers are zeros, so return `"0"`.
-
    ```python
    if max_str[0] == '0':
        return "0"
@@ -119,10 +111,9 @@ class Solution:
 
 5. **Return the largest permutation:**
    - Return the largest permutation found.
-
    ```python
    return max_str
-   ```
+```
 
 #### **Example:**
 
@@ -134,5 +125,5 @@ class Solution:
   3. Track largest permutation: `"9534330"`
 - **Output:** `"9534330"`
 
----
-
+--- 
+```

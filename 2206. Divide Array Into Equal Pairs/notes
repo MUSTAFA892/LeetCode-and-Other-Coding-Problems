@@ -1,0 +1,51 @@
+### **Explanation of the Approach:**
+
+The problem asks us to determine if an array can be divided into pairs of equal numbers. In other words, the array is valid if each number appears an even number of times.
+
+1. **Counting Frequency of Elements:**
+   - First, we use `Counter(nums)` to count how many times each number appears in the array. `Counter(nums)` returns a dictionary-like object where keys are the numbers, and values are the counts.
+
+2. **Checking Frequency for Each Number:**
+   - We iterate over the counts of each number in the frequency map (`freq.values()`).
+   - For each count, if it's even (i.e., `count % 2 == 0`), we continue. If any count is odd, we immediately break out of the loop, and the result will be `False`.
+
+3. **Returning the Result:**
+   - If all counts are even, we return `True` (indicating that the array can be divided into pairs of equal numbers).
+   - If any count is odd, we return `False` because a number with an odd frequency cannot be paired evenly.
+
+### **Working Example:**
+
+- **Input:** `[1, 2, 2, 4, 4, 1]`
+
+- **Steps:**
+
+   1. **Counting Frequencies:**
+      - `freq = Counter(nums)` results in: `{1: 2, 2: 2, 4: 2}`.
+
+   2. **Checking Counts:**
+      - First, the count for `1` is `2` (even).
+      - Next, the count for `2` is `2` (even).
+      - Finally, the count for `4` is `2` (even).
+
+   3. **Result:**
+      - All counts are even, so the result is `True`.
+
+- **Output:** `True`
+
+---
+
+- **Input:** `[1, 2, 2, 3, 3, 3]`
+
+- **Steps:**
+
+   1. **Counting Frequencies:**
+      - `freq = Counter(nums)` results in: `{1: 1, 2: 2, 3: 3}`.
+
+   2. **Checking Counts:**
+      - First, the count for `1` is `1` (odd), so we break the loop.
+
+   3. **Result:**
+      - Since we found an odd count, the result is `False`.
+
+- **Output:** `False`
+
