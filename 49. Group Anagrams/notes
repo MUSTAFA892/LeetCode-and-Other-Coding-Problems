@@ -1,0 +1,163 @@
+
+---
+
+### **1. Problem Understanding**  
+The goal of this function is to group words (strings) that are anagrams of each other. Two words are anagrams if they contain the same characters in a different order.  
+
+#### **Example Input and Output**  
+
+#### **Input**:
+```python
+strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+```
+
+#### **Output**:
+```python
+[
+    ["eat", "tea", "ate"], 
+    ["tan", "nat"], 
+    ["bat"]
+]
+```
+---
+
+### **2. Explanation of the Code**
+
+#### **Step 1: Initializing a Dictionary**
+- The function starts by initializing an empty dictionary `grouped_anagrams = {}`.
+- This dictionary will be used to store anagrams, where the **sorted version of each word** acts as a key, and the corresponding anagrams are stored in a list.
+
+---
+
+#### **Step 2: Iterating Over the List**
+- The function loops through each string in `strs`:
+
+```python
+for idx, str_ in enumerate(strs):
+```
+- `idx` represents the index (which is not used in logic).
+- `str_` represents the current string being processed.
+
+---
+
+#### **Step 3: Sorting Each Word**
+- The function sorts the characters of the word:
+```python
+sorted_str = tuple(sorted(str_))
+```
+- Sorting ensures that all anagrams will have the **same key** because anagrams have the same letters.
+- We use a `tuple` because lists are not hashable and cannot be used as dictionary keys.
+
+---
+
+#### **Step 4: Storing in the Dictionary**
+- If the sorted string (`sorted_str`) is **not already a key** in `grouped_anagrams`, we initialize an empty list:
+```python
+if sorted_str not in grouped_anagrams:
+    grouped_anagrams[sorted_str] = []
+```
+- We then **append the original word** to the corresponding list:
+```python
+grouped_anagrams[sorted_str].append(str_)
+```
+
+---
+
+#### **Step 5: Converting Dictionary to List**
+- After processing all words, we extract the grouped anagram lists:
+```python
+ans = list(grouped_anagrams.values())
+```
+- The function **returns** this list.
+
+---
+
+### **3. Step-by-Step Execution**
+#### **Input**:
+```python
+strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+```
+
+#### **Iteration 1** (Processing `"eat"`):
+- `sorted_str = ('a', 'e', 't')`
+- Since `('a', 'e', 't')` is not in `grouped_anagrams`, create an empty list.
+- Add `"eat"` to the list.
+
+#### **Dictionary State**:
+```python
+{ ('a', 'e', 't'): ["eat"] }
+```
+
+---
+
+#### **Iteration 2** (Processing `"tea"`):
+- `sorted_str = ('a', 'e', 't')`
+- Since `('a', 'e', 't')` is already in `grouped_anagrams`, append `"tea"`.
+
+#### **Dictionary State**:
+```python
+{ ('a', 'e', 't'): ["eat", "tea"] }
+```
+
+---
+
+#### **Iteration 3** (Processing `"tan"`):
+- `sorted_str = ('a', 'n', 't')`
+- Since `('a', 'n', 't')` is not in `grouped_anagrams`, create a new list.
+- Add `"tan"` to the list.
+
+#### **Dictionary State**:
+```python
+{ ('a', 'e', 't'): ["eat", "tea"],
+  ('a', 'n', 't'): ["tan"] }
+```
+
+---
+
+#### **Iteration 4** (Processing `"ate"`):
+- `sorted_str = ('a', 'e', 't')`
+- Append `"ate"` to the existing list.
+
+#### **Dictionary State**:
+```python
+{ ('a', 'e', 't'): ["eat", "tea", "ate"],
+  ('a', 'n', 't'): ["tan"] }
+```
+
+---
+
+#### **Iteration 5** (Processing `"nat"`):
+- `sorted_str = ('a', 'n', 't')`
+- Append `"nat"` to the existing list.
+
+#### **Dictionary State**:
+```python
+{ ('a', 'e', 't'): ["eat", "tea", "ate"],
+  ('a', 'n', 't'): ["tan", "nat"] }
+```
+
+---
+
+#### **Iteration 6** (Processing `"bat"`):
+- `sorted_str = ('a', 'b', 't')`
+- Since `('a', 'b', 't')` is not in `grouped_anagrams`, create a new list.
+- Add `"bat"` to the list.
+
+#### **Final Dictionary State**:
+```python
+{ ('a', 'e', 't'): ["eat", "tea", "ate"],
+  ('a', 'n', 't'): ["tan", "nat"],
+  ('a', 'b', 't'): ["bat"] }
+```
+
+---
+
+### **4. Final Output**
+- Extract the values (grouped anagrams) and return:
+```python
+[
+    ["eat", "tea", "ate"], 
+    ["tan", "nat"], 
+    ["bat"]
+]
+```

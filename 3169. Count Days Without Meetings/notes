@@ -1,0 +1,155 @@
+
+---
+
+## **Approach 1: Sorting & Iteration (Efficient Approach)**
+
+### **Explanation**:
+1. **Sorting the Meetings**:  
+   - The input list `meetings` is sorted based on the start time. This ensures that we process the meetings in chronological order.
+   
+2. **Tracking Free Days**:  
+   - We maintain a variable `Latest_End` to track the latest meeting end time encountered so far.
+   - We iterate through each meeting (`start`, `end`), and if there is a gap between `Latest_End` and `start`, we count those days as free.
+   
+3. **Final Adjustment**:  
+   - After processing all meetings, we add any remaining free days from `Latest_End` to the total number of days.
+
+### **Time Complexity**:  
+- **O(n log n)** due to sorting the `meetings`.  
+- **O(n)** for iterating through the list.  
+- **Overall Complexity: O(n log n)**.
+
+### **Space Complexity**:  
+- **O(1)**, as we use only a few extra variables.
+
+### **Code**:
+```python
+class Solution:
+    def countDays(self, days: int, meetings: List[List[int]]) -> int:
+        meetings.sort()  # Sort meetings based on start time
+        Free_Days = 0
+        Latest_End = 0
+
+        for start, end in meetings:
+            if start > Latest_End + 1:
+                Free_Days += start - Latest_End - 1  # Count free days between meetings
+
+            Latest_End = max(Latest_End, end)  # Update the latest meeting end time
+
+        Free_Days += days - Latest_End  # Count remaining free days after the last meeting
+
+        return Free_Days  
+```
+
+### **Example Walkthrough**:
+#### **Input**:
+```python
+days = 10
+meetings = [[2, 3], [6, 7]]
+```
+#### **Execution**:
+- Sorted meetings: `[[2, 3], [6, 7]]`
+- Free days before first meeting: `1`
+- Free days between meetings: `2`
+- Free days after last meeting: `3`
+- **Total Free Days**: `1 + 2 + 3 = 6`
+
+#### **Output**:
+```python
+6
+```
+
+---
+
+## **Approach 2: Using a Set to Track Busy Days**
+### **Explanation**:
+1. **Storing Meeting Days in a Set**:
+   - Iterate over each meeting (`start`, `end`) and add all the days in the range `[start, end]` to a set called `result`.
+   - This helps track all occupied days uniquely.
+
+2. **Calculating Free Days**:
+   - Subtract the number of occupied days (`len(result)`) from `days` to get the free days.
+
+### **Time Complexity**:
+- **O(n * k)**, where `k` is the average length of the meetings.
+- **Worst case: O(n * days)**.
+
+### **Space Complexity**:
+- **O(days)** in the worst case when all days are occupied.
+
+### **Code**:
+```python
+class Solution:
+    def countDays(self, days: int, meetings: List[List[int]]) -> int:
+        result = set()
+
+        for start, end in meetings:
+            for i in range(start, end + 1):
+                result.add(i)  # Mark busy days
+
+        return days - len(result)  # Free days = total days - occupied days
+```
+
+### **Example Walkthrough**:
+#### **Input**:
+```python
+days = 10
+meetings = [[2, 3], [6, 7]]
+```
+#### **Execution**:
+- `result` contains `{2, 3, 6, 7}`.
+- **Total occupied days**: `4`
+- **Free days**: `10 - 4 = 6`
+
+#### **Output**:
+```python
+6
+```
+
+---
+
+## **Approach 3: Using `update()` Method on a Set**
+### **Explanation**:
+1. **Using `set.update()`**:
+   - Instead of using a loop, we use `set.update(range(start, end + 1))` to add all meeting days to `result` in one step.
+   - This is a more concise and efficient way of adding multiple values to a set.
+
+2. **Counting Free Days**:
+   - Subtract the number of occupied days (`len(result)`) from `days` to get the free days.
+
+### **Time Complexity**:
+- **O(n * k)** (same as Approach 2).
+- `update()` is slightly faster than manually iterating.
+
+### **Space Complexity**:
+- **O(days)** (same as Approach 2).
+
+### **Code**:
+```python
+class Solution:
+    def countDays(self, days: int, meetings: List[List[int]]) -> int:
+        result = set()
+
+        for start, end in meetings:
+            result.update(range(start, end + 1))  # Mark busy days
+
+        return days - len(result)  # Free days = total days - occupied days
+```
+
+### **Example Walkthrough**:
+#### **Input**:
+```python
+days = 10
+meetings = [[2, 3], [6, 7]]
+```
+#### **Execution**:
+- `result` contains `{2, 3, 6, 7}`.
+- **Total occupied days**: `4`
+- **Free days**: `10 - 4 = 6`
+
+#### **Output**:
+```python
+6
+```
+
+---
