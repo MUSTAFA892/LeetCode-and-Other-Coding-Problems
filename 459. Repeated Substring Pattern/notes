@@ -1,0 +1,82 @@
+
+
+The function `repeatedSubstringPattern` is checking if a given string `s` can be formed by repeating a substring multiple times. If such a substring exists, the function returns `True`; otherwise, it returns `False`.
+
+Here’s how the code works:
+
+1. **Create a New String**:
+   - The string `updated_string` is created by concatenating `s` with itself. This effectively doubles the string, allowing us to check if `s` can be found as a substring within it, excluding the first and last characters.
+
+2. **Check Substring**:
+   - The key insight is that if `s` is a repeated substring, then it will appear in the middle of the `updated_string`. 
+   - The expression `updated_string[1:-1]` removes the first and last characters of `updated_string`. This ensures that we are not simply matching the whole string `s` within itself.
+   - If `s` is found within this modified string (`s in updated_string[1:-1]`), it means `s` can be constructed by repeating a substring, and the function returns `True`.
+   - Otherwise, it returns `False`.
+
+---
+
+### Working Example:
+
+#### Input:
+```python
+s = "abab"
+```
+
+#### Execution:
+
+1. **Create Updated String**:
+   - `updated_string = s + s = "abab" + "abab" = "abababab"`
+
+2. **Check Substring**:
+   - `updated_string[1:-1] = "bababa"`
+   - Now, we check if `s = "abab"` is a substring of `"bababa"`.
+   - Since `"abab"` is indeed a substring of `"bababa"`, the function returns `True`.
+
+#### Output:
+```python
+True
+```
+
+---
+
+#### Another Example:
+
+#### Input:
+```python
+s = "abcabc"
+```
+
+#### Execution:
+
+1. **Create Updated String**:
+   - `updated_string = s + s = "abcabc" + "abcabc" = "abcabcabcabc"`
+
+2. **Check Substring**:
+   - `updated_string[1:-1] = "bcabcabcab"`
+   - Check if `s = "abcabc"` is a substring of `"bcabcabcab"`.
+   - Since it is, the function returns `True`.
+
+#### Output:
+```python
+True
+```
+
+#### Input:
+```python
+s = "abcd"
+```
+
+#### Execution:
+
+1. **Create Updated String**:
+   - `updated_string = s + s = "abcd" + "abcd" = "abcdabcd"`
+
+2. **Check Substring**:
+   - `updated_string[1:-1] = "bcda"`
+   - Check if `s = "abcd"` is a substring of `"bcda"`.
+   - Since it is not, the function returns `False`.
+
+#### Output:
+```python
+False
+```

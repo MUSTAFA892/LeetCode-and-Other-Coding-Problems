@@ -1,0 +1,51 @@
+
+
+The problem is to determine the minimum number of times you need to repeat string `a` such that string `b` becomes a substring of the repeated string. Here's how the code works:
+
+1. **Initialization**:  
+   - An empty string `check_str` is initialized to store the repeated string `a`.
+   - A counter `count` is initialized to track how many times `a` is repeated.
+
+2. **First Loop**:  
+   - The loop keeps adding `a` to `check_str` until its length becomes greater than or equal to the length of `b`.
+
+3. **Check Substring**:  
+   - After the loop, it checks if `b` is a substring of `check_str`. If it is, the function returns the current count (i.e., how many times `a` has been repeated).
+
+4. **One Extra Repeat**:  
+   - If `b` is not found in `check_str`, one more repetition of `a` is added to `check_str`, and we check again.
+
+5. **Return the Result**:  
+   - If `b` is still not found after the extra repeat, return `-1` (meaning it's impossible for `b` to be a substring of any number of repetitions of `a`).
+
+---
+
+### Working Example:
+
+#### Input:
+```python
+a = "abcd"
+b = "cdabcdab"
+```
+
+#### Execution:
+
+1. **Initialization**:  
+   `check_str = ""`, `count = 0`.
+
+2. **First Loop**:  
+   - After 1 repetition:  
+     `check_str = "abcd"`, `count = 1`
+   - After 2 repetitions:  
+     `check_str = "abcdabcd"`, `count = 2`
+   - After 3 repetitions:  
+     `check_str = "abcdabcdabcd"`, `count = 3`
+
+3. **Check if `b` is a Substring**:  
+   We check if `b = "cdabcdab"` is a substring of `check_str = "abcdabcdabcd"`. It is, so the answer is `count = 3`.
+
+#### Output:
+```python
+3
+``` 
+
