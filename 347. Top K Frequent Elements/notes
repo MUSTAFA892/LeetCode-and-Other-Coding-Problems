@@ -1,0 +1,166 @@
+
+### **Function Purpose**:
+The `topKFrequent` function finds the **`k` most frequent elements** from the list `nums`. If there are ties in frequency, the elements are sorted in descending order by frequency. The function returns these top `k` frequent elements as a list.
+
+### **Code Explanation**:  
+Here’s the code provided:
+
+```python
+from collections import Counter
+from typing import List
+
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        ans  = []
+        freq = Counter(nums)
+
+        count = 0
+
+        for val, cou in sorted(freq.items(), key=lambda x: x[1], reverse=True):
+            ans.append(val)
+            count += 1
+            if count == k:    
+                break
+
+        return ans
+```
+
+### **Step-by-Step Explanation**:
+
+1. **Initial Setup**:
+   - `ans = []`: This initializes an empty list that will store the final result, which is the list of the `k` most frequent numbers.
+   - `freq = Counter(nums)`: This uses the `Counter` from the `collections` module to count the frequency of each number in the `nums` list. The `Counter` will return a dictionary-like object where the keys are the numbers in the list, and the values are their frequencies.
+
+2. **Loop through Sorted Frequency Items**:
+   - `for val, cou in sorted(freq.items(), key=lambda x: x[1], reverse=True)`: This sorts the frequency dictionary `freq` by frequency (`x[1]` is the frequency) in **descending** order (`reverse=True`).
+     - `sorted(freq.items())`: This returns a list of tuples where each tuple contains a number and its frequency.
+     - `key=lambda x: x[1]`: Sorts by frequency, where `x[1]` is the frequency of each element.
+
+3. **Populate the Result List**:
+   - The loop starts iterating over each element and its frequency (`val` for the value, `cou` for the frequency).
+   - `ans.append(val)`: Appends the current element (`val`) to the `ans` list.
+   - `count += 1`: Increments the counter `count`, which tracks how many elements have been added to `ans`.
+   - `if count == k: break`: If `count` equals `k` (i.e., we have added `k` elements to the result), the loop breaks.
+
+4. **Return the Result**:
+   - Finally, the list `ans`, which contains the `k` most frequent numbers, is returned.
+
+---
+
+### **Working Example**:
+
+Let’s consider the example:
+
+```python
+nums = [1, 1, 1, 2, 2, 3]
+k = 2
+```
+
+#### Step-by-Step Execution:
+
+1. **Count Frequencies**:
+   Using the `Counter`, the frequency of elements in the list `nums` is calculated:
+   ```python
+   freq = Counter(nums)  # freq = {1: 3, 2: 2, 3: 1}
+   ```
+   - `1` appears 3 times
+   - `2` appears 2 times
+   - `3` appears 1 time
+
+2. **Sort by Frequency**:
+   The frequency dictionary is sorted by frequency in descending order:
+   ```python
+   sorted(freq.items(), key=lambda x: x[1], reverse=True)
+   ```
+   This results in:
+   ```python
+   [(1, 3), (2, 2), (3, 1)]
+   ```
+
+3. **Populate the Result**:
+   The function now iterates over the sorted list and adds the top `k` frequent elements:
+   - For the first iteration (`val = 1`, `cou = 3`):
+     - `ans = [1]`
+     - `count = 1`
+   - For the second iteration (`val = 2`, `cou = 2`):
+     - `ans = [1, 2]`
+     - `count = 2`
+
+   Since `count` equals `k`, the loop breaks.
+
+4. **Return the Result**:
+   The function returns the list `ans`, which contains the top `k` frequent elements:
+   ```python
+   return [1, 2]
+   ```
+
+---
+
+### **Final Output**:
+```python
+Output: [1, 2]
+```
+
+### **Why the Output is `[1, 2]`**:
+- The frequency count of the elements in `nums` is:
+  - `1` occurs 3 times
+  - `2` occurs 2 times
+  - `3` occurs 1 time
+- We are asked for the top 2 frequent elements (`k=2`).
+- After sorting by frequency in descending order, we get `[1, 2, 3]`. 
+- The top 2 frequent elements are `[1, 2]`, which is the output.
+
+---
+
+### **Edge Case Considerations**:
+- If `k` is equal to the number of unique elements in `nums`, the function will return all elements.
+- If `k` is greater than the number of unique elements, an error might occur unless handled separately, but in this implementation, it assumes `k <= len(nums)`.
+
+---
+
+### **Another Example**:
+
+Let’s consider another example:
+
+```python
+nums = [4, 4, 4, 5, 5, 6, 6, 6, 7]
+k = 3
+```
+
+#### Execution:
+
+1. **Count Frequencies**:
+   ```python
+   freq = Counter(nums)  # freq = {4: 3, 5: 2, 6: 3, 7: 1}
+   ```
+
+2. **Sort by Frequency**:
+   Sorting by frequency:
+   ```python
+   sorted(freq.items(), key=lambda x: x[1], reverse=True)
+   ```
+   Result:
+   ```python
+   [(4, 3), (6, 3), (5, 2), (7, 1)]
+   ```
+
+3. **Populate the Result**:
+   - First iteration (`val = 4`, `cou = 3`):
+     - `ans = [4]`
+     - `count = 1`
+   - Second iteration (`val = 6`, `cou = 3`):
+     - `ans = [4, 6]`
+     - `count = 2`
+   - Third iteration (`val = 5`, `cou = 2`):
+     - `ans = [4, 6, 5]`
+     - `count = 3`
+
+4. **Return the Result**:
+   ```python
+   return [4, 6, 5]
+   ```
+
+### **Final Output for this Example**:
+```python
+Output: [4, 6, 5]
+```

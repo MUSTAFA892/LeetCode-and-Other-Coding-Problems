@@ -1,0 +1,98 @@
+
+
+### Example Input:
+```python
+nums = [0, 1, 2, 2, 4, 4, 1, 0]
+```
+
+### Step-by-Step Execution:
+
+1. **Initial List**  
+   The input list is:
+   ```python
+   nums = [0, 1, 2, 2, 4, 4, 1, 0]
+   ```
+
+2. **Filter Even Numbers**  
+   The function first filters out all the even numbers from the list. This is done using list comprehension:
+   ```python
+   even_nums = [i for i in nums if i % 2 == 0]
+   ```
+   After filtering the even numbers, we get:
+   ```python
+   even_nums = [0, 2, 2, 4, 4, 0]
+   ```
+   Here, only the even numbers (`0`, `2`, `2`, `4`, `4`, `0`) are kept.
+
+3. **Sort the Even Numbers**  
+   The list of even numbers is then sorted:
+   ```python
+   even_nums.sort()
+   ```
+   After sorting, the list becomes:
+   ```python
+   even_nums = [0, 0, 2, 2, 4, 4]
+   ```
+   Sorting is done to ensure that in case of a tie in frequency, the smallest number is selected. So, we now have the sorted list of even numbers.
+
+4. **Count the Frequency of Each Even Number**  
+   Next, the function uses the `Counter` from the `collections` module to count the frequency of each even number in the list:
+   ```python
+   freq = Counter(even_nums)
+   ```
+   The resulting frequency dictionary is:
+   ```python
+   freq = {0: 2, 2: 2, 4: 2}
+   ```
+   This means:
+   - `0` appears 2 times
+   - `2` appears 2 times
+   - `4` appears 2 times
+
+5. **Check if there are Any Even Numbers**  
+   The function checks if there are any even numbers in the list by checking if the frequency dictionary is not empty:
+   ```python
+   if freq:
+   ```
+   Since the frequency dictionary is not empty (it contains `{0: 2, 2: 2, 4: 2}`), the function proceeds to the next step.
+
+6. **Find the Most Frequent Even Number**  
+   Now, the function iterates over the frequency dictionary and compares the frequency of each number with the current `max_freq`. Initially, `max_freq` is set to 0, and `max_freq_value` is set to -1.
+   
+   The loop starts:
+   ```python
+   for value, count in freq.items():
+   ```
+   - First, it checks the number `0` with a frequency of `2`:
+     - Since `2 > 0` (the current `max_freq`), it updates `max_freq` to `2` and `max_freq_value` to `0`.
+     ```python
+     max_freq = 2
+     max_freq_value = 0
+     ```
+   
+   - Next, it checks the number `2` with a frequency of `2`:
+     - Since `2 == 2` (the current `max_freq`), there is a tie. Because the numbers are processed in sorted order, and `0` is already smaller than `2`, the current `max_freq_value` remains `0` (no update).
+   
+   - Then, it checks the number `4` with a frequency of `2`:
+     - Again, since `2 == 2` (the current `max_freq`), there is another tie. The current `max_freq_value` remains `0`.
+
+7. **Return the Result**  
+   After processing all the numbers, the function returns the `max_freq_value`, which is the most frequent even number:
+   ```python
+   return max_freq_value
+   ```
+   In this case, the most frequent even number is `0`.
+
+---
+
+### Final Output:
+```python
+Output: 0
+```
+
+### Why the Output is `0`:
+- The function first identifies all the even numbers: `[0, 2, 2, 4, 4, 0]`.
+- It counts their frequencies: `{0: 2, 2: 2, 4: 2}`.
+- Since all even numbers have the same frequency of `2`, the smallest number among them, `0`, is chosen and returned as the result.
+
+---
