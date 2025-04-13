@@ -1,0 +1,98 @@
+
+---
+
+## ✅ **Problem: `findErrorNums`**
+
+You're given a list `nums` containing **n integers** where:
+- Each integer is supposed to be from `1` to `n`
+- But **one number is duplicated**, and **one is missing**
+
+### 🔍 **Goal:**
+Return a list `[duplicate, missing]`
+
+---
+
+### 🧠 **Code Explanation:**
+
+```python
+class Solution:
+    def findErrorNums(self, nums: List[int]) -> List[int]:
+        temp = [0] * (len(nums) + 1)  # temp[0] is unused
+        ans = []
+
+        for i in nums:
+            if temp[i] == 1:         # Already seen this number?
+                ans.append(i)        # It's the duplicate!
+            temp[i] = 1              # Mark this number as seen
+
+        for i in range(1, len(nums) + 1):  # Find the missing number
+            if temp[i] == 0:
+                ans.append(i)
+
+        return ans
+```
+
+---
+
+### ⚙️ **How it works:**
+
+1. `temp` is used to **mark whether a number has been seen**.
+   - Index `i` of `temp` tells you whether the number `i` appeared in `nums`.
+2. First loop: detect the **duplicate**.
+3. Second loop: find the **missing** number.
+
+---
+
+### 📘 Example:
+
+```python
+nums = [1, 2, 2, 4]
+```
+
+We expect:  
+- `2` is duplicated  
+- `3` is missing  
+→ Output should be `[2, 3]`
+
+---
+
+### 🔄 Step-by-Step Execution:
+
+**Initial state:**
+- `temp = [0, 0, 0, 0, 0]`  (length = len(nums)+1)
+- `ans = []`
+
+#### First Loop: Mark seen numbers
+Loop through `nums`:
+
+1. i = 1  
+   → temp[1] = 0 → mark it as seen → temp becomes: `[0, 1, 0, 0, 0]`
+
+2. i = 2  
+   → temp[2] = 0 → mark it as seen → temp: `[0, 1, 1, 0, 0]`
+
+3. i = 2  
+   → temp[2] = 1 → **duplicate found**! → `ans = [2]`
+
+4. i = 4  
+   → temp[4] = 0 → mark it as seen → temp: `[0, 1, 1, 0, 1]`
+
+#### Second Loop: Find missing number
+
+Loop from 1 to 4 (inclusive):
+
+- i = 1 → temp[1] = 1 → okay  
+- i = 2 → temp[2] = 1 → okay  
+- i = 3 → temp[3] = 0 → **missing found**! → `ans = [2, 3]`  
+- i = 4 → temp[4] = 1 → okay
+
+✔️ Final output: `[2, 3]`
+
+---
+
+### 🧮 Time & Space Complexity:
+
+- **Time:** O(n)
+- **Space:** O(n) (due to the extra `temp` list)
+
+---

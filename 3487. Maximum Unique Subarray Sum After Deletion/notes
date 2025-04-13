@@ -1,0 +1,145 @@
+
+---
+
+### ✅ **Approach 1: Sum of unique positive numbers**
+
+```python
+class Solution:
+    def maxSum(self, nums: List[int]) -> int:
+        max_sum = 0
+
+        for num in set(nums):
+            if num > 0:
+                max_sum += num
+        
+        if max_sum:
+            return max_sum
+        else:
+            return max(nums)
+```
+
+#### 🔍 **Explanation:**
+
+- `set(nums)` removes duplicates.
+- For every **positive unique number**, we add it to `max_sum`.
+- If there are no positive numbers, we just return the **maximum** value in `nums` (which will be the **least negative** number).
+
+#### 📘 **Example:**
+
+```python
+nums = [1, 2, 2, -5, 3]
+```
+
+- `set(nums)` ➝ `{1, 2, 3, -5}`
+- Positive numbers: `1, 2, 3`
+- Sum = `1 + 2 + 3 = 6`
+- Return `6`
+
+#### 📘 **Another Example (All negative):**
+
+```python
+nums = [-1, -2, -3]
+```
+
+- No positive numbers.
+- Return `max(nums)` ➝ `-1`
+
+---
+
+### 🚫 **Approach 2 (Commented Out): Paired Absolute Value Removal**
+
+```python
+"""
+seen = []
+
+for i in range(len(nums)):
+    number = abs(nums[i])
+    if number in  seen:
+        seen.remove(number)
+    seen.append(number)
+
+return sum(seen)
+"""
+```
+
+#### 🔍 **Explanation:**
+
+- We process each number's **absolute value**.
+- If the absolute value has been **seen before**, remove it (like canceling it out).
+- Otherwise, add it to the `seen` list.
+- Finally, return the **sum of remaining absolute values**.
+
+This behavior looks like we're trying to find **unpaired absolute values**.
+
+#### 📘 **Example:**
+
+```python
+nums = [3, -3, 4, 4, 5]
+```
+
+- i=0 → `abs(3) = 3`, not in `seen` → seen = [3]
+- i=1 → `abs(-3) = 3`, in `seen` → remove → seen = []
+- i=2 → `abs(4) = 4`, not in seen → seen = [4]
+- i=3 → `abs(4) = 4`, in seen → remove → seen = []
+- i=4 → `abs(5) = 5`, not in seen → seen = [5]
+
+Final sum = `sum([5]) = 5`
+
+#### 📌 **Takeaway:**
+- This method filters out numbers that appear **twice with opposite signs** or **twice in general**.
+- Use case: detect unpaired elements (though this is quite niche).
+
+---
+
+### ✅ **Approach 3: Sliding Window for Max Unique Subarray Sum**
+
+```python
+"""
+left = 0 
+max_sum = 0
+current_sum = 0
+seen = set()
+
+for right in range(len(nums)):
+    while nums[right] in seen:
+        seen.remove(nums[left])
+        current_sum -= nums[left]
+        left += 1
+    
+    seen.add(nums[right])
+    current_sum += nums[right]
+    max_sum = max(max_sum, current_sum)
+
+return max_sum
+"""
+```
+
+#### 🔍 **Explanation:**
+
+- This uses a **sliding window** to find the **maximum sum of any subarray with unique elements**.
+- `seen` keeps track of elements in the current window.
+- If a duplicate is found, we **shrink the window from the left** until it's unique again.
+
+#### 📘 **Example:**
+
+```python
+nums = [4, 2, 4, 5, 6]
+```
+
+- Start with `left = 0`, `right = 0`
+- nums[0] = 4 → seen = {4}, current_sum = 4, max_sum = 4
+- nums[1] = 2 → seen = {2, 4}, current_sum = 6, max_sum = 6
+- nums[2] = 4 (duplicate)
+  - remove nums[0] (4), left = 1, current_sum = 2
+  - seen = {2}
+  - now add 4 again → seen = {2, 4}, current_sum = 6
+- nums[3] = 5 → seen = {2, 4, 5}, current_sum = 11, max_sum = 11
+- nums[4] = 6 → seen = {2, 4, 5, 6}, current_sum = 17, max_sum = 17
+
+✔️ **Return 17**
+
+#### 📌 **Takeaway:**
+- Great for **finding the largest unique-subarray sum**.
+- Time complexity: **O(n)** using sliding window.
+
+---

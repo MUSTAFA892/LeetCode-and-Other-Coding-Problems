@@ -1,0 +1,76 @@
+
+---
+
+## ✅ Goal of the Problem: `duplicateZeros`
+
+You're given an **integer array `arr`**, and for **each zero**, you want to **duplicate it** **in-place**, shifting the remaining elements to the right.
+
+> ⚠️ But since the array **cannot grow**, you need to **cut off the last elements** that fall outside the original array length.
+
+---
+
+### 🔍 Your Code
+
+```python
+class Solution:
+    def duplicateZeros(self, arr: List[int]) -> None:
+        pointer = 0
+
+        while pointer < len(arr):
+            if arr[pointer] == 0:
+                arr.insert(pointer + 1, 0)
+                arr.pop()  # remove last element to maintain array size
+                pointer += 1  # skip over the inserted zero
+            pointer += 1
+```
+
+---
+
+### 🧠 How It Works
+
+- You go through the array using `pointer`.
+- When you find a **0**, you:
+  - Insert another `0` **after it**
+  - Remove the **last element** to maintain the size of `arr`
+  - Increment `pointer` twice to **skip over** the duplicated zero
+- Otherwise, you move `pointer` normally
+
+✅ The key is: this keeps the array length fixed, and inserts a 0 wherever you find one.
+
+---
+
+### 📘 Example
+
+```python
+arr = [1, 0, 2, 3, 0, 4, 5, 0]
+```
+
+Original length: 8
+
+Let's walk through the code step-by-step:
+
+| Step | pointer | arr                             | Explanation |
+|------|---------|----------------------------------|-------------|
+| 0    | 0       | [1, 0, 2, 3, 0, 4, 5, 0]         | arr[0] != 0 → move on |
+| 1    | 1       | [1, 0, 2, 3, 0, 4, 5, 0]         | Found 0 → insert 0 at index 2 |
+|      |         | [1, 0, 0, 2, 3, 0, 4, 5]         | pop last (0), pointer += 2 |
+| 2    | 3       | [1, 0, 0, 2, 3, 0, 4, 5]         | arr[3] = 2 → move on |
+| 3    | 4       | [1, 0, 0, 2, 3, 0, 4, 5]         | arr[4] = 3 → move on |
+| 4    | 5       | [1, 0, 0, 2, 3, 0, 4, 5]         | Found 0 → insert 0 at index 6 |
+|      |         | [1, 0, 0, 2, 3, 0, 0, 4]         | pop last (5), pointer += 2 |
+| 5    | 7       | [1, 0, 0, 2, 3, 0, 0, 4]         | arr[7] = 4 → move on |
+| 6    | 8       | END                              | Done! |
+
+✔️ Final array:  
+```python
+[1, 0, 0, 2, 3, 0, 0, 4]
+```
+
+---
+
+### 📌 Time & Space Complexity
+
+- **Time:** O(n²) in worst case (because `insert()` and `pop()` can take O(n))
+- **Space:** O(1) since it's in-place
+
+---
