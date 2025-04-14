@@ -1,0 +1,68 @@
+
+
+### 🔍 What is this code doing?
+
+The function `countTriples` is trying to count how many **Pythagorean triples** `(a, b, c)` exist where:
+- \( a^2 + b^2 = c^2 \)
+- All values are **positive integers** less than or equal to `n`.
+
+It **does not require a < b < c**, so it includes all permutations of a and b.
+
+---
+
+### 🔁 Breakdown of the logic:
+
+1. **Loop through all possible pairs (a, b)** from `1` to `n` inclusive.
+2. Compute the sum of squares: `sum_ = a^2 + b^2`.
+3. Compute the square root of the sum: `c = sqrt(sum_)`.
+4. If `c` is an integer (`c * c == sum_`) and `c <= n`, then it's a valid triple.
+5. Increase the count.
+
+---
+
+## 🧪 Example Walkthrough: `n = 5`
+
+Let's try to find all valid triples for `n = 5`.
+
+We loop over `a` and `b` from `1` to `5`.
+
+We want to find all combinations where:
+- \( a^2 + b^2 = c^2 \)
+- `c <= 5`
+
+---
+
+### Let's try a few pairs manually:
+
+#### (a=3, b=4)
+- \( 3^2 + 4^2 = 9 + 16 = 25 \)
+- \( \sqrt{25} = 5 \), which is an integer and ≤ 5
+- ✅ Valid triple → count += 1
+
+#### (a=4, b=3)
+- \( 4^2 + 3^2 = 16 + 9 = 25 \)
+- \( \sqrt{25} = 5 \)
+- ✅ Valid again → count += 1
+
+> So `(3,4,5)` and `(4,3,5)` both count as valid.
+
+Are there more? Let's look at all valid `(a, b)`:
+
+| a | b | a² + b² | sqrt     | c valid? |
+|---|---|----------|----------|----------|
+| 3 | 4 | 25       | 5        | ✅        |
+| 4 | 3 | 25       | 5        | ✅        |
+
+That’s it!
+
+So the total `count = 2`.
+
+---
+
+## ✅ Final Output for `n = 5`:  
+```python
+s = Solution()
+print(s.countTriples(5))
+# Output: 2
+```
+
