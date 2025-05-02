@@ -1,0 +1,64 @@
+
+---
+
+### 🔍 **Purpose of the Function**
+
+The goal of the function is to **find the smallest length of a contiguous subarray** of `nums` that has the **same degree** as the original array.
+
+* **Degree of an array** = maximum frequency of any element in the array.
+* We want the **shortest subarray** that contains **all occurrences of the most frequent element(s)**.
+
+---
+
+### 🧠 **How It Works**
+
+1. **Count frequencies**:
+
+   * `freq = Counter(nums)` gives how many times each number appears.
+   * `max_fre = max(freq.values())` gives the degree of the array.
+
+2. **Track first and last indices**:
+
+   * `first_idx[num]`: index where a number first appears.
+   * `last_idx[num]`: index where a number last appears.
+
+3. **Find the shortest subarray**:
+
+   * For each number that appears `max_fre` times:
+
+     * Calculate the length of the subarray from its first to last occurrence.
+     * Track the smallest such length.
+
+4. **Return the minimum length**.
+
+---
+
+### ✅ **Example**
+
+```python
+nums = [1, 2, 2, 3, 1, 4, 2]
+```
+
+**Step-by-step:**
+
+* Frequencies: `{1: 2, 2: 3, 3: 1, 4: 1}`
+
+* Degree = `3` (because `2` appears 3 times)
+
+* First and last indices of `2`: `first = 1`, `last = 6`
+
+* Length = `6 - 1 + 1 = 6`
+
+No other element has frequency 3, so:
+
+* **Shortest subarray** with same degree is from index 1 to 6: `[2, 2, 3, 1, 4, 2]`
+* Output = `6`
+
+---
+
+### ✅ **Final Output**
+
+```python
+sol = Solution()
+print(sol.findShortestSubArray([1, 2, 2, 3, 1, 4, 2]))  # Output: 6
+```
