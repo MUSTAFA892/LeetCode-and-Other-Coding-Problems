@@ -1,0 +1,99 @@
+### ✅ Problem Summary
+* Given an array `nums` of **positive integers**.
+* You can erase **one subarray** (contiguous elements) with **all unique values**.
+* Your score is the **sum** of that subarray.
+* Return the **maximum score** possible.
+
+---
+
+## 💡 Intuition (Key Idea)
+
+* We want the **maximum sum of a subarray with unique elements**.
+* Use a **sliding window** approach:
+
+  * Expand the window to the right while elements are unique.
+  * Shrink from the left if a duplicate is found.
+* Track:
+
+  * Current sum of the window.
+  * Set to check uniqueness.
+  * Maximum sum seen so far.
+
+---
+
+## 🧩 Algorithm Steps
+
+1. **Initialize**:
+
+   * `left = 0` → Left pointer of window.
+   * `seen = set()` → To store unique elements.
+   * `curr_sum = 0` → Sum of current window.
+   * `max_sum = 0` → Track the maximum score.
+
+2. **Traverse** through the array with `right` pointer:
+
+   * If `nums[right]` is **not in set**:
+
+     * Add it to set.
+     * Add `nums[right]` to `curr_sum`.
+     * Update `max_sum`.
+
+   * If `nums[right]` **is in set**:
+
+     * Remove elements from the left of the window **until duplicate is removed**:
+
+       * Subtract `nums[left]` from `curr_sum`.
+       * Remove from set.
+       * Move `left` pointer.
+
+     * Then add `nums[right]` to set and `curr_sum`.
+
+3. At the end, return `max_sum`.
+
+---
+
+## 🔍 Example Dry Run
+
+### Input: `nums = [4, 2, 4, 5, 6]`
+
+| Step | Window     | Set       | Curr\_Sum | Max\_Sum |
+| ---- | ---------- | --------- | --------- | -------- |
+| 0    | \[4]       | {4}       | 4         | 4        |
+| 1    | \[4,2]     | {2,4}     | 6         | 6        |
+| 2    | \[2,4]     | {2,4}     | 6         | 6        |
+| 3    | \[2,4,5]   | {2,4,5}   | 11        | 11       |
+| 4    | \[2,4,5,6] | {2,4,5,6} | 17        | ✅ 17     |
+
+🔹 Maximum subarray is `[2, 4, 5, 6]`
+🔹 Answer: **17**
+
+---
+
+## ✅ Final Code (Python)
+
+```python
+nums = [4, 2, 4, 5, 6]
+seen = set()
+left = 0
+curr_sum = 0
+max_sum = 0
+
+for right in range(len(nums)):
+    while nums[right] in seen:
+        seen.remove(nums[left])
+        curr_sum -= nums[left]
+        left += 1
+    seen.add(nums[right])
+    curr_sum += nums[right]
+    max_sum = max(max_sum, curr_sum)
+
+print(max_sum)  # Output: 17
+```
+
+---
+
+## 🧠 Key Concepts Used
+
+* Sliding Window Technique
+* HashSet for uniqueness checking
+* Dynamic sum adjustment (not recalculating entire sum each time)
