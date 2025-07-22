@@ -1,0 +1,87 @@
+
+
+### ✅ Problem Summary
+
+* Given an integer array `nums`, find the **contiguous subarray** (containing at least one number) that has the **largest product**, and return the product.
+
+---
+
+## 💡 Intuition (Key Idea)
+
+* Unlike sum, product of negative numbers can become **positive**, so:
+
+  * You must track both:
+
+    * **Maximum product so far**
+    * **Minimum product so far** (because a large negative × negative = big positive)
+* At each step, calculate 3 things:
+
+  * `nums[i]` (start a new subarray),
+  * `nums[i] * max_pro` (extend max subarray),
+  * `nums[i] * min_pro` (maybe it becomes positive if `nums[i] < 0`)
+
+---
+
+## 🧩 Algorithm Steps
+
+1. Initialize:
+
+   * `max_pro`, `min_pro`, and `result` as `nums[0]`.
+
+2. Loop from index `1` to end:
+
+   * Compute all possible products:
+
+     * `nums[i]`
+     * `nums[i] * max_pro`
+     * `nums[i] * min_pro`
+   * `max_pro = max(all three)`
+   * `min_pro = min(all three)`
+   * Update `result = max(result, max_pro)`
+
+3. Return `result`.
+
+---
+
+## 🧠 Dry Run Example
+
+### Input: `nums = [2, 3, -2, 4]`
+
+| i | nums\[i] | max\_pro             | min\_pro              | result |
+| - | -------- | -------------------- | --------------------- | ------ |
+| 0 | 2        | 2                    | 2                     | 2      |
+| 1 | 3        | max(3, 6, 6)=6       | min(3, 6, 6)=3        | ✅ 6    |
+| 2 | -2       | max(-2, -12, -6)= -2 | min(-2, -12, -6)= -12 | 6      |
+| 3 | 4        | max(4, -8, -48)=4    | min(4, -8, -48)= -48  | ✅ 6    |
+
+🔹 Final Answer: **6** (subarray `[2, 3]`)
+
+---
+
+## ✅ Final Code (Cleaned Up)
+
+```python
+class Solution:
+    def maxProduct(self, nums: List[int]) -> int:
+        max_pro = nums[0]
+        min_pro = nums[0]
+        result = nums[0]
+
+        for i in range(1, len(nums)):
+            curr = nums[i]
+            product = (curr, curr * max_pro, curr * min_pro)
+
+            max_pro = max(product)
+            min_pro = min(product)
+            result = max(result, max_pro)
+
+        return result
+```
+
+---
+
+## 📌 Key Concepts
+
+* Kadane’s Algorithm (modified for product)
+* Maintain both `max` and `min`
+* Product flipping behavior due to negatives
