@@ -1,0 +1,57 @@
+
+### ✅ Problem Summary
+
+* Given an integer list `nums`, split it into two groups:
+
+  1. **`first_nums`** → elements at **non-prime indices**
+  2. **`second_nums`** → elements at **prime indices**
+
+* Then, return the **absolute difference** between the sum of both groups.
+
+---
+
+## 💡 Intuition (Key Idea)
+
+* Instead of checking the number **value**, the function checks whether each **index** is prime.
+* If the index is **prime** → value goes to `second_nums`.
+* If the index is **not prime** → value goes to `first_nums`.
+* At the end, compute:
+  `abs(sum(first_nums) - sum(second_nums))`
+
+---
+
+## 🧠 Example Walkthrough
+
+### Input:
+
+```python
+nums = [5, 10, 15, 20, 25, 30]
+         ↑   ↑   ↑   ↑   ↑   ↑
+        i=0 i=1 i=2 i=3 i=4 i=5
+```
+
+### Step 1: Check each index
+
+| Index | Prime? | Value | Goes to       |
+| ----- | ------ | ----- | ------------- |
+| 0     | ❌ No   | 5     | `first_nums`  |
+| 1     | ❌ No   | 10    | `first_nums`  |
+| 2     | ✅ Yes  | 15    | `second_nums` |
+| 3     | ✅ Yes  | 20    | `second_nums` |
+| 4     | ❌ No   | 25    | `first_nums`  |
+| 5     | ✅ Yes  | 30    | `second_nums` |
+
+---
+
+### Step 2: Group Sums
+
+* `first_nums` = \[5, 10, 25] → sum = **40**
+* `second_nums` = \[15, 20, 30] → sum = **65**
+
+---
+
+### Step 3: Final Answer
+
+* Absolute difference = `abs(40 - 65)` = **25**
+
+🔹 **Output: 25**
