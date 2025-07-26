@@ -1,0 +1,62 @@
+
+
+### ✅ Problem Summary
+
+* You are given a **word** (a string).
+* You must check if the word is **valid** based on these rules:
+
+  1. The word must be **at least 3 characters long**
+  2. It should only contain **letters and digits** (no special characters like `@`, `!`, `#`)
+  3. It must have **at least one vowel** (`a, e, i, o, u`)
+  4. It must have **at least one consonant**
+
+---
+
+## 💡 Intuition (Key Idea)
+
+* A valid word should be **clean (alphanumeric)** and have a **mix of vowels and consonants**.
+* Special characters make it invalid.
+* We don’t care about digits unless a special symbol is present — in which case, it's invalid.
+
+---
+
+## 🧠 Example 1: `"abc"`
+
+* Length = 3 ✅
+* Characters = all letters ✅
+* Vowel = `'a'` ✅
+* Consonants = `'b'`, `'c'` ✅
+* No special characters ✅
+
+🔹 **Result: Valid (True)**
+
+---
+
+## ❌ Example 2: `"a1!"`
+
+* Length = 3 ✅
+* Contains a special character `!` ❌
+* So, it's **invalid** even though it has a vowel and a digit.
+
+🔹 **Result: Invalid (False)**
+
+---
+
+## ❌ Example 3: `"aei"`
+
+* All characters are vowels ✅
+* No consonants ❌
+* So, it's **invalid**
+
+🔹 **Result: Invalid (False)**
+
+---
+
+## ✅ Example 4: `"b2e"`
+
+* Length = 3 ✅
+* Contains only alphanumeric characters ✅
+* Contains vowel `e` ✅
+* Contains consonant `b` ✅
+
+🔹 **Result: Valid (True)**
