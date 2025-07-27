@@ -1,0 +1,68 @@
+### Approach
+
+The solution uses a two-step approach to solve the problem:
+
+1.  **Simplify the Array:** First, it processes the input array `nums` to remove any "plateaus" (consecutive duplicate numbers). This creates a new list where every adjacent number is different, making it much easier to spot peaks and troughs.
+2.  **Count Hills and Valleys:** Second, it iterates through this simplified list to count the number of elements that are strictly greater than their neighbors (hills) or strictly smaller than their neighbors (valleys).
+
+-----
+
+### Step-by-Step Explanation
+
+#### 1\. Remove Plateaus (Consecutive Duplicates)
+
+The first part of the code is responsible for simplification.
+
+```python
+unique_nums = []
+# ... (logic to handle first element)
+for i in nums:
+    if unique_nums[-1] != i:
+        unique_nums.append(i)
+```
+
+  * The goal is to build a new list called `unique_nums`.
+  * This list is constructed by iterating through the original `nums` array and only adding an element if it's different from the *last element* already added to `unique_nums`.
+  * This effectively transforms an array like `[2, 4, 4, 4, 1]` into `[2, 4, 1]`.
+
+#### 2\. Count Hills and Valleys
+
+The second part of the code iterates through the simplified `unique_nums` list to do the actual counting.
+
+```python
+count = 0
+for i in range (1,len(unique_nums)-1):
+    # ... (counting logic)
+```
+
+  * The loop runs from the second element (`index 1`) to the second-to-last element. The very first and last elements are ignored because they don't have neighbors on both sides.
+  * Inside the loop, each number is checked against its immediate left (`i-1`) and right (`i+1`) neighbors.
+  * **Hill Condition ⛰️:** `unique_nums[i] > unique_nums[i-1] and unique_nums[i] > unique_nums[i+1]`
+      * If the current number is greater than both its neighbors, it's a hill, and `count` is incremented.
+  * **Valley Condition 🏞️:** `unique_nums[i] < unique_nums[i-1] and unique_nums[i] < unique_nums[i+1]`
+      * If the current number is smaller than both its neighbors, it's a valley, and `count` is also incremented.
+
+-----
+
+### Example Walkthrough
+
+Let's trace `nums = [2, 4, 1, 1, 6, 5]`.
+
+1.  **Simplify the Array:**
+
+      * After removing consecutive duplicates, `unique_nums` becomes `[2, 4, 1, 6, 5]`.
+
+2.  **Count Hills and Valleys:**
+
+      * The loop will check the elements at indices 1, 2, and 3 (the numbers `4`, `1`, and `6`).
+      * **i = 1 (value = 4):**
+          * Is `4 > 2` and `4 > 1`? Yes. It's a **hill**.
+          * `count` is now **1**.
+      * **i = 2 (value = 1):**
+          * Is `1 < 4` and `1 < 6`? Yes. It's a **valley**.
+          * `count` is now **2**.
+      * **i = 3 (value = 6):**
+          * Is `6 > 1` and `6 > 5`? Yes. It's a **hill**.
+          * `count` is now **3**.
+
+The loop finishes, and the function returns the final `count`, which is **3**.
