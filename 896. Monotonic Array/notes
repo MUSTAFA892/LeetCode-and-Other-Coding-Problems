@@ -1,0 +1,63 @@
+### Approach
+
+The code determines if an array is monotonic by using a process of elimination. It starts with the assumption that the array could be **both** monotone increasing and monotone decreasing. Then, it iterates through the array to find any evidence that contradicts these assumptions. If, by the end of the array, at least one of these assumptions still holds true, the array is considered monotonic.
+
+-----
+
+### Step-by-Step Explanation
+
+#### 1\. Initialization
+
+```python
+is_increasing = True
+is_decreasing = True
+```
+
+  * The code begins by setting two boolean flags. These flags track whether the array still has the potential to be considered increasing or decreasing.
+  * `is_increasing = True` 📈: Assumes the array is non-decreasing until a downward trend is found.
+  * `is_decreasing = True` 📉: Assumes the array is non-increasing until an upward trend is found.
+
+#### 2\. Iteration and Logic
+
+```python
+for i in range(1,len(nums)):
+    if nums[i] > nums[i-1]:
+        is_decreasing = False
+
+    if nums[i] < nums[i-1]:
+        is_increasing = False
+```
+
+  * The code loops through the array, comparing each element `nums[i]` with the one before it, `nums[i-1]`.
+  * **First `if` statement:** If an element is **strictly greater** than its predecessor (`nums[i] > nums[i-1]`), it's an upward movement. This proves the array cannot be monotone decreasing, so `is_decreasing` is set to `False`.
+  * **Second `if` statement:** If an element is **strictly smaller** than its predecessor (`nums[i] < nums[i-1]`), it's a downward movement. This proves the array cannot be monotone increasing, so `is_increasing` is set to `False`.
+  * **Note on Equal Numbers:** If `nums[i] == nums[i-1]`, neither of these conditions is met. Both flags remain unchanged, which correctly allows for flat sections in a monotonic array.
+
+#### 3\. Final Result
+
+```python
+return is_increasing or is_decreasing
+```
+
+  * After the loop has checked all the elements, this line determines the final answer.
+  * If `is_increasing` is still `True`, it means no downward trend was ever found.
+  * If `is_decreasing` is still `True`, it means no upward trend was ever found.
+  * The array is monotonic if it satisfies **at least one** of these conditions. The `or` operator correctly returns `True` if either flag has survived the elimination process. It only returns `False` if both flags were set to `False`, meaning the array went both up and down.
+
+-----
+
+### Example Walkthrough
+
+Let's trace `nums = [1, 5, 2]`.
+
+1.  **Start:** `is_increasing = True`, `is_decreasing = True`.
+2.  **i = 1:** Compare `nums[1]` (5) and `nums[0]` (1).
+      * `5 > 1` is true. The array can't be decreasing.
+      * Set `is_decreasing = False`.
+      * Flags are now: `is_increasing = True`, `is_decreasing = False`.
+3.  **i = 2:** Compare `nums[2]` (2) and `nums[1]` (5).
+      * `2 < 5` is true. The array can't be increasing.
+      * Set `is_increasing = False`.
+      * Flags are now: `is_increasing = False`, `is_decreasing = False`.
+4.  **End of Loop:** The function returns `is_increasing or is_decreasing`, which is `False or False`.
+5.  **Final Answer:** `False`.
