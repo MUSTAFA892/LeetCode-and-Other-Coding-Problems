@@ -1,0 +1,79 @@
+### Approach
+
+The code uses a **greedy approach**, which is the most intuitive and efficient way to solve this problem. The core idea is that to get a sum that's greater than the rest of the elements with the **minimum number of items**, we should always pick the largest numbers available first. This strategy naturally fulfills all the problem's conditions.
+
+-----
+
+### Step-by-Step Explanation
+
+#### 1\. Sort the Array
+
+```python
+nums.sort(reverse=True)
+```
+
+  * The first and most important step is to sort the input array `nums` in **non-increasing (descending) order**.
+  * This places the largest, most "valuable" numbers at the beginning, so we can pick them first.
+
+#### 2\. Initialize Sums and Result Array
+
+```python
+Total_sum = sum(nums)
+final_arr = []
+```
+
+  * `Total_sum` is calculated once upfront. This is an optimization to avoid recalculating the sum of the entire original array inside the loop.
+  * `final_arr` is an empty list that will be populated with the numbers for our result subsequence.
+
+#### 3\. Greedily Build and Check the Subsequence
+
+```python
+for i in nums:
+    final_arr.append(i)
+    
+    min_sum = Total_sum - sum(final_arr)
+    
+    if sum(final_arr) > min_sum:
+        break
+```
+
+  * The code iterates through the sorted `nums` array, effectively processing numbers from largest to smallest.
+  * In each iteration, the current number `i` is added to `final_arr`.
+  * The crucial check happens next:
+      * The sum of the numbers picked so far is `sum(final_arr)`.
+      * The sum of the remaining numbers not picked is calculated as `Total_sum - sum(final_arr)`.
+      * The code checks if the sum of our subsequence is **strictly greater** than the sum of the remaining part.
+  * If the condition is met, the `break` statement stops the loop immediately. This is key, as it ensures we use the absolute minimum number of elements required, fulfilling a main constraint of the problem.
+
+#### 4\. Return the Result
+
+```python
+return final_arr
+```
+
+  * The loop terminates as soon as the condition is met, and `final_arr` contains the desired subsequence.
+  * Since we built it from an array that was already sorted in descending order, `final_arr` is also correctly sorted.
+
+-----
+
+### Example Walkthrough
+
+Let's trace `nums = [4, 4, 7, 6, 7]`.
+
+1.  **Sort:** `nums` becomes `[7, 7, 6, 4, 4]`.
+2.  **Initialize:** `Total_sum = 28`, `final_arr = []`.
+3.  **Loop:**
+      * **Pick 7:**
+          * `final_arr` is `[7]`. Its sum is **7**.
+          * Remaining sum is `28 - 7 = 21`.
+          * Is `7 > 21`? No.
+      * **Pick 7:**
+          * `final_arr` is `[7, 7]`. Its sum is **14**.
+          * Remaining sum is `28 - 14 = 14`.
+          * Is `14 > 14`? No (it must be strictly greater).
+      * **Pick 6:**
+          * `final_arr` is `[7, 7, 6]`. Its sum is **20**.
+          * Remaining sum is `28 - 20 = 8`.
+          * Is `20 > 8`? **Yes**.
+4.  **Break:** The loop stops.
+5.  **Return:** The function returns `[7, 7, 6]`.
