@@ -1,0 +1,55 @@
+### 💡 **Core Idea**
+
+Use a **two-pointer approach**:
+
+* One pointer starts from the **beginning** (`first`).
+* One from the **end** (`last`).
+* Swap characters **only if both are letters**.
+* Skip over characters that are **not letters** (using `isalpha()`).
+
+---
+
+### 🛠️ **Step-by-Step Logic**
+
+1. Convert the string into a **list of characters**, since strings are immutable in Python.
+2. Initialize two pointers:
+
+   * `first` at the start
+   * `last` at the end
+3. While `first <= last`:
+
+   * If both characters are **letters**:
+
+     * Swap them.
+     * Move both pointers inward.
+   * If `s[first]` is **not a letter**, move `first` forward.
+   * If `s[last]` is **not a letter**, move `last` backward.
+4. After the loop, join the list back into a string and return it.
+
+---
+
+### 🔍 **Example Walkthrough**
+
+Given:
+
+```python
+s = "a-bC-dEf-ghIj"
+```
+
+Process:
+
+* Start: `first = 0` ('a'), `last = 13` ('j') → both are letters → swap
+* `first = 1` ('-') → not a letter → skip
+* Continue this process...
+
+Final result:
+➡️ `"j-Ih-gfE-dCba"`
+
+Only letters reversed, all non-letters stay in place.
+
+---
+
+### 📈 **Time & Space Complexity**
+
+* **Time:** O(n) — each character is visited at most once.
+* **Space:** O(n) — due to converting string to list and back.
