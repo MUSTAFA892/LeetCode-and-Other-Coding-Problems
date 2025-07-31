@@ -1,0 +1,51 @@
+### 💡 **Core Idea**
+
+* Traverse the array once.
+* Use two separate lists:
+
+  * One for **even numbers**.
+  * One for **odd numbers**.
+* At the end, **concatenate** the even list with the odd list.
+
+---
+
+### 🛠️ **Step-by-Step Explanation**
+
+1. **Initialize two lists:**
+
+   * One (`arr`) for even numbers.
+   * One (`odd_idx`) for odd numbers.
+
+2. **Loop through each element** in the input list:
+
+   * If it’s **even** (`% 2 == 0`) → append to `arr`.
+   * If it’s **odd** → append to `odd_idx`.
+
+3. **Combine the lists**: even part first, then odd part.
+
+4. **Return the result**.
+
+---
+
+### 🔍 **Example Walkthrough**
+
+Given:
+
+```python
+nums = [4, 2, 5, 7]
+```
+
+* 4 → even → `arr = [4]`
+* 2 → even → `arr = [4, 2]`
+* 5 → odd → `odd_idx = [5]`
+* 7 → odd → `odd_idx = [5, 7]`
+
+Final result:
+➡️ `arr + odd_idx = [4, 2, 5, 7]`
+
+---
+
+### 📈 **Time & Space Complexity**
+
+* **Time:** O(n) — single pass through the list.
+* **Space:** O(n) — uses two additional lists of total length `n`.
