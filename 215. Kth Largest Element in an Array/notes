@@ -1,0 +1,51 @@
+### 💡 **Core Idea**
+
+Use a **min-heap** of size `k` to track the top `k` largest elements.
+
+* Python's `heapq` is a **min-heap**: the smallest element is always at the top (`heap[0]`).
+* After processing all elements, the **smallest in the heap** is the **k-th largest** overall.
+
+---
+
+### 🛠️ **Step-by-Step Explanation**
+
+1. **Initialize a min-heap**.
+2. **Push the first `k` elements** into the heap.
+3. **For the rest of the elements** in the array:
+
+   * If the current number is **greater than the heap's top**, replace the top with the current number.
+4. After all elements are processed, the **heap's top (heap\[0])** is the answer.
+
+---
+
+### 🔍 **Example Walkthrough**
+
+Given:
+
+```python
+nums = [3, 2, 1, 5, 6, 4]
+k = 2
+```
+
+#### Step 1: First 2 elements go into the heap
+
+* Heap becomes: `[2, 3]`
+
+#### Step 2: Process the rest
+
+* 1 → smaller than 2 → skip
+* 5 → bigger than 2 → replace 2 → heap: `[3, 5]`
+* 6 → bigger than 3 → replace 3 → heap: `[5, 6]`
+* 4 → smaller than 5 → skip
+
+#### Final heap: `[5, 6]`
+
+➡️ **Top of heap (5)** is the **2nd largest**.
+
+---
+
+### 📈 **Time & Space Complexity**
+
+* **Time:** `O(n log k)`
+* **Space:** `O(k)` — only `k` elements in the heap.
+
