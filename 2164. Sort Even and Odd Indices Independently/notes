@@ -1,0 +1,66 @@
+
+
+### ✅ **Problem**
+
+Given an integer list `nums`, you need to:
+
+* **Sort elements at even indices** in **ascending** order
+* **Sort elements at odd indices** in **descending** order
+
+Then, return the final rearranged array.
+
+---
+
+### 💡 **Core Idea**
+
+1. Split the array into two:
+
+   * Elements at **even indices** (0, 2, 4...) → store in `even`
+   * Elements at **odd indices** (1, 3, 5...) → store in `odd`
+
+2. Sort:
+
+   * `even` → in **ascending** order
+   * `odd` → in **descending** order
+
+3. Merge them back:
+
+   * Traverse the original index range
+   * Use one value from `even` at even positions, one from `odd` at odd positions
+
+---
+
+### 🔍 **Example Walkthrough**
+
+Input:
+
+```python
+nums = [4, 1, 2, 3]
+```
+
+Step 1:
+
+* even = \[4, 2] (indices 0, 2)
+* odd = \[1, 3] (indices 1, 3)
+
+Step 2:
+
+* even → sorted ascending → \[2, 4]
+* odd → sorted descending → \[3, 1]
+
+Step 3:
+Rebuild:
+
+* index 0 → even\[0] = 2
+* index 1 → odd\[0] = 3
+* index 2 → even\[1] = 4
+* index 3 → odd\[1] = 1
+
+✅ Final Output: `[2, 3, 4, 1]`
+
+---
+
+### 📈 **Time & Space Complexity**
+
+* **Time:** O(n log n) — due to sorting even and odd lists
+* **Space:** O(n) — uses three lists: `even`, `odd`, and `final_arr`
