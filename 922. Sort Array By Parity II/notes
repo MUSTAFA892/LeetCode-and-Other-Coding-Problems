@@ -1,0 +1,70 @@
+
+### ✅ **Problem**
+
+Given an array `nums` where:
+
+* Half of the integers are **even**
+* Half are **odd**
+
+**Goal**: Rearrange the array so that:
+
+* Elements at **even indices** are even
+* Elements at **odd indices** are odd
+
+---
+
+### 💡 **Core Idea**
+
+Use two pointers:
+
+* `even_idx` → starts at 0 (goes over even indices)
+* `odd_idx` → starts at 1 (goes over odd indices)
+
+Move each pointer by 2 steps at a time.
+
+* If both elements are in their correct places, just increment pointers.
+* If:
+
+  * `nums[even_idx]` is **odd** AND
+  * `nums[odd_idx]` is **even**
+    → **Swap** them.
+
+---
+
+### 🛠️ **Step-by-Step Logic**
+
+1. Start both pointers (`even_idx = 0`, `odd_idx = 1`).
+2. While both pointers are within bounds:
+
+   * If `nums[even_idx]` is even → correct → move ahead.
+   * If `nums[odd_idx]` is odd → correct → move ahead.
+   * If both are wrong (odd at even index, even at odd index) → **swap** and move both.
+
+---
+
+### 🔍 **Example Walkthrough**
+
+Input:
+
+```python
+nums = [4, 1, 2, 3]
+```
+
+Initial:
+
+* `even_idx = 0` → `nums[0] = 4` → even ✅
+* `odd_idx = 1` → `nums[1] = 1` → odd ✅
+
+Move both: `even_idx = 2`, `odd_idx = 3`
+
+* `nums[2] = 2` → even ✅
+* `nums[3] = 3` → odd ✅
+
+✅ Already sorted → Output: `[4, 1, 2, 3]`
+
+---
+
+### 📈 **Time & Space Complexity**
+
+* **Time:** O(n) — one pass through the array.
+* **Space:** O(1) — in-place sorting, no extra memory used.
