@@ -1,0 +1,51 @@
+##Notes & Explanation of Your Code
+
+Here is a detailed explanation of your code with comments on how each part works.
+
+### 🧾 Your Code
+
+```python
+n = int(input("Enter the number of stars:"))
+count = 0
+
+skipped_stars = []
+
+def make_stars(n):
+    count = 0
+    for i in range(n):
+        print('*', end="")     # Print the first star of the row
+        count += 1
+        for j in range(n - 2):  # Loop for inner elements of the row
+            if count in skipped_stars:
+                print(' ', end="")  # Print space if in skipped row
+            else:
+                print('*', end="")  # Otherwise print a star
+        print('*')  # Print the last star and go to next line
+
+# Build the list of rows where spaces should appear (middle rows)
+for i in range(2, n + 1):
+    if i == n:
+        continue
+    else:
+        skipped_stars.append(i)
+
+make_stars(n)
+```
+
+---
+
+### 🔍 Line-by-Line Explanation
+
+| Line                         | Description                                                                                       |
+| ---------------------------- | ------------------------------------------------------------------------------------------------- |
+| `n = int(input(...))`        | Takes the number of stars (square size) from the user.                                            |
+| `skipped_stars = []`         | Initializes a list that will hold the row numbers where inner stars will be replaced with spaces. |
+| `for i in range(2, n + 1):`  | Loops from 2 to n-1 to mark middle rows.                                                          |
+| `skipped_stars.append(i)`    | Appends each middle row index to `skipped_stars`.                                                 |
+| `make_stars(n)`              | Calls the function to print the square.                                                           |
+| Inside `make_stars(n)`       |                                                                                                   |
+| `print('*', end="")`         | Prints the first star in the row.                                                                 |
+| `if count in skipped_stars:` | Checks if current row is a middle row.                                                            |
+| `print(' ', end="")`         | If it is, print spaces instead of stars in the middle.                                            |
+| `else: print('*', end="")`   | Otherwise, print stars (used for top and bottom rows).                                            |
+| `print('*')`                 | Ends each row with a star and moves to the next line.                                             |

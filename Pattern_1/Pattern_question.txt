@@ -1,0 +1,52 @@
+## 📌 1. Question (with example diagram)
+
+### 🧩 Problem Statement
+
+Write a Python program to print a **hollow square pattern** of stars (`*`).
+The number of stars (i.e., the size of the square) is taken as input from the user.
+
+---
+
+### 💡 Requirements:
+
+* The **first and last row** should be completely filled with stars.
+* The **middle rows** should have:
+
+  * A `*` at the beginning,
+  * Followed by **spaces**,
+  * And another `*` at the end.
+
+---
+
+### 🎯 Example
+
+**Input:**
+
+```
+Enter the number of stars: 20
+```
+
+**Output:**
+
+```
+********************
+*                  *
+*                  *
+*                  *
+*                  *
+*                  *
+*                  *
+*                  *
+*                  *
+*                  *
+*                  *
+*                  *
+*                  *
+*                  *
+*                  *
+*                  *
+*                  *
+*                  *
+*                  *
+********************
+```
