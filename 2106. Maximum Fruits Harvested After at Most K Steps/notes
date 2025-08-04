@@ -1,0 +1,193 @@
+# ✅ **Goal of the Problem**
+
+* You are at `startPos`.
+* You can take **at most `k` steps**, left or right.
+* On each position you visit, you collect all fruits there.
+* You are given a sorted list `fruits = [[pos1, amount1], [pos2, amount2], ...]`.
+
+### 🎯 Find the **maximum fruits** you can collect within the allowed steps `k`.
+
+---
+
+# ✅ **Your Code**
+
+```python
+class Solution:
+    def maxTotalFruits(self, fruits: List[List[int]], startPos: int, k: int) -> int:
+        n = len(fruits)
+        max_fruits = 0
+        steps = 0
+
+        left = 0
+        current_fruits = 0
+
+        for right  in range(n):
+            current_fruits += fruits[right][1]
+
+            while left <= right:
+                left_pos = fruits[left][0]
+                right_pos = fruits[right][0]
+
+                if startPos <= left_pos:
+                    steps = right_pos - startPos
+                elif startPos >= right_pos:
+                    steps = startPos - left_pos
+                else:
+                    steps = min(abs(startPos - left_pos), abs(startPos - right_pos)) + (right_pos - left_pos)
+
+                if steps <= k:
+                    break
+                else:
+                    current_fruits -= fruits[left][1]
+                    left += 1
+
+            max_fruits = max(max_fruits, current_fruits)
+
+        return max_fruits
+```
+
+---
+
+# 🧠 **Deep Explanation (with Comments)**
+
+### 🔁 Step-by-step logic:
+
+### ✅ Initial Setup:
+
+```python
+n = len(fruits)                   # number of fruit spots
+max_fruits = 0                    # maximum fruits collected so far
+steps = 0                         # steps needed to cover current window
+left = 0                          # start of the sliding window
+current_fruits = 0                # fruits in the current window
+```
+
+---
+
+### 🔁 Loop over each fruit spot using the `right` pointer:
+
+```python
+for right in range(n):
+    current_fruits += fruits[right][1]  # Add the fruit at this position to the window
+```
+
+Now, we have a window `[left ... right]` which contains some fruit spots.
+
+Next, we need to check if **this window can be covered within `k` steps** from `startPos`.
+
+---
+
+### 📏 Step calculation based on `startPos`:
+
+```python
+left_pos = fruits[left][0]
+right_pos = fruits[right][0]
+```
+
+Now, 3 scenarios are considered:
+
+#### 1️⃣ `startPos` is to the **left** of the window:
+
+```python
+if startPos <= left_pos:
+    steps = right_pos - startPos
+```
+
+You walk **straight to the right**, from `startPos → right_pos`.
+
+#### 2️⃣ `startPos` is to the **right** of the window:
+
+```python
+elif startPos >= right_pos:
+    steps = startPos - left_pos
+```
+
+You walk **straight to the left**, from `startPos → left_pos`.
+
+#### 3️⃣ `startPos` is **inside the window**:
+
+```python
+else:
+    steps = min(abs(startPos - left_pos), abs(startPos - right_pos)) + (right_pos - left_pos)
+```
+
+Here, the best strategy is:
+
+* Go to the closer end of the window first
+* Then walk to the other end
+* So total steps = min(start-to-left, start-to-right) + width of window
+
+---
+
+### ❌ If steps exceed `k`, shrink the window from the left:
+
+```python
+if steps <= k:
+    break
+else:
+    current_fruits -= fruits[left][1]
+    left += 1
+```
+
+---
+
+### ✅ Update the result:
+
+```python
+max_fruits = max(max_fruits, current_fruits)
+```
+
+---
+
+# 🧪 **Dry Run Example**
+
+Let’s use:
+
+```python
+fruits = [[0,9],[4,1],[5,7],[6,2],[7,4],[10,9]]
+startPos = 5
+k = 4
+```
+
+### Sliding window steps:
+
+| Iteration | `right` Index | Window `[left...right]` | Window Positions | Steps from `startPos=5` | Valid?               | Fruits Collected | `max_fruits` |
+| --------- | ------------- | ----------------------- | ---------------- | ----------------------- | -------------------- | ---------------- | ------------ |
+| 0         | 0             | \[0]                    | 0                | 5 → 0 = 5 steps         | ❌                    | 0                | 0            |
+| 1         | 1             | \[1]                    | 4                | 1 step                  | ✅                    | 1                | 1            |
+| 2         | 2             | \[1,2]                  | 4 → 5            | 5 inside: steps = 1     | ✅                    | 1+7 = 8          | 8            |
+| 3         | 3             | \[1,2,3]                | 4 → 6            | steps = 2               | ✅                    | 1+7+2 = 10       | 10           |
+| 4         | 4             | \[1,2,3,4]              | 4 → 7            | steps = 3               | ✅                    | 1+7+2+4 = 14     | ✅ **14**     |
+| 5         | 5             | \[1,2,3,4,5]            | 4 → 10           | steps = 5               | ❌                    | Shrink window    | 14 stays     |
+|           |               | \[2,3,4,5]              | 5 → 10           | steps = 5               | ❌                    | Shrink again     |              |
+|           |               | \[3,4,5]                | 6 → 10           | steps = 5               | ❌                    | Shrink again     |              |
+|           |               | \[4,5]                  | 7 → 10           | steps = 5 → ❌           | Shrink again         |                  |              |
+|           |               | \[5]                    | 10               | 5 → 10 = 5 → ❌          | Final window too far |                  |              |
+
+✅ Final `max_fruits = 14`
+
+---
+
+# 🧾 Summary for Notes
+
+### ✅ Sliding Window Strategy
+
+* Iterate with `right` pointer through `fruits`.
+* Maintain a window `[left...right]` where total steps from `startPos` to collect all are ≤ `k`.
+* Update the max fruits collected within valid windows.
+
+### ✅ Step Calculation Logic:
+
+```python
+if startPos <= left_pos:
+    steps = right_pos - startPos
+elif startPos >= right_pos:
+    steps = startPos - left_pos
+else:
+    steps = min(start-left, start-right) + (right-left)
+```
+
+### ✅ Time Complexity:
+
+* Every fruit is visited once by both `right` and `left` pointers.
+* **Total time: O(n)**, where n = number of fruit positions.
