@@ -1,0 +1,62 @@
+## **Notes with Explanation**
+
+### 🔸 `Node` Class
+
+This represents each element (node) in the linked list. It contains:
+
+* `data`: The value stored in the node.
+* `next`: A pointer to the next node (initially `None`).
+
+```python
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+```
+
+---
+
+### 🔸 `Linked` Class
+
+This manages the linked list operations.
+
+#### 🔹 `__init__()`
+
+Initializes the list:
+
+* `self.head = None`: The list is initially empty.
+* `self.length = 1`: (⚠️ Starts at 1 by default, which may be unintentional if the list is truly empty at first.)
+
+#### 🔹 `insert(data)`
+
+* Inserts new elements **at the beginning** of the list (head insertion).
+* Creates a new node and makes it point to the current head.
+* Then updates the head to this new node.
+
+```python
+def insert(self, data):
+    new_node = Node(data)
+    new_node.next = self.head
+    self.head = new_node
+```
+
+#### 🔹 `traverse()`
+
+* Walks through the list and prints each node’s data followed by `'->'`.
+* Increments `self.length` during traversal (⚠️ This will **overcount length** if `traverse()` is called more than once.)
+
+```python
+def traverse(self):
+    current = self.head
+    while current:
+        print(current.data,'->',end=" ")
+        current = current.next
+        self.length += 1  # ⚠️ Increases length incorrectly
+    print('None')
+```
+
+> 🔧 **Fix Tip:** You should avoid increasing `self.length` here. Instead, increase it only in `insert()`.
+
+#### 🔹 `get_length()`
+
+* Returns the current length of the linked list.
