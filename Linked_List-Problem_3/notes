@@ -1,0 +1,125 @@
+## 📘 NOTES on Linked List with Even Element Filtering
+
+---
+
+### 🔹 1. `Node` Class
+
+This class defines a **single node** in the linked list.
+
+```python
+class Node:
+    def __init__(self, data):
+        self.data = data        # stores the actual value
+        self.next = None        # points to the next node (initially None)
+```
+
+When you do:
+
+```python
+n = Node(5)
+```
+
+It creates a node like:
+
+```
+[5 | next → None]
+```
+
+---
+
+### 🔹 2. `Linked` Class
+
+This class manages the full **linked list** and its operations.
+
+```python
+class Linked:
+    def __init__(self):
+        self.head = None      # points to the first node in the list
+        self.length = 1       # used to track number of elements
+```
+
+---
+
+### 🔹 3. `insert(data)` Method
+
+Adds a new node at the **beginning** of the list (head insertion).
+
+```python
+def insert(self, data):
+    new_node = Node(data)
+    new_node.next = self.head   # point new node to old head
+    self.head = new_node        # update head to new node
+```
+
+➡️ Example inserts:
+
+```python
+ll.insert(4) → ll.insert(2) → ll.insert(4)
+```
+
+Linked list becomes:
+
+```
+[4] → [2] → [4] → None
+```
+
+---
+
+### 🔹 4. `traverse()` Method
+
+Prints all nodes in the list, one by one.
+
+```python
+def traverse(self):
+    current = self.head
+    while current:
+        print(current.data, '->', end=" ")
+        current = current.next
+```
+
+Output:
+
+```
+4 -> 2 -> 4 -> None
+```
+
+---
+
+### 🔹 5. `even_elements()` Method
+
+Prints only nodes with **even** values.
+
+```python
+def even_elements(self):
+    current = self.head
+    while current:
+        if current.data % 2 == 0:
+            print(current.data, '->', end=" ")
+        current = current.next
+```
+
+Output:
+
+```
+The even elements in the LL are: 
+4 -> 2 -> 4 -> None
+```
+
+---
+
+## 🔄 Behind the Scenes (How it Works)
+
+* Each node stores:
+
+  * The actual data (`data`)
+  * The address of the next node (`next`)
+* `head` always points to the **first node**
+* You move from one node to another using `current = current.next`
+
+---
+
+### ✅ Final Structure (After 3 Inserts)
+
+```text
+Head → [4] → [2] → [4] → None
+```
