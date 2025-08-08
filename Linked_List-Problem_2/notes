@@ -1,0 +1,105 @@
+## Explanation Notes
+
+### 🔸 `Node` Class
+
+Same as before, represents each element in the list:
+
+```python
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+```
+
+---
+
+### 🔸 `Linked` Class
+
+#### 🔹 Attributes:
+
+* `head`: Start of the linked list
+* `length`: Number of nodes (⚠️ Initialized to `1`, which can cause incorrect results)
+* `middle_index`: Stores index of middle
+* `middle_element`: Stores value of the middle node
+
+---
+
+### 🔹 `insert(data)`
+
+* Inserts node at the beginning (head-first insertion)
+* This method **does not update `length`**, which is a bug
+* Should add `self.length += 1` here
+
+---
+
+### 🔹 `traverse()`
+
+* Prints the linked list
+* Increments `length` during traversal (⚠️ Bug: length should not be updated here)
+* Every time `traverse()` is called, length increases even without inserting new nodes
+
+**Fix Suggestion:**
+
+* Move `self.length += 1` into `insert()` only
+* Set `length = 0` during initialization
+
+---
+
+### 🔹 `get_length()`
+
+* Returns the length
+
+---
+
+### 🔹 `middle_value()`
+
+Logic:
+
+1. Calculates `middle_index = length // 2`
+2. Walks through the list using a counter
+3. When the counter equals `middle_index + 1`, it saves the current node's data as the middle
+4. Prints the middle element
+
+✅ This logic is correct for 1-based tracking (`track_length = 1`)
+
+---
+
+### ⚠️ Bugs to Fix (in your code):
+
+| Problem                            | Why it's an issue                            | Fix                                                |
+| ---------------------------------- | -------------------------------------------- | -------------------------------------------------- |
+| `length = 1`                       | Even before inserting any nodes, length is 1 | Set `self.length = 0` in `__init__`                |
+| `self.length += 1` in `traverse()` | This causes incorrect length when printing   | Remove it from `traverse()`, move it to `insert()` |
+
+---
+
+## ✅ Final Correct Behavior (After Fixes)
+
+### If inputs are:
+
+```python
+insert(1)
+insert(2)
+insert(5)
+insert(4)
+insert(7)
+insert(9)
+```
+
+Then printed list is:
+
+```
+9 -> 7 -> 4 -> 5 -> 2 -> 1 -> None
+```
+
+Length:
+
+```
+6
+```
+
+Middle element:
+
+```
+5  (because 6//2 = 3, so the 4th node from head = 5)
+```
