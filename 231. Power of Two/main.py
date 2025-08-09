@@ -5,3 +5,5 @@ class Solution:
             if ans == n:
                 return True
         return False
+
+# second approach (Optimized approach)
