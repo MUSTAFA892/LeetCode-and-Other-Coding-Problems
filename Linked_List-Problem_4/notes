@@ -1,0 +1,167 @@
+## **How Your Code Works**
+
+### **Class Structure**
+
+* `Node` → Represents a single node in the linked list (has `data` and `next` pointer).
+* `LL` → Manages the linked list (head pointer + methods).
+
+---
+
+### **Method Breakdown**
+
+#### 1. **insert(self, data)**
+
+* Creates a new node with the given `data`.
+* Inserts it at the **start** of the list:
+
+  * `temp.next = self.head` links the new node to the old head.
+  * `self.head = temp` updates the head to the new node.
+
+Example after:
+
+```python
+ll.insert(5)
+ll.insert(4)
+```
+
+List becomes:
+
+```
+self.head → [4] → [5] → None
+```
+
+---
+
+#### 2. **traverse(self)**
+
+* Starts at `self.head`
+* Prints each node’s `data` and moves to the `.next` node until `None`.
+
+---
+
+#### 3. **starting\_deletion(self)**
+
+* Simply does:
+
+```python
+self.head = self.head.next
+```
+
+* Deletes the first node by making head point to the second node.
+
+---
+
+#### 4. **deletion\_by\_val(self, val)**
+
+Purpose: Delete the **first occurrence** of a node with value `val`.
+
+Logic flow:
+
+1. Start at head:
+
+```python
+current = self.head
+```
+
+2. If head contains the value:
+
+```python
+if current.data == val:
+    self.head = self.head.next
+```
+
+✅ Works fine for deleting the head.
+
+3. Else, traverse the list:
+
+```python
+while current:
+    if current.data == val:
+        prev.next = current.next
+        print(f"The value {val} is deleted from the node")
+        break
+    prev = current
+    current = current.next
+```
+
+Here:
+
+* `prev` is the node before `current`
+* `prev.next = current.next` “skips” over the node being deleted
+
+---
+
+## **Problem in Your Current Code**
+
+* **`prev` is never initialized** before the `while` loop, so the first time you reach `prev.next` you’ll get a `NameError`.
+* You also **don’t move `current`** if the value is in the head (after updating head), which can be fine if you just break.
+* The loop runs even if `val` is in the head — you already handled head deletion, so that loop is for non-head only.
+
+---
+
+## **Corrected Version**
+
+```python
+def deletion_by_val(self, val):
+    current = self.head
+    prev = None
+
+    # If head node holds the value
+    if current and current.data == val:
+        self.head = current.next
+        print(f"The value {val} (head node) is deleted")
+        return
+
+    # Traverse for non-head deletion
+    while current:
+        if current.data == val:
+            prev.next = current.next
+            print(f"The value {val} is deleted from the node")
+            return
+        prev = current
+        current = current.next
+```
+
+---
+
+## **Execution Example**
+
+List after inserts:
+
+```
+self.head → [5] → [4] → [3] → [2] → [1] → None
+```
+
+### Deleting value `4`:
+
+* `current = [5]`, `prev = None`
+* `5 != 4` → move:
+
+```
+prev = [5]
+current = [4]
+```
+
+* Match found → `prev.next = [3]`
+* New list:
+
+```
+self.head → [5] → [3] → [2] → [1] → None
+```
+
+* `[4]` is now disconnected.
+
+---
+
+## **Key Notes**
+
+1. Always initialize `prev = None` before traversal.
+2. Only update `self.head` when deleting the **head node**.
+3. For non-head deletion, always do:
+
+```python
+prev.next = current.next
+```
+
+4. Use `break` or `return` after deletion to stop further traversal.
+5. If `current` becomes `None` and no match is found, print a message like `"Value not found"`.
