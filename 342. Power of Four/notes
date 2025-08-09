@@ -1,0 +1,75 @@
+### **1. Problem Statement (Short)**
+
+Given an integer `n`, return **True** if `n` is a **power of 4**; otherwise, return **False**.
+
+A number is a power of four if it can be written as:
+
+$$
+4^x \quad \text{where} \quad x \geq 0
+$$
+
+Examples: `1, 4, 16, 64, ...`
+
+---
+
+### **2. Approach**
+
+* First handle **small edge cases** (`n == 1` → True, `n <= 3` → False).
+* If `n` is bigger, keep dividing by **4** until:
+
+  * It becomes `1` → then it is a power of 4.
+  * Or it’s not divisible by 4 → then it’s not a power of 4.
+
+---
+
+### **3. Code Walk-through**
+
+```python
+class Solution:
+    def isPowerOfFour(self, n: int) -> bool:
+        # Case 1: Directly check if n is 1 (4^0)
+        if n == 1:
+            return True
+        
+        # Case 2: Numbers <= 3 (except 1) cannot be powers of 4
+        if n <= 3:
+            return False
+        
+        # Case 3: Keep dividing by 4 while possible
+        while n % 2 == 0:  # n is even
+            n /= 4          # divide by 4 each time
+        
+        # If n is reduced exactly to 1, it is a power of 4
+        return n == 1
+```
+
+---
+
+### **4. Example Runs**
+
+**Example 1:**
+
+```
+Input: n = 16
+Step 1: n % 2 == 0 → n = 16 / 4 → n = 4
+Step 2: n % 2 == 0 → n = 4 / 4 → n = 1
+Step 3: n == 1 → return True
+Output: True
+```
+
+**Example 2:**
+
+```
+Input: n = 8
+Step 1: n % 2 == 0 → n = 8 / 4 → n = 2
+Step 2: 2 % 2 == 0 → n = 2 / 4 → n = 0.5 (not 1)
+Output: False
+```
+
+---
+
+### **5. Complexity Analysis**
+
+* **Time Complexity:** $O(\log_4 n)$ → Each step divides `n` by 4.
+* **Space Complexity:** $O(1)$ → Only a constant amount of extra memory used.
+
