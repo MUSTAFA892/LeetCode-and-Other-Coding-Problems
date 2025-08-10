@@ -1,0 +1,17 @@
+## **Practice Question Based on This Code**
+
+**Question:**
+Given two numbers represented as linked lists in **reverse order** (least significant digit first), write a program to return their sum as a new linked list. Each node contains a single digit, and you must handle carry-over.
+
+**Example:**
+
+```
+Input:
+l1 = 2 -> 4 -> 3
+l2 = 5 -> 6 -> 4
+
+Output:
+7 -> 0 -> 8
+Explanation:
+342 + 465 = 807
+```

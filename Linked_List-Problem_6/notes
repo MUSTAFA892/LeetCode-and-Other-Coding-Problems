@@ -1,0 +1,100 @@
+## **Notes on the Code**
+
+### **1. Class `Node`**
+
+Represents a single node in a linked list.
+
+* **`data`** → stores the value.
+* **`next`** → points to the next node (default `None`).
+
+### **2. Class `LL`**
+
+This class holds:
+
+* **`head_1`** → head of the first linked list.
+* **`head_2`** → head of the second linked list.
+* **`addition`** → head of the resulting sum linked list.
+
+---
+
+### **3. `insert_LL1` & `insert_LL2`**
+
+* Inserts a new node at the **head** of the list.
+* This means the order of insertion is **reversed**.
+  Example:
+
+  ```python
+  insert_LL1(3)
+  insert_LL1(4)
+  insert_LL1(2)
+  ```
+
+  Will result in: `2 -> 4 -> 3` (not `3 -> 4 -> 2`).
+
+---
+
+### **4. `traverse_LL1` & `traverse_LL2`**
+
+* Prints the linked list nodes in order from head to tail.
+* Ends with `"None"` to indicate the end.
+
+---
+
+### **5. `addition_carry`**
+
+* Adds the two linked lists **digit-by-digit**, starting from the head.
+* Maintains a `carry` for sums ≥ 10.
+* Uses **tail insertion** to preserve the correct order in the result list.
+* Steps:
+
+  1. Take `val1` and `val2` from both lists.
+  2. Add them with the carry:
+     `sum_ = val1 + val2 + carry`
+  3. Update carry:
+     `carry = sum_ // 10`
+  4. Extract last digit:
+     `last_val = sum_ % 10`
+  5. Create a new node for the result.
+  6. Append it to the end of the `addition` list.
+
+---
+
+### **6. `addition_traverse`**
+
+* Prints the result linked list from head to tail.
+
+---
+
+## **Dry Run Example**
+
+**Input:**
+
+```python
+l1 = [2, 4, 3]  # Represents 342
+l2 = [5, 6, 4]  # Represents 465
+```
+
+**Steps:**
+
+1. First digit sum:
+   `2 + 5 = 7` → carry = 0 → store `7`
+2. Second digit sum:
+   `4 + 6 = 10` → carry = 1 → store `0`
+3. Third digit sum:
+   `3 + 4 + carry(1) = 8` → carry = 0 → store `8`
+
+**Result list:**
+`7 -> 0 -> 8 -> None`
+
+---
+
+## **Expected Output**
+
+```
+The first Linked List:-
+2 -> 4 -> 3 -> None
+The second Linked List:-
+5 -> 6 -> 4 -> None
+The addtion of the LL with carry logic Implemented: 
+7 -> 0 -> 8 -> None
+```
