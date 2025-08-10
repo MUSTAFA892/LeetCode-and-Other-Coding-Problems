@@ -1,0 +1,139 @@
+## **Purpose of the Code**
+
+The goal is to check whether **any permutation** of the digits of a given number `n` can form a power of 2.
+
+For example:
+
+* `n = 128` → permutations include `"128"`, `"281"`, `"812"`, etc.
+* `128` itself is a power of 2 → return `True`.
+
+---
+
+## **Code Notes**
+
+### 1. Importing permutations
+
+```python
+from itertools import permutations as p
+```
+
+* This lets you easily get **all possible rearrangements** of the digits of `n`.
+
+---
+
+### 2. Generating permutations
+
+```python
+for i in p(str(n)):
+    permut.append(''.join(i))
+```
+
+* Convert `n` to a string so `p()` works with each digit separately.
+* `p(str(n))` returns tuples like `('1','2','8')`.
+* `''.join(i)` makes them into a full string like `"128"`.
+* Store them all in the `permut` list.
+
+---
+
+### 3. Checking each permutation
+
+```python
+for i in permut:
+    if i[0] == '0':
+        start_zero = True
+```
+
+* If the first digit is `0`, skip it later (to avoid numbers like `"012"` being considered valid).
+
+---
+
+### 4. Testing if the permutation is a power of 2
+
+```python
+temp_var = int(i)
+while temp_var % 2 == 0:
+    temp_var /= 2
+```
+
+* Keep dividing by 2 until it’s no longer divisible by 2.
+* If it **ends up as 1**, then it was a power of 2.
+
+---
+
+### 5. Final check
+
+```python
+if temp_var == 1 and not start_zero:
+    return True
+```
+
+* If it’s a power of 2 **and** doesn’t start with zero → return `True`.
+
+---
+
+### 6. Resetting flag
+
+```python
+else:
+    start_zero = False
+```
+
+* Reset `start_zero` before the next loop iteration.
+
+---
+
+## **Step-by-Step Example**
+
+### Input:
+
+```python
+n = 128
+```
+
+---
+
+### Step 1 – Permutations:
+
+```python
+['128', '182', '218', '281', '812', '821']
+```
+
+---
+
+### Step 2 – Check each permutation:
+
+#### **1st permutation:** `"128"`
+
+* Does not start with zero.
+* Convert to int → `128`
+* Divide by 2:
+
+```
+128 → 64 → 32 → 16 → 8 → 4 → 2 → 1
+```
+
+* Reaches `1` → valid power of 2 → return `True`.
+
+---
+
+If no permutation worked, the loop would finish and `return False`.
+
+---
+
+## **Potential Improvements**
+
+1. **Avoid duplicate permutations** — e.g. numbers like `112` will repeat permutations unnecessarily.
+2. **Avoid floating-point division**:
+
+```python
+temp_var //= 2
+```
+
+instead of
+
+```python
+temp_var /= 2
+```
+
+3. Precompute all powers of 2 within a reasonable range and just compare sorted digit strings (faster).
+
