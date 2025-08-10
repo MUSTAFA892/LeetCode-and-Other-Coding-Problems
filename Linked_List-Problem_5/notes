@@ -1,0 +1,153 @@
+## **Step-by-Step Explanation**
+
+### **1. Node Class**
+
+```python
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+```
+
+* Represents **one node** in a linked list.
+* Stores:
+
+  * `data` → the value
+  * `next` → pointer to the next node
+
+---
+
+### **2. LL Class**
+
+```python
+class LL:
+    def __init__(self):
+        self.head_1 = None
+        self.head_2 = None
+        self.addition = None
+```
+
+* `head_1` → head of the **first linked list**
+* `head_2` → head of the **second linked list**
+* `addition` → head of a **third linked list** that stores the sum of the first two lists
+
+---
+
+### **3. Insert Methods**
+
+```python
+def insert_LL1(self, data):
+    current = Node(data)
+    current.next = self.head_1
+    self.head_1 = current
+```
+
+* Inserts a new node at the **start** of LL1.
+* Same logic applies for `insert_LL2` for LL2.
+
+> **Note:** Since insertion happens at the head, the linked list order is **reversed** from insertion order.
+
+---
+
+### **4. Traversal Methods**
+
+```python
+def traverse_LL1(self):
+    current = self.head_1
+    while current:
+        print(current.data, '->', end=" ")
+        current = current.next
+    print('None')
+```
+
+* Prints each node’s data in sequence until reaching the end (`None`).
+* Separate methods for LL1 and LL2.
+
+---
+
+### **5. Addition Without Creating a New LL**
+
+```python
+def addition_normal(self):
+    ll_1 = self.head_1
+    ll_2 = self.head_2
+    while ll_1 and ll_2:
+        print(ll_1.data + ll_2.data, '->', end=" ")
+        ll_1 = ll_1.next
+        ll_2 = ll_2.next
+    print('None')
+```
+
+* Loops through both LL1 and LL2 **at the same time**.
+* Prints the sum of corresponding nodes directly.
+* Stops when one list ends (doesn’t handle different lengths).
+
+---
+
+### **6. Addition While Creating a New LL**
+
+```python
+def addition_in_LL(self):
+    ll_1 = self.head_1
+    ll_2 = self.head_2
+    while ll_1 and ll_2:
+        val_1 = ll_1.data
+        val_2 = ll_2.data
+        addition_current = Node(val_1 + val_2)
+        addition_current.next = self.addition
+        self.addition = addition_current
+        ll_1 = ll_1.next
+        ll_2 = ll_2.next
+    self.addition_current_traverse()
+```
+
+* Loops through both lists.
+* Creates a **new node** with the sum of the two data values.
+* Inserts it at the head of the `addition` linked list (so the order is reversed).
+* Calls `addition_current_traverse()` to print it.
+
+---
+
+### **7. Traversing the Addition LL**
+
+```python
+def addition_current_traverse(self):
+    current = self.addition
+    while current:
+        print(current.data, '->', end=" ")
+        current = current.next
+    print('None')
+```
+
+* Prints the **sum list** created in `addition_in_LL`.
+
+---
+
+## **Example Run**
+
+```python
+ll.insert_LL1(1)
+ll.insert_LL1(2)
+ll.insert_LL1(3)   # LL1 = 3 -> 2 -> 1
+ll.insert_LL2(4)
+ll.insert_LL2(5)
+ll.insert_LL2(6)   # LL2 = 6 -> 5 -> 4
+```
+
+### `addition_normal()`
+
+```
+LL1: 3 -> 2 -> 1
+LL2: 6 -> 5 -> 4
+Sum: 9 -> 7 -> 5 -> None
+```
+
+### `addition_in_LL()`
+
+* Creates `5 -> 7 -> 9` in reverse order, so output is:
+
+```
+The addition of the Linked List in new LL:
+5 -> 7 -> 9 -> None
+```
+
