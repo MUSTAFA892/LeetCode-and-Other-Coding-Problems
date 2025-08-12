@@ -1,0 +1,160 @@
+
+# 🧾 Notes: Splitting a Linked List into Odd and Even Linked Lists
+
+---
+
+## 🧠 Code Explanation
+
+### 1. `Node` class
+
+Represents a single node in the linked list.
+
+```python
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+```
+
+Each node holds:
+
+* `data`: the value (int)
+* `next`: pointer to the next node
+
+---
+
+### 2. `LL` class
+
+This is the main linked list class with multiple functionalities:
+
+```python
+class LL:
+    def __init__(self):
+        self.head = None  # Head of the original list
+        self.odd = None   # Head of the odd elements list
+        self.even = None  # Head of the even elements list
+```
+
+---
+
+### 3. `insert(data)`
+
+Inserts a new node at the **head** of the list.
+
+```python
+def insert(self, data):
+    current = Node(data)
+    current.next = self.head
+    self.head = current
+```
+
+> Insertion is done in reverse order – each new node becomes the new head.
+
+---
+
+### 4. `traverse()`
+
+Traverses the original list and prints it.
+
+```python
+def traverse(self):
+    current = self.head
+    print("Linked List:-")
+    while current:
+        print(current.data, '->', end=" ")
+        current = current.next
+    print('None')
+```
+
+---
+
+### 5. `odd_even()`
+
+Splits the original list into two:
+
+* one with odd numbers
+* one with even numbers
+
+```python
+def odd_even(self):
+    current = self.head
+    while current:
+        if current.data % 2 == 0:
+            # Add to even list
+            even_current = Node(current.data)
+            even_current.next = self.even
+            self.even = even_current
+        else:
+            # Add to odd list
+            odd_current = Node(current.data)
+            odd_current.next = self.odd
+            self.odd = odd_current
+        current = current.next
+
+    self.traverse_odd()
+    self.traverse_even()
+```
+
+> Nodes are inserted at the beginning of the new lists, so order is reversed.
+
+---
+
+### 6. `traverse_odd()` and `traverse_even()`
+
+These print the odd and even linked lists respectively.
+
+---
+
+## 🔍 Example Walkthrough
+
+```python
+ll = LL()
+ll.insert(1)
+ll.insert(2)
+ll.insert(3)
+ll.traverse()
+ll.odd_even()
+```
+
+### Step-by-step:
+
+* Insert 3: `3 -> None`
+* Insert 2: `2 -> 3 -> None`
+* Insert 1: `1 -> 2 -> 3 -> None`
+
+**Original List:**
+
+```
+1 -> 2 -> 3 -> None
+```
+
+### Splitting into Odd and Even:
+
+* 1 is odd → Odd list: `1 -> None`
+* 2 is even → Even list: `2 -> None`
+* 3 is odd → Odd list: `3 -> 1 -> None`
+
+**Odd List:**
+
+```
+3 -> 1 -> None
+```
+
+**Even List:**
+
+```
+2 -> None
+```
+
+---
+
+## 📌 Final Output
+
+```text
+Linked List:-
+1 -> 2 -> 3 -> None
+The odd element Linked List:- 
+3 -> 1 -> None
+The even element Linked List:- 
+2 -> None
+```

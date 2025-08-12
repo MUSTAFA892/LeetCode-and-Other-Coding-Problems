@@ -1,0 +1,11 @@
+**Question:**
+Write a program to implement a singly linked list, where you:
+
+1. Insert elements into the list.
+2. Traverse and print the original list.
+3. Separate the list into two new linked lists:
+
+   * One containing all **odd** elements.
+   * One containing all **even** elements.
+4. Traverse and print the odd and even linked lists separately.
+
