@@ -1,0 +1,71 @@
+### ✅ A **good integer** is defined as:
+
+* A substring of length 3.
+* All characters are the same digit. (e.g., `"111"`, `"999"`)
+
+You need to find the largest such integer and return it as a **string**. If there are no good integers, return an empty string.
+
+
+### 🧠 Step-by-step Logic:
+
+1. **Initialize**:
+
+   * `count = 1`: To keep track of consecutive identical digits.
+   * `unique_nums = []`: To store digits that form a "good integer".
+
+2. **Loop Through the String**:
+
+   * Start from index `1` to compare each digit with the one before it.
+   * If digits are the same, increment `count`.
+   * If they are different, reset `count` to 1.
+
+3. **Check for Good Integers**:
+
+   * If `count == 3`, it means you've found 3 consecutive same digits.
+   * Add the digit to `unique_nums`.
+   * Reset `count = 1` to allow checking for overlapping or new sequences.
+
+4. **Return the Result**:
+
+   * If any good integers were found, return the **largest** one repeated 3 times.
+   * If not, return an empty string.
+
+---
+
+## 💡 Example
+
+```python
+Input: "6777133339"
+```
+
+### Walkthrough:
+
+| i | num\[i-1] | num\[i] | count | Action                 |
+| - | --------- | ------- | ----- | ---------------------- |
+| 1 | '6'       | '7'     | 1     | Reset count            |
+| 2 | '7'       | '7'     | 2     | Match                  |
+| 3 | '7'       | '7'     | 3     | Found good integer '7' |
+| 4 | '7'       | '1'     | Reset |                        |
+| 5 | '1'       | '3'     | Reset |                        |
+| 6 | '3'       | '3'     | 2     | Match                  |
+| 7 | '3'       | '3'     | 3     | Found good integer '3' |
+| 8 | '3'       | '9'     | Reset |                        |
+
+### Final `unique_nums = ['7', '3']`
+
+* `max('7', '3') = '7'`
+* Return `'7' * 3 = '777'`
+
+### ✅ Output:
+
+```python
+"777"
+```
+
+---
+
+## ✅ Pros of This Approach
+
+* Efficient (O(n) time complexity).
+* Only uses simple data structures.
+* Handles overlapping cases correctly (due to reset after `count == 3`).
