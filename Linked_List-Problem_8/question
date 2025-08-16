@@ -1,0 +1,8 @@
+### 📘 **Question (Problem Statement)**
+
+> **Given a singly linked list, write a program to:**
+>
+> 1. Insert elements at the beginning of the list.
+> 2. Traverse and print the original linked list.
+> 3. Create a new reversed copy of the original linked list (without modifying the original one).
+> 4. Traverse and print the reversed linked list.

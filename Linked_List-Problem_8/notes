@@ -1,0 +1,132 @@
+### 🧠 **Explanation of the Code**
+
+#### ✅ `Node` Class
+
+This represents a single node in the linked list.
+
+```python
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+```
+
+Each node contains:
+
+* `data`: The value stored in the node.
+* `next`: A pointer to the next node (or `None` if it's the last node).
+
+---
+
+#### ✅ `LL` Class (Linked List)
+
+This class manages the linked list.
+
+```python
+class LL:
+    def __init__(self):
+        self.head = None       # Head of the original list
+        self.reverse = None    # Head of the reversed copy
+```
+
+---
+
+##### 🔹 `insert(data)`
+
+Inserts a new node **at the beginning** of the original list.
+
+```python
+def insert(self, data):
+    current = Node(data)
+    current.next = self.head
+    self.head = current
+```
+
+---
+
+##### 🔹 `traverse()`
+
+Prints the original linked list.
+
+```python
+def traverse(self):
+    current = self.head
+    while current:
+        print(current.data, '->', end=" ")
+        current = current.next
+```
+
+---
+
+##### 🔹 `reverse_LL()`
+
+This creates a **reversed copy** of the original list **without modifying the original**.
+
+```python
+def reverse_LL(self):
+    current = self.head
+    prev = None
+    while current:
+        NextNode = current.next
+
+        current.next = prev      # Reverses the original (temporarily)
+        prev = current
+        current = NextNode
+
+        reverseData = Node(prev.data)
+        reverseData.next = self.reverse
+        self.reverse = reverseData
+```
+
+* It uses the standard reversal technique with `prev` and `current`.
+* But instead of changing the actual `head`, it uses the reversed traversal to create **new nodes** for a **reversed copy**.
+
+---
+
+##### 🔹 `traverse_LL()`
+
+Prints the reversed copy of the list.
+
+```python
+def traverse_LL(self):
+    current = self.reverse
+    while current:
+        print(current.data, '->', end =" ")
+        current = current.next
+```
+
+---
+
+### ✅ Example Execution
+
+Let’s look at this part of the code:
+
+```python
+ll = LL()
+ll.insert(1)
+ll.insert(2)
+ll.insert(3)
+ll.traverse()
+ll.reverse_LL()
+ll.traverse_LL()
+```
+
+#### Step-by-step:
+
+1. `ll.insert(1)` → List: `1`
+2. `ll.insert(2)` → List: `2 -> 1`
+3. `ll.insert(3)` → List: `3 -> 2 -> 1`
+
+**Original Linked List:**
+
+```
+3 -> 2 -> 1 -> None
+```
+
+**Reversed Copy (after `reverse_LL()`):**
+
+```
+1 -> 2 -> 3 -> None
+```
+
+> ❗ Note: The **original list is not modified**, only a reversed **copy** is created.
