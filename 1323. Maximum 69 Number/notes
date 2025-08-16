@@ -1,0 +1,115 @@
+### Code Explanation:
+
+1. **Input:** The method receives a number, `num`, as an argument. It is an integer.
+
+2. **Convert to string:** The `num` is converted to a string (`str(num)`) so we can easily manipulate individual digits.
+
+3. **Iterate through digits:** The code loops over each digit (`i`) of the string representation of `num`.
+
+4. **Flipping logic:**
+
+   * If the digit is a `6` and `count <= 0` (meaning no `6` has been flipped yet), it is changed to `9`. The `count` is then incremented to prevent flipping any further `6` to `9`.
+   * Otherwise, the digit is added to the result string `nums` unchanged.
+
+5. **Return Result:** After the loop finishes, the modified string is converted back to an integer and returned.
+
+### Edge Cases:
+
+* If there are no `6`s in the number, the original number is returned unchanged.
+* If the number contains multiple `6`s, only the first one is flipped to `9` to maximize the number.
+
+### Working Examples:
+
+#### Example 1:
+
+```python
+num = 9669
+result = Solution().maximum69Number(num)
+```
+
+**Steps:**
+
+* The number `9669` is converted to a string `'9669'`.
+* Loop through the string:
+
+  * The first digit is `9`, so it is added as is.
+  * The second digit is `6`, and `count` is `0`, so it is flipped to `9` and `count` is incremented to 1.
+  * The third and fourth digits are `6` and `9`, so they are added as is (since we already flipped the first `6`).
+* The result is `'9969'`, which is converted back to `9969`.
+
+**Output:**
+
+```python
+9969
+```
+
+#### Example 2:
+
+```python
+num = 6666
+result = Solution().maximum69Number(num)
+```
+
+**Steps:**
+
+* The number `6666` is converted to a string `'6666'`.
+* Loop through the string:
+
+  * The first digit is `6`, so it is flipped to `9` and `count` is incremented to 1.
+  * The next three digits are `6`s, but they are not flipped because `count` is now `1`.
+* The result is `'9666'`, which is converted back to `9666`.
+
+**Output:**
+
+```python
+9666
+```
+
+#### Example 3:
+
+```python
+num = 9999
+result = Solution().maximum69Number(num)
+```
+
+**Steps:**
+
+* The number `9999` is already at its maximum possible value (no `6`s).
+* The string remains `'9999'` and is converted back to `9999`.
+
+**Output:**
+
+```python
+9999
+```
+
+#### Example 4:
+
+```python
+num = 6
+result = Solution().maximum69Number(num)
+```
+
+**Steps:**
+
+* The number `6` is converted to the string `'6'`.
+* The first digit is `6`, so it is flipped to `9` and `count` is incremented to 1.
+* The result is `'9'`, which is converted back to `9`.
+
+**Output:**
+
+```python
+9
+```
+
+### Time Complexity:
+
+* The time complexity is **O(n)**, where `n` is the number of digits in the input number `num`, because the function processes each digit once.
+
+### Space Complexity:
+
+* The space complexity is **O(n)** due to the storage of the string `nums`, which contains the modified digits.
+
+### Conclusion:
+
+This method works by flipping the first occurrence of `6` to `9`, maximizing the number. It is efficient and handles all edge cases correctly, such as when no `6`s are present or when the number consists entirely of `6`s.
