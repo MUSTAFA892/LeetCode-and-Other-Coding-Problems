@@ -1,0 +1,9 @@
+
+## 💡 **Problem Statement**
+
+> **Given a singly linked list**, implement the following functionalities:
+>
+> 1. Insert elements at the beginning of the list.
+> 2. Traverse and print the original linked list.
+> 3. Create a reversed copy of the original linked list (without modifying the original).
+> 4. Check if the linked list is a **palindrome** (i.e., reads the same forwards and backwards).

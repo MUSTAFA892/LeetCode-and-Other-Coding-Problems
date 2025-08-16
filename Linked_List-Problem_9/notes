@@ -1,0 +1,164 @@
+## 🔎 **Understanding the Code**
+
+### ✅ Class: `Node`
+
+Defines a node of the linked list with `data` and a `next` pointer.
+
+```python
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+```
+
+---
+
+### ✅ Class: `LL` (Linked List)
+
+#### 🔹 `insert(data)`
+
+Inserts a new node at the **beginning** of the original list.
+
+#### 🔹 `traverse()`
+
+Prints the current state of the original linked list.
+
+#### 🔹 `reverse_LL()`
+
+Creates a reversed copy of the original linked list by:
+
+* Reversing the original list **temporarily** in-place.
+* Creating a **new node** for each visited item and adding it to the `reverse` list.
+* This avoids changing the original list structure.
+
+#### 🔹 `palindrome()`
+
+Compares the original list and the reversed copy node by node:
+
+* If all corresponding node values are the same, it is a **palindrome**.
+* Otherwise, it is **not a palindrome**.
+
+```python
+def palindrome(self):
+    current1 = self.head
+    current2 = self.reverse
+    flag = True
+    
+    while current1 and current2:
+        if current1.data != current2.data:
+            flag = False
+            break
+        
+        current1 = current1.next
+        current2 = current2.next
+        
+    if flag:
+        print('The Linked List is palindrome')
+    else:
+        print("The Linked List is not palindrome")
+```
+
+---
+
+## 📘 **Example Walkthrough**
+
+```python
+ll = LL()
+ll.insert(1)
+ll.insert(2)
+ll.insert(1)
+ll.insert(2)
+ll.insert(1)
+```
+
+### ➕ Insertions
+
+* `ll.insert(1)` → `1`
+* `ll.insert(2)` → `2 -> 1`
+* `ll.insert(1)` → `1 -> 2 -> 1`
+* `ll.insert(2)` → `2 -> 1 -> 2 -> 1`
+* `ll.insert(1)` → `1 -> 2 -> 1 -> 2 -> 1`
+
+### ✅ `traverse()` Output
+
+```
+Linked List :-
+1 -> 2 -> 1 -> 2 -> 1 -> None
+```
+
+### ✅ `reverse_LL()` → Creates reversed copy:
+
+```
+1 -> 2 -> 1 -> 2 -> 1 -> None
+```
+
+### ✅ `palindrome()` Output
+
+Since both the original and reversed lists match **exactly**, it's a palindrome:
+
+```
+The Linked List is palindrome
+```
+
+---
+
+## ✅ Summary of Features
+
+| Method         | Purpose                                     |
+| -------------- | ------------------------------------------- |
+| `insert(data)` | Adds node at the beginning                  |
+| `traverse()`   | Displays the original linked list           |
+| `reverse_LL()` | Builds a reversed copy of the original list |
+| `palindrome()` | Checks if the list is a palindrome          |
+
+---
+
+## 📌 Sample Input/Output
+
+### Input:
+
+```python
+ll.insert(1)
+ll.insert(2)
+ll.insert(1)
+ll.insert(2)
+ll.insert(1)
+```
+
+### Output:
+
+```
+Linked List :-
+1 -> 2 -> 1 -> 2 -> 1 -> None
+
+The Linked List is palindrome
+```
+
+---
+
+## ❓ Want a Formal Coding Question Version?
+
+Here’s how this could be asked in an interview or on a platform:
+
+---
+
+### 💼 **Interview-style Coding Question**
+
+> **Problem:**
+> Implement a singly linked list and write a method to check whether it is a **palindrome**.
+> You may not use arrays or strings for conversion.
+> You must do this by creating a reversed copy of the original linked list and comparing it.
+>
+> **Constraints:**
+>
+> * You may not modify the original linked list structure.
+> * Use only singly linked list nodes.
+>
+> **Input:** A list of integers inserted at the beginning.
+> **Output:** A message indicating whether the linked list is a palindrome.
+>
+> **Example:**
+>
+> ```
+> Input: 1 -> 2 -> 1 -> 2 -> 1
+> Output: The Linked List is palindrome
