@@ -1,0 +1,211 @@
+## 🔹 Problem Recap
+
+We are given a **binary matrix** (only `"0"` and `"1"` as strings).
+We want to find the **largest square containing only 1s** and return its **area**.
+
+Example:
+
+```
+Input:
+1 0 1
+1 1 1
+1 1 1
+
+Largest square:
+1 1
+1 1
+
+Output: 4 (area of square 2×2)
+```
+
+---
+
+## 🔹 Code Breakdown
+
+### Step 1: Convert strings to integers
+
+```python
+nums = [[int(item) for item in row] for row in matrix]
+```
+
+👉 The matrix given is like `[["1","0","1"], ["1","1","1"], ["1","1","1"]]`.
+We convert it to integers:
+
+```
+nums = [
+  [1, 0, 1],
+  [1, 1, 1],
+  [1, 1, 1]
+]
+```
+
+---
+
+### Step 2: Handle edge cases
+
+```python
+if len(nums) == 1:
+    max_number = max(nums[0])
+    return max_number
+```
+
+👉 If the matrix has only **1 row**, the largest square can only be `1×1`.
+So just return the max value in that row.
+
+```python
+has_one = any("1" in row for row in matrix)
+if not has_one:
+    return 0
+```
+
+👉 This checks if there’s **at least one "1"** in the matrix.
+If no `1` exists → answer is `0`.
+
+---
+
+### Step 3: Dynamic Programming (DP) core
+
+```python
+for i in range(1, len(nums)):
+    for j in range(1, len(nums[0])):
+        top = nums[i-1][j]
+        left = nums[i][j-1]
+        top_left = nums[i-1][j-1]
+
+        if nums[i][j] == 1:
+            nums[i][j] = 1 + min(top, left, top_left)
+        else:
+            nums[i][j] = 0
+
+        max_number = max(max_number, nums[i][j])
+```
+
+👉 **Idea**:
+If `nums[i][j]` is `1`, it can form a square with its neighbors:
+
+* `top` = square ending **above**
+* `left` = square ending **left**
+* `top_left` = square ending **diagonal left-top**
+
+Formula:
+
+```
+nums[i][j] = 1 + min(top, left, top_left)
+```
+
+This means:
+
+* If all three neighbors can form a square of size `k`,
+* then this cell can extend it to `k+1`.
+
+We also keep track of the **maximum square size found**.
+
+---
+
+### Step 4: Return area
+
+```python
+return max_number**2
+```
+
+👉 Since `max_number` = largest square side length,
+return **area = side²**.
+
+---
+
+## 🔹 Example Walkthrough (3×3)
+
+Input:
+
+```
+matrix = [
+  ["1","0","1"],
+  ["1","1","1"],
+  ["1","1","1"]
+]
+```
+
+Converted:
+
+```
+nums = [
+  [1, 0, 1],
+  [1, 1, 1],
+  [1, 1, 1]
+]
+```
+
+---
+
+### Iteration
+
+#### i=1, j=1
+
+* nums\[1]\[1] = 1
+* top = nums\[0]\[1] = 0
+* left = nums\[1]\[0] = 1
+* top\_left = nums\[0]\[0] = 1
+
+```
+nums[1][1] = 1 + min(0,1,1) = 1
+```
+
+(no bigger square yet)
+
+---
+
+#### i=1, j=2
+
+* nums\[1]\[2] = 1
+* top = nums\[0]\[2] = 1
+* left = nums\[1]\[1] = 1
+* top\_left = nums\[0]\[1] = 0
+
+```
+nums[1][2] = 1 + min(1,1,0) = 1
+```
+
+---
+
+#### i=2, j=1
+
+* nums\[2]\[1] = 1
+* top = nums\[1]\[1] = 1
+* left = nums\[2]\[0] = 1
+* top\_left = nums\[1]\[0] = 1
+
+```
+nums[2][1] = 1 + min(1,1,1) = 2
+```
+
+👉 Found a **2×2 square** here!
+
+---
+
+#### i=2, j=2
+
+* nums\[2]\[2] = 1
+* top = nums\[1]\[2] = 1
+* left = nums\[2]\[1] = 2
+* top\_left = nums\[1]\[1] = 1
+
+```
+nums[2][2] = 1 + min(1,2,1) = 2
+```
+
+---
+
+### Final nums (DP table):
+
+```
+[
+  [1, 0, 1],
+  [1, 1, 1],
+  [1, 2, 2]
+]
+```
+
+* The largest value = `2` (means 2×2 square)
+* Area = `2² = 4`
+
+✅ Answer = 4
