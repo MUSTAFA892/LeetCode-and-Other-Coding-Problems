@@ -1,0 +1,54 @@
+### What’s Happening Conceptually
+
+* `count` tracks how many consecutive zeros we have so far.
+* Each time you see a `0`, you increment `count`.
+* That `count` tells you **how many new zero-filled subarrays end at this index**.
+
+  * Example: streak of 3 zeros → `[0]`, `[0,0]`, `[0,0,0]`.
+* By appending `count` each time, you collect all those contributions.
+* Finally, summing them gives the total number of zero-subarrays.
+
+---
+
+### Example Walkthrough
+
+Input:
+
+```python
+nums = [1, 3, 0, 0, 2, 0, 0, 4]
+```
+
+Steps:
+
+1. `1`: not zero → `count=0`
+2. `3`: not zero → `count=0`
+3. `0`: → `count=1`, append `1` → `zero_pair=[1]`
+
+   * new subarray: `[0]`
+4. `0`: → `count=2`, append `2` → `zero_pair=[1,2]`
+
+   * new subarrays: `[0]` (the new one), `[0,0]`
+5. `2`: not zero → reset `count=0`
+6. `0`: → `count=1`, append `1` → `zero_pair=[1,2,1]`
+
+   * new subarray: `[0]`
+7. `0`: → `count=2`, append `2` → `zero_pair=[1,2,1,2]`
+
+   * new subarrays: `[0]`, `[0,0]`
+8. `4`: not zero → reset `count=0`
+
+Now:
+`zero_pair = [1, 2, 1, 2]`
+`sum(zero_pair) = 6` ✅
+
+---
+
+### Intuition Behind the Trick
+
+* Every new `0` extends all previous zero-subarrays by 1 **and also starts a new one**.
+* That’s why we just keep adding the running count.
+* Mathematically, if a run has length `k`, you’ll eventually add:
+
+  $$
+  1 + 2 + 3 + \dots + k = \frac{k \cdot (k+1)}{2}
+  $$
