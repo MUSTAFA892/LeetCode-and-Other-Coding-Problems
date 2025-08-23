@@ -1,0 +1,80 @@
+### 🔹 Problem
+
+You’re given a **grid of 0s and 1s**. You want to find the **minimum rectangular area** that covers all the cells containing `1`.
+
+### 🔹 How it Works
+
+* **`top`** → the smallest row index where a `1` appears
+* **`bottom`** → the largest row index where a `1` appears
+* **`left`** → the smallest column index where a `1` appears
+* **`right`** → the largest column index where a `1` appears
+
+After scanning the grid, you form a rectangle with corners:
+
+* Top-left: `(top, left)`
+* Bottom-right: `(bottom, right)`
+
+The area of this rectangle =
+
+$$
+(height) \times (width) = (bottom - top + 1) \times (right - left + 1)
+$$
+
+---
+
+### 🔹 Working Example
+
+```python
+grid = [
+    [0, 1, 0],
+    [1, 0, 1]
+]
+```
+
+#### Step 1: Traverse the grid
+
+* `(0,1)` → grid\[0]\[1] = 1
+
+  * top = min(∞,0) = 0
+  * left = min(∞,1) = 1
+  * right = max(0,1) = 1
+  * bottom = max(0,0) = 0
+
+* `(1,0)` → grid\[1]\[0] = 1
+
+  * top = min(0,1) = 0
+  * left = min(1,0) = 0
+  * right = max(1,0) = 1
+  * bottom = max(0,1) = 1
+
+* `(1,2)` → grid\[1]\[2] = 1
+
+  * top = min(0,1) = 0
+  * left = min(0,2) = 0
+  * right = max(1,2) = 2
+  * bottom = max(1,1) = 1
+
+Final values:
+
+* top = 0, bottom = 1, left = 0, right = 2
+
+#### Step 2: Calculate area
+
+$$
+(bottom - top + 1) \times (right - left + 1) = (1 - 0 + 1) \times (2 - 0 + 1) = 2 \times 3 = 6
+$$
+
+✅ Output = `6`
+
+This means the **minimum rectangle covering all `1`s** is:
+
+```
+Row 0 to 1, Column 0 to 2
+```
+
+```
+0 1 0
+1 0 1
+```
+
+Area = `6` (entire grid in this case).
