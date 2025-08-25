@@ -1,0 +1,82 @@
+### 🔑 Key Ideas
+
+1. **Diagonal grouping**
+
+   * In a matrix, all elements that share the same **i + j (row index + column index)** lie on the same diagonal.
+     Example: `mat[i][j]` and `mat[i+1][j-1]` both have same `i+j`.
+
+2. **Dictionary storage**
+
+   * `diagonals[i+j]` stores elements belonging to diagonal `i+j`.
+
+3. **Even vs Odd diagonals**
+
+   * For **even diagonals** (like diagonal 0, 2, 4 …) → reverse the collected list before adding to answer.
+   * For **odd diagonals** → keep them as is.
+   * This gives the **zig-zag / diagonal traversal order**.
+
+---
+
+# 📝 Working Example
+
+Let’s use:
+
+```python
+mat = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9]
+]
+```
+
+---
+
+### Step 1: Group by i+j
+
+* `(0,0) → 1` → key = 0
+* `(0,1) → 2` , `(1,0) → 4` → key = 1 → \[2,4]
+* `(0,2) → 3` , `(1,1) → 5` , `(2,0) → 7` → key = 2 → \[3,5,7]
+* `(1,2) → 6` , `(2,1) → 8` → key = 3 → \[6,8]
+* `(2,2) → 9` → key = 4 → \[9]
+
+👉 Diagonals dict =
+
+```
+{
+  0: [1],
+  1: [2, 4],
+  2: [3, 5, 7],
+  3: [6, 8],
+  4: [9]
+}
+```
+
+---
+
+### Step 2: Build Answer
+
+* Key = 0 (even) → reverse \[1] = \[1] → ans = \[1]
+* Key = 1 (odd)  → keep \[2,4] → ans = \[1,2,4]
+* Key = 2 (even) → reverse \[3,5,7] = \[7,5,3] → ans = \[1,2,4,7,5,3]
+* Key = 3 (odd)  → keep \[6,8] → ans = \[1,2,4,7,5,3,6,8]
+* Key = 4 (even) → reverse \[9] = \[9] → ans = \[1,2,4,7,5,3,6,8,9]
+
+---
+
+### ✅ Final Output
+
+```
+[1, 2, 4, 7, 5, 3, 6, 8, 9]
+```
+
+This matches the **diagonal traversal order**.
+
+---
+
+⚡ So the **algorithm** is:
+
+1. Group by `i+j` → collect diagonals.
+2. Traverse keys in increasing order.
+3. Reverse for even diagonals.
+4. Append to final result.
+
