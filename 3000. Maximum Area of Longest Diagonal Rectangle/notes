@@ -1,0 +1,124 @@
+## ✅ **1. Optimized and Correct Approach** (Your updated version)
+
+### 🔍 **Code:**
+
+```python
+class Solution:
+    def areaOfMaxDiagonal(self, dimensions: List[List[int]]) -> int:
+        max_diag = 0
+        max_area = 0
+
+        for width, height in dimensions:
+            diag = (width ** 2 + height ** 2) ** 0.5
+            area = width * height 
+
+            if diag > max_diag:
+                max_diag = diag
+                max_area = area
+            elif diag == max_diag:
+                max_area = max(max_area, area)
+
+        return max_area
+```
+
+---
+
+### ✅ **Explanation:**
+
+1. Iterate through each rectangle (`width`, `height`) in `dimensions`.
+2. Calculate its **diagonal length** using the Pythagorean theorem:
+
+   $$
+   \text{diagonal} = \sqrt{width^2 + height^2}
+   $$
+3. If the diagonal is **greater than** any seen before:
+
+   * Update `max_diag`
+   * Set `max_area` to current rectangle's area
+4. If the diagonal **equals** the current maximum:
+
+   * Compare areas and keep the **larger** one
+5. Return the **largest area** among all rectangles with the **maximum diagonal length**
+
+---
+
+### ✅ **Key Feature:**
+
+* Handles **multiple rectangles with the same diagonal**, choosing the one with **maximum area**
+
+---
+
+### 🧪 **Example:**
+
+```python
+dimensions = [[3, 4], [6, 8], [5, 12]]
+```
+
+| Rectangle | Diagonal | Area                               |
+| --------- | -------- | ---------------------------------- |
+| \[3, 4]   | 5        | 12                                 |
+| \[6, 8]   | 10       | 48                                 |
+| \[5, 12]  | 13       | 60   ← **Max Diagonal + Max Area** |
+
+✅ Output: **60**
+
+---
+
+## ❌ **Old Approach (Commented Version)**
+
+### 🔍 **Code:**
+
+```python
+diagonals = []
+for i in range(len(dimensions)):
+    diag = ((dimensions[i][0] ** 2 + dimensions[i][1] ** 2) ** 0.5)
+    diagonals.append([diag, i])
+
+max_number = max(diagonals)
+return dimensions[max_number[1]][0] * dimensions[max_number[1]][1]
+```
+
+---
+
+### ❌ **Explanation:**
+
+1. For each rectangle, calculate its **diagonal**
+2. Store both the **diagonal and index**: `[diagonal, index]`
+3. Find the pair with the **maximum diagonal**
+4. Use the **index** to compute and return its **area**
+
+---
+
+### ❌ **Flaw in Logic:**
+
+* It **only picks the first rectangle** with the **maximum diagonal**.
+* If **multiple rectangles** share the same maximum diagonal but differ in area, it **may return the wrong (smaller) area**.
+
+---
+
+### 🧪 **Example of Failure:**
+
+```python
+dimensions = [[5, 12], [13, 0]]
+```
+
+| Rectangle | Diagonal | Area                                 |
+| --------- | -------- | ------------------------------------ |
+| \[5, 12]  | 13       | 60   ← correct one (bigger area)     |
+| \[13, 0]  | 13       | 0    ← same diagonal but comes later |
+
+* This code picks `[5, 12]` if it's first (good), but will fail if `[13, 0]` is first.
+* **Doesn't check for maximum area if diagonals are the same**
+
+---
+
+## 🔄 **Differences Between the Two Approaches**
+
+| Feature                                         | Correct Approach ✅ | Old Approach ❌                       |
+| ----------------------------------------------- | ------------------ | ------------------------------------ |
+| Handles multiple equal diagonals                | ✅ Yes              | ❌ No                                 |
+| Chooses rectangle with max **area** among those | ✅ Yes              | ❌ No                                 |
+| Efficient                                       | ✅ Yes              | ⚠️ Slightly less (due to extra list) |
+| Hardcoded workaround needed                     | ❌ No               | ✅ Yes (for edge cases)               |
+
+
