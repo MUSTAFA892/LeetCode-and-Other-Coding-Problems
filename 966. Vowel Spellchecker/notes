@@ -1,0 +1,176 @@
+# 📌 Problem Recap
+
+You’re given:
+
+* `wordlist` (dictionary of correct words).
+* `queries` (words to check).
+
+The rules:
+
+1. If a query matches a word **exactly**, return the same word.
+2. If not, but the query matches case-insensitively, return the first such match from `wordlist`.
+3. If not, but the query matches after replacing vowels (`a, e, i, o, u`) with `"*"`, return the first such match.
+4. Otherwise, return `""`.
+
+---
+
+# ✅ Approach 1 – **Using Hash Maps for Fast Lookup**
+
+Your first solution builds **3 filters**:
+
+* **filter1\_map** → exact match (set for O(1) lookup).
+* **filter2\_map** → case-insensitive mapping.
+* **filter3\_map** → vowel-masked mapping.
+
+### Code:
+
+```python
+class Solution:
+    def spellchecker(self, wordlist: List[str], queries: List[str]) -> List[str]:
+        arr = []
+
+        filter1_map = set(wordlist)       # exact match
+        filter2_map = {}                  # lowercase -> original word
+        filter3_map = {}                  # masked vowels -> original word
+
+        def mask_word(word):
+            return ''.join('*' if c in 'aeiou' else c for c in word)
+
+        # Build filter2_map
+        for i in range(len(wordlist)):
+            lower = wordlist[i].lower()
+            if lower not in filter2_map:   # keep first occurrence only
+                filter2_map[lower] = wordlist[i]
+                
+        # Build filter3_map
+        for i in range(len(wordlist)):
+            masked = mask_word(wordlist[i].lower())
+            if masked not in filter3_map:  # keep first occurrence only
+                filter3_map[masked] = wordlist[i]
+
+        # Process queries
+        for i in queries:
+            if i in filter1_map:                               # Rule 1
+                arr.append(i)
+            elif i.lower() in filter2_map:                     # Rule 2
+                arr.append(filter2_map[i.lower()])
+            elif mask_word(i.lower()) in filter3_map:          # Rule 3
+                arr.append(filter3_map[mask_word(i.lower())])
+            else:                                              # Rule 4
+                arr.append("")
+            
+        return arr
+```
+
+---
+
+### 🔎 Example Walkthrough
+
+```python
+wordlist = ["KiTe", "kite", "hare", "Hare"]
+queries = ["kite", "Kite", "KiTe", "Hare", "HARE", "Hear", "keti", "keet", "keto"]
+```
+
+1. `filter1_map = {"KiTe", "kite", "hare", "Hare"}`
+2. `filter2_map = {"kite": "KiTe", "hare": "hare"}`
+   (because we only keep **first occurrence**)
+3. `filter3_map = {"k*t*": "KiTe", "h*r*": "hare"}`
+
+Processing queries:
+
+* `"kite"` → exact match ✅ `"kite"`
+* `"Kite"` → lowercase `"kite"` → `"KiTe"`
+* `"KiTe"` → exact match ✅ `"KiTe"`
+* `"Hare"` → exact match ✅ `"Hare"`
+* `"HARE"` → lowercase `"hare"` → `"hare"`
+* `"Hear"` → masked `"h**r"` → no match → `""`
+* `"keti"` → masked `"k*t*"` → `"KiTe"`
+* `"keet"` → masked `"k**t"` → no match → `""`
+* `"keto"` → masked `"k*t*"` → `"KiTe"`
+
+✅ Output:
+
+```python
+["kite","KiTe","KiTe","Hare","hare","","KiTe","","KiTe"]
+```
+
+---
+
+# ✅ Approach 2 – **Direct Linear Search (Brute Force)**
+
+Your second version doesn’t build hash maps.
+Instead, it **searches linearly through `wordlist`** every time for Rule 2 and Rule 3.
+
+### Code:
+
+```python
+class Solution:
+    def spellchecker(self, wordlist: List[str], queries: List[str]) -> List[str]:
+        arr = []
+
+        def filter_2(val):
+            for i in range(len(wordlist)):
+                if val.lower() == wordlist[i].lower():
+                    return wordlist[i]
+
+        def mask_word(word):
+            return ''.join('*' if c in 'aeiou' else c for c in word)
+
+        def filter_3(val):
+            for i in range(len(wordlist)):
+                if len(val) == len(wordlist[i]):  # lengths must match
+                    if mask_word(val.lower()) == mask_word(wordlist[i].lower()):
+                        return wordlist[i]
+
+        for i in queries:
+            if i in wordlist:             # Rule 1
+                arr.append(i)
+            elif filter_2(i):             # Rule 2
+                arr.append(filter_2(i))
+            elif filter_3(i):             # Rule 3
+                arr.append(filter_3(i))
+            else:                         # Rule 4
+                arr.append("")
+
+        return arr
+```
+
+---
+
+### 🔎 Example Walkthrough (same input as above)
+
+* `"kite"` → exact match ✅ `"kite"`
+* `"Kite"` → `filter_2` finds `"KiTe"` first → `"KiTe"`
+* `"KiTe"` → exact match ✅ `"KiTe"`
+* `"Hare"` → exact match ✅ `"Hare"`
+* `"HARE"` → `filter_2` finds `"hare"` first → `"hare"`
+* `"Hear"` → no match → `""`
+* `"keti"` → `filter_3` finds `"KiTe"` (masked `"k*t*") → `"KiTe"\`
+* `"keet"` → no match → `""`
+* `"keto"` → `filter_3` finds `"KiTe"` → `"KiTe"`
+
+✅ Same Output:
+
+```python
+["kite","KiTe","KiTe","Hare","hare","","KiTe","","KiTe"]
+```
+
+---
+
+# ⚖️ Comparison of Both Approaches
+
+### Approach 1 (Hash Maps):
+
+* **Preprocessing**: O(N) where N = len(wordlist).
+* **Query lookup**: O(1) per query.
+* **Total**: O(N + Q).
+* ✅ Much faster when queries are large.
+
+### Approach 2 (Linear Search):
+
+* For each query, it scans `wordlist`.
+* **Total**: O(Q × N).
+* ❌ Slower if `wordlist` and `queries` are big.
+* ✅ Easier to write and understand.
+
+
