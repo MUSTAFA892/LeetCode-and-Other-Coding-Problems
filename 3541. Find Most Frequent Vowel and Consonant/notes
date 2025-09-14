@@ -1,0 +1,123 @@
+## 🔎 What your code does:
+
+Your function `maxFreqSum(s: str)`:
+
+1. **Separates vowels and consonants**:
+
+   * It loops through every character in the string `s`.
+   * If the character is a vowel (`a, e, i, o, u`), it stores/updates its count in a dictionary called `vow_hashmap`.
+   * Otherwise, it is treated as a consonant and stored in `con_hashmap`.
+
+2. **Finds the maximum frequency**:
+
+   * From `vow_hashmap`, it finds the maximum frequency of any vowel.
+   * From `con_hashmap`, it finds the maximum frequency of any consonant.
+
+3. **Returns the sum**:
+
+   * Finally, it returns **(max vowel frequency) + (max consonant frequency)**.
+
+---
+
+## ⚠️ Important Issue in Code:
+
+Your condition:
+
+```python
+if i in "a,e,i,o,u":
+```
+
+This string `"a,e,i,o,u"` includes commas (`,`) so the check is wrong. For example, `"a" in "a,e,i,o,u"` → ✅ True, but `"e" in "a,e,i,o,u"` also works because `"e"` is present.
+But `"o"` won’t work because `"o"` is not directly present (it’s `"o,"`).
+
+👉 Correct way:
+
+```python
+if i in "aeiou":
+```
+
+---
+
+## ✅ Corrected Code:
+
+```python
+class Solution:
+    def maxFreqSum(self, s: str) -> int:
+        vow_hashmap = {}
+        con_hashmap = {}
+
+        for i in s:
+            if i in "aeiou":   # fixed here
+                vow_hashmap[i] = vow_hashmap.get(i, 0) + 1
+            else:
+                con_hashmap[i] = con_hashmap.get(i, 0) + 1 
+
+        # Find maximum frequency among vowels
+        vow = max(vow_hashmap.values()) if vow_hashmap else 0
+
+        # Find maximum frequency among consonants
+        con = max(con_hashmap.values()) if con_hashmap else 0
+    
+        return vow + con
+```
+
+---
+
+## 📝 Example Walkthrough:
+
+Input:
+
+```python
+s = "banana"
+```
+
+### Step 1 – Count vowels & consonants:
+
+* Vowels = `a` appears 3 times.
+* Consonants = `b:1`, `n:2`.
+
+So:
+
+```python
+vow_hashmap = {'a': 3}
+con_hashmap = {'b': 1, 'n': 2}
+```
+
+### Step 2 – Find max freq:
+
+* Max vowel freq = 3 (`a`).
+* Max consonant freq = 2 (`n`).
+
+### Step 3 – Return sum:
+
+```
+3 (vowel) + 2 (consonant) = 5
+```
+
+Output:
+
+```python
+5
+```
+
+---
+
+## Another Example:
+
+Input:
+
+```python
+s = "programming"
+```
+
+Counts:
+
+* Vowels → `o:1`, `a:1`, `i:1` → max = 1
+* Consonants → `p:1, r:2, g:2, m:2, n:1` → max = 2
+
+Output = `1 + 2 = 3`
+
+---
+
+✅ So your function finds the **most frequent vowel** + **most frequent consonant** count and adds them.
+
