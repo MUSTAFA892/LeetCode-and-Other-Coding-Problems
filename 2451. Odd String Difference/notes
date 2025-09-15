@@ -1,0 +1,129 @@
+# What the code does (high-level)
+
+1. For each word you build a **difference array** `arr` where `arr[j] = value(word[j+1]) - value(word[j])`. This captures the “shape” of the word in alphabet positions.
+2. Convert this `arr` into a `tuple` and use it as a dictionary key (`freq_map`) to group words that share the same difference pattern.
+3. After grouping all words, find the group whose list length is `1` — that list holds the unique word. Return that word.
+
+# Line-by-line quick explanation
+
+```python
+class Solution:
+    def oddString(self, words: List[str]) -> str:
+        freq_map = {}                        # map: difference-tuple -> list of words sharing that pattern
+        
+        def get_value(num):
+            return ord(num) - ord('a')       # 'a' -> 0, 'b' -> 1, ... 'z' -> 25
+            
+        for word in words:
+            arr = []
+            for j in range(len(word) - 1):
+                letter = get_value(word[j+1]) - get_value(word[j])
+                arr.append(letter)
+
+            key = tuple(arr)                 # convert list to tuple so it can be used as a dict key
+
+            if key not in freq_map:
+                freq_map[key] = []
+            freq_map[key].append(word)      # append the word to its pattern-group
+
+        for diff, word_list in freq_map.items():
+            if len(word_list) == 1:
+                return word_list[0]         # return the single word in the unique group
+```
+
+# Why `tuple(arr)`?
+
+Lists are not hashable so they can’t be used as dictionary keys. A `tuple` is immutable and hashable, so `tuple(arr)` is a safe key representing the pattern.
+
+# Worked example 1 — unique is last
+
+Input: `words = ["adc", "wzy", "abc"]`
+
+Step-by-step:
+
+1. Process `"adc"`:
+
+   * `a`=0, `d`=3, `c`=2
+   * differences: `[3 - 0, 2 - 3] = [3, -1]`
+   * key = `(3, -1)`
+   * `freq_map` becomes `{ (3, -1): ["adc"] }`
+
+2. Process `"wzy"`:
+
+   * `w`=22, `z`=25, `y`=24
+   * differences: `[25 - 22, 24 - 25] = [3, -1]`
+   * key = `(3, -1)`
+   * `freq_map` becomes `{ (3, -1): ["adc", "wzy"] }`
+
+3. Process `"abc"`:
+
+   * `a`=0, `b`=1, `c`=2
+   * differences: `[1 - 0, 2 - 1] = [1, 1]`
+   * key = `(1, 1)`
+   * `freq_map` becomes `{ (3, -1): ["adc", "wzy"], (1, 1): ["abc"] }`
+
+4. Find group with length 1 → `(1,1)` → `["abc"]` → return `"abc"`.
+
+So output: `"abc"`.
+
+# Worked example 2 — unique is first
+
+Input: `words = ["abd", "bcd", "cde"]`
+
+Step-by-step:
+
+1. `"abd"`:
+
+   * `a`=0, `b`=1, `d`=3
+   * diffs: `[1, 2]`
+   * key `(1, 2)` → `freq_map = { (1, 2): ["abd"] }`
+
+2. `"bcd"`:
+
+   * `b`=1, `c`=2, `d`=3
+   * diffs: `[1, 1]`
+   * key `(1, 1)` → `freq_map = { (1, 2): ["abd"], (1, 1): ["bcd"] }`
+
+3. `"cde"`:
+
+   * `c`=2, `d`=3, `e`=4
+   * diffs: `[1, 1]`
+   * append to `(1,1)` → `freq_map = { (1, 2): ["abd"], (1, 1): ["bcd", "cde"] }`
+
+4. Find group length 1 → `(1,2)` → `["abd"]` → return `"abd"`.
+
+# Edge cases / assumptions
+
+* The problem statement guarantees exactly one string is different, so the loop that returns the group of size `1` will always find something.
+* Difference values can be negative (e.g., `'b' - 'c' = -1`); that’s fine — tuples store negative integers too.
+* If you wanted to be defensive, you could return an empty string or raise an exception if no unique group is found.
+
+# Complexity
+
+* Let `m = number of words`, `n = length of each word`.
+* Time: O(m \* n) — for each of the m words you do O(n) work to compute differences.
+* Space: O(m \* n) in worst case — storing up to m keys each of length n-1 (and the values referencing words).
+
+# Shorter / faster-in-practice approach (no big dictionary)
+
+If you want a version that avoids storing every group (slightly less memory and often faster in practice), you can determine the **common pattern** by checking the difference arrays of the first 3 words — the majority among them is the common pattern — then scan to find a word that does not match that pattern.
+
+Example code (optional to include in notes):
+
+```python
+class Solution:
+    def oddString(self, words: List[str]) -> str:
+        def diff_tuple(word):
+            return tuple(ord(word[i+1]) - ord(word[i]) for i in range(len(word)-1))
+
+        # Find common pattern among first 3 words (majority vote)
+        d0, d1, d2 = diff_tuple(words[0]), diff_tuple(words[1]), diff_tuple(words[2])
+        common = d0 if d0 == d1 or d0 == d2 else d1
+
+        # Find word that doesn't match `common`
+        for w in words:
+            if diff_tuple(w) != common:
+                return w
+```
+
+This also runs in O(m \* n) time, but uses O(1) extra space (besides input), and often returns quickly.
