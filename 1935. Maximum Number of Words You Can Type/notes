@@ -1,0 +1,155 @@
+# Problem (LeetCode 1935: *Maximum Number of Words You Can Type*)
+
+You are given a string `text` consisting of words separated by single spaces, and a string `brokenLetters` (letters that are broken on your keyboard).
+
+A word **cannot** be typed if it contains at least one of the broken letters.
+Return the number of words in `text` that can be typed.
+
+---
+
+# Code Walkthrough
+
+```python
+class Solution:
+    def canBeTypedWords(self, text: str, brokenLetters: str) -> int:
+        text = text.split()                 # Step 1: split text into list of words
+        count = len(text)                   # Step 2: assume all words are typable
+        flag = False                        # Step 3: flag to track if current word is broken
+
+        for i in text:                      # Step 4: check each word
+            count_txt = Counter(i)          # count frequency of characters in the word
+            
+            for j in brokenLetters:         # Step 5: check if any broken letter is in the word
+                if j in count_txt:
+                    flag = True             # mark word as broken if found
+                
+            if flag:                        # Step 6: if broken, reduce count
+                count -= 1
+                flag = False                # reset flag for next word
+
+        return count                        # Step 7: return number of typable words
+```
+
+---
+
+# Key ideas
+
+* `text.split()` → converts `"hello world"` into `["hello", "world"]`.
+* `Counter(i)` → makes a frequency dictionary for word `i`. Example: `"hello"` → `{'h':1,'e':1,'l':2,'o':1}`.
+* For each word, check if **any broken letter exists** inside it.
+* If yes → mark as broken → decrement count.
+* Else → keep as is.
+* Finally return count.
+
+---
+
+# Worked Example 1
+
+Input:
+
+```python
+text = "hello world leet"
+brokenLetters = "ad"
+```
+
+### Step 1: split words
+
+`text = ["hello", "world", "leet"]`
+Initial `count = 3` (assume all words typable).
+
+---
+
+### Step 2: check `"hello"`
+
+* Counter = `{'h':1, 'e':1, 'l':2, 'o':1}`
+* Broken letters: `"a"`, `"d"`
+* Neither `"a"` nor `"d"` in `"hello"`.
+* So `flag` remains False → word is okay.
+* `count = 3`
+
+---
+
+### Step 3: check `"world"`
+
+* Counter = `{'w':1, 'o':1, 'r':1, 'l':1, 'd':1}`
+* `"d"` is in `"world"` → mark flag = True.
+* Word cannot be typed → reduce count: `count = 2`.
+* Reset flag = False.
+
+---
+
+### Step 4: check `"leet"`
+
+* Counter = `{'l':1, 'e':2, 't':1}`
+* Broken letters `"a"`, `"d"` are not present.
+* So word is fine.
+* `count = 2`
+
+---
+
+### Final Answer → `2`
+
+Words typable: `"hello"`, `"leet"`
+
+---
+
+# Worked Example 2
+
+Input:
+
+```python
+text = "abc def ghi"
+brokenLetters = "bgh"
+```
+
+1. Split → `["abc", "def", "ghi"]`, count = 3
+2. `"abc"` → contains `b` → broken → count = 2
+3. `"def"` → contains `g`? no, contains `h`? no → typable → count = 2
+4. `"ghi"` → contains `g` and `h` → broken → count = 1
+
+Answer: **1**
+
+---
+
+# Complexity
+
+* Let:
+
+  * `m = number of words`
+  * `n = average word length`
+  * `k = number of broken letters`
+
+### Time Complexity:
+
+For each word (`m`), you check all broken letters (`k`) inside a `Counter` dictionary lookup (`O(1)` each).
+So total = **O(m \* (n + k))**
+
+* `O(n)` → build Counter for word
+* `O(k)` → check each broken letter
+
+### Space Complexity:
+
+* `O(n)` for Counter of a single word (reused per loop).
+* No extra storage proportional to input size.
+
+---
+
+# Note / Optimization
+
+Using `Counter` here is **overkill** since we only need membership checking (`if j in word`). A simpler version avoids `Counter`:
+
+```python
+class Solution:
+    def canBeTypedWords(self, text: str, brokenLetters: str) -> int:
+        broken_set = set(brokenLetters)
+        words = text.split()
+        count = 0
+        
+        for word in words:
+            if all(ch not in broken_set for ch in word):
+                count += 1
+        return count
+```
+
+This is more direct, easier to understand, and avoids `Counter`.
+
