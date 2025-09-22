@@ -1,0 +1,90 @@
+## 🔎 What the Problem Usually Asks
+
+The **LeetCode problem "Count Elements With Maximum Frequency"** asks:
+
+* You’re given an array `nums`.
+* Find the **maximum frequency** of any element.
+* Then count **how many times all the most frequent elements appear in total**.
+
+👉 In short: If multiple numbers appear with the same highest frequency, return the total count of their occurrences.
+
+---
+
+## 🛠 Step-by-Step Code Explanation
+
+1. **Count frequency of each number**
+
+   ```python
+   freq = Counter(nums)
+   ```
+
+   Example:
+   `nums = [1, 2, 2, 3, 1, 4]`
+   Then:
+   `freq = {1: 2, 2: 2, 3: 1, 4: 1}`
+
+2. **Find the maximum frequency**
+
+   ```python
+   max_freq = max(freq.values())
+   ```
+
+   Here:
+   `max_freq = 2` (because both `1` and `2` appear twice)
+
+3. **Initialize a helper variable**
+
+   ```python
+   max_ = max_freq
+   ```
+
+   So `max_ = 2`.
+
+4. **Loop over all frequencies**
+
+   ```python
+   for i in freq.values():
+       if max_freq == i:
+           max_ += i
+   ```
+
+   * For `i = 2`: condition true → `max_ = 2 + 2 = 4`
+   * For `i = 2`: condition true again → `max_ = 4 + 2 = 6`
+   * For `i = 1`: skip
+   * For `i = 1`: skip
+
+5. **Final adjustment**
+
+   ```python
+   return max_ - max_freq
+   ```
+
+   Since we added `max_freq` at the start unnecessarily, this subtracts it once.
+   → `6 - 2 = 4`
+
+✅ Output = `4`
+
+Which is correct, because the most frequent elements are `1` and `2`, and together they occur **2 + 2 = 4 times**.
+
+---
+
+## 🧪 Another Example
+
+Input:
+
+```python
+nums = [5, 5, 6, 6, 6, 7]
+```
+
+* Step 1: `freq = {5: 2, 6: 3, 7: 1}`
+* Step 2: `max_freq = 3`
+* Step 3: `max_ = 3`
+* Loop:
+
+  * `i = 2` → skip
+  * `i = 3` → `max_ = 3 + 3 = 6`
+  * `i = 1` → skip
+* Final return: `6 - 3 = 3`
+
+✅ Answer = `3`, because the most frequent element is `6` (appears 3 times).
+
