@@ -1,0 +1,166 @@
+## **Explanation of the Code**
+
+This function converts a fraction (`numerator / denominator`) into its **decimal string representation**, and correctly handles **repeating decimals** with parentheses and **negative numbers**.
+
+---
+
+### **Step 1: Handle zero numerator**
+
+```python
+if numerator == 0:
+    return "0"
+```
+
+* Any fraction with numerator 0 is always `0`.
+
+---
+
+### **Step 2: Prepare integer part**
+
+```python
+str_ = []
+str_.append(str(abs(numerator) // abs(denominator)))
+remainder = abs(numerator) % abs(denominator)
+```
+
+* Compute the **integer part** using floor division `//`.
+* Compute the **initial remainder** using `%`.
+* Example: `7 / 13` → `0` integer part, remainder `7`.
+
+---
+
+### **Step 3: Add decimal point (if needed)**
+
+```python
+if remainder != 0:
+    str_.append(".")
+```
+
+* Only add `.` if there is a non-zero remainder.
+* Example: `4 / 2 = 2` → remainder 0 → no decimal point.
+
+---
+
+### **Step 4: Track repeating decimals**
+
+```python
+count = len(str_)
+freq = {}
+```
+
+* `freq` dictionary keeps track of **first occurrence index of each remainder**.
+* `count` is the current **index in the result list `str_`**.
+
+---
+
+### **Step 5: Long division loop**
+
+```python
+while remainder != 0:
+    if remainder in freq:
+        str_.insert(freq[remainder], '(')  
+        str_.append(')')  
+        break
+    freq[remainder] = count
+    new_remainder = (remainder*10) % abs(denominator)
+    str_.append(str((remainder*10) // abs(denominator)))
+    remainder = new_remainder
+    count += 1
+```
+
+* **Step 5a:** Check if remainder repeats → add parentheses and break.
+* **Step 5b:** If not, store **current remainder → index**.
+* **Step 5c:** Multiply remainder by 10, compute next digit, append digit.
+* **Step 5d:** Update remainder for next iteration.
+
+This is **how repeating decimals are detected**.
+
+* When a remainder repeats, the digits generated since the first occurrence of that remainder are repeating → wrap them in parentheses.
+
+---
+
+### **Step 6: Handle negative fractions**
+
+```python
+if (numerator < 0) != (denominator < 0):
+    str_.insert(0,'-')
+```
+
+* A fraction is negative **if numerator and denominator have opposite signs**.
+* Prepend `"-"` to the string.
+
+---
+
+### **Step 7: Return final string**
+
+```python
+return ''.join(str_)
+```
+
+* Join the list of characters into a single string.
+
+---
+
+## **Perfect Working Example**
+
+### Example 1: `7 / -13`
+
+1. Integer part: `7 // 13 = 0` → `"0"`
+2. Remainder: `7 % 13 = 7`
+3. Decimal point → `"0."`
+4. Long division table:
+
+| Remainder | Multiply 10 | Digit | New Remainder | Notes              |
+| --------- | ----------- | ----- | ------------- | ------------------ |
+| 7         | 70          | 5     | 5             | store 7 → index 2  |
+| 5         | 50          | 3     | 11            | store 5 → index 3  |
+| 11        | 110         | 8     | 6             | store 11 → index 4 |
+| 6         | 60          | 4     | 8             | store 6 → index 5  |
+| 8         | 80          | 6     | 2             | store 8 → index 6  |
+| 2         | 20          | 1     | 7 ← repeat!   | store 2 → index 7  |
+
+* Repeating digits start at index 2 → `"538461"`
+* Wrap in parentheses → `"0.(538461)"`
+* Original fraction negative → prepend `"-"` → `"-0.(538461)"` ✅
+
+---
+
+### Example 2: `-50 / 8`
+
+* Integer part: `50 // 8 = 6` → `"6"`
+* Remainder: `50 % 8 = 2`
+* Decimal point → `"6."`
+* Long division: `2 * 10 = 20 → 20 // 8 = 2, remainder 4 → 4 * 10 = 40 → 40 // 8 = 5, remainder 0`
+* Digits: `"25"` → `"6.25"`
+* Negative sign → `"-6.25"` ✅
+
+---
+
+### Example 3: `1 / 3`
+
+* Integer part: `0`
+* Decimal point → `"0."`
+* Long division: `1 * 10 = 10 → 10 // 3 = 3, remainder 1 → repeat`
+* Wrap repeating → `"0.(3)"` ✅
+
+---
+
+### Example 4: `0 / 5`
+
+* Numerator = 0 → return `"0"` ✅
+
+---
+
+### ✅ Test Cases Table
+
+| Numerator | Denominator | Output        |
+| --------- | ----------- | ------------- |
+| 7         | -13         | "-0.(538461)" |
+| -50       | 8           | "-6.25"       |
+| 1         | 3           | "0.(3)"       |
+| 22        | 7           | "3.(142857)"  |
+| 1         | 2           | "0.5"         |
+| -1        | -2          | "0.5"         |
+| 0         | 5           | "0"           |
+
+
