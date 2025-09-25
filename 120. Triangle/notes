@@ -1,0 +1,81 @@
+## 🔹 How It Works
+
+1. **Bottom-Up Dynamic Programming**
+
+   * Instead of calculating from the top (which requires branching decisions), we start from the **second last row** and move upward.
+   * For each element, we **add its value** to the **minimum of its two children** in the row below.
+
+   Formula:
+
+   ```
+   triangle[i][j] = triangle[i][j] + min(triangle[i+1][j], triangle[i+1][j+1])
+   ```
+
+2. **Why it works**
+
+   * Each element gets replaced by the minimum total path sum **starting at that element**.
+   * By the time we reach the top row, `triangle[0][0]` contains the overall minimum path sum.
+
+---
+
+## 🔹 Example Walkthrough
+
+Triangle:
+
+```
+       [2]
+      [3, 4]
+     [6, 5, 7]
+    [4, 1, 8, 3]
+```
+
+---
+
+### Step 1 → Start at Row 2 ([6, 5, 7])
+
+Look at Row 3 ([4, 1, 8, 3]):
+
+* For `6`: `6 + min(4,1) = 6+1 = 7`
+* For `5`: `5 + min(1,8) = 5+1 = 6`
+* For `7`: `7 + min(8,3) = 7+3 = 10`
+
+Row 2 becomes:
+
+```
+[7, 6, 10]
+```
+
+---
+
+### Step 2 → Row 1 ([3, 4])
+
+Look at Row 2 ([7, 6, 10]):
+
+* For `3`: `3 + min(7,6) = 3+6 = 9`
+* For `4`: `4 + min(6,10) = 4+6 = 10`
+
+Row 1 becomes:
+
+```
+[9, 10]
+```
+
+---
+
+### Step 3 → Row 0 ([2])
+
+Look at Row 1 ([9, 10]):
+
+* For `2`: `2 + min(9,10) = 2+9 = 11`
+
+Row 0 becomes:
+
+```
+[11]
+```
+
+---
+
+### ✅ Final Answer
+
+`triangle[0][0] = 11`
