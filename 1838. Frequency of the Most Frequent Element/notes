@@ -1,0 +1,185 @@
+## 🔹 Problem Recap
+
+**Goal:**
+
+* Given an array `nums` and an integer `k`, you can **increment elements by 1 at most k times**.
+* Find the **maximum frequency of any number** after at most `k` increments.
+
+**Example:**
+
+```
+nums = [3,1,4,1,5], k = 5
+```
+
+---
+
+## 🔹 Step 1: Sort the array
+
+```python
+nums.sort()
+```
+
+* Sorted array = `[1,1,3,4,5]`
+* **Why?**
+
+  * The algorithm uses a **sliding window** where we make **all elements in the window equal to the largest element (`nums[right]`)**.
+  * Sorting ensures the **largest element in any window is always at the right**.
+
+---
+
+## 🔹 Step 2: Initialize variables
+
+```python
+left = 0         # start of the sliding window
+total = 0        # sum of elements in the current window
+max_freq = 0     # maximum frequency found so far
+```
+
+* **Window** = `nums[left:right]`
+* **Total** = sum of elements in the current window
+* **max_freq** = result we will return
+
+---
+
+## 🔹 Step 3: Loop through the array (expand the window)
+
+```python
+for right in range(len(nums)):
+    total += nums[right]
+```
+
+* Expand the window to include `nums[right]`
+* Update `total` with the new element
+
+---
+
+## 🔹 Step 4: Calculate operations needed
+
+```python
+ops = (nums[right] * (right - left + 1)) - total
+```
+
+* **Idea:** Make **all elements in the window equal to `nums[right]`**.
+* Formula explained:
+
+```
+operations_needed = (largest_element * window_size) - sum(window_elements)
+```
+
+* `window_size = right - left + 1`
+* `largest_element = nums[right]`
+* `sum(window_elements = total)`
+
+✅ This gives the **number of increments needed** to make all elements in the window equal.
+
+---
+
+## 🔹 Step 5: Shrink window if needed
+
+```python
+if ops > k:
+    total -= nums[left]
+    left += 1
+```
+
+* If `ops > k`, we **cannot make all numbers equal** in this window with available operations.
+* Shrink the window from the left until it becomes valid:
+
+  * Remove `nums[left]` from `total`
+  * Move `left` pointer right
+
+---
+
+## 🔹 Step 6: Update maximum frequency
+
+```python
+max_freq = max(max_freq, right - left + 1)
+```
+
+* Window size = number of elements we can make equal with ≤ k operations
+* Update `max_freq` if this window is larger than previous
+
+---
+
+## 🔹 Step 7: Return result
+
+```python
+return max_freq
+```
+
+* After going through the array, `max_freq` is the **largest number of elements that can be made equal**.
+
+---
+
+## 🔹 Working Example (Step by Step)
+
+```
+nums = [3,1,4,1,5], k = 5
+```
+
+1. Sort → `[1,1,3,4,5]`
+2. Initialize → `left=0`, `total=0`, `max_freq=0`
+
+---
+
+### Iteration 1: right=0
+
+* Window = `[1]`
+* total = 1
+* ops = 1*1 - 1 = 0 ≤ 5 ✅
+* max_freq = 1
+
+---
+
+### Iteration 2: right=1
+
+* Window = `[1,1]`
+* total = 1+1=2
+* ops = 1*2 - 2 = 0 ≤ 5 ✅
+* max_freq = 2
+
+---
+
+### Iteration 3: right=2
+
+* Window = `[1,1,3]`
+* total = 2+3=5
+* ops = 3*3 - 5 = 9-5 = 4 ≤ 5 ✅
+* max_freq = 3
+
+---
+
+### Iteration 4: right=3
+
+* Window = `[1,1,3,4]`
+* total = 5+4=9
+* ops = 4*4 - 9 = 16-9 = 7 > 5 ❌ → shrink window
+
+  * Remove left=0 element: total -=1 → total=8, left=1
+* Window now `[1,3,4]`
+* ops = 4*3 - 8 = 12-8=4 ≤5 ✅
+* max_freq = max(3,3)=3
+
+---
+
+### Iteration 5: right=4
+
+* Window = `[1,3,4,5]`
+* total = 8+5=13
+* ops = 5*4 - 13 = 20-13=7 >5 ❌ → shrink left
+
+  * Remove left=1 element: total -=1 → total=12, left=2
+* Window `[3,4,5]`
+* ops = 5*3 - 12 = 15-12=3 ≤5 ✅
+* max_freq = max(3,3)=3
+
+---
+
+### ✅ Final Result
+
+```
+max_freq = 3
+```
+
+* Maximum frequency achievable = **3**
+* Example of elements we can make equal: `[1,1,3] → [3,3,3]` or `[3,4,5] → [5,5,5]`
