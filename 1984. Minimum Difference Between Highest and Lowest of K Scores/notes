@@ -1,0 +1,96 @@
+## 🔹 Step-by-Step Explanation of Code
+
+```python
+class Solution:
+    def minimumDifference(self, nums: List[int], k: int) -> int:
+        if len(nums) == 0:
+            return 0
+```
+
+* If there are no scores, return 0. (Edge case).
+
+```python
+        nums.sort()
+```
+
+* Sort the scores.
+* This is important because the **smallest difference between k scores will always be among consecutive elements** after sorting.
+
+```python
+        l, r = 0, k-1
+        min_val = float('inf')
+```
+
+* Use two pointers `l` and `r` to represent a **window of size k**.
+* Start with the first `k` elements.
+* `min_val` is initialized to infinity to track the **minimum difference found so far**.
+
+```python
+        while r < len(nums):
+            difference = nums[r] - nums[l]
+            min_val = min(min_val, difference)
+            l += 1
+            r += 1
+```
+
+* Slide the window across the sorted list.
+* For each window of size `k`, compute `difference = max - min = nums[r] - nums[l]`.
+* Update the minimum difference.
+* Move both pointers forward by 1 to check the next window.
+
+```python
+        return min_val
+```
+
+* Return the smallest difference found.
+
+---
+
+## 🔹 Working Example (Better & Clear)
+
+Let’s take:
+
+```
+nums = [10, 100, 300, 200, 1000, 20, 30]
+k = 3
+```
+
+### Step 1: Sort the scores
+
+```
+Sorted nums = [10, 20, 30, 100, 200, 300, 1000]
+```
+
+## 🔹 Why this works
+
+* Sorting ensures that in each window of size `k`, the **leftmost is the smallest** and the **rightmost is the largest**.
+* That way, the difference `nums[r] - nums[l]` directly gives the spread.
+* Sliding the window ensures we check **all possible groups of k students**.
+
+---
+
+👉 Do you want me to also **draw a number line visualization** (showing windows sliding step by step) to make it even clearer?
+
+### Step 2: Apply sliding window of size k=3
+
+* Window `[10, 20, 30]`
+  → difference = 30 - 10 = **20**
+
+* Window `[20, 30, 100]`
+  → difference = 100 - 20 = **80**
+
+* Window `[30, 100, 200]`
+  → difference = 200 - 30 = **170**
+
+* Window `[100, 200, 300]`
+  → difference = 300 - 100 = **200**
+
+* Window `[200, 300, 1000]`
+  → difference = 1000 - 200 = **800**
+
+### Step 3: Find minimum
+
+Differences = `[20, 80, 170, 200, 800]`
+Minimum = **20**
+
+✅ So the result = **20**
