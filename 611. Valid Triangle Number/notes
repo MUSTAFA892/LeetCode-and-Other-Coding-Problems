@@ -1,0 +1,162 @@
+# **1️⃣ Brute-force approach using `combinations`**
+
+### Code
+
+```python
+from itertools import combinations
+
+class Solution:
+    def triangleNumber(self, nums: List[int]) -> int:
+        nums.sort()
+        combo = list(combinations(nums, 3))  # all triplets
+        count = 0
+        for triplet in combo:
+            sort_triplet = sorted(triplet)    # ensure a <= b <= c
+            if sort_triplet[0] + sort_triplet[1] > sort_triplet[2]:
+                count += 1
+        return count
+```
+
+---
+
+### Working Example
+
+```
+nums = [4, 2, 3, 4]
+```
+
+**Step 1: Sort array** (optional, mainly for clarity)
+
+```
+[2, 3, 4, 4]
+```
+
+**Step 2: Generate all triplets using combinations**
+
+* `(2, 3, 4)`
+* `(2, 3, 4)`
+* `(2, 4, 4)`
+* `(3, 4, 4)`
+
+**Step 3: Check triangle inequality for each**
+
+* `(2, 3, 4)` → 2+3>4 ✅ valid
+* `(2, 3, 4)` → 2+3>4 ✅ valid (same triplet, counts again)
+* `(2, 4, 4)` → 2+4>4 ✅ valid
+* `(3, 4, 4)` → 3+4>4 ✅ valid
+
+**Step 4: Count**
+### Comparison
+
+| Feature                             | Combinations (Brute Force) | Two-Pointer (Optimized) |
+| ----------------------------------- | -------------------------- | ----------------------- |
+| Complexity                          | O(n³)                      | O(n²)                   |
+| Easy to understand                  | ✅                          | ✅                       |
+| Fast for large n                    | ❌                          | ✅                       |
+| Counts multiple valid pairs at once | ❌                          | ✅                       |
+
+---
+
+If you want, I can **draw a visual number-line diagram showing i, j, k moving** in the optimized approach — it makes it extremely easy to “see” why `(j-i)` counts all valid triangles at once.
+
+Do you want me to do that?
+
+* Total valid triangles = **4**
+
+---
+
+### Pros & Cons
+
+* ✅ Simple and easy to understand
+* ❌ **Inefficient**: `O(n³)` for generating all combinations
+* ❌ Slow for large `n` (like 1000)
+
+---
+
+# **2️⃣ Optimized Two-Pointer Approach**
+
+### Code
+
+```python
+class Solution:
+    def triangleNumber(self, nums: List[int]) -> int:
+        nums.sort()
+        count = 0
+        n = len(nums)
+        
+        for k in range(n-1, 1, -1):   # pick largest side nums[k]
+            i, j = 0, k-1             # two pointers for smaller sides
+            
+            while i < j:
+                if nums[i] + nums[j] > nums[k]:
+                    count += (j - i)  # all pairs between i..j-1 are valid
+                    j -= 1
+                else:
+                    i += 1
+        return count
+```
+
+---### Comparison
+
+| Feature                             | Combinations (Brute Force) | Two-Pointer (Optimized) |
+| ----------------------------------- | -------------------------- | ----------------------- |
+| Complexity                          | O(n³)                      | O(n²)                   |
+| Easy to understand                  | ✅                          | ✅                       |
+| Fast for large n                    | ❌                          | ✅                       |
+| Counts multiple valid pairs at once | ❌                          | ✅                       |
+
+---
+
+If you want, I can **draw a visual number-line diagram showing i, j, k moving** in the optimized approach — it makes it extremely easy to “see” why `(j-i)` counts all valid triangles at once.
+
+Do you want me to do that?
+
+
+### Working Example (same array)
+
+```
+nums = [4, 2, 3, 4]
+Sorted → [2, 3, 4, 4]
+```
+
+**Step 1: Outer loop (pick largest side)**
+
+* **k = 3 → nums[k] = 4**
+  Pointers: i=0, j=2
+
+**Iteration 1:**
+
+* nums[i]+nums[j] = 2+4=6 > 4 ✅
+* Count += j-i = 2 (pairs: (2,4,4), (3,4,4))
+* Move j → 1
+
+**Iteration 2:**
+
+* nums[i]+nums[j] = 2+3=5 > 4 ✅
+
+* Count += j-i = 1 (pair: (2,3,4))
+
+* Move j → 0 → while loop ends
+
+* **k = 2 → nums[k] = 4**
+  Pointers: i=0, j=1
+
+**Iteration 1:**
+
+* nums[i]+nums[j] = 2+3=5 > 4 ✅
+* Count += j-i = 1 (pair: (2,3,4))
+* Move j → 0 → loop ends
+
+**Step 2: Done**
+
+* Total count = **4**
+
+---
+
+### ✅ Key Points of Two-Pointer Approach
+
+1. Sorting ensures `a ≤ b ≤ c`.
+2. Fix the largest side `c = nums[k]`.
+3. Use two pointers (`i` start, `j` end) to check **all valid pairs** efficiently.
+4. If `nums[i]+nums[j] > nums[k]`, then **all numbers between i and j-1** also form valid triangles → add `(j-i)` at once.
+5. Time complexity: **O(n²)** (much faster than brute force).
