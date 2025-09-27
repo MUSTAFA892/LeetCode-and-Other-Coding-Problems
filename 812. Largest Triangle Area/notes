@@ -1,0 +1,142 @@
+
+## 🔹 Problem Restatement
+We are given a list of points on the XY-plane.
+We must find the **largest possible area** of any triangle formed by **choosing 3 points**.
+
+---
+
+## 🔹 Code Walkthrough
+
+```python
+class Solution:
+    def largestTriangleArea(self, points: List[List[int]]) -> float:
+        max_area = 0
+```
+
+* `max_area` keeps track of the **largest triangle area found so far**.
+
+---
+
+### 🔹 Triple nested loop
+
+```python
+for i in range(len(points)):
+    for j in range(i+1, len(points)):
+        for k in range(j+1, len(points)):
+```
+
+* Loops through **all possible combinations of 3 distinct points** (i, j, k).
+* Since we need 3 points to form a triangle, we must check every triplet.
+
+---
+
+### 🔹 Shoelace formula for area
+
+```python
+area = 0.5 * abs(
+    (points[i][0]*(points[j][1] - points[k][1])) +
+    (points[j][0]*(points[k][1] - points[i][1])) +
+    (points[k][0]*(points[i][1] - points[j][1]))
+)
+```
+
+This is the **shoelace formula**, which calculates the area of a polygon (in this case, a triangle).
+
+For three points ((x_1,y_1), (x_2,y_2), (x_3,y_3)), the area is:
+
+[
+\text{Area} = \tfrac{1}{2} \cdot |x_1(y_2-y_3) + x_2(y_3-y_1) + x_3(y_1-y_2)|
+]
+
+Why? It’s derived from the determinant of the matrix representing the triangle.
+
+---
+
+### 🔹 Update maximum
+
+```python
+max_area = max(max_area, area)
+```
+
+* After computing area of this triangle, compare with current `max_area`.
+* Keep the larger one.
+
+---
+
+### 🔹 Return
+
+```python
+return max_area
+```
+
+* At the end, we return the **largest area** found.
+
+---
+
+## 🔹 Working Example
+
+### Example Input
+
+```python
+points = [[0,0], [0,1], [1,0], [0,2]]
+```
+
+---
+
+### Step 1: Try triples
+
+1. **(0,0), (0,1), (1,0)**
+
+   * Plug into formula:
+     [
+     0.5 \times |0 \cdot (1-0) + 0 \cdot (0-0) + 1 \cdot (0-1)|
+     = 0.5 \times |-1| = 0.5
+     ]
+     Area = 0.5
+
+---
+
+2. **(0,0), (0,1), (0,2)**
+
+   * All x = 0 → collinear → area = 0
+
+---
+
+3. **(0,0), (0,1), (1,0)** already done
+
+---
+
+4. **(0,0), (1,0), (0,2)**
+
+   * Formula:
+     [
+     0.5 \times |0 \cdot (0-2) + 1 \cdot (2-0) + 0 \cdot (0-0)|
+     = 0.5 \times |2| = 1
+     ]
+     Area = 1
+
+---
+
+5. **(0,1), (1,0), (0,2)**
+
+   * Formula:
+     [
+     0.5 \times |0 \cdot (0-2) + 1 \cdot (2-1) + 0 \cdot (1-0)|
+     = 0.5 \times |1| = 0.5
+     ]
+     Area = 0.5
+
+---
+
+### Step 2: Compare
+
+* Areas found = [0.5, 0, 1, 0.5]
+* **Max = 1**
+
+---
+
+### Final Answer
+
+```
+1.0
+```
