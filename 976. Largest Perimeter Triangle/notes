@@ -1,0 +1,101 @@
+## 🔹 Problem Restatement
+
+We’re given an array of stick lengths `nums`.
+We must form a **triangle with non-zero area** and return the **largest possible perimeter**.
+If no triangle can be formed, return `0`.
+
+---
+
+## 🔹 Code Walkthrough
+
+```python
+nums.sort(reverse=True)
+```
+
+* Sorts the array in **descending order**.
+* Why? Because bigger sticks will give **larger perimeter**, so we want to check them first.
+
+---
+
+```python
+perimeter = 0
+```
+
+* Initialize the answer.
+
+---
+
+```python
+for i in range(len(nums)-2):
+```
+
+* Loop through all possible **triples of consecutive sides** in the sorted list.
+* Only go until `len(nums)-2` so that `nums[i+2]` doesn’t go out of bounds.
+
+---
+
+```python
+if nums[i+2] + nums[i+1] > nums[i]:
+```
+
+* This is the **triangle inequality**.
+* For three sides `a ≥ b ≥ c` (since sorted descending):
+
+  * Only need to check if `b + c > a`.
+  * If true → valid triangle.
+
+---
+
+```python
+perimeter = max(perimeter, nums[i] + nums[i+1] + nums[i+2])
+```
+
+* If triangle inequality is satisfied, compute the perimeter.
+* Compare with current maximum and keep the larger.
+
+---
+
+```python
+return perimeter
+```
+
+* Return the largest valid perimeter found.
+* If no valid triangle was found → perimeter remains `0`.
+
+---
+
+## 🔹 Working Example
+
+### Example 1
+
+```python
+nums = [2, 1, 2]
+```
+
+1. Sort descending → `[2, 2, 1]`
+2. Check triple `(2,2,1)`
+
+   * `2 + 1 > 2` ✅ valid
+   * Perimeter = `2+2+1 = 5`
+3. Return `5`
+
+✅ Output: `5`
+
+---
+
+### Example 2
+
+```python
+nums = [1,2,1,10]
+```
+
+1. Sort descending → `[10, 2, 1, 1]`
+2. Check triple `(10,2,1)`
+
+   * `2+1 > 10` ❌ invalid
+3. Next triple `(2,1,1)`
+
+   * `1+1 > 2` ❌ invalid (equal, so area = 0)
+4. No valid triangle → return `0`
+
+✅ Output: `0`
