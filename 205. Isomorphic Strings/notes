@@ -1,0 +1,85 @@
+## 🔎 Explanation of your code
+
+You’re checking **isomorphism** by maintaining two maps:
+
+* `map_s`: maps each character from `s → t`
+* `map_t`: maps each character from `t → s`
+
+Then, for every character pair `(i, j)` from `s` and `t` (looping together):
+
+1. **Insert mapping if missing**
+
+   ```python
+   if i not in map_s:---
+
+👉 So your code now correctly checks **order + one-to-one mapping** instead of just frequencies.
+
+Do you want me to also dry-run it on your tricky case (`s = "bbbaaaba"`, `t = "aaabbbba"`) so you can see why it fails there (as it should)?
+
+       map_s[i] = j
+   if j not in map_t:
+       map_t[j] = i
+   ```
+
+   * If a character hasn’t been mapped yet, create the mapping.
+   * This builds the one-to-one relationship.
+
+2. **Check consistency**
+
+   ```python
+   if map_s[i] != j or map_t[j] != i:
+       return False
+   ```
+
+   * If `s[i]` doesn’t map to `t[i]`, or `t[i]` doesn’t map back to `s[i]`, → return `False`.
+   * This ensures **consistency** and prevents two different characters mapping to the same one.
+---
+
+👉 So your code now correctly checks **order + one-to-one mapping** instead of just frequencies.
+
+Do you want me to also dry-run it on your tricky case (`s = "bbbaaaba"`, `t = "aaabbbba"`) so you can see why it fails there (as it should)?
+
+3. If the loop finishes with no conflicts → return `True`.
+
+---
+
+## ✅ Working Example
+
+`s = "egg"`, `t = "add"`
+
+Step by step:
+
+* Pair 1: `e → a`
+
+  * `map_s = {e: a}`, `map_t = {a: e}`
+  * Consistent ✅
+
+* Pair 2: `g → d`
+
+  * `map_s = {e: a, g: d}`, `map_t = {a: e, d: g}`
+  * Consistent ✅
+
+* Pair 3: `g → d` again
+
+  * Already mapped, and consistent ✅
+
+Loop ends → return `True`.
+
+---
+
+## ❌ Non-working Example
+
+`s = "foo"`, `t = "bar"`
+
+* Pair 1: `f → b`
+
+  * `map_s = {f: b}`, `map_t = {b: f}`
+* Pair 2: `o → a`
+
+  * `map_s = {f: b, o: a}`, `map_t = {b: f, a: o}`
+* Pair 3: `o → r`
+
+  * But `map_s[o] = a` ≠ `r` → conflict ❌
+
+Return `False`.
+
