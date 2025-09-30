@@ -1,0 +1,88 @@
+## 🔹 Step-by-step Explanation
+
+1. **Goal**:
+   Convert the array step by step into a single number.
+
+   * In each step, replace the array with a new one formed by summing adjacent elements **mod 10**.
+   * Continue until only one number is left.
+
+2. **Logic**:
+
+   * `for i in range(1, len(nums))`: loop through adjacent pairs.
+   * `sums = (nums[i-1] + nums[i]) % 10`: take the sum of neighbors and keep only the last digit.
+   * `nums[i-1] = sums`: overwrite the left element with the sum result.
+   * `nums.pop()`: remove the last element since the row is shorter each time.
+   * Repeat until only one element is left, then return it.
+
+---
+
+## 🔹 Example Walkthrough
+
+Let’s take:
+`nums = [1, 2, 3, 4, 5]`
+
+### Step 1: First iteration
+
+* Adjacent sums (mod 10):
+
+  * (1+2) % 10 = 3
+  * (2+3) % 10 = 5
+  * (3+4) % 10 = 7
+  * (4+5) % 10 = 9
+
+So, array becomes:
+`[3, 5, 7, 9, 5] → after nums.pop() → [3, 5, 7, 9]`
+
+---
+
+### Step 2: Second iteration
+
+* Adjacent sums:
+
+  * (3+5) % 10 = 8
+  * (5+7) % 10 = 2
+  * (7+9) % 10 = 6
+
+Array:
+`[8, 2, 6, 9] → after pop → [8, 2, 6]`
+
+---
+
+### Step 3: Third iteration
+
+* Adjacent sums:
+
+  * (8+2) % 10 = 0
+  * (2+6) % 10 = 8
+
+Array:
+`[0, 8, 6] → after pop → [0, 8]`
+
+---
+
+### Step 4: Fourth iteration
+
+* Adjacent sums:
+
+  * (0+8) % 10 = 8
+
+Array:
+`[8, 8] → after pop → [8]`
+
+---
+
+✅ Final Answer = **8**
+
+---
+
+## 🔹 Visualization (Triangle)
+
+```
+[1, 2, 3, 4, 5]
+ [3, 5, 7, 9]
+  [8, 2, 6]
+   [0, 8]
+    [8]
+```
+
+The last number **8** is the triangular sum.
