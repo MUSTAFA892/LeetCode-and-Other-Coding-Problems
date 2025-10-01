@@ -1,0 +1,101 @@
+### **Step-by-step explanation**
+
+1. **Initialization**
+
+   * `drank = numBottles` → you drink all the starting full bottles.
+   * `empty = numBottles` → these now become empty bottles.
+
+2. **Loop condition**
+
+   * `while empty >= numExchange` → as long as you have enough empty bottles to exchange for **at least 1 full bottle**.
+
+3. **Calculate new full bottles**
+
+   * `fullBottle = empty // numExchange` → integer division to see **how many full bottles you can get** from current empties.
+
+4. **Update empty bottles**
+
+   * `empty = abs((numExchange * fullBottle) - empty)`
+
+     * This is the **remainder of empties** after exchange.
+     * Conceptually: `empty % numExchange` (same thing).
+
+5. **Update drank count**
+
+   * `drank += fullBottle` → drink the newly exchanged full bottles.
+
+6. **Add the new empty bottles**
+
+   * After drinking the new full bottles, they become empty: `empty += fullBottle`.
+
+7. **Repeat until not enough empty bottles**.
+
+---
+
+### **Key Difference from Water Bottles II**
+
+* This logic **fits Water Bottles I (1518)** where the exchange rate is **constant**.
+* It **does NOT handle Water Bottles II** correctly because in problem 3100, **numExchange increases by 1 after each trade**.
+* So your code would **over-count bottles** if used for Water Bottles II.
+
+---
+
+## **Perfect Example: Water Bottles I**
+
+Let’s take:
+
+`numBottles = 9`, `numExchange = 3`
+
+---
+
+### **Step-by-step execution**
+
+**Initialization:**
+
+* `drank = 9` (drink all starting bottles)
+* `empty = 9`
+
+---
+
+**Loop 1:**
+
+* `empty >= 3` ✅
+* `fullBottle = 9 // 3 = 3` → get 3 full bottles
+* `empty = abs((3*3) - 9) = abs(9 - 9) = 0` → leftover empties
+* `drank += 3 → 9 + 3 = 12`
+* `empty += 3 → 0 + 3 = 3` (the new empties from drinking the exchanged bottles)
+
+---
+
+**Loop 2:**
+
+* `empty >= 3` ✅
+* `fullBottle = 3 // 3 = 1` → get 1 full bottle
+* `empty = abs((3*1) - 3) = abs(3 - 3) = 0`
+* `drank += 1 → 12 + 1 = 13`
+* `empty += 1 → 0 + 1 = 1`
+
+---
+
+**Loop 3:**
+
+* `empty >= 3` ❌ → stop
+
+---
+
+### **Final result:**
+
+✅ `drank = 13`
+
+This matches the **expected output** for **Water Bottles I**.
+
+---
+
+### **Visual Idea**
+
+| Step  | Full bottles exchanged | Empties left | Total drank |
+| ----- | ---------------------- | ------------ | ----------- |
+| Start | -                      | 9            | 9           |
+| 1     | 3                      | 3            | 12          |
+| 2     | 1                      | 1            | 13          |
+| 3     | -                      | 1            | 13 (stop)   |
