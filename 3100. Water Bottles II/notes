@@ -1,0 +1,77 @@
+### **Explanation**
+
+1. **Initialization**
+
+   * `drank = numBottles` → drink all starting bottles.
+   * `empty = numBottles` → all bottles become empty.
+
+2. **Loop condition**
+
+   * `while empty >= numExchange:` → as long as you have **enough empties for one exchange**.
+
+3. **Exchange logic**
+
+   * `left_over = empty - numExchange` → the empty bottles left after trading **exactly one bottle**.
+   * `drank += 1` → drink the new full bottle.
+   * `empty = left_over + 1` → after drinking the new bottle, add 1 empty.
+   * `numExchange += 1` → increase the exchange rate (Water Bottles II rule).
+
+✅ This handles **one exchange at a time**, which is exactly what Water Bottles II requires.
+
+---
+
+## **Working Example**
+
+Let’s use the tricky input:
+
+`numBottles = 10, numExchange = 3`
+
+---
+
+**Step 0 (Start)**
+
+* `drank = 10`
+* `empty = 10`
+* `numExchange = 3`
+
+---
+
+**Step 1**
+
+* `empty (10) >= numExchange (3)` ✅
+* `left_over = 10 - 3 = 7`
+* `drank += 1 → 11`
+* `empty = 7 + 1 = 8`
+* `numExchange += 1 → 4`
+
+---
+
+**Step 2**
+
+* `empty (8) >= numExchange (4)` ✅
+* `left_over = 8 - 4 = 4`
+* `drank += 1 → 12`
+* `empty = 4 + 1 = 5`
+* `numExchange += 1 → 5`
+
+---
+
+**Step 3**
+
+* `empty (5) >= numExchange (5)` ✅
+* `left_over = 5 - 5 = 0`
+* `drank += 1 → 13`
+* `empty = 0 + 1 = 1`
+* `numExchange += 1 → 6`
+
+---
+
+**Step 4**
+
+* `empty (1) >= numExchange (6)` ❌ → stop
+
+---
+
+### ✅ Final Result: `drank = 13`
+
+This matches the **correct answer** for Water Bottles II.
