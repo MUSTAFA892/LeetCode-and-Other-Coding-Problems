@@ -32,73 +32,247 @@
 10. **Return Result:**
    - The total amount of trapped water is accumulated in a result variable (`res`) and returned at the end.
 
+Got it 👍 You don’t want paragraphs — you want a **step-by-step virtual example, like a detailed notebook of what’s happening**. Let’s break down your `trapRainWater` (2D Rain Water Trapping with heap/priority queue) with a **concrete example input** and walk through it.
+
 ---
 
-### **Working Virtual Example:**
+We want to calculate **how much water can be trapped** inside a 2D elevation map (matrix).
+Think of it like a **container made of blocks** — water can only be trapped if it’s surrounded by taller walls.
 
-Let’s take an example of a 2D grid (`heightMap`) where water can be trapped:
+Algorithm used here:
 
-#### **Input:**
+* BFS with **min-heap (priority queue)**.
+* Always process the **lowest boundary** first.
+* Keep track of the **highest wall seen so far**.
+* Water trapped at a cell = `max_h - current_height`.
 
-```
+---
+
+# 📌 Example Input
+
+```python
 heightMap = [
   [1, 4, 3, 1, 3, 2],
-  [3, 2, 1, 4, 2, 4],
+  [3, 2, 1, 3, 2, 4],
   [2, 3, 3, 2, 3, 1]
 ]
 ```
 
-#### **Steps:**
-
-1. **Initialize Border Cells in the Min-Heap:**
-   - We first add all the border cells to the min-heap. These are cells in the first and last row, and the first and last column.
-   
-   The min-heap will contain:
-   ```
-   [(1, 0, 0), (1, 0, 5), (2, 2, 5), (3, 0, 1), (4, 0, 3), (3, 2, 0), (3, 2, 4), (2, 1, 0), (2, 2, 3), (3, 1, 5), (1, 0, 4), (4, 2, 4), (3, 3, 1), (3, 1, 1)]
-   ```
-
-2. **Processing the Min-Heap:**
-   - We begin processing cells starting from the smallest height in the heap.
-   - First, pop `(1, 0, 0)` from the heap. The current maximum height `max_h` is 1.
-     - The current trapped water: `max_h - height = 1 - 1 = 0`
-     - Check the neighbors: Right `(0, 1)` which has height `4`, push `(4, 0, 1)` into the heap.
-     - No water is trapped here.
-
-3. **Proceeding to the Next Cell:**
-   - Now pop `(1, 0, 5)` from the heap. The current `max_h` is still 1.
-     - The current trapped water: `max_h - height = 1 - 1 = 0`
-     - Neighbors: Left `(0, 4)` with height `3`, push `(3, 0, 4)` into the heap.
-     - Still no trapped water.
-
-4. **Process Next Border Cells:**
-   - Continue with the border cells, adding neighbors to the heap and updating `max_h`.
-   - Eventually, you will reach cells that are lower than their neighbors, indicating trapped water.
-
-5. **Trapping Water Between Lower and Higher Cells:**
-   - As we move to cells with lower heights surrounded by higher cells, we begin calculating the trapped water. For example, when processing a cell in the interior like `(1, 1)` (height `2`), it is surrounded by higher cells, so trapped water can be calculated:
-     - If the highest boundary around it is `4`, the water trapped here would be `4 - 2 = 2`.
-
-6. **Continue Until All Cells Are Processed:**
-   - Keep processing cells, updating the `max_h`, pushing neighbors into the heap, and calculating trapped water.
-
-#### **Final Calculation:**
-
-- After processing all cells, the total trapped water is accumulated in `res`.
-- The final trapped water for the given example is **10 units**.
-
-#### **Visual Breakdown:**
-
-```
-heightMap = [
-  [1, 4, 3, 1, 3, 2],
-  [3, 2, 1, 4, 2, 4],
-  [2, 3, 3, 2, 3, 1]
-]
-```
-
-- The water is trapped in the valleys (cells surrounded by higher heights).
-- As we simulate the process step by step, the `max_h` increases as we explore cells. Water accumulates where there is a difference between the current height and `max_h`.
+Rows = 3
+Cols = 6
 
 ---
- 
+
+# 🛠 Step 1 – Put Boundary into MinHeap
+
+We push all **border cells** into a min-heap.
+Also, mark them as visited (`-1`).
+
+Heap after inserting boundaries (value, row, col):
+
+```
+[(1,0,0), (4,0,1), (3,0,2), (1,0,3), (3,0,4), (2,0,5),
+ (3,1,0), (4,1,5),
+ (2,2,0), (3,2,1), (3,2,2), (2,2,3), (3,2,4), (1,2,5)]
+```
+
+`max_h = -1` initially.
+
+---
+
+# 🛠 Step 2 – Pop from Heap (Process Cells)
+
+We always pop the **lowest wall** first.
+Keep track of `max_h = max(max_h, h)`.
+Water trapped at this cell = `max_h - h`.
+Then push unvisited neighbors into heap.
+
+---
+
+## 🔹 Iteration 1
+
+Pop `(1,0,0)` → lowest wall = 1
+`max_h = max(-1,1) = 1`
+Water trapped = `1-1 = 0`
+
+Neighbors → (1,1,0) already boundary, skip.
+
+---
+
+## 🔹 Iteration 2
+
+Pop `(1,0,3)`
+`max_h = max(1,1) = 1`
+Water trapped = `0`
+
+Neighbor inside: (1,1,3) → value=3 → push `(3,1,3)`
+
+---
+
+## 🔹 Iteration 3
+
+Pop `(1,2,5)`
+`max_h = max(1,1) = 1`
+Water trapped = 0
+
+Neighbor inside: (1,1,5) already boundary.
+
+---
+
+## 🔹 Iteration 4
+
+Pop `(2,0,5)`
+`max_h = max(1,2)=2`
+Water trapped = 0
+
+Neighbor inside: (1,0,4) → already visited.
+
+---
+
+## 🔹 Iteration 5
+
+Pop `(2,2,0)`
+`max_h = max(2,2)=2`
+Water trapped = 0
+
+Neighbor: (1,1,0) already boundary.
+
+---
+
+## 🔹 Iteration 6
+
+Pop `(2,2,3)`
+`max_h = max(2,2)=2`
+Water trapped = 0
+
+Neighbor: (1,1,3) already pushed.
+
+---
+
+## 🔹 Iteration 7
+
+Pop `(3,0,2)`
+`max_h = 3`
+Water = 0
+
+---
+
+## 🔹 Iteration 8
+
+Pop `(3,0,4)`
+`max_h = 3`
+Water = 0
+
+---
+
+## 🔹 Iteration 9
+
+Pop `(3,1,0)`
+`max_h = 3`
+Water = 0
+
+---
+
+## 🔹 Iteration 10
+
+Pop `(3,2,1)`
+`max_h = 3`
+Water = 0
+
+---
+
+## 🔹 Iteration 11
+
+Pop `(3,2,2)`
+`max_h = 3`
+Water = 0
+
+---
+
+## 🔹 Iteration 12
+
+Pop `(3,2,4)`
+`max_h = 3`
+Water = 0
+
+---
+
+## 🔹 Iteration 13
+
+Pop `(3,1,3)` (from earlier push)
+`max_h = 3`
+Water = 0
+
+Neighbors → (1,1,2) = 1 → push `(1,1,2)`
+(1,1,4) = 2 → push `(2,1,4)`
+
+---
+
+## 🔹 Iteration 14
+
+Pop `(4,0,1)`
+`max_h = 4`
+Water = 0
+
+---
+
+## 🔹 Iteration 15
+
+Pop `(4,1,5)`
+`max_h = 4`
+Water = 0
+
+---
+
+## 🔹 Iteration 16
+
+Pop `(1,1,2)`
+`max_h = 4`
+Water = `4 - 1 = 3` ✅
+Total water = 3
+
+Neighbors → (1,1,1) = 2 → push `(2,1,1)`
+
+---
+
+## 🔹 Iteration 17
+
+Pop `(2,1,4)`
+`max_h = 4`
+Water = `4 - 2 = 2` ✅
+Total water = 5
+
+Neighbor → already visited.
+
+---
+
+## 🔹 Iteration 18
+
+Pop `(2,1,1)`
+`max_h = 4`
+Water = `4 - 2 = 2` ✅
+Total water = 7
+
+Neighbor → (1,1,2) already visited.
+
+---
+
+# ✅ Final Result
+
+Total trapped water = **7**
+
+---
+
+# 🔑 Notes (Summary Like a Cheat-Sheet)
+
+1. **Push all boundaries into heap.**
+2. **Heap pops lowest cell → ensures water always flows outwards.**
+3. Keep `max_h` = tallest wall seen so far.
+4. At each pop:
+
+   ```
+   water += max_h - current_height
+   ```
+5. Push unvisited neighbors into heap.
+6. Repeat until heap empty.
+
