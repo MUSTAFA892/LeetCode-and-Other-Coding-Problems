@@ -31,9 +31,6 @@
 
 10. **Return Result:**
    - The total amount of trapped water is accumulated in a result variable (`res`) and returned at the end.
-
-Got it 👍 You don’t want paragraphs — you want a **step-by-step virtual example, like a detailed notebook of what’s happening**. Let’s break down your `trapRainWater` (2D Rain Water Trapping with heap/priority queue) with a **concrete example input** and walk through it.
-
 ---
 
 We want to calculate **how much water can be trapped** inside a 2D elevation map (matrix).
