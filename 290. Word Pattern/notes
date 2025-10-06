@@ -1,0 +1,113 @@
+## ✅ Problem Summary: Word Pattern
+
+Given:
+
+* A `pattern` string like `"abba"`
+* A string `s` like `"dog cat cat dog"`
+
+You need to check if the words in `s` follow the **same pattern** as the letters in `pattern`, where:
+
+* Each character in `pattern` maps to **exactly one unique word** in `s`, and
+* Each word in `s` maps to **exactly one unique character** in `pattern`
+
+> 🧠 This is called a **bijective** mapping (one-to-one and onto).
+
+---
+
+## 🔍 Let's Use Your Example:
+
+```python
+pattern = "abba"
+s = "dog cat cat dog"
+```
+
+---
+
+### 🎯 Goal:
+
+Check if:
+
+* `'a' → dog`
+* `'b' → cat`
+* And second `'b'` maps to `cat`, second `'a'` maps to `dog`
+* No word is reused for a different pattern letter (e.g., `'b'` can't map to both `"cat"` and `"dog"`)
+
+Expected output: **`True`** ✅
+
+---
+
+## 🧪 Step-by-Step Walkthrough of Your Code
+
+```python
+s_map = {}         # Word-to-pattern mapping
+pattern_map = {}   # Pattern-to-word mapping
+s = s.split()      # ['dog', 'cat', 'cat', 'dog']
+```
+
+Now loop over each position `i` from 0 to 3:
+
+---
+
+### ➤ i = 0
+
+* `pattern[0] = 'a'`
+* `s[0] = 'dog'`
+
+**Mappings:**
+
+* `'a'` not in `pattern_map` → add: `'a' → 'dog'`
+* `'dog'` not in `s_map`, and `'a' → 'dog'` → add: `'dog' → 'a'`
+
+✅ Good so far.
+
+---
+
+### ➤ i = 1
+
+* `pattern[1] = 'b'`
+* `s[1] = 'cat'`
+
+**Mappings:**
+
+* `'b'` not in `pattern_map` → add: `'b' → 'cat'`
+* `'cat'` not in `s_map`, and `'b' → 'cat'` → add: `'cat' → 'b'`
+
+✅ Still good.
+
+---
+
+### ➤ i = 2
+
+* `pattern[2] = 'b'`
+* `s[2] = 'cat'`
+
+**Mappings:**
+
+* `'b'` already maps to `'cat'` — ✅ match
+* `'cat'` already maps to `'b'` — ✅ match
+
+No change needed — pass.
+
+---
+
+### ➤ i = 3
+
+* `pattern[3] = 'a'`
+* `s[3] = 'dog'`
+
+**Mappings:**
+
+* `'a'` → `'dog'` — ✅
+* `'dog'` → `'a'` — ✅
+
+Still matches — ✅
+
+---
+
+### 🎯 Final Return:
+
+```python
+return flag  # which is still True
+```
+
+✅ Output: **True**, as expected.
