@@ -1,0 +1,170 @@
+### Problem Explanation:
+
+You are given a list `rains`, where:
+
+* `rains[i] == 0` means the lake at index `i` dries up (i.e., no rain in that index).
+* `rains[i] > 0` means it rains in the lake numbered `rains[i]` on that day.
+
+The goal is to return a list `ans`, where:
+
+* `ans[i] == -1` means no action is taken on day `i` (i.e., it rained on that day).
+* `ans[i] == x` (where `x` is a lake number) means that on day `i`, you dry up lake `x` so that it doesn't overflow.
+
+The main constraint is that **you cannot dry up a lake if it has already rained on that lake before**. If it's not possible to avoid a flood (i.e., no valid day exists to dry up a lake when needed), return `[]`.
+
+---
+
+### Code Walkthrough:
+
+#### Step 1: Initialize the variables
+
+```python
+ans = [-1] * len(rains)
+full_lake = {}  
+dry_lake = []
+```
+
+* `ans`: This list is initialized to `-1` for every index, meaning that by default, it assumes that nothing is done on any day unless specified.
+* `full_lake`: A dictionary that will store the last day (index) when it rained on a particular lake.
+* `dry_lake`: A list that will store the indices (days) when a lake dries up (i.e., when `rains[i] == 0`).
+
+#### Step 2: Iterate over all the days in the `rains` list
+
+```python
+for i in range(len(rains)):
+```
+
+We will loop over every day in the `rains` list and decide if it rains or not, and if it does, whether we need to dry up any lake.
+
+#### Step 3: Handling the case when there is no rain on that day
+
+```python
+if rains[i] == 0:
+    dry_lake.append(i)
+    ans[i] = 1
+```
+
+* If `rains[i] == 0`, that means it’s a dry day (we can dry a lake on this day).
+* We add this index `i` to the `dry_lake` list, as this is a potential day where we could dry up a lake.
+* Set `ans[i] = 1` because no action is needed on this day (nothing happens here except drying a lake).
+
+#### Step 4: Handling the case when it rains on that day
+
+```python
+else:
+    if rains[i] in full_lake:
+        flag = False
+        for j in range(len(dry_lake)):
+            if dry_lake[j] > full_lake[rains[i]]:
+                ans[dry_lake[j]] = rains[i]
+                dry_lake.pop(j)
+                flag = True
+                break
+        
+        if not flag:
+            return []
+```
+
+* If `rains[i] > 0` (meaning it rains on day `i`), we check if it has already rained on that lake (`rains[i]`) before.
+
+  * If it has already rained before (`rains[i] in full_lake`), we need to find the earliest day to dry this lake. We must dry it on a day before it rains again.
+  * We loop through the `dry_lake` list (which stores the indices of the days when we can dry a lake). For each `j`, we check if this day `dry_lake[j]` is **after** the day when the lake `rains[i]` last rained (i.e., `dry_lake[j] > full_lake[rains[i]]`).
+  * If we find such a day, we dry up the lake on this day by setting `ans[dry_lake[j]] = rains[i]`.
+  * We then remove that day (`dry_lake.pop(j)`) because we’ve used it to dry the lake, and set `flag = True` to indicate that we successfully found a valid day to dry up the lake.
+  * If no valid day is found (no day in `dry_lake` after the previous rain), we return an empty list `[]` because it’s impossible to avoid flooding.
+
+#### Step 5: Update the `full_lake` dictionary
+
+```python
+    full_lake[rains[i]] = i
+    ans[i] = -1
+```
+
+* After processing the rain for that day, we update `full_lake` with the latest index when the lake `rains[i]` has rained.
+* We also leave `ans[i]` as `-1` because it rained on that day, and no other action was taken.
+
+#### Step 6: Return the result
+
+```python
+return ans
+```
+
+Finally, we return the `ans` list, which contains the actions for each day, where `-1` indicates no action (it rained), and a number represents the lake number that was dried on that day.
+
+---
+
+### Working Example
+
+Let's walk through an example step-by-step to understand the flow of the code:
+
+#### Input:
+
+```python
+rains = [1, 2, 0, 0, 2, 1]
+```
+
+#### Initial Setup:
+
+```python
+ans = [-1, -1, -1, -1, -1, -1]
+full_lake = {}
+dry_lake = []
+```
+
+#### Step 1: First day (rains[0] = 1)
+
+* It rains on lake 1.
+* Update `full_lake = {1: 0}` (lake 1 rained on day 0).
+* `ans[0] = -1` (it rained on day 0).
+
+#### Step 2: Second day (rains[1] = 2)
+
+* It rains on lake 2.
+* Update `full_lake = {1: 0, 2: 1}` (lake 2 rained on day 1).
+* `ans[1] = -1` (it rained on day 1).
+
+#### Step 3: Third day (rains[2] = 0)
+
+* No rain today, so we can dry a lake.
+* Add day 2 to `dry_lake = [2]`.
+* Set `ans[2] = 1` (we dry up lake 1, as it rained before).
+
+#### Step 4: Fourth day (rains[3] = 0)
+
+* No rain today, so we can dry a lake.
+* Add day 3 to `dry_lake = [2, 3]`.
+* Set `ans[3] = 1` (we dry up lake 1).
+
+#### Step 5: Fifth day (rains[4] = 2)
+
+* It rains on lake 2.
+* Lake 2 has already rained before, so we need to dry it up.
+* The only day in `dry_lake` that is after lake 2's last rain (on day 1) is day 3.
+* We can dry up lake 2 on day 3.
+* Update `ans[3] = 2` (dry lake 2).
+* Remove day 3 from `dry_lake = [2]`.
+
+#### Step 6: Sixth day (rains[5] = 1)
+
+* It rains on lake 1.
+* Lake 1 has already rained before, so we need to dry it up.
+* The only day in `dry_lake` after lake 1's last rain (on day 0) is day 2.
+* We can dry up lake 1 on day 2.
+* Update `ans[2] = 1` (dry lake 1).
+* Remove day 2 from `dry_lake = []`.
+
+#### Final Answer:
+
+```python
+ans = [1, 2, 1, 2, -1, -1]
+```
+
+The output is `[1, 2, 1, 2, -1, -1]`, which means:
+
+* On day 0, it rained on lake 1.
+* On day 1, it rained on lake 2.
+* On day 2, we dried up lake 1.
+* On day 3, we dried up lake 2.
+* On day 4, it rained on lake 2.
+* On day 5, it rained on lake 1.
+
