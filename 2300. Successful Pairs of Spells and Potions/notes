@@ -1,0 +1,197 @@
+## **Problem Statement**
+
+You are given:
+
+* Two arrays:
+
+  * `spells = [s₁, s₂, …, sₙ]`
+  * `potions = [p₁, p₂, …, pₘ]`
+* An integer `success`.
+
+**Task:**
+
+For each spell `sᵢ`, count how many potions `pⱼ` satisfy:
+
+[
+sᵢ * pⱼ ≥ success
+]
+
+Return an array `pairs` where `pairs[i]` = number of successful potions for spell `i`.
+
+---
+
+## **1️⃣ Brute-Force Approach (Nested Loops)**
+
+### **Logic**
+
+1. Initialize an empty list `counter`.
+2. For each spell in `spells`:
+
+   * Initialize `count = 0`.
+   * For each potion in `potions`:
+
+     * If `spell * potion >= success`, increment `count`.
+   * Append `count` to `counter`.
+3. Return `counter`.
+
+### **Python Code**
+
+```python
+def successfulPairsBruteForce(spells, potions, success):
+    counter = []
+    for spell in spells:
+        count = 0
+        for potion in potions:
+            if spell * potion >= success:
+                count += 1
+        counter.append(count)
+    return counter
+```
+
+### **Example 1**
+
+```python
+spells = [5,1,3]
+potions = [1,2,3,4,5]
+success = 7
+```
+
+**Step-by-step Calculation:**
+
+| Spell | Potion    | Product   | ≥7? | Count |
+| ----- | --------- | --------- | --- | ----- |
+| 5     | 1         | 5         | ❌   | 0     |
+| 5     | 2         | 10        | ✅   | 1     |
+| 5     | 3         | 15        | ✅   | 2     |
+| 5     | 4         | 20        | ✅   | 3     |
+| 5     | 5         | 25        | ✅   | 4     |
+| 1     | 1,2,3,4,5 | 1,2,3,4,5 | ❌   | 0     |
+| 3     | 1         | 3         | ❌   | 0     |
+| 3     | 2         | 6         | ❌   | 0     |
+| 3     | 3         | 9         | ✅   | 1     |
+| 3     | 4         | 12        | ✅   | 2     |
+| 3     | 5         | 15        | ✅   | 3     |
+
+**Output:**
+
+```python
+[4, 0, 3]
+```
+
+### **Pros & Cons**
+
+* **Pros:** Simple, easy to understand.
+* **Cons:**
+
+  * Time Complexity: **O(n*m)** → slow for large arrays.
+  * Not efficient when `n` and `m` are large.
+
+---
+
+## **2️⃣ Optimized Two-Pointer Approach**
+
+### **Logic**
+
+* Sort both `spells` and `potions`.
+* Use a **two-pointer** approach:
+
+  * One pointer for spells (`spells_counter`)
+  * One pointer for potions (`potions_counter`, starting from the end)
+* For each spell:
+
+  1. Move the potion pointer left until the product `< success`.
+  2. Number of successful potions = `len(potions) - (potions_counter + 1)`
+* Handle duplicates correctly by **keeping track of original indices**.
+
+### **Why Use Two Pointers?**
+
+* Avoids recomputing for previous spells.
+* Efficient because potions array is sorted → we can “reuse” the potion pointer.
+
+---
+
+### **Python Code**
+
+```python
+class Solution:
+    def successfulPairs(self, spells, potions, success):
+        # Copy spells to store the results in original order
+        spell = spells.copy()
+
+        # Keep track of original indices
+        indexed_spells = list(enumerate(spell))
+        # Sort by spell values for two-pointer approach
+        indexed_spells.sort(key=lambda x: x[1])
+
+        # Sort spells and potions
+        spells.sort()
+        potions.sort()
+
+        spells_counter = 0
+        potions_counter = len(potions) - 1
+
+        while spells_counter < len(spells):
+            # Move potion pointer left while product >= success
+            while potions_counter >= 0 and spells[spells_counter] * potions[potions_counter] >= success:
+                potions_counter -= 1
+
+            # Count of successful potions
+            count = len(potions) - (potions_counter + 1)
+            
+            # Place count in original spell index
+            spell[indexed_spells[spells_counter][0]] = count
+
+            spells_counter += 1
+
+        return spell
+```
+
+---
+
+### **Example 2 (With Duplicates)**
+
+```python
+spells = [20,26,38,23,23,20,14,30]
+potions = [24,1,7,26,19,17,7]
+success = 510
+```
+
+**Step-by-step (Pointers)**
+
+1. Sort spells: `[14,20,20,23,23,26,30,38]`
+   Keep original indices: `[ (6,14),(0,20),(5,20),(3,23),(4,23),(1,26),(7,30),(2,38) ]`
+2. Sort potions: `[1,7,7,17,19,24,26]`
+3. Initialize `potions_counter = 6` (last index).
+
+#### Processing Spells
+
+| Spell | potions_counter moves | Count (len(potions) - (counter+1)) | Original Index |
+| ----- | --------------------- | ---------------------------------- | -------------- |
+| 14    | stops immediately     | 0                                  | 6              |
+| 20    | moves to 5            | 1                                  | 0              |
+| 20    | moves to 5            | 1                                  | 5              |
+| 23    | moves to 4            | 2                                  | 3              |
+| 23    | moves to 4            | 2                                  | 4              |
+| 26    | moves to 3            | 4                                  | 1              |
+| 30    | moves to 3            | 4                                  | 7              |
+| 38    | moves to 2            | 4                                  | 2              |
+
+**Output (Original Order):**
+
+```python
+[1,2,4,2,2,1,0,4]
+```
+
+✅ Correct! Works even with duplicates.
+
+---
+
+### **Time Complexity Comparison**
+
+| Approach              | Time Complexity              | Space Complexity |
+| --------------------- | ---------------------------- | ---------------- |
+| Brute Force           | O(n*m)                       | O(n)             |
+| Two-Pointer Optimized | O(n log n + m log m + n + m) | O(n)             |
+
+* Optimized approach is **much faster** for large inputs.
+
