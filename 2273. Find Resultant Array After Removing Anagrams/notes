@@ -1,0 +1,109 @@
+## 💡 What This Code Does
+
+### 1. **Initialization**
+
+```python
+check = [words[0]]
+og = [''.join(sorted(words[0]))]
+```
+
+* `check`: list to store the final result.
+
+  * Start with the first word.
+* `og`: list to store the sorted version of each word (used to detect anagrams).
+
+  * Start with the sorted version of the first word.
+
+---
+
+### 2. **Loop Through the Rest of the List**
+
+```python
+for i in range(1, len(words)):
+```
+
+* Start from index 1 because you’ve already added index 0 to the result.
+
+---
+
+### 3. **Anagram Check (with previous word only!)**
+
+```python
+if ''.join(sorted(words[i])) == og[-1]:
+```
+
+* You're comparing the sorted version of the current word to the sorted version of the **previous word** (`og[-1]`).
+* If they are the same → current word is an anagram of the previous → **skip adding to `check`**.
+* If they are different → **add to `check`**.
+
+---
+
+### 4. **Always Update `og`**
+
+```python
+og.append(''.join(sorted(words[i])))
+```
+
+* You always update `og` so that the next word can be compared to the current one.
+
+---
+
+## 🧪 Let's Use Your Test Case:
+
+```python
+words = ["ab", "bc", "cb", "ab", "bc"]
+```
+
+We’ll go step-by-step and simulate what happens:
+
+---
+
+### Step 0:
+
+* `check = ["ab"]`
+* `og = ["ab"]` (sorted `"ab"`)
+
+---
+
+### Step 1: i = 1 → `"bc"`
+
+* sorted `"bc"` = `"bc"`
+* compare to `og[-1] = "ab"` → not equal → ✅ add `"bc"`
+* `check = ["ab", "bc"]`
+* `og = ["ab", "bc"]`
+
+---
+
+### Step 2: i = 2 → `"cb"`
+
+* sorted `"cb"` = `"bc"`
+* compare to `og[-1] = "bc"` → equal → ❌ skip
+* `check = ["ab", "bc"]`
+* `og = ["ab", "bc", "bc"]`
+
+---
+
+### Step 3: i = 3 → `"ab"`
+
+* sorted `"ab"` = `"ab"`
+* compare to `og[-1] = "bc"` → not equal → ✅ add `"ab"`
+* `check = ["ab", "bc", "ab"]`
+* `og = ["ab", "bc", "bc", "ab"]`
+
+---
+
+### Step 4: i = 4 → `"bc"`
+
+* sorted `"bc"` = `"bc"`
+* compare to `og[-1] = "ab"` → not equal → ✅ add `"bc"`
+* `check = ["ab", "bc", "ab", "bc"]`
+* `og = ["ab", "bc", "bc", "ab", "bc"]`
+
+---
+
+### ✅ Final Output:
+
+```python
+["ab", "bc", "ab", "bc"]
+```
+
