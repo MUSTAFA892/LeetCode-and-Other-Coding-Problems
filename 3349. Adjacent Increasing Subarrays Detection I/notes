@@ -1,0 +1,227 @@
+# Full annotated explanation (line-by-line / block-by-block)
+
+```python
+class Solution:
+    def hasIncreasingSubarrays(self, nums: List[int], k: int) -> bool:
+```
+
+* `hasIncreasingSubarrays` returns `True` if there exist **two adjacent subarrays** of length `k` that are **each strictly increasing**.
+* Parameters:
+
+  * `nums`: list of integers (length `n`)
+  * `k`: required length of each subarray
+
+---
+
+### Initialization
+
+```python
+        arr = []
+        index_ = []
+
+        n = len(nums)
+
+        curr_idx = [0]
+```
+
+* `arr`: will collect the **lengths** (counts) of each strictly-increasing **streak** found in `nums`.
+* `index_`: will collect the **exact indices** (as lists) of each streak in order.
+* `n`: length of `nums`.
+* `curr_idx`: list that holds the indices of the current increasing streak. It starts with `[0]` because the first element (index 0) starts the first streak.
+
+---
+
+### Build increasing streaks
+
+```python
+        for i in range(1,len(nums)):
+            if nums[i] > nums[i-1]:
+                curr_idx.append(i)
+            else:
+                arr.append(len(curr_idx))
+                index_.append(curr_idx.copy())
+                curr_idx = [i]
+                
+        arr.append(len(curr_idx))
+        index_.append(curr_idx.copy())
+```
+
+* Loop from `i = 1` to `n-1`.
+* If `nums[i] > nums[i-1]`, the increasing streak continues → append index `i` to `curr_idx`.
+* If not (`nums[i] <= nums[i-1]`) → the current streak ended:
+
+  * Append its length `len(curr_idx)` to `arr`.
+  * Append a copy of the index list `curr_idx` to `index_`.
+  * Start a new streak with `curr_idx = [i]`.
+* After the loop, append the final streak’s length and indices.
+
+**Result**: `arr` is a list like `[5, 3, 1]` meaning streak lengths; `index_` is list of index-lists like `[[0,1,2,3,4],[5,6,7],[8]]`.
+
+---
+
+### First strategy: check adjacent streaks
+
+```python
+        for i in range(1,len(index_)):
+            if len(index_[i-1]) >= k and len(index_[i]) >= k:
+                if index_[i-1][-1] + 1 == index_[i][0]:
+                    return True
+```
+
+* We iterate over adjacent streaks in `index_`.
+* For each pair `(index_[i-1], index_[i])`:
+
+  * Check both streaks have length ≥ `k` (so each can contain a k-length increasing subarray).
+  * Check the streaks are **consecutive in the array**: end index of previous streak `index_[i-1][-1]` plus one equals start index of next `index_[i][0]`.
+  * If both conditions hold → we have **two adjacent increasing subarrays** (they each can provide at least one length-`k` strictly increasing subarray) → return `True`.
+
+This is fast and covers the common case where two increasing sequences occur back-to-back (e.g., `...[increasing run][increasing run]...`).
+
+---
+
+### Fallback: explicit adjacent-subarray check (precise but slightly more work)
+
+```python
+        for i in range(0, n - 2 * k + 1):
+            first = nums[i : i + k]
+            second = nums[i + k : i + 2 * k]
+            if all(first[j] < first[j + 1] for j in range(k - 1)) and all(second[j] < second[j + 1] for j in range(k - 1)):
+                return True
+```
+
+* This loop **slides** the pair of windows across the array:
+
+  * `first` is `nums[i : i+k]`,
+  * `second` is the immediately adjacent `nums[i+k : i+2k]`.
+* The `range` goes from `0` up to and including `n - 2*k` (so both windows fit).
+* For each `i`, we explicitly check:
+
+  * `first` is strictly increasing: `first[0] < first[1] < ... < first[k-1]`
+  * `second` is strictly increasing similarly.
+* If both are increasing → return `True`.
+* If no `i` passes the test → return `False` at the end.
+
+**Why needed?** The streak-based check is efficient but can miss cases where the two k-length increasing subarrays are formed across boundaries or inside a streak pattern not captured by two adjacent streaks. The fallback ensures correctness for all inputs.
+
+---
+
+### Final return
+
+```python
+        return False
+```
+
+* If neither check finds a valid pair, the function returns `False`.
+
+---
+
+# Worked examples — full step-by-step traces
+
+I’ll show three examples: the main example, the `k=1` edge-case example, and the tricky false-positive case you found.
+
+---
+
+## Example A — main example (should return `True`)
+
+```
+nums = [2, 5, 7, 8, 9, 2, 3, 4, 3, 1]
+k = 3
+```
+
+### 1) Build streaks
+
+* Start `curr_idx = [0]`.
+* i=1: 5 > 2 → curr_idx = [0,1]
+* i=2: 7 > 5 → curr_idx = [0,1,2]
+* i=3: 8 > 7 → curr_idx = [0,1,2,3]
+* i=4: 9 > 8 → curr_idx = [0,1,2,3,4]
+* i=5: 2 ≤ 9 → streak ends → append length 5 and indices [0,1,2,3,4]; new curr_idx = [5]
+* i=6: 3 > 2 → curr_idx = [5,6]
+* i=7: 4 > 3 → curr_idx = [5,6,7]
+* i=8: 3 ≤ 4 → streak ends → append length 3 and indices [5,6,7]; curr_idx = [8]
+* i=9: 1 ≤ 3 → streak ends → append length 1 and indices [8]; curr_idx = [9]
+* End: append last streak length 1 and [9].
+
+Final:
+
+* `arr = [5, 3, 1, 1]`
+* `index_ = [[0,1,2,3,4], [5,6,7], [8], [9]]`
+
+### 2) First adjacency check
+
+* Compare streak 0 and 1:
+
+  * len([0..4]) = 5 ≥ k=3 ✅
+  * len([5..7]) = 3 ≥ k=3 ✅
+  * last of previous = 4, first of next = 5 → 4 + 1 == 5 ✅
+    → return `True` immediately.
+
+This matches expectation because `[7,8,9]` (indices 2..4) and `[2,3,4]` (indices 5..7) are two adjacent increasing subarrays of length 3.
+
+---
+
+## Example B — `k = 1` edge-case
+
+```
+nums = [-15, 19]
+k = 1
+```
+
+* Build streaks:
+
+  * i=1: 19 > -15 → `curr_idx = [0,1]`
+  * end: `arr = [2]`, `index_ = [[0,1]]`
+* First adjacency check:
+
+  * `index_` length is 1 → loop from 1 to len(index_) - 1 does nothing.
+* Fallback loop:
+
+  * `n = 2`, `n - 2*k + 1 = 2 - 2 + 1 = 1` → i takes 0 only.
+  * `first = nums[0:1] = [-15]` ; `second = nums[1:2] = [19]`
+  * For `k=1`, `range(k-1)` is `range(0)` → `all(...)` over an empty iterator returns `True` by definition, so both `all(...)` are True.
+  * So the fallback **finds i=0 valid** → returns `True`.
+
+So the function returns `True` for the `[-15,19], k=1` case as expected.
+
+---
+
+## Example C — tricky false-positive candidate (should return `False`)
+
+```
+nums = [-3, -19, -8, -16]
+k = 2
+```
+
+### Build streaks:
+
+* start `curr_idx = [0]`
+* i=1: -19 > -3 ? No → append len 1 ([0]) → index_.append([0]) ; curr_idx = [1]
+* i=2: -8 > -19 ? Yes → curr_idx = [1,2]
+* i=3: -16 > -8 ? No → append len 2 ([1,2]) ; index_.append([1,2]) ; curr_idx = [3]
+* End: append len 1 ([3])
+
+Final:
+
+* `index_ = [[0], [1,2], [3]]`
+* `arr = [1,2,1]`
+
+### First adjacency check:
+
+* i=1: check streak 0 ([0]) and streak 1 ([1,2]):
+
+  * len([0]) >= 2? No → skip
+* i=2: check streak 1 ([1,2]) and streak 2 ([3]):
+
+  * len([1,2]) >= 2? Yes
+  * len([3]) >= 2? No → skip
+* No `True` returned here.
+
+### Fallback loop:
+
+* n=4, n - 2*k + 1 = 4 - 4 + 1 = 1 → only i=0
+* first = nums[0:2] = [-3, -19] → is this strictly increasing? Check -3 < -19 → False
+* Since first fails, this `i` fails → no True found
+* End → return `False`.
+
+So the function returns `False` correctly for this case. This demonstrates why the fallback explicit sliding check is necessary — it avoids incorrectly treating a single increasing subarray or fragment as two valid adjacent k-length increasing subarrays.
+
