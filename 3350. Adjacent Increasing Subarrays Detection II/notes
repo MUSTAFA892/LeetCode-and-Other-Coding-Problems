@@ -1,0 +1,171 @@
+## High-level summary of what the code does
+
+1. **Break `nums` into strictly increasing runs**. For each run we store:
+
+   * `arr` — the run lengths (list of integers).
+   * `index_` — the indices of elements in each run (list of lists of indices).
+2. **Check adjacent runs**: for every pair of consecutive runs that are adjacent in the array, compute `min(len(run1), len(run2))` and track the maximum of those minima.
+3. **Check inside each single run**: a single long increasing run can be split into two adjacent increasing subarrays; the maximum `k` available inside a run of length `L` is `L // 2`. Update the global maximum with these values.
+4. Return the overall `max_k`.
+
+---
+
+## Step-by-step run for `nums = [1,2,3,4,4,4,4,5,6,7]`
+
+### Initialization
+
+* `arr = []`
+* `index_ = []`
+* `n = 10`
+* `curr_idx = [0]`  (we start a run at index 0)
+
+---
+
+### First `for` loop: build runs (`for i in range(1, len(nums))`)
+
+We iterate `i` from 1 to 9 and either append `i` to the current run (if `nums[i] > nums[i-1]`) or close the current run and start a new one.
+
+I’ll list the state after each `i`:
+
+* **i = 1**: `nums[1]=2 > nums[0]=1` → extend current run
+  `curr_idx = [0, 1]`
+  (`arr` and `index_` unchanged)
+
+* **i = 2**: `3 > 2` → extend
+  `curr_idx = [0, 1, 2]`
+
+* **i = 3**: `4 > 3` → extend
+  `curr_idx = [0, 1, 2, 3]`
+
+* **i = 4**: `nums[4]=4` and `nums[3]=4` → NOT greater → **breaking point**
+
+  * close current run:
+
+    * `arr.append(len(curr_idx))` → `arr.append(4)` → `arr = [4]`
+    * `index_.append(curr_idx.copy())` → `index_ = [[0,1,2,3]]`
+  * start new run at index 4:
+
+    * `curr_idx = [4]`
+
+* **i = 5**: `nums[5]=4` ≤ `nums[4]=4` → break again
+
+  * close run `[4]`:
+
+    * `arr.append(1)` → `arr = [4, 1]`
+    * `index_.append([4])` → `index_ = [[0,1,2,3], [4]]`
+  * start new run: `curr_idx = [5]`
+
+* **i = 6**: `nums[6]=4` ≤ `nums[5]=4` → break again
+
+  * close run `[5]`:
+
+    * `arr.append(1)` → `arr = [4, 1, 1]`
+    * `index_.append([5])` → `index_ = [[0,1,2,3], [4], [5]]`
+  * start new run: `curr_idx = [6]`
+
+* **i = 7**: `nums[7]=5 > nums[6]=4` → extend
+
+  * `curr_idx = [6, 7]`
+
+* **i = 8**: `nums[8]=6 > nums[7]=5` → extend
+
+  * `curr_idx = [6, 7, 8]`
+
+* **i = 9**: `nums[9]=7 > nums[8]=6` → extend
+
+  * `curr_idx = [6, 7, 8, 9]`
+
+**After loop finishes** we append the last run:
+
+* `arr.append(len(curr_idx))` → `arr.append(4)` → `arr = [4, 1, 1, 4]`
+* `index_.append(curr_idx.copy())` → `index_ = [[0,1,2,3], [4], [5], [6,7,8,9]]`
+
+**So the runs are:**
+
+1. indices `[0,1,2,3]` → values `[1,2,3,4]` → length 4
+2. indices `[4]` → values `[4]` → length 1
+3. indices `[5]` → values `[4]` → length 1
+4. indices `[6,7,8,9]` → values `[4,5,6,7]` → length 4
+
+---
+
+### Second phase: find `max_k` from adjacent runs
+
+We set `max_k = 0` and run:
+
+```python
+for i in range(1, len(index_)):
+    if index_[i-1][-1] + 1 == index_[i][0]:
+        max_k = max(max_k, min(len(index_[i-1]), len(index_[i])))
+```
+
+We iterate `i` from 1 to 3 (since there are 4 runs):
+
+* **i = 1**:
+
+  * `index_[0][-1] = 3`, `index_[1][0] = 4` → `3 + 1 == 4` → adjacent ✓
+  * `min(len(index_[0]), len(index_[1])) = min(4,1) = 1`
+  * `max_k = max(0, 1) = 1`
+
+* **i = 2**:
+
+  * `index_[1][-1] = 4`, `index_[2][0] = 5` → `4 + 1 == 5` → adjacent ✓
+  * `min(1,1) = 1`
+  * `max_k = max(1, 1) = 1`  (unchanged)
+
+* **i = 3**:
+
+  * `index_[2][-1] = 5`, `index_[3][0] = 6` → `5 + 1 == 6` → adjacent ✓
+  * `min(1, 4) = 1`
+  * `max_k = max(1, 1) = 1`  (unchanged)
+
+**After this loop**: `max_k = 1`.
+
+> Note: this step only considers **pairs of distinct runs** where one run ends immediately before the next starts. For each such pair we can form two adjacent subarrays of length up to `min(length(run1), length(run2))`. Because the short singleton runs `[4]` and `[4]` are between the two long runs, the minima are 1.
+
+---
+
+### Third phase: check inside each single run (`for length in arr`)
+
+```python
+for length in arr:
+    if length // 2 > max_k:
+        max_k = length // 2
+```
+
+We iterate through `arr = [4, 1, 1, 4]`:
+
+* `length = 4`: `4 // 2 = 2` → `2 > 1` → so `max_k = 2`
+* `length = 1`: `1 // 2 = 0` → `0 > 2`? no
+* `length = 1`: `0` → no
+* `length = 4`: `2` → `2 > 2`? no
+
+**After this loop**: `max_k = 2`.
+
+This step captures the fact that the **fourth run** `[4,5,6,7]` (length 4) can be split internally into two adjacent increasing subarrays each of length 2 (for example `[4,5]` and `[6,7]`), so `k=2` is possible even though the runs surrounding it are short.
+
+---
+
+### Final result
+
+* The function returns `max_k = 2`.
+
+This matches the correct answer for that input.
+
+---
+
+## Why your earlier result was 1 (before you added the `length // 2` logic)
+
+Originally you only compared **separate runs**. Because the long runs at the ends were separated by three single-element runs (`[4]`, `[4]`), the `min` across adjacent run pairs was 1 in every case — so the adjacent-run logic alone returned `1`. The `length // 2` check is necessary to capture adjacent subarrays **inside a single long run**, which is why adding it fixed that case.
+
+---
+
+## Complexity & notes
+
+* **Time complexity:** O(n) to build runs + O(number_of_runs) to evaluate pairs and lengths → overall O(n).
+* **Space complexity:** O(number_of_runs) for `arr` and `index_` (worst-case O(n) if the array alternates non-increasing/increasing).
+* **Edge cases to be aware of:**
+
+  * Entire array strictly increasing (single run): answer = `n // 2`.
+  * No increasing pair at all (all equal or decreasing): answer = 0 (your code would return 0 because runs are of length 1 → `1 // 2 = 0`).
+  * Multiple long runs with small separators: both checks (across runs and inside runs) are necessary.
