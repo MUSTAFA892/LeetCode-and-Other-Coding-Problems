@@ -1,0 +1,140 @@
+## 🧩 Problem Recap
+
+You’re given:
+
+```
+nums = [1, 2, 2, 3, 3, 4]
+k = 2
+```
+
+You can add **any integer from `[-k, k]`** to each element **at most once**.
+
+Your goal is to make **as many distinct elements as possible**.
+
+---
+
+# 🧠 Approach 1: Brute Force (Your First Code)
+
+### 🔹 Code:
+
+```python
+nums = [1, 2, 2, 3, 3, 4]
+k = 2
+arr = []
+
+for i in range(len(nums)):
+    range_start = nums[i] - k
+    range_end = nums[i] + k
+
+    for j in range(range_start, range_end + 1):
+        if j not in arr:
+            arr.append(j)
+            break
+
+print(arr)
+```
+
+---
+
+### 🔍 Working Explanation
+
+1. For every number, we create a **range of possible values** it can take after adding `[-k, k]`.
+2. Then, we try to assign it the **smallest number in that range** that hasn’t been used yet.
+3. If we find a value not in `arr`, we add it and break (so each number is used only once).
+
+---
+
+### 🧮 Step-by-Step Example
+
+**Input:**
+
+```
+nums = [1, 2, 2, 3, 3, 4]
+k = 2
+```
+
+Let’s walk through:
+
+| i | nums[i] | Range   | Already Taken    | Picked | arr After           |
+| - | ------- | ------- | ---------------- | ------ | ------------------- |
+| 0 | 1       | [-1, 3] | []               | -1     | [-1]                |
+| 1 | 2       | [0, 4]  | [-1]             | 0      | [-1, 0]             |
+| 2 | 2       | [0, 4]  | [-1, 0]          | 1      | [-1, 0, 1]          |
+| 3 | 3       | [1, 5]  | [-1, 0, 1]       | 2      | [-1, 0, 1, 2]       |
+| 4 | 3       | [1, 5]  | [-1, 0, 1, 2]    | 3      | [-1, 0, 1, 2, 3]    |
+| 5 | 4       | [2, 6]  | [-1, 0, 1, 2, 3] | 4      | [-1, 0, 1, 2, 3, 4] |
+
+✅ Final output: `[-1, 0, 1, 2, 3, 4]`
+✅ Distinct Count = **6**
+
+---
+
+### ⚙️ Complexity
+
+* Outer loop: `n`
+* Inner loop: up to `2k` checks
+* Checking `if j not in arr` = `O(n)`
+
+➡️ **Overall:** O(n²) — works for small arrays, but **TLE for large inputs** (like 10⁵ elements).
+
+---
+
+# ⚡ Approach 2: Optimized Greedy Approach (O(n log n))
+
+### 🔹 Idea
+
+Instead of checking each possible number manually, we:
+
+1. Sort the array (so we handle smaller numbers first).
+2. Keep track of used numbers in a **set**.
+3. For each number `x`, try to assign it a new value from `x - k` to `x + k` that isn’t used, starting from the smallest possible.
+
+---
+
+### 🔹 Pseudocode (conceptually)
+
+```
+Sort nums
+Initialize empty set used
+For each num in nums:
+    for val in range(num - k, num + k + 1):
+        if val not in used:
+            add val to used
+            break
+Return len(used)
+```
+
+⚠️ This looks similar, but using a **set** for lookup makes checking `if val not in used` → O(1).
+
+Sorting step → O(n log n)
+
+So total → **O(n log n)**.
+
+---
+
+### 🧮 Example: `nums = [8, 7, 8, 7, 10], k = 1`
+
+**Step 1:** Sort → `[7, 7, 8, 8, 10]`
+
+| i | num | Range   | Already Used | Chosen | Used After       |
+| - | --- | ------- | ------------ | ------ | ---------------- |
+| 0 | 7   | [6, 8]  | {}           | 6      | {6}              |
+| 1 | 7   | [6, 8]  | {6}          | 7      | {6, 7}           |
+| 2 | 8   | [7, 9]  | {6, 7}       | 8      | {6, 7, 8}        |
+| 3 | 8   | [7, 9]  | {6, 7, 8}    | 9      | {6, 7, 8, 9}     |
+| 4 | 10  | [9, 11] | {6, 7, 8, 9} | 11     | {6, 7, 8, 9, 11} |
+
+✅ Final used = {6, 7, 8, 9, 11}
+✅ Distinct = 5
+✅ Matches expected output!
+
+---
+
+### ⚙️ Complexity
+
+* Sorting: O(n log n)
+* Loop: O(n)
+* Lookup in set: O(1)
+
+➡️ **Total = O(n log n)** ✅
+Perfect for large inputs like n = 10⁵.
