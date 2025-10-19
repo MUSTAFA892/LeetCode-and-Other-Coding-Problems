@@ -1,0 +1,126 @@
+### 🧠 Problem Recap
+
+You’re given:
+
+```
+nums = [1,3,6,4,1,2]
+target = 3
+```
+
+You start at index `0` and want to reach the last index (`n-1`).
+You can **jump from i → j** if:
+
+```
+0 <= i < j < n
+and -target <= nums[j] - nums[i] <= target
+```
+
+You need the **maximum number of jumps** possible to reach the end.
+If not possible, return `-1`.
+
+---
+
+### 🧩 Your Code Explained
+
+```python
+class Solution:
+    def maximumJumps(self, nums: List[int], target: int) -> int:
+        dp = [-1] * (len(nums) - 1)
+        dp.insert(0, 0)  # start position at index 0 → dp[0] = 0
+
+        for i in range(1, len(nums)):       # i = current index
+            for j in range(0, i):           # j = previous index
+                sub = nums[i] - nums[j]     # difference between nums[i] and nums[j]
+                # valid jump condition + reachable index
+                if -target <= sub <= target and dp[j] != -1:
+                    dp[i] = max(dp[i], dp[j] + 1)
+        
+        return dp[-1]
+```
+
+---
+
+### 🧮 Step-by-Step Example
+
+Let’s take the **main example**:
+
+```
+nums = [1,3,6,4,1,2]
+target = 3
+```
+
+We’ll track what happens for each `i` and `j`.
+
+#### Initialization:
+
+```
+dp = [0, -1, -1, -1, -1, -1]
+(Index) 0   1   2   3   4   5
+```
+
+* `dp[i]` = max jumps to reach index `i`.
+* Start point `dp[0] = 0` (no jumps yet).
+
+---
+
+#### i = 1 → nums[1] = 3
+
+* j = 0 → sub = 3 - 1 = 2 ✅ (within ±3)
+
+  * dp[1] = max(-1, 0+1) = **1**
+
+✅ `dp = [0, 1, -1, -1, -1, -1]`
+
+---
+
+#### i = 2 → nums[2] = 6
+
+* j = 0 → sub = 6 - 1 = 5 ❌ (too large)
+* j = 1 → sub = 6 - 3 = 3 ✅ (within ±3)
+
+  * dp[1] = 1 → dp[2] = max(-1, 1+1) = **2**
+
+✅ `dp = [0, 1, 2, -1, -1, -1]`
+
+---
+
+#### i = 3 → nums[3] = 4
+
+* j = 0 → sub = 4 - 1 = 3 ✅ → dp[3] = max(-1, 0+1) = 1
+* j = 1 → sub = 4 - 3 = 1 ✅ → dp[3] = max(1, 1+1) = 2
+* j = 2 → sub = 4 - 6 = -2 ✅ → dp[3] = max(2, 2+1) = **3**
+
+✅ `dp = [0, 1, 2, 3, -1, -1]`
+
+---
+
+#### i = 4 → nums[4] = 1
+
+* j = 0 → sub = 1 - 1 = 0 ✅ → dp[4] = max(-1, 0+1) = 1
+* j = 1 → sub = 1 - 3 = -2 ✅ → dp[4] = max(1, 1+1) = 2
+* j = 2 → sub = 1 - 6 = -5 ❌
+* j = 3 → sub = 1 - 4 = -3 ✅ → dp[4] = max(2, 3+1) = **4**
+
+✅ `dp = [0, 1, 2, 3, 4, -1]`
+
+---
+
+#### i = 5 → nums[5] = 2
+
+* j = 0 → sub = 2 - 1 = 1 ✅ → dp[5] = max(-1, 0+1) = 1
+* j = 1 → sub = 2 - 3 = -1 ✅ → dp[5] = max(1, 1+1) = 2
+* j = 2 → sub = 2 - 6 = -4 ❌
+* j = 3 → sub = 2 - 4 = -2 ✅ → dp[5] = max(2, 3+1) = 4
+* j = 4 → sub = 2 - 1 = 1 ✅ → dp[5] = max(4, 4+1) = **5**
+
+✅ Final: `dp = [0, 1, 2, 3, 4, 5]`
+
+---
+
+### ✅ Final Output
+
+```
+dp[-1] = 5
+```
+
+👉 So the **maximum number of jumps** = **5**.
