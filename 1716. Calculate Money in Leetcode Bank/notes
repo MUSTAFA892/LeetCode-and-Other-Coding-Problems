@@ -1,0 +1,126 @@
+## 🔍 **1. Explanation of Your Code**
+
+### 🧠 Idea:
+
+Hercy deposits money every day:
+
+* On **Monday**, he starts with `$1`, next Monday `$2`, and so on.
+* Each **day of the week**, he adds `$1` more than the day before.
+
+You are simulating this week-by-week and day-by-day using a loop.
+
+---
+
+### 🧩 Variable Roles:
+
+| Variable     | Meaning                                                          |
+| ------------ | ---------------------------------------------------------------- |
+| `n`          | Total number of days he deposits money                           |
+| `day`        | Counts how many days have passed so far                          |
+| `count`      | The total money saved so far                                     |
+| `week_start` | The amount Hercy starts depositing on Monday of the current week |
+| `week_end`   | Counts the number of days completed within the week (1 to 7)     |
+| `deposit`    | The amount Hercy deposits on the current day                     |
+
+---
+
+### ⚙️ How the code works step-by-step
+
+1. Start with:
+
+   * `week_start = 1` → means first Monday deposit = $1
+   * `deposit = 1` → today’s deposit
+   * `count = 0` → total savings starts from 0
+
+2. The **while loop** runs until all `n` days are completed.
+
+3. Each day:
+
+   * Add `deposit` to `count`
+   * Increase `deposit` by 1 (next day’s amount)
+   * Increase both `day` and `week_end` by 1
+
+4. When **7 days are over (week_end == 7)**:
+
+   * Increase `week_start` by 1 → next week starts $1 higher
+   * Reset `deposit` to `week_start` (new Monday deposit)
+   * Reset `week_end = 0`
+
+5. When `day` reaches `n`, the loop stops and returns the total.
+
+---
+
+## 🧮 **2. Working Example (n = 13)**
+
+Let’s trace your program step by step.
+
+| Day | Week | week_start | deposit | count (total) | Explanation                    |
+| --- | ---- | ---------- | ------- | ------------- | ------------------------------ |
+| 1   | 1    | 1          | 1       | 1             | Monday, starts at $1           |
+| 2   | 1    | 1          | 2       | 3             | +1 daily                       |
+| 3   | 1    | 1          | 3       | 6             | +1 daily                       |
+| 4   | 1    | 1          | 4       | 10            | +1 daily                       |
+| 5   | 1    | 1          | 5       | 15            | +1 daily                       |
+| 6   | 1    | 1          | 6       | 21            | +1 daily                       |
+| 7   | 1    | 1          | 7       | 28            | End of week 1 (sum = 28)       |
+| 8   | 2    | 2          | 2       | 30            | Week 2 starts, new Monday = $2 |
+| 9   | 2    | 2          | 3       | 33            | +1 daily                       |
+| 10  | 2    | 2          | 4       | 37            | +1 daily                       |
+| 11  | 2    | 2          | 5       | 42            | +1 daily                       |
+| 12  | 2    | 2          | 6       | 48            | +1 daily                       |
+| 13  | 2    | 2          | 7       | 55            | +1 daily, 13th day done ✅      |
+
+✅ **Final Total = 55**
+
+---
+
+## 📝 **3. Notes (For Revision or Exam)**
+
+### 🏦 Problem Concept:
+
+* Hercy deposits money in a pattern:
+
+  * Monday starts with `$1`.
+  * Each next day adds `$1` more than the previous.
+  * Each new Monday starts `$1` higher than the last Monday.
+
+---
+
+### 📋 Algorithm Steps:
+
+1. Initialize:
+
+   * `week_start = 1`
+   * `deposit = week_start`
+   * `count = 0`, `day = 0`, `week_end = 0`
+2. Repeat until all `n` days are done:
+
+   * Add today’s deposit to total (`count += deposit`)
+   * Increment `deposit`, `day`, and `week_end`
+   * When a week ends (`week_end == 7`):
+
+     * Increase `week_start` by 1
+     * Reset `deposit = week_start`
+     * Reset `week_end = 0`
+3. Return `count`.
+
+---
+
+### 🧠 Key Points:
+
+* One full week = 7 days.
+* Each new week starts with a deposit +1 higher than last week’s Monday.
+* This pattern repeats until `n` days finish.
+* This approach is **O(n)** time and **O(1)** space — simple simulation.
+
+---
+
+### ✅ Example Results:
+
+| n  | Total |
+| -- | ----- |
+| 4  | 10    |
+| 7  | 28    |
+| 10 | 37    |
+| 13 | 55    |
+| 20 | 96    |
