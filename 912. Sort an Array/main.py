@@ -1,0 +1,34 @@
+# Merge Sort
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        def merge_sort(nums):
+            if len(nums) <= 1:
+                return nums
+            mid = len(nums) // 2
+            left = merge_sort(nums[:mid])
+            right = merge_sort(nums[mid:])
+
+            return merge(left, right)
+        
+
+        def merge(left, right):
+            sorted_numsay = []
+            i, j = 0, 0
+
+            while i < len(left) and j < len(right):
+                if left[i] < right[j]:
+                    sorted_numsay.append(left[i])
+                    i += 1
+                else:
+                    sorted_numsay.append(right[j])
+                    j += 1
+            sorted_numsay.extend(left[i:])
+            sorted_numsay.extend(right[j:])
+
+            return sorted_numsay
+
+        return merge_sort(nums)
+
+"""
+        nums.sort()
+        return nums"""
