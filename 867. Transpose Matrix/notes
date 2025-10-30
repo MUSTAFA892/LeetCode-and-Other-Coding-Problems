@@ -1,0 +1,84 @@
+## 🧠 **Explanation (Step-by-Step)**
+
+### 📌 What is “Transpose of a Matrix”?
+
+The **transpose** of a matrix is formed by **interchanging its rows and columns**.
+That means —
+if an element is at position **(row, column)** in the original matrix,
+it moves to position **(column, row)** in the transposed matrix.
+
+Formally:
+[
+\text{Transpose}[i][j] = \text{Matrix}[j][i]
+]
+
+---
+
+### 🧩 Example
+
+Let’s take an input matrix:
+
+```
+matrix = [
+    [1, 2, 3],
+    [4, 5, 6]
+]
+```
+
+This is a **2 x 3** matrix (2 rows, 3 columns).
+
+We want the **3 x 2** transposed version.
+
+---
+
+### 🔁 Step-by-Step Working:
+
+1. **Outer Loop (i)** — iterates over each column of the original matrix
+   → `range(len(matrix[0])) = range(3)` → i = 0, 1, 2
+
+2. **Inner Loop (j)** — iterates over each row
+   → `range(len(matrix)) = range(2)` → j = 0, 1
+
+3. **Element selection:**
+
+   * For i = 0 → pick `matrix[0][0]`, `matrix[1][0]` → [1, 4]
+   * For i = 1 → pick `matrix[0][1]`, `matrix[1][1]` → [2, 5]
+   * For i = 2 → pick `matrix[0][2]`, `matrix[1][2]` → [3, 6]
+
+4. **Result:**
+
+   ```
+   ans = [
+       [1, 4],
+       [2, 5],
+       [3, 6]
+   ]
+   ```
+
+✅ **Final Output:**
+
+```
+[[1, 4], [2, 5], [3, 6]]
+```
+
+---
+
+## 🧾 **Notes (for revision)**
+
+### 🧩 Concept:
+
+* Transpose of a matrix means **rows become columns and columns become rows**.
+
+### ⚙️ Working:
+
+* For every element in the matrix, swap its indices:
+  `ans[i][j] = matrix[j][i]`
+
+### 🕒 Time Complexity:
+
+* **O(m × n)**
+  (where m = number of rows, n = number of columns)
+
+### 💾 Space Complexity:
+
+* **O(m × n)** (since a new matrix `ans` is created)
