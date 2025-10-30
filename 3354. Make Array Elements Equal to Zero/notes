@@ -1,0 +1,187 @@
+## 🔍 Step-by-Step Explanation
+
+### 🧩 Step 1 — Identify Zeros
+
+```python
+zeros = []
+for i in range(len(nums)):
+    if nums[i] == 0:
+        zeros.append(i)
+```
+
+* You loop through the array to **find all indices where `nums[i] == 0`**.
+* These positions are the *starting points* where you’ll “stimulate” from both directions (left and right).
+* Example:
+  `nums = [1, 0, 1]` → `zeros = [1]` (since index `1` is `0`)
+
+---
+
+### ⚙️ Step 2 — The Stimulate Function
+
+```python
+def stimulate(zero_index, way):
+```
+
+This function simulates the “movement” starting from a zero in a chosen direction (either left or right).
+
+#### Key variables:
+
+| Variable    | Meaning                                                                     |
+| ----------- | --------------------------------------------------------------------------- |
+| `temp`      | A copy of `nums`, to safely modify values                                   |
+| `direction` | Current movement direction (`+1` = right, `-1` = left)                      |
+| `pointer`   | Current position in the array                                               |
+| `total`     | Keeps track of total sum of all numbers (to know when everything becomes 0) |
+| `count`     | Used to count how many times all elements became 0                          |
+
+---
+
+### 🔄 Step 3 — Simulation Logic
+
+```python
+while 0 <= pointer < len(nums) and total >= 0:
+    if temp[pointer] != 0:
+        temp[pointer] -= 1
+        direction *= -1
+        total -= 1
+    pointer += direction
+
+    if total == 0:
+        count += 1
+        break
+```
+
+#### Here’s what happens:
+
+1. You start at a `zero` position.
+2. You **move in the given direction (`way`)**.
+3. Every time you find a **non-zero** element:
+
+   * Subtract 1 (like consuming 1 unit).
+   * **Flip the direction** (like bouncing back).
+   * Reduce `total` by 1.
+4. Keep going until:
+
+   * You go out of bounds (`pointer` < 0 or ≥ len(nums)), or
+   * The total sum becomes 0 (everything turned zero).
+
+---
+
+### 🔁 Step 4 — Try Both Directions for Each Zero
+
+```python
+for i in zeros:
+    count += stimulate(i, 1)   # simulate going right first
+    count += stimulate(i, -1)  # simulate going left first
+```
+
+Each zero may allow valid operations **in both directions**.
+So for each zero:
+
+* You test the rightward simulation.
+* Then you test the leftward simulation.
+
+---
+
+### ✅ Step 5 — Return Final Count
+
+```python
+return count
+```
+
+After testing all zeros from both directions, you return how many valid cases resulted in the entire array becoming zero.
+
+---
+
+## 🧮 Working Example
+
+Let’s dry-run your code on this:
+
+```python
+nums = [1, 0, 1]
+```
+
+### Step 1:
+
+Zeros found → `[1]`
+
+### Step 2:
+
+Start from index `1` (the zero):
+
+* Try right (`way = 1`)
+* Try left (`way = -1`)
+
+---
+
+#### Case 1 — Stimulate Right (`way = 1`)
+
+* `pointer = 1`, `direction = 1`, `temp = [1, 0, 1]`, `total = 2`
+
+Now:
+
+| Step | Pointer | Value | Action                | Direction | Total | Array     |
+| ---- | ------- | ----- | --------------------- | --------- | ----- | --------- |
+| 1    | 1       | 0     | skip (still 0)        | →         | 2     | [1, 0, 1] |
+| 2    | 2       | 1     | non-zero → subtract 1 | flip (←)  | 1     | [1, 0, 0] |
+| 3    | 1       | 0     | skip                  | ←         | 1     | [1, 0, 0] |
+| 4    | 0       | 1     | non-zero → subtract 1 | flip (→)  | 0     | [0, 0, 0] |
+
+✅ All became 0 → count = 1
+
+---
+
+#### Case 2 — Stimulate Left (`way = -1`)
+
+* Similar logic, works the same due to symmetry.
+  ✅ Again all become 0 → count = 1
+
+---
+
+🧾 Final total:
+`count = 2`
+
+---
+
+## 🧠 Summary Note (for revision)
+
+### 🧩 Problem Idea:
+
+You are given an array `nums`.
+Each time you start at a zero, you can move left or right.
+Whenever you encounter a non-zero number, you:
+
+* Decrease it by 1,
+* Reverse your direction, and
+* Continue moving.
+  Count how many times you can make **all elements become zero** by starting at any zero (and in either direction).
+
+---
+
+### ⚙️ Key Points:
+
+* Start simulation from every zero position.
+* Try both directions (right `+1`, left `-1`).
+* Keep flipping direction whenever a non-zero is reduced.
+* Stop when:
+
+  * You move out of bounds, or
+  * The total sum of elements becomes zero.
+* Count successful cases.
+
+---
+
+### 💡 Complexity:
+
+* Time Complexity: `O(n * z)` where `z` = number of zeros
+* Space Complexity: `O(n)` due to array copy
+
+---
+
+### ✅ Example Summary
+
+| Input                         | Output | Explanation                                     |
+| ----------------------------- | ------ | ----------------------------------------------- |
+| `[1, 0, 1]`                   | `2`    | Both directions from the zero lead to all zeros |
+| `[0, 1, 2]`                   | `1`    | Only right direction works                      |
+| `[16,13,10,0,0,0,10,6,7,8,7]` | `3`    | Only some zeros can clear the array             |
