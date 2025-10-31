@@ -1,0 +1,88 @@
+## 🧠 **Explanation (Line by Line)**
+
+### 🔹 Step 1: `from collections import Counter`
+
+* `Counter` is a special Python class from the `collections` module.
+* It automatically counts how many times each element appears in a list (or any iterable).
+
+---
+
+### 🔹 Step 2: `freq = Counter(nums)`
+
+* This creates a **dictionary-like object** where:
+
+  * The **keys** are unique numbers from the list.
+  * The **values** are how many times each number occurs.
+
+🧩 Example:
+
+```python
+nums = [1, 3, 2, 3, 4, 2]
+freq = Counter(nums)
+# Output → Counter({3: 2, 2: 2, 1: 1, 4: 1})
+```
+
+---
+
+### 🔹 Step 3: Loop through `freq.items()`
+
+```python
+for k, v in freq.items():
+```
+
+* `k` → the number
+* `v` → how many times it appears
+
+---
+
+### 🔹 Step 4: Find “sneaky” numbers
+
+```python
+if v >= 2:
+    ans.append(k)
+```
+
+* If a number appears **two or more times**, it is considered **“sneaky”** (repeated).
+* Add it to the result list `ans`.
+
+---
+
+### 🔹 Step 5: Return result
+
+```python
+return ans
+```
+
+* After checking all elements, return the list of repeated numbers.
+
+---
+
+## 🧩 **Example Walkthrough**
+
+### Input:
+
+```python
+nums = [1, 2, 3, 2, 4, 3, 5, 3]
+```
+
+### Step 1 → Counter:
+
+```python
+freq = {1: 1, 2: 2, 3: 3, 4: 1, 5: 1}
+```
+
+### Step 2 → Loop through each:
+
+| Number | Count | Condition (`>= 2`)? | Added to ans? |
+| :----: | :---: | :-----------------: | :-----------: |
+|    1   |   1   |         ❌ No        |       –       |
+|    2   |   2   |        ✅ Yes        |      [2]      |
+|    3   |   3   |        ✅ Yes        |     [2, 3]    |
+|    4   |   1   |         ❌ No        |       –       |
+|    5   |   1   |         ❌ No        |       –       |
+
+✅ Final Output:
+
+```python
+[2, 3]
+```
