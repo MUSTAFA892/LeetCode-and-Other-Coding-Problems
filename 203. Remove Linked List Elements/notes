@@ -1,0 +1,251 @@
+## 🧩 Problem: Remove Elements from Linked List
+
+> Remove **all nodes** from the linked list whose value equals `val`.
+
+---
+
+### ✅ **Your Code (Correct Version)**
+
+```python
+class Solution:
+    def removeElements(self, head: Optional[ListNode], val: int) -> Optional[ListNode]:
+        dummy = ListNode(0)
+        dummy.next = head
+        prev, current = dummy, head
+
+        while current:
+            if current.val == val:
+                prev.next = current.next   # delete the node
+            else:
+                prev = current              # move prev normally
+            
+            current = current.next          # always move current
+
+        return dummy.next
+```
+
+---
+
+## ⚙️ **Step-by-Step Explanation**
+
+### 1️⃣ Create a Dummy Node
+
+```python
+dummy = ListNode(0)
+dummy.next = head
+```
+
+We create a new node (`dummy`) that points to the head.
+👉 This helps handle the case when the head itself needs to be deleted.
+
+---
+
+### 2️⃣ Initialize Pointers
+
+```python
+prev, current = dummy, head
+```
+
+We use two pointers:
+
+* `prev` → the previous node
+* `current` → the current node being inspected
+
+---
+
+### 3️⃣ Traverse the List
+
+```python
+while current:
+```
+
+Loop until the end of the list (`current` becomes `None`).
+
+---
+
+### 4️⃣ If Value Matches → Delete Node
+
+```python
+if current.val == val:
+    prev.next = current.next
+```
+
+Skip the current node by linking `prev` directly to `current.next`.
+👉 This effectively removes the node.
+
+---
+
+### 5️⃣ If Value Does Not Match → Keep Node
+
+```python
+else:
+    prev = current
+```
+
+Move the `prev` pointer forward to keep this node.
+
+---
+
+### 6️⃣ Always Move `current`
+
+```python
+current = current.next
+```
+
+Move to the next node in every iteration.
+
+---
+
+### 7️⃣ Return New Head
+
+```python
+return dummy.next
+```
+
+`dummy.next` points to the start of the **modified list**.
+(Handles the case where head was deleted.)
+
+---
+
+## 🧮 **Example Walkthrough**
+
+Let’s take:
+
+```
+head = [1 → 2 → 6 → 3 → 4 → 5 → 6]
+val = 6
+```
+
+---
+
+### 🧠 Step 0: Initialization
+
+```
+dummy → [0] → [1 → 2 → 6 → 3 → 4 → 5 → 6]
+prev = dummy
+current = head (1)
+```
+
+---
+
+### 🧠 Step 1: current = 1
+
+* `current.val = 1`, not equal to 6
+  ✅ Keep the node
+
+```
+prev = 1
+current = 2
+```
+
+List stays the same:
+
+```
+[1 → 2 → 6 → 3 → 4 → 5 → 6]
+```
+
+---
+
+### 🧠 Step 2: current = 2
+
+* `current.val = 2`, not equal to 6
+  ✅ Keep the node
+
+```
+prev = 2
+current = 6
+```
+
+---
+
+### 🧠 Step 3: current = 6
+
+* `current.val = 6`, equals val ❌
+  Delete this node:
+
+```
+prev.next = current.next
+```
+
+Now list becomes:
+
+```
+[1 → 2 → 3 → 4 → 5 → 6]
+```
+
+Move:
+
+```
+current = 3  (prev still = 2)
+```
+
+---
+
+### 🧠 Step 4: current = 3
+
+✅ Keep node
+
+```
+prev = 3
+current = 4
+```
+
+---
+
+### 🧠 Step 5: current = 4
+
+✅ Keep node
+
+```
+prev = 4
+current = 5
+```
+
+---
+
+### 🧠 Step 6: current = 5
+
+✅ Keep node
+
+```
+prev = 5
+current = 6
+```
+
+---
+
+### 🧠 Step 7: current = 6
+
+❌ Delete node (same value)
+
+```
+prev.next = current.next  # current.next = None
+```
+
+Now list becomes:
+
+```
+[1 → 2 → 3 → 4 → 5]
+```
+
+Move:
+
+```
+current = None
+```
+
+Loop ends.
+
+---
+
+### ✅ Final Linked List
+
+```
+dummy.next → [1 → 2 → 3 → 4 → 5]
+```
+
+### ✅ Output:
+
+```
+[1, 2, 3, 4, 5]
+```
