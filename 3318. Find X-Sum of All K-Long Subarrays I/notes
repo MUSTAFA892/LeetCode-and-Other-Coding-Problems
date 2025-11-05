@@ -1,0 +1,209 @@
+## 🧠 Step 1: What the code does (Concept)
+
+Your function:
+
+```python
+class Solution:
+    def findXSum(self, nums: List[int], k: int, x: int) -> List[int]:
+```
+
+**Goal:**
+For every subarray of length `k` → find the **x-sum** (sum of occurrences of top `x` most frequent elements), and return all such results in a list.
+
+---
+
+## 🧩 Step 2: Code Explanation (Line-by-Line)
+
+```python
+l, r = 0, k - 1
+ans = []
+```
+
+* `l` and `r` are the **left** and **right** pointers for the sliding window.
+* Initially, window = `nums[0 : k]`.
+* `ans` stores all computed x-sums.
+
+---
+
+```python
+while r < len(nums):
+```
+
+→ Loop through all valid subarrays of length `k`.
+
+---
+
+```python
+freq = Counter(nums[l:r + 1])
+```
+
+* Count how many times each element appears in the current window.
+
+---
+
+```python
+freq = Counter(dict(sorted(freq.items(), key=lambda x: (x[1], x[0]), reverse=True)))
+```
+
+* Sort the frequencies:
+
+  * `x[1]` → frequency (higher first)
+  * `x[0]` → value (larger first, if frequencies are equal)
+* Convert back to `Counter` (optional but fine).
+
+✅ Now, `freq` is ordered in the exact order we need.
+
+---
+
+```python
+sub = []
+count = 0
+
+for key, val in freq.items():
+    if count < x:
+        sub.append(key * val)
+        count += 1
+    else:
+        break
+```
+
+* We go through sorted elements and pick **top x**.
+* For each, add `key * val` (since `val` = count of that element → its total contribution).
+* Stop once `x` elements are picked.
+
+---
+
+```python
+ans.append(sum(sub))
+```
+
+* Add the total x-sum for this window to our result list.
+
+---
+
+```python
+l += 1
+r += 1
+```
+
+* Move the window forward by 1 element.
+
+---
+
+```python
+return ans
+```
+
+✅ Return the final list of x-sums for all subarrays.
+
+---
+
+## 🧮 Step 3: Working Example
+
+Let’s take this small input:
+
+```python
+nums = [1, 1, 2, 2, 3, 4, 2, 3]
+k = 6
+x = 2
+```
+
+---
+
+### 🔹 Window 1 → `nums[0:6] = [1, 1, 2, 2, 3, 4]`
+
+**Frequencies:**
+
+```
+1 → 2
+2 → 2
+3 → 1
+4 → 1
+```
+
+**Sort (by freq desc, value desc):**
+→ [(2, 2), (1, 2), (4, 1), (3, 1)]
+
+**Top x = 2 elements:** → 2 and 1
+Their contributions:
+
+```
+2 * 2 = 4
+1 * 2 = 2
+Sum = 6
+```
+
+✅ x-sum = 6
+
+---
+
+### 🔹 Window 2 → `nums[1:7] = [1, 2, 2, 3, 4, 2]`
+
+**Frequencies:**
+
+```
+2 → 3
+1 → 1
+3 → 1
+4 → 1
+```
+
+**Sort:** [(2, 3), (4, 1), (3, 1), (1, 1)]
+
+**Top x = 2 elements:** → 2 and 4
+Contributions:
+
+```
+2 * 3 = 6
+4 * 1 = 4
+Sum = 10
+```
+
+✅ x-sum = 10
+
+---
+
+### 🔹 Window 3 → `nums[2:8] = [2, 2, 3, 4, 2, 3]`
+
+**Frequencies:**
+
+```
+2 → 3
+3 → 2
+4 → 1
+```
+
+**Sort:** [(2, 3), (3, 2), (4, 1)]
+
+**Top x = 2 elements:** → 2 and 3
+Contributions:
+
+```
+2 * 3 = 6
+3 * 2 = 6
+Sum = 12
+```
+
+✅ x-sum = 12
+
+---
+
+### ✅ Final Answer
+
+Collecting all x-sums:
+
+```
+ans = [6, 10, 12]
+```
+
+---
+
+## 🧾 Summary Table
+
+| Window | Elements      | Frequencies        | Top x | Contributions | x-sum |
+| ------ | ------------- | ------------------ | ----- | ------------- | ----- |
+| 1      | [1,1,2,2,3,4] | 1:2, 2:2, 3:1, 4:1 | [2,1] | 4 + 2         | 6     |
+| 2      | [1,2,2,3,4,2] | 2:3, 4:1, 3:1, 1:1 | [2,4] | 6 + 4         | 10    |
+| 3      | [2,2,3,4,2,3] | 2:3, 3:2, 4:1      | [2,3] | 6 + 6         | 12    |
+
+✅ **Output = [6, 10, 12]**
