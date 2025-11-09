@@ -1,0 +1,63 @@
+## ✅ **Explanation of the Code**
+
+This code repeatedly subtracts the smaller number from the larger one until **one of them becomes zero**.
+With each subtraction, a counter (`count`) increases by 1.
+This process is similar to finding the **Greatest Common Divisor (GCD)** using repeated subtraction.
+
+---
+
+### 🧠 **What Each Part Does**
+
+```python
+num1 = 2
+num2 = 3
+count = 0
+```
+
+* Two numbers are given: `num1 = 2`, `num2 = 3`
+* `count` will store how many subtraction steps are done.
+
+```python
+while num1 != 0 or num2 != 0:
+```
+
+* The loop runs **until both numbers become 0**.
+* ⚠ (Note: Using `or` can cause infinite loops in some cases; `and` is usually better.)
+
+```python
+    if num1 >= num2:
+        num1 -= num2
+    else:
+        num2 -= num1
+```
+
+* Subtract the smaller number from the larger one.
+
+```python
+    count += 1
+```
+
+* Increase the step counter.
+
+```python
+print(count)
+```
+
+* Print total number of steps taken.
+
+---
+
+## 📌 **Working Example (Test Case: num1 = 2, num2 = 3)**
+
+| Step | num1 | num2 | Larger? | Operation Done | New Values         | count |
+| ---- | ---- | ---- | ------- | -------------- | ------------------ | ----- |
+| 0    | 2    | 3    | 3 > 2   | num2 = 3 - 2   | num1 = 2, num2 = 1 | 1     |
+| 1    | 2    | 1    | 2 > 1   | num1 = 2 - 1   | num1 = 1, num2 = 1 | 2     |
+| 2    | 1    | 1    | equal   | num1 = 1 - 1   | num1 = 0, num2 = 1 | 3     |
+
+Now `num1 = 0`, so the loop stops.
+✅ Final output printed is:
+
+```
+3
+```
