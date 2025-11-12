@@ -1,0 +1,148 @@
+# 📘 Problem Recap
+
+We want to make **all elements of an array equal to 1** by performing the following operation any number of times:
+
+> Choose an index `i` (where 0 ≤ i < n−1) and replace either `nums[i]` or `nums[i+1]` with `gcd(nums[i], nums[i+1])`.
+
+If it’s impossible to make all elements 1, return `-1`.
+
+---
+
+# 🧩 Algorithm (Step-by-Step Notes)
+
+### **1️⃣ Check if there’s already a `1` in the array**
+
+* If the array already contains `1`, that’s great — because `gcd(1, x) = 1`.
+* We can use those `1`s to “spread” 1 across the array.
+* Each non-1 element will need **1 operation** to become 1.
+
+✅ Formula:
+
+```
+operations = n - count(1s)
+```
+
+---
+
+### **2️⃣ If no 1 is present → try to create one**
+
+We need to check whether it’s even possible to get a `1` from any sequence of GCD operations.
+
+* We find the **smallest consecutive subarray** whose overall GCD = 1.
+* That means if we take all numbers in that subarray and keep taking gcd step by step, we eventually get 1.
+* The shorter that subarray, the fewer steps it takes to *create* our first `1`.
+
+So we scan:
+
+```python
+for i in range(n):        # start index
+    gcd_val = nums[i]
+    for j in range(i+1, n):   # extend subarray
+        gcd_val = math.gcd(gcd_val, nums[j])
+        if gcd_val == 1:
+            min_len = min(min_len, j - i + 1)
+            break  # no need to extend further; we already hit gcd = 1
+```
+
+This finds the smallest subarray length where GCD becomes 1.
+
+---
+
+### **3️⃣ If we never find gcd=1 → impossible**
+
+If no subarray’s gcd becomes 1,
+it means all elements share a common divisor greater than 1 (like all even numbers → gcd=2).
+
+So:
+
+```
+if min_len == float('inf'):
+    return -1
+```
+
+---
+
+### **4️⃣ Otherwise, compute total operations**
+
+Once we’ve found the smallest subarray with gcd = 1 (length = `min_len`):
+
+* To **create the first 1**, we need `(min_len - 1)` operations
+  (because each GCD operation reduces the subarray length by 1).
+* After we have one 1, it takes `(n - 1)` operations to **spread** that 1 across the array.
+
+✅ Formula:
+
+```
+operations = (min_len - 1) + (n - 1)
+```
+
+---
+
+# ⚙️ Complete Working Example
+
+### **Test case**
+
+```python
+nums = [2, 6, 3, 4]
+```
+
+### Step 1: Check for existing 1s
+
+`nums` does **not** contain 1
+→ move to next step.
+
+---
+
+### Step 2: Find smallest subarray with gcd = 1
+
+Let’s go index by index 👇
+
+#### i = 0 → start from 2
+
+| Subarray | gcd | gcd==1? |
+| -------- | --- | ------- |
+| [2,6]    | 2   | No      |
+| [2,6,3]  | 1   | ✅ Yes   |
+
+→ Subarray length = 3
+→ `min_len = 3`
+
+---
+
+#### i = 1 → start from 6
+
+| Subarray | gcd | gcd==1? |
+| -------- | --- | ------- |
+| [6,3]    | 3   | No      |
+| [6,3,4]  | 1   | ✅ Yes   |
+
+→ Subarray length = 3
+→ `min_len = min(3, 3) = 3`
+
+---
+
+#### i = 2 → start from 3
+
+| Subarray | gcd | gcd==1? |
+| -------- | --- | ------- |
+| [3,4]    | 1   | ✅ Yes   |
+
+→ Subarray length = 2
+→ `min_len = min(3, 2) = 2`
+
+✅ Found the smallest subarray of length 2 with gcd = 1
+→ `[3, 4]`
+
+---
+
+### Step 3: Compute total operations
+
+```
+min_len = 2
+n = 4
+operations = (min_len - 1) + (n - 1)
+operations = (2 - 1) + (4 - 1)
+operations = 1 + 3 = 4
+```
+
+✅ Minimum operations = **4**
