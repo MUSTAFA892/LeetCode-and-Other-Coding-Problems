@@ -1,0 +1,320 @@
+# ✅ **Understanding the Problem (Quick Recap)**
+
+You are given a binary string `s`.
+
+You must count **how many substrings contain only `'1'`**.
+
+Example:
+`111` contains:
+
+```
+"1", "1", "1", "11", "11", "111"  → 6 substrings
+```
+
+Key fact:
+
+If a block of consecutive 1s has length `k`, its number of all-1 substrings is:
+
+```
+k * (k + 1) // 2
+```
+
+So the goal is:
+
+### 👉 Find each block of continuous `'1'`s
+
+### 👉 Compute its contribution
+
+### 👉 Add them all (modulo 1e9+7)
+
+Your code uses **two pointers (`l` and `r`)** to detect such blocks.
+
+---
+
+# ✅ **Your Final Code**
+
+```python
+class Solution:
+    def numSub(self, s: str) -> int:
+        MOD = 10**9 + 7 
+        str_count = 0
+        l ,r = 0 , 0 
+
+        while r < len(s):
+            if s[l] == '0' and s[r] == '0':
+                l += 1
+                r = l
+            
+            elif s[l] == '1' and s[r] == '1':
+                r += 1
+            
+            elif s[r] == '0':
+                str_count += (r-l) * (r - l + 1) // 2
+                str_count %= MOD
+                l = r
+
+        if l < r:
+            str_count += (r-l) * ((r-l)+1) // 2
+            str_count %= MOD
+            
+
+        return str_count
+```
+
+---
+
+# ✅ **Explanation of the Code (Line-by-Line Note)**
+
+## **1. Initialization**
+
+```python
+MOD = 10**9 + 7
+str_count = 0
+l, r = 0, 0
+```
+
+* `str_count` keeps the total number of substrings of all 1s.
+* `l` = left pointer = start of current block of 1s.
+* `r` = right pointer = scans the string forward.
+
+---
+
+## **2. Loop through the string with two pointers**
+
+```python
+while r < len(s):
+```
+
+We examine each character using `r`, and `l` marks the start of a current run of 1s.
+
+---
+
+## **3. Case 1: both pointers are at `'0'`**
+
+```python
+if s[l] == '0' and s[r] == '0':
+    l += 1
+    r = l
+```
+
+Meaning:
+
+* No block of 1s can start at `l`.
+* Move both pointers forward.
+* Ensure `l` and `r` stay aligned.
+
+---
+
+## **4. Case 2: both pointers are at `'1'`**
+
+```python
+elif s[l] == '1' and s[r] == '1':
+    r += 1
+```
+
+We are inside a block of `'1'`.
+
+So:
+
+* Expand `r` to extend the block.
+* The block becomes `[l, r)`.
+
+---
+
+## **5. Case 3: we hit a `'0'` at `r`**
+
+```python
+elif s[r] == '0':
+    str_count += (r-l) * (r - l + 1) // 2
+    str_count %= MOD
+    l = r
+```
+
+This means:
+
+* A block of 1s has **ended at r-1**.
+* Block length = `r - l`.
+
+Add its contribution using:
+
+```
+k * (k + 1) // 2
+```
+
+Then start the next block at `l = r`.
+
+---
+
+## **6. After the loop—handle final block**
+
+```python
+if l < r:
+    str_count += (r-l) * (r-l+1) // 2
+    str_count %= MOD
+```
+
+If the string ends with `'1'`, the block never got closed inside the loop.
+
+This catches that last block.
+
+---
+
+# ⭐ **Intuition in One Sentence**
+
+Your code treats each consecutive `'1'` region as a window `[l, r)`,
+and whenever the window ends, it contributes:
+
+```
+length * (length + 1) // 2
+```
+
+counting all all-1 substrings.
+
+---
+
+# 🔥 **Working Example (Step-by-Step Dry Run)**
+
+Let’s trace your code on:
+
+```
+s = "0110111"
+```
+
+Index:
+
+```
+0 1 2 3 4 5 6
+0 1 1 0 1 1 1
+```
+
+### **Initial**
+
+```
+l = 0
+r = 0
+str_count = 0
+```
+
+---
+
+## **Iteration 1**
+
+`s[l] = 0`, `s[r] = 0` → both zero
+
+```
+l = 1
+r = 1
+```
+
+---
+
+## **Iteration 2**
+
+`s[l] = 1`, `s[r] = 1` → inside block of 1s
+
+```
+r = 2
+```
+
+---
+
+## **Iteration 3**
+
+`s[l] = 1`, `s[r] = 1`
+
+```
+r = 3
+```
+
+---
+
+## **Iteration 4**
+
+`s[r] = 0` → block ended at r-1
+
+Block = indices `[1,2]` → length = `2`
+
+Add:
+
+```
+2 * 3 / 2 = 3
+```
+
+Update pointers:
+
+```
+str_count = 3
+l = 3
+```
+
+---
+
+## **Iteration 5**
+
+`s[l] = 0` and `s[r] = 0`
+
+```
+l = 4
+r = 4
+```
+
+---
+
+## **Iteration 6**
+
+`s[l] = 1`, `s[r] = 1`
+
+```
+r = 5
+```
+
+---
+
+## **Iteration 7**
+
+`s[l] = 1`, `s[r] = 1`
+
+```
+r = 6
+```
+
+---
+
+## **Iteration 8**
+
+`s[l] = 1`, `s[r] = 1`
+
+```
+r = 7
+```
+
+Now `r == len(s)`, exit loop.
+
+---
+
+# ⭐ Final block handling
+
+`l = 4`, `r = 7` → final block length = 3
+
+Add:
+
+```
+3 * 4 / 2 = 6
+```
+
+Final:
+
+```
+str_count = 3 + 6 = 9
+```
+
+---
+
+# 🎉 **Final Answer = 9**
+
+Your two-pointer method correctly identifies both runs of `'1'`:
+
+* `"11"` → contributes 3
+* `"111"` → contributes 6
+
+Total = **9 substrings of only `'1'`**.
