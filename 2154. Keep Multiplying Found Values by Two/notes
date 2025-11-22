@@ -1,0 +1,86 @@
+# 🧠 **Code Explanation (Line-by-Line)**
+
+```python
+while original in nums:
+```
+
+* Check whether the current value of `original` is present in the nums array.
+* If yes, then you must double it.
+
+```python
+    original = original * 2
+```
+
+* Double the value of `original`.
+* Continue checking again with the updated value.
+
+```python
+return original
+```
+
+* As soon as a value is found that does NOT exist in the array, return that value.
+
+---
+
+# 🔍 **Working Example**
+
+### Input:
+
+```
+nums = [2, 7, 9, 4, 1]
+original = 2
+```
+
+### Step-by-step:
+
+---
+
+### **Step 1**
+
+Check:
+
+```
+Is 2 in nums? → Yes
+```
+
+So update:
+
+```
+original = 2 * 2 = 4
+```
+
+---
+
+### **Step 2**
+
+Check:
+
+```
+Is 4 in nums? → Yes
+```
+
+Update:
+
+```
+original = 4 * 2 = 8
+```
+
+---
+
+### **Step 3**
+
+Check:
+
+```
+Is 8 in nums? → No
+```
+
+So we **stop** and return `8`.
+
+---
+
+# 🎉 Final Output:
+
+```
+8
+```
