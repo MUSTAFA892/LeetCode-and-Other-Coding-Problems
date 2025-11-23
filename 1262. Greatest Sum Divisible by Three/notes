@@ -1,0 +1,280 @@
+# ✅ **1. Code Explanation (Line-by-Line, Very Clear)**
+
+---
+
+## **STEP 1 — Group numbers by remainder**
+
+```python
+freq = {}
+for i in nums:
+    rema = i % 3
+    if rema not in freq:
+        freq[rema] = []
+    freq[rema].append(i)
+```
+
+This creates a dictionary where:
+
+* `freq[0]` → numbers divisible by 3
+* `freq[1]` → numbers giving remainder 1
+* `freq[2]` → numbers giving remainder 2
+
+Example:
+
+```
+freq = {
+    0: [6],
+    1: [7],
+    2: [2, 2, 2]
+}
+```
+
+---
+
+## **STEP 2 — Sort each remainder list**
+
+```python
+for key in freq:
+    freq[key].sort()
+```
+
+This ensures the **smallest elements** are at the front.
+
+---
+
+## **STEP 3 — While total sum is NOT divisible by 3**
+
+```python
+while sum(nums) % 3 != 0:
+```
+
+If the sum is already divisible, we stop.
+Otherwise, we must remove something.
+
+---
+
+## **STEP 4 — Determine which remainder we need to fix**
+
+```python
+rem = sum(nums) % 3
+```
+
+* If `rem = 1`, remove remainder-1 items
+* If `rem = 2`, remove remainder-2 items
+
+---
+
+## **STEP 5 — Compute optionA (remove ONE smallest element)**
+
+```python
+optionA = float('inf')
+if rem in freq and len(freq[rem]) > 0:
+    optionA = freq[rem][0]
+```
+
+Smallest number whose **own remainder = rem**.
+This fixes the sum immediately.
+
+---
+
+## **STEP 6 — Compute optionB (remove TWO smallest opposite-remainder elements)**
+
+```python
+optionB = float('inf')
+opp = (3 - rem) % 3
+```
+
+Example:
+
+* If rem = 1 → opp = 2
+* If rem = 2 → opp = 1
+
+Opposite remainder works because:
+
+```
+(opp + opp) % 3 = rem
+```
+
+So removing two opposite numbers also fixes the sum.
+
+Then:
+
+```python
+if opp in freq and len(freq[opp]) >= 2:
+    optionB = freq[opp][0] + freq[opp][1]
+```
+
+---
+
+## **STEP 7 — Choose the cheaper of the two**
+
+```python
+if optionA <= optionB:
+    # remove one
+else:
+    # remove two
+```
+
+We remove the **minimum total value**, because that gives the **maximum possible remaining sum**.
+
+---
+
+## **STEP 8 — Actually remove the numbers from freq and nums**
+
+### IF removing 1 number:
+
+```python
+remove_val = freq[rem][0]
+freq[rem].pop(0)
+nums.remove(remove_val)
+```
+
+### ELSE removing 2 numbers:
+
+```python
+remove_val1 = freq[opp][0]
+remove_val2 = freq[opp][1]
+freq[opp] = freq[opp][2:]
+nums.remove(remove_val1)
+nums.remove(remove_val2)
+```
+
+We remove from `freq` AND from the original array `nums`.
+
+---
+
+## **Finally return the sum**
+
+```python
+return sum(nums)
+```
+
+---
+
+# ✅ **2. Complete Working Example**
+
+Let’s dry-run the code using the test case that reveals the important logic:
+
+### **Input**
+
+```
+nums = [2, 6, 2, 2, 7]
+```
+
+### **Initial sum**
+
+```
+19
+19 % 3 = 1  → need to fix rem = 1
+```
+
+---
+
+## **STEP A — Build freq**
+
+Remainders:
+
+| Number | Remainder |
+| ------ | --------- |
+| 2      | 2         |
+| 6      | 0         |
+| 2      | 2         |
+| 2      | 2         |
+| 7      | 1         |
+
+So:
+
+```
+freq = {
+    0: [6],
+    1: [7],
+    2: [2, 2, 2]
+}
+```
+
+---
+
+## **STEP B — First loop iteration**
+
+### **sum % 3 = 1**
+
+So:
+
+```
+rem = 1
+opp = (3 - 1) % 3 = 2
+```
+
+---
+
+### **Compute optionA**
+
+Smallest number with remainder 1:
+
+```
+freq[1] = [7]
+optionA = 7
+```
+
+---
+
+### **Compute optionB**
+
+Two smallest numbers with remainder 2:
+
+```
+freq[2] = [2, 2, 2]
+optionB = 2 + 2 = 4
+```
+
+---
+
+### Comparison:
+
+```
+optionA = 7
+optionB = 4
+optionB < optionA → remove TWO numbers
+```
+
+So we remove **2 and 2**.
+
+---
+
+## **STEP C — Update lists**
+
+### Remove from freq:
+
+```
+freq[2] becomes [2]      # we removed first two 2's
+```
+
+### Remove from nums:
+
+`nums = [2, 6, 2, 7]`
+remove two 2's → nums becomes:
+
+```
+nums = [6, 2, 7]
+```
+
+---
+
+## **STEP D — Now check sum again**
+
+```
+sum(nums) = 6 + 2 + 7 = 15
+15 % 3 = 0
+```
+
+Stop the loop.
+
+---
+
+# 🎉 **Final Output**
+
+```
+15
+```
+
+Which is the correct maximum sum divisible by 3.
