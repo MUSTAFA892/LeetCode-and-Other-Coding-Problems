@@ -1,0 +1,255 @@
+# ⭐ **1. Goal**
+
+Find the smallest number made only of digit `'1'`:
+
+```
+1
+11
+111
+1111
+11111
+...
+```
+
+that is divisible by **k**.
+
+Return **how many 1s** it has.
+
+---
+
+# ⭐ **2. Why remainder logic is needed?**
+
+Numbers like:
+
+```
+11111111111111111111...
+```
+
+become massive (hundreds or thousands of digits).
+
+Python could handle it,
+but LeetCode time/memory would explode.
+
+So instead of storing the actual number,
+we store only:
+
+```
+remainder when divided by k
+```
+
+This is always small: `0..k-1`.
+
+---
+
+# ⭐ **3. The Chain Rule (the KEY idea)**
+
+We generate repunit numbers:
+
+```
+1
+11
+111
+1111
+...
+```
+
+And each next number is built like:
+
+```
+next_number = previous_number * 10 + 1
+```
+
+Example:
+
+* From 1 → 11
+* From 11 → 111
+* From 111 → 1111
+
+This pattern is ALWAYS true for repunits.
+
+Now apply modulo:
+
+```
+(previous_number * 10 + 1) % k
+```
+
+We do NOT need previous_number itself.
+
+We only need:
+
+```
+rem = previous_number % k
+```
+
+So:
+
+```
+new_remainder = (rem * 10 + 1) % k
+```
+
+🎯 This is the magical “chain rule”.
+
+---
+
+# ⭐ **4. Why this works (modulo math proof)**
+
+Property:
+
+```
+(a * 10 + 1) % k  
+= ( (a % k) * 10 + 1 ) % k
+```
+
+Meaning:
+
+👉 We can REPLACE the full number with just its REMAINDER
+👉 Remainder carries all needed information
+
+That’s why the chain rule is valid.
+
+---
+
+# ⭐ **5. The Algorithm**
+
+Initialize:
+
+```
+rem = 0
+length = 1
+```
+
+For each level of repunit:
+
+```
+1, 11, 111, 1111, ...
+```
+
+We update:
+
+```
+rem = (rem * 10 + 1) % k
+```
+
+If at any time:
+
+```
+rem == 0
+```
+
+The repunit is divisible by k → return length.
+
+---
+
+# ⭐ **6. Full Walkthrough Example (k = 7)**
+
+Goal: Find smallest repunit divisible by 7.
+
+Start:
+
+```
+rem = 0
+```
+
+---
+
+### **i = 1 → number = 1**
+
+```
+rem = (0*10 + 1) % 7 = 1
+```
+
+Not divisible.
+
+---
+
+### **i = 2 → number = 11**
+
+```
+rem = (1*10 + 1) % 7 = 11 % 7 = 4
+```
+
+Not divisible.
+
+---
+
+### **i = 3 → number = 111**
+
+```
+rem = (4*10 + 1) % 7 = 41 % 7 = 6
+```
+
+Not divisible.
+
+---
+
+### **i = 4 → number = 1111**
+
+```
+rem = (6*10 + 1) % 7 = 61 % 7 = 5
+```
+
+Not divisible.
+
+---
+
+### **i = 5 → number = 11111**
+
+```
+rem = (5*10 + 1) % 7 = 51 % 7 = 2
+```
+
+Not divisible.
+
+---
+
+### **i = 6 → number = 111111**
+
+```
+rem = (2*10 + 1) % 7 = 21 % 7 = 0
+```
+
+🎉 Divisible!
+
+Answer = **6**
+
+---
+
+# ⭐ **7. Why we check up to k times**
+
+There are only **k** possible remainders:
+
+```
+0, 1, 2, ..., k-1
+```
+
+If we take more than k steps,
+remainders must repeat → infinite loop → no solution.
+
+So loop runs at most **k times**.
+
+---
+
+# ⭐ **8. Why we return −1 when k is divisible by 2 or 5**
+
+Any repunit:
+
+```
+1, 11, 111, 1111, …
+```
+
+always ends with **1**.
+
+Numbers ending in 1:
+
+* ❌ are NEVER divisible by 2
+* ❌ are NEVER divisible by 5
+
+If **k contains factor 2 or 5**,
+it is impossible for a number ending with 1 to divide it.
+
+So:
+
+```python
+if k % 2 == 0 or k % 5 == 0:
+    return -1
+```
