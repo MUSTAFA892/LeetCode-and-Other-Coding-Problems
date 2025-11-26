@@ -1,0 +1,207 @@
+# 📘 **DETAILED NOTES — Prefixes Divisible by 5**
+
+---
+
+# 🔥 **1. Goal of the problem**
+
+Given a binary array `nums`, for each prefix:
+
+```
+nums[0 : i]
+```
+
+Check **whether the binary number formed is divisible by 5**.
+
+We must return a list like:
+
+```
+[True, False, True, ...]
+```
+
+where each value tells:
+
+* TRUE  → The prefix forms a binary number divisible by 5
+* FALSE → Not divisible
+
+---
+
+# 💡 **2. Why not convert to full decimal?**
+
+Binary numbers grow very fast:
+
+```
+101010111011101011...
+```
+
+This could easily become a number with **hundreds of bits** → too large for normal integers.
+
+So we **do NOT** convert prefix binary into a normal integer.
+
+Instead, we use **remainder logic**, which is always small (0 to 4).
+
+---
+
+# 🧠 **3. Mathematical foundation**
+
+A binary prefix works like this:
+
+### If old number = X
+
+### New number = X * 2 + current_bit
+
+Example:
+
+* Old: `101` → decimal = 5
+* New bit: `1`
+* New number: `5 * 2 + 1 = 11`
+
+This rule is **always true** for binary numbers.
+
+---
+
+# 🔑 **4. Remainder Trick**
+
+Instead of storing the WHOLE number,
+we only store:
+
+```
+remainder when divided by 5
+```
+
+Let:
+
+```
+rem = (previous_number % 5)
+```
+
+Then:
+
+```
+new_number % 5 = (previous_number * 2 + current_bit) % 5
+               = (rem * 2 + current_bit) % 5
+```
+
+So this:
+
+```
+rem = (rem * 2 + nums[i]) % 5
+```
+
+gives us the **new remainder** without ever computing the full number!
+
+---
+
+# 🎯 **5. Output rule**
+
+After updating `rem`:
+
+```
+if rem == 0:
+    prefix is divisible by 5 → append True
+else:
+    append False
+```
+
+Why?
+
+* If remainder is 0 → perfectly divisible
+* Otherwise not divisible
+
+Simple and perfect.
+
+---
+
+# 🧪 **6. FULL WALKTHROUGH EXAMPLE**
+
+Let:
+
+```
+nums = [1, 0, 1, 1]
+```
+
+We'll track:
+
+* prefix (binary)
+* decimal meaning
+* remainder after dividing by 5
+
+---
+
+### **Initialize**
+
+```
+rem = 0
+ans = []
+```
+
+---
+
+### **i = 0, bit = 1**
+
+```
+rem = (0 * 2 + 1) % 5 = 1
+```
+
+Prefix: `1`
+Decimal: 1
+1 % 5 = 1 → ❌ Not divisible
+
+```
+ans = [False]
+```
+
+---
+
+### **i = 1, bit = 0**
+
+```
+rem = (1 * 2 + 0) % 5 = 2
+```
+
+Prefix: `10`
+Decimal: 2
+2 % 5 = 2 → ❌
+
+```
+ans = [False, False]
+```
+
+---
+
+### **i = 2, bit = 1**
+
+```
+rem = (2 * 2 + 1) % 5 = 5 % 5 = 0
+```
+
+Prefix: `101`
+Decimal: 5
+5 % 5 = 0 → ✔ Divisible
+
+```
+ans = [False, False, True]
+```
+
+---
+
+### **i = 3, bit = 1**
+
+```
+rem = (0 * 2 + 1) % 5 = 1
+```
+
+Prefix: `1011`
+Decimal: 11
+11 % 5 = 1 → ❌
+
+```
+ans = [False, False, True, False]
+```
+
+---
+
+# 🟢 **7. Final Output**
+
+```
+[False, False, True, False]
+```
