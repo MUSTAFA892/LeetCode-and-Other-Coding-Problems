@@ -1,0 +1,151 @@
+# 📘 **Explanation: Minimum Operations to Make Array Sum Divisible by k**
+
+---
+
+# 🎯 **Goal**
+
+We want to find the **minimum number of operations** needed so that:
+
+```
+sum(nums) % k == 0
+```
+
+Where **one operation** =
+➡️ Add 1 **or** subtract 1 from **any** element.
+
+---
+
+# 🧠 **Core Insight**
+
+Let:
+
+```
+S = sum(nums)
+```
+
+We want to transform S into some number S′ that is divisible by k.
+
+In modular math:
+
+```
+S′ ≡ 0 (mod k)
+```
+
+---
+
+# 📌 **Remainder Determines the Answer**
+
+Compute:
+
+```
+r = S % k
+```
+
+This remainder tells us:
+
+* The sum is **r more** than the nearest lower multiple of k.
+* To reach the closest divisible number, we need to **fix this remainder**.
+
+Two possible ways to fix S:
+
+---
+
+## **Option 1 — Subtract r from the sum**
+
+(lower divisible target)
+
+```
+S → S - r
+```
+
+Cost: **r operations**
+
+---
+
+## **Option 2 — Add (k - r) to the sum**
+
+(upper divisible target)
+
+```
+S → S + (k - r)
+```
+
+Cost: **k − r operations**
+
+---
+
+# ⭐ **Why the answer = r (S % k)**
+
+Because between the two options:
+
+```
+min(r, k - r)
+```
+
+But since **adding (k − r)** is ALWAYS larger (except when r=0):
+
+```
+r ≤ (k - r)
+```
+
+Therefore:
+
+```
+minimum operations = r = S % k
+```
+
+---
+
+# 🧪 **Working Example**
+
+### Input
+
+```
+nums = [3, 1, 4]
+k = 5
+```
+
+---
+
+### ✅ Step 1: Compute sum
+
+```
+S = 3 + 1 + 4 = 8
+```
+
+---
+
+### ✅ Step 2: Compute remainder
+
+```
+r = 8 % 5 = 3
+```
+
+Interpretation:
+
+* The sum is **3 more** than the nearest divisible number (which is 5).
+* To fix it, we need the total sum to drop by **3**.
+
+---
+
+### ✅ Step 3: Minimum operations = r
+
+```
+operations = 3
+```
+
+(We subtract 1 from any element 3 times total.)
+
+---
+
+# 🎉 **Final Correct Formula**
+
+```
+minimum operations = sum(nums) % k
+```
+
+If the sum is already divisible:
+
+```
+sum(nums) % k = 0 → answer is 0
+```
