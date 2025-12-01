@@ -1,0 +1,304 @@
+# 📘 **MIN SUBARRAY TO MAKE TOTAL SUM DIVISIBLE BY P — NOTES**
+
+---
+
+# PART 1 — **OPTIMAL HASHMAP APPROACH (O(n))**
+
+### ✔ Goal
+
+Remove the **smallest** continuous subarray such that:
+
+```
+(sum of remaining elements) % p == 0
+```
+
+This is same as finding a subarray whose:
+
+```
+sum(subarray) % p == total_sum % p
+```
+
+---
+
+## 🔍 **Line-by-line Explanation of Your HashMap Code**
+
+```
+prefix_sum = 0
+total_rem = sum(nums) % p
+```
+
+* `total_rem` = remainder of the whole array
+* We must remove a subarray whose sum % p = `total_rem`.
+
+---
+
+```
+if total_rem == 0:
+    return 0
+```
+
+If total is already divisible by `p`, no need to remove anything.
+
+---
+
+```
+hashp = {0:-1}
+```
+
+We store remainder → index.
+`0 : -1` means before array starts, prefix sum = 0.
+This helps to detect subarrays starting from index 0.
+
+---
+
+```
+min_len = float('inf')
+```
+
+Tracks the smallest valid subarray length.
+
+---
+
+### ✔ ITERATION STARTS (prefix sum idea)
+
+```
+for i in range(len(nums)):
+    prefix_sum += nums[i]
+    prefix_rem = prefix_sum % p
+```
+
+* Compute current prefix sum remainder.
+
+Example:
+if nums = [3,1,4,2]
+prefix remainders → [3,4,2,4]
+
+---
+
+### ✔ Find what remainder we need
+
+```
+sub_arr = (prefix_rem - total_rem) % p
+```
+
+This comes from equation:
+
+```
+prefix[j] - prefix[i] = sum of subarray (i+1 to j)
+```
+
+Rearranging:
+
+```
+prefix[i] % p = (prefix[j] - total_rem) % p
+```
+
+So `sub_arr` is the remainder we are searching for in hashmap.
+
+---
+
+### ✔ If earlier prefix exists, we found a valid subarray
+
+```
+if sub_arr in hashp:
+    prev_idx = hashp[sub_arr]
+    sub_len = i - prev_idx
+```
+
+* We found a subarray ending at `i`
+* Starting at `prev_idx + 1`
+* Length = `i - prev_idx`
+
+---
+
+### ✔ Apply problem constraint
+
+```
+if sub_len != len(nums):
+    min_len = min(min_len, sub_len)
+```
+
+We cannot remove the entire array.
+
+---
+
+### ✔ Store current prefix remainder
+
+```
+hashp[prefix_rem] = i
+```
+
+Store or overwrite the latest index of this remainder.
+
+---
+
+### ✔ Final answer
+
+```
+return -1 if min_len == float('inf') else min_len
+```
+
+If no subarray found → impossible.
+
+---
+
+# 🌟 **Worked Example (HashMap Approach)**
+
+## Test Case
+
+```
+nums = [6,3,5,2]
+p = 9
+```
+
+### Step 1: total remainder
+
+sum = 16
+16 % 9 = **7**
+
+We need subarray whose sum % 9 = 7.
+
+---
+
+### Step 2: iterate
+
+#### i = 0 → 6
+
+prefix_rem = 6
+
+needed = (6 - 7) % 9 = 8
+not found.
+
+Store 6 → index 0.
+
+---
+
+#### i = 1 → 6+3 = 9
+
+prefix_rem = 0
+
+needed = (0 - 7) % 9 = 2
+not found.
+
+Store 0 → index 1.
+
+---
+
+#### i = 2 → 9+5 = 14
+
+prefix_rem = 5
+
+needed = (5 - 7) % 9 = 7
+not found.
+
+Store 5 → index 2.
+
+---
+
+#### i = 3 → 14+2 = 16
+
+prefix_rem = 7
+
+needed = (7 - 7) % 9 = 0
+Found in hashmap → index 1
+
+Subarray is from:
+
+```
+1+1 = 2 → 3
+nums[2:3] = [5,2]
+length = 3 - 1 = 2
+```
+
+Answer = **2**
+
+---
+
+# PART 2 — **BRUTE FORCE APPROACH (O(n³))**
+
+Your brute force idea:
+
+### ✔ Step 1
+
+Compute total remainder:
+
+```
+sum(nums) % p
+```
+
+Say it is `R`.
+We now want a subarray whose:
+
+```
+subarray_sum % p = R
+```
+
+---
+
+### ✔ Step 2
+
+Two loops to check EVERY possible subarray:
+
+```
+for i in range(len(nums)):
+    for j in range(i+1, len(nums)+1):
+        subarray = nums[i:j]
+```
+
+`i` = start
+`j` = end+1
+
+---
+
+### ✔ Step 3
+
+Skip removing the whole array:
+
+```
+if i == 0 and j == len(nums):
+    continue
+```
+
+---
+
+### ✔ Step 4
+
+Check remainder:
+
+```
+if sum(nums[i:j]) % p == R:
+    min_len = min(min_len, j-i)
+```
+
+But this is slow:
+
+* outer loop → n
+* inner loop → n
+* sum(nums[i:j]) → n
+
+Total → **O(n³)**
+Very slow for large input.
+
+---
+
+# 🌟 Worked Example (Brute-force)
+
+(nums = [6,3,5,2], p = 9)
+
+Total = 16
+R = 7
+
+Now try all subarrays:
+
+| Subarray  | Sum   | %9    | Match? |
+| --------- | ----- | ----- | ------ |
+| [6]       | 6     | 6     | No     |
+| [3]       | 3     | 3     | No     |
+| [5]       | 5     | 5     | No     |
+| **[5,2]** | **7** | **7** | YES    |
+| [6,3]     | 9     | 0     | No     |
+| [6,3,5]   | 14    | 5     | No     |
+
+Smallest matching = **2**
+
+---
