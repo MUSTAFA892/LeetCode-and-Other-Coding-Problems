@@ -1,0 +1,134 @@
+# 🧩 Problem Recap
+
+**Fizz Buzz**
+
+You are given an integer `n`.
+
+For numbers from **1 to n**:
+
+* Print **"FizzBuzz"** if the number is divisible by **both 3 and 5**
+* Print **"Fizz"** if divisible by **3**
+* Print **"Buzz"** if divisible by **5**
+* Otherwise, print the **number itself**
+
+Return the result as a **list of strings**.
+
+---
+
+
+# 🧠 Core Idea of the Code
+
+The code iterates through numbers from **1 to n** and checks divisibility conditions using the **modulo (`%`) operator**.
+
+The result for each number is stored as a **string** in a list.
+
+# 🔍 Variable Explanation
+
+| Variable | Meaning                      |
+| -------- | ---------------------------- |
+| `n`      | Upper limit of the range     |
+| `arr`    | Stores final FizzBuzz output |
+| `i`      | Current number in loop       |
+
+---
+
+# 🔁 Loop Explanation
+
+```python
+for i in range(1, n+1):
+```
+
+* Starts from `1`
+* Ends at `n` (inclusive)
+* Processes each number one by one
+
+---
+
+# 🔢 Condition Checks (Important Order)
+
+### 1️⃣ Check for both 3 and 5 first
+
+```python
+if i % 3 == 0 and i % 5 == 0:
+```
+
+✔ Numbers divisible by **15**
+
+👉 Must be checked **first**, otherwise:
+
+* `15` would match `i % 3 == 0` and incorrectly print `"Fizz"`
+
+---
+
+### 2️⃣ Divisible by 3 only
+
+```python
+elif i % 3 == 0:
+```
+
+✔ Prints `"Fizz"`
+
+---
+
+### 3️⃣ Divisible by 5 only
+
+```python
+elif i % 5 == 0:
+```
+
+✔ Prints `"Buzz"`
+
+---
+
+### 4️⃣ Otherwise
+
+```python
+else:
+    arr.append(str(i))
+```
+
+✔ Converts number to **string** and stores it
+
+---
+
+# 🧪 Working Example (Step-by-Step)
+
+### **Test Case**
+
+```python
+n = 15
+```
+
+---
+
+### 🔹 Iteration Walkthrough
+
+| i  | Condition Matched  | Output       |
+| -- | ------------------ | ------------ |
+| 1  | none               | `"1"`        |
+| 2  | none               | `"2"`        |
+| 3  | divisible by 3     | `"Fizz"`     |
+| 4  | none               | `"4"`        |
+| 5  | divisible by 5     | `"Buzz"`     |
+| 6  | divisible by 3     | `"Fizz"`     |
+| 7  | none               | `"7"`        |
+| 8  | none               | `"8"`        |
+| 9  | divisible by 3     | `"Fizz"`     |
+| 10 | divisible by 5     | `"Buzz"`     |
+| 11 | none               | `"11"`       |
+| 12 | divisible by 3     | `"Fizz"`     |
+| 13 | none               | `"13"`       |
+| 14 | none               | `"14"`       |
+| 15 | divisible by 3 & 5 | `"FizzBuzz"` |
+
+---
+
+# ✅ Final Output
+
+```python
+[
+ "1", "2", "Fizz", "4", "Buzz",
+ "Fizz", "7", "8", "Fizz", "Buzz",
+ "11", "Fizz", "13", "14", "FizzBuzz"
+]
+```
