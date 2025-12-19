@@ -1,0 +1,139 @@
+# 🧩 Problem Recap
+
+**3432. Count Partitions with Even Sum Difference**
+
+You are given an integer array `nums`.
+
+A **partition** is an index `i` such that:
+
+* Left subarray = `nums[0 … i]`
+* Right subarray = `nums[i+1 … n-1]`
+* Both subarrays must be **non-empty**
+
+👉 Count how many such partitions have an **even difference** between the sums of left and right subarrays.
+
+
+# 🧠 Idea Behind the Code
+
+The code checks **every possible partition point** and:
+
+1. Calculates the **sum of the left subarray**
+2. Calculates the **sum of the right subarray**
+3. Checks if their **difference is even**
+4. Counts such valid partitions
+
+---
+
+# 🔍 Variable Explanation
+
+| Variable      | Meaning                                   |
+| ------------- | ----------------------------------------- |
+| `l`           | Length of the left subarray               |
+| `r`           | Start index of the right subarray (`r-1`) |
+| `even_count`  | Number of valid partitions                |
+| `left_count`  | Sum of elements in left subarray          |
+| `right_count` | Sum of elements in right subarray         |
+
+---
+
+# 🔁 Loop Logic Explained
+
+```python
+while l <= len(nums) - 1:
+```
+
+* Ensures **left has at least 1 element**
+* Ensures **right has at least 1 element**
+
+Each iteration corresponds to **one valid partition**.
+
+---
+
+# 🧮 Sum Calculation
+
+### Left subarray
+
+```python
+left_count = sum(nums[0:l])
+```
+
+→ Elements from index `0` to `l-1`
+
+### Right subarray
+
+```python
+right_count = sum(nums[r-1:len(nums)])
+```
+
+→ Elements from index `l` to the end
+
+---
+
+# 🟢 Even Difference Check
+
+```python
+if (left_count - right_count) % 2 == 0:
+```
+
+✔ Difference is **even** if divisible by `2`
+✔ Both positive and negative even numbers are valid
+
+---
+
+# 🧪 Working Example (Step-by-Step)
+
+### **Test Case**
+
+```python
+nums = [1, 2, 3, 4]
+```
+
+Total length = 4
+Possible partitions = `n - 1 = 3`
+
+---
+
+### 🔹 Iteration 1
+
+```
+l = 1, r = 2
+Left  = [1]        → sum = 1
+Right = [2,3,4]    → sum = 9
+Difference = 1 - 9 = -8 (even)
+```
+
+✔ Count = 1
+
+---
+
+### 🔹 Iteration 2
+
+```
+l = 2, r = 3
+Left  = [1,2]      → sum = 3
+Right = [3,4]      → sum = 7
+Difference = 3 - 7 = -4 (even)
+```
+
+✔ Count = 2
+
+---
+
+### 🔹 Iteration 3
+
+```
+l = 3, r = 4
+Left  = [1,2,3]    → sum = 6
+Right = [4]        → sum = 4
+Difference = 6 - 4 = 2 (even)
+```
+
+✔ Count = 3
+
+---
+
+# ✅ Final Output
+
+```python
+return 3
+```
