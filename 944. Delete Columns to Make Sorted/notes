@@ -1,0 +1,215 @@
+# 🧩 High-Level Idea of the Code
+
+* `count` → keeps track of **how many columns are deleted**
+* Outer loop → moves **column by column**
+* Inner loop → checks **vertical order (top → bottom)** in that column
+* `ord()` → converts characters into ASCII values to compare alphabetically
+
+---
+
+# 🔍 Line-by-Line Explanation
+
+---
+
+## 🔹 `count = 0`
+
+```python
+count = 0
+```
+
+* Stores the **number of columns that are NOT sorted**
+* This will be your final answer
+
+---
+
+## 🔹 Outer Loop — Column Traversal
+
+```python
+for i in range(len(strs[0])):
+```
+
+* `strs[0]` → first string
+* `len(strs[0])` → number of columns
+* `i` → **current column index**
+
+📌 This means:
+
+> “Check column 0, then column 1, then column 2, …”
+
+---
+
+## 🔹 Column Validity Check
+
+```python
+if len(strs[0]) > 1:
+```
+
+* This condition checks whether each string has **more than 1 character**
+* In LeetCode, this condition is **always true**, but your logic is still valid
+
+---
+
+## 🔹 Inner Loop — Row Traversal (Top → Bottom)
+
+```python
+for j in range(1,len(strs)):
+```
+
+* `j` starts from `1` because:
+
+  * You compare current row with the **previous row**
+* You are checking:
+
+  ```
+  strs[j-1][i]  vs  strs[j][i]
+  ```
+
+---
+
+## 🔹 Character Comparison
+
+```python
+if ord(strs[j-1][i]) <= ord(strs[j][i]):
+    continue
+```
+
+* `ord()` converts letters into numbers:
+
+  * `a = 97`, `b = 98`, `c = 99`, …
+* This checks:
+
+  > Is the current letter **not smaller** than the one above?
+
+✔ If yes → column still sorted → keep checking
+❌ If no → column is invalid
+
+---
+
+## 🔹 Column Deletion Logic
+
+```python
+else:
+    count += 1
+    break
+```
+
+* As soon as **one violation** is found:
+
+  * Increase `count`
+  * `break` stops checking this column
+* No need to check further rows for this column
+
+📌 This is **efficient and correct**
+
+---
+
+## 🔹 Return Result
+
+```python
+return count
+```
+
+* Final number of columns that must be deleted
+
+---
+
+# 🧪 Working Example (Step-by-Step)
+
+### **Test Case**
+
+```python
+strs = ["abc", "bce", "cae"]
+```
+
+Grid:
+
+```
+a  b  c
+b  c  e
+c  a  e
+```
+
+---
+
+## 🔹 Column 0 (`i = 0`)
+
+Characters:
+
+```
+a
+b
+c
+```
+
+Comparisons:
+
+* `a <= b` ✔
+* `b <= c` ✔
+
+✅ Column sorted → **not deleted**
+
+---
+
+## 🔹 Column 1 (`i = 1`)
+
+Characters:
+
+```
+b
+c
+a
+```
+
+Comparisons:
+
+* `b <= c` ✔
+* `c <= a` ❌
+
+🚫 Violation found
+➡ `count = 1`
+➡ Stop checking this column
+
+---
+
+## 🔹 Column 2 (`i = 2`)
+
+Characters:
+
+```
+c
+e
+e
+```
+
+Comparisons:
+
+* `c <= e` ✔
+* `e <= e` ✔
+
+✅ Column sorted → **not deleted**
+
+---
+
+## 🔹 Final Result
+
+```python
+return 1
+```
+
+✔ Output is correct
+
+---
+
+# 🧠 Key Observations (Exam Gold 💡)
+
+* Columns are checked **independently**
+* Only **one violation** is enough to delete a column
+* `break` avoids unnecessary comparisons
+* Rows are **never** compared horizontally
+* Equal characters are allowed (`<=` not `<`)
+
+---
+
+# 🔑 One-Line Mental Summary
+
+> “For each column, if any letter goes backward when moving downward, delete that column.”
