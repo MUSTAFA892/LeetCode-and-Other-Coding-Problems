@@ -1,0 +1,288 @@
+# 📝 Problem Recap
+
+You are given multiple strings of **equal length**.
+
+You may delete **entire columns** (same index in all strings).
+
+After deletion:
+
+* **Each row individually** must be sorted (non-decreasing from left → right)
+
+Your goal:
+👉 **Delete the minimum number of columns**
+
+---
+
+# 🧠 Big Idea Behind the Code
+
+Instead of thinking:
+
+> “Which columns should I delete?”
+
+The code thinks:
+
+> **“What is the maximum number of columns I can KEEP so that every row remains sorted?”**
+
+Then:
+
+```
+minimum deletions = total columns − maximum columns kept
+```
+
+---
+
+# 🔑 Core Concept Used
+
+If we keep two columns `i < j`, they are compatible **only if**:
+
+```
+for every row r:
+    strs[r][i] ≤ strs[r][j]
+```
+
+If even **one row** breaks this, those two columns **cannot be kept together**.
+
+---
+
+# 🧩 Meaning of `dp` Array
+
+```python
+dp[j]
+```
+
+👉 `dp[j]` = **maximum number of columns that can be kept**
+**ending exactly at column `j`**
+
+Think of it as:
+
+> “What is the longest valid column sequence that ends at column `j`?”
+
+---
+
+# 🧱 Line-by-Line Explanation
+
+---
+
+## 1️⃣ Initialize DP
+
+```python
+dp = [1] * len(strs[0])
+```
+
+* Every column by itself can always be kept
+* So the minimum chain length ending at each column is `1`
+
+Example:
+
+```
+dp = [1, 1, 1, 1, 1]
+```
+
+---
+
+## 2️⃣ Outer loop: choose the ending column `j`
+
+```python
+for j in range(len(strs[0])):
+```
+
+We try to build a valid column sequence **ending at column `j`**.
+
+---
+
+## 3️⃣ Inner loop: try extending from earlier columns `i`
+
+```python
+for i in range(j):
+```
+
+We ask:
+
+> Can column `j` come **after** column `i` in the kept sequence?
+
+---
+
+## 4️⃣ Check compatibility of columns `i → j`
+
+```python
+valid = True
+for r in range(len(strs)):
+    if strs[r][i] > strs[r][j]:
+        valid = False
+        break
+```
+
+This enforces the **row-wise sorted rule**:
+
+* If **any row** has `strs[r][i] > strs[r][j]`
+* Then column `i` cannot precede column `j`
+
+---
+
+## 5️⃣ Update DP if compatible
+
+```python
+if valid:
+    dp[j] = max(dp[j], dp[i] + 1)
+```
+
+Meaning:
+
+* If column `j` can follow column `i`
+* Then we extend the sequence that ended at `i`
+
+---
+
+## 6️⃣ Final Answer
+
+```python
+return len(strs[0]) - max(dp)
+```
+
+* `max(dp)` = maximum columns we can keep
+* Total columns − kept columns = minimum deletions
+
+---
+
+# 🧪 FULL WORKING EXAMPLE (Very Important)
+
+### Input
+
+```python
+strs = ["babca", "bbazb"]
+```
+
+Grid:
+
+```
+Index:  0 1 2 3 4
+Row 0:  b a b c a
+Row 1:  b b a z b
+```
+
+Total columns = **5**
+
+---
+
+## Step-by-step DP Construction
+
+### Initial
+
+```
+dp = [1, 1, 1, 1, 1]
+```
+
+---
+
+### j = 0
+
+No previous columns.
+
+```
+dp = [1, 1, 1, 1, 1]
+```
+
+---
+
+### j = 1
+
+Check `i = 0`
+
+Row-wise:
+
+* Row 0: b > a ❌
+
+Not valid.
+
+```
+dp = [1, 1, 1, 1, 1]
+```
+
+---
+
+### j = 2
+
+Check `i = 0`
+
+* Row 1: b > a ❌
+
+Check `i = 1`
+
+* Row 1: b > a ❌
+
+```
+dp = [1, 1, 1, 1, 1]
+```
+
+---
+
+### j = 3
+
+Check `i = 0`
+
+* Row 0: b < c ✔
+* Row 1: b < z ✔
+
+Valid → `dp[3] = 2`
+
+Check `i = 1`
+
+* Row 0: a < c ✔
+* Row 1: b < z ✔
+
+Valid → still `2`
+
+Check `i = 2`
+
+* Row 0: b < c ✔
+* Row 1: a < z ✔
+
+Valid → still `2`
+
+```
+dp = [1, 1, 1, 2, 1]
+```
+
+---
+
+### j = 4
+
+Check `i = 0`
+
+* Row 0: b > a ❌
+
+Check `i = 1`
+
+* Row 0: a = a ✔
+* Row 1: b = b ✔
+
+Valid → `dp[4] = 2`
+
+Check `i = 2`
+
+* Row 0: b > a ❌
+
+Check `i = 3`
+
+* Row 0: c > a ❌
+
+```
+dp = [1, 1, 1, 2, 2]
+```
+
+---
+
+## 🧮 Final Calculation
+
+```
+max(dp) = 2
+minimum deletions = 5 - 2 = 3
+```
+
+---
+
+# ✅ Final Answer
+
+```
+Output = 3
+```
