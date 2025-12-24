@@ -1,0 +1,209 @@
+
+
+## Explanation of Your Code (Line by Line)
+
+### 🔹 Code:
+
+```python
+class Solution:
+    def minimumBoxes(self, apple: List[int], capacity: List[int]) -> int:
+```
+
+**Explanation:**
+
+* You define a class `Solution`.
+* Inside it, you define a function `minimumBoxes`.
+* The function takes:
+
+  * `apple`: list of apple packs
+  * `capacity`: list of box capacities
+* It returns an **integer** (minimum number of boxes).
+
+---
+
+```python
+        count = 0
+```
+
+**Explanation:**
+
+* `count` keeps track of **how many boxes you are using**.
+* Initially, you have used **0 boxes**.
+
+---
+
+```python
+        capacity.sort(reverse=True)
+```
+
+**Explanation:**
+
+* You sort the box capacities in **descending order**.
+* This means you use **big boxes first**.
+* This helps minimize the number of boxes needed.
+
+📦 Example:
+`[2, 5, 3] → [5, 3, 2]`
+
+---
+
+```python
+        apple_filled = 0
+```
+
+**Explanation:**
+
+* `apple_filled` stores **total space available so far** from selected boxes.
+* Initially, no box is chosen, so space = 0.
+
+---
+
+```python
+        for i in capacity:
+```
+
+**Explanation:**
+
+* You loop through each box capacity (largest first).
+* `i` represents the capacity of the current box.
+
+---
+
+```python
+            if apple_filled < sum(apple):
+```
+
+**Explanation:**
+
+* `sum(apple)` calculates **total apples**.
+* This condition checks:
+
+  > “Do I still need more space to store all apples?”
+
+---
+
+```python
+                apple_filled += i
+```
+
+**Explanation:**
+
+* You add the current box’s capacity to total available space.
+* This means you **select this box**.
+
+---
+
+```python
+                count += 1
+```
+
+**Explanation:**
+
+* Since you selected a box, increase box count by 1.
+
+---
+
+```python
+            else:
+                break
+```
+
+**Explanation:**
+
+* If you already have enough space for all apples,
+* Stop selecting more boxes.
+
+---
+
+```python
+        return count
+```
+
+**Explanation:**
+
+* Return the **minimum number of boxes used**.
+
+---
+
+## Working Example (Step-by-Step Execution)
+
+### ✅ Test Case
+
+```python
+apple = [4, 3, 7]
+capacity = [2, 6, 4, 5]
+```
+
+---
+
+### 🔹 Step 1: Calculate Total Apples
+
+```
+sum(apple) = 4 + 3 + 7 = 14
+```
+
+So we need **space ≥ 14**.
+
+---
+
+### 🔹 Step 2: Sort Capacity (Descending)
+
+```
+capacity = [6, 5, 4, 2]
+```
+
+---
+
+### 🔹 Step 3: Initialize Variables
+
+| Variable     | Value |
+| ------------ | ----- |
+| apple_filled | 0     |
+| count        | 0     |
+
+---
+
+### 🔹 Step 4: Loop Execution
+
+#### ▶ First box (i = 6)
+
+* `apple_filled = 0 < 14` → YES
+* Add capacity: `apple_filled = 0 + 6 = 6`
+* Increase count: `count = 1`
+
+---
+
+#### ▶ Second box (i = 5)
+
+* `apple_filled = 6 < 14` → YES
+* Add capacity: `apple_filled = 6 + 5 = 11`
+* Increase count: `count = 2`
+
+---
+
+#### ▶ Third box (i = 4)
+
+* `apple_filled = 11 < 14` → YES
+* Add capacity: `apple_filled = 11 + 4 = 15`
+* Increase count: `count = 3`
+
+---
+
+#### ▶ Fourth box (i = 2)
+
+* `apple_filled = 15 < 14` → ❌ NO
+* `else` → `break` (stop loop)
+
+---
+
+### 🔹 Step 5: Return Result
+
+```
+return count → 3
+```
+
+---
+
+## ✅ Final Answer
+
+**Minimum boxes needed = 3**
