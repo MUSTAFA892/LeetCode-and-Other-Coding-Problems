@@ -1,0 +1,334 @@
+# 🟢 APPROACH 1 — **O(n) efficient running penalty update**
+
+```python
+class Solution:
+    def bestClosingTime(self, customers: str) -> int:
+        total_penalty = customers.count('Y')
+        min_penalty = total_penalty
+        best = 0
+                
+        for i in range(len(customers)):
+            if customers[i] == 'Y':
+                total_penalty -= 1
+            else:
+                total_penalty += 1  
+
+            if total_penalty < min_penalty:
+                min_penalty = total_penalty
+                best = i + 1
+
+        return best
+```
+
+---
+
+## 🧠 IDEA (simple words)
+
+### Step 1
+
+Assume the shop closes at **hour 0** (never opens).
+
+Then:
+
+* every `'Y'` causes penalty
+* every `'N'` causes no penalty
+
+So initial penalty =
+
+```
+number of Y’s
+```
+
+---
+
+### Step 2
+
+Now move closing time hour-by-hour to the right.
+
+When we pass an hour:
+
+| Character | Meaning                    | Effect on penalty |
+| --------- | -------------------------- | ----------------- |
+| `'Y'`     | customer now served (open) | penalty − 1       |
+| `'N'`     | shop now open for nobody   | penalty + 1       |
+
+So we update `total_penalty`.
+
+---
+
+### Step 3
+
+Whenever penalty becomes smaller than before,
+save:
+
+```
+best hour = i + 1
+```
+
+Because after hour i, shop closes.
+
+---
+
+# 🧪 DRY-RUN ON `"YYNY"`
+
+Initial:
+
+```
+total_penalty = count('Y') = 3
+min_penalty = 3
+best = 0
+```
+
+---
+
+## 🔹 Hour 0 → 'Y'
+
+Customer now served → penalty −1
+
+```
+total_penalty = 2
+```
+
+Compare:
+
+```
+2 < 3 → yes
+min_penalty = 2
+best = 1   (close at hour 1)
+```
+
+---
+
+## 🔹 Hour 1 → 'Y'
+
+Penalty −1 again
+
+```
+total_penalty = 1
+```
+
+Compare:
+
+```
+1 < 2 → yes
+best = 2   (close at hour 2)
+```
+
+---
+
+## 🔹 Hour 2 → 'N'
+
+Penalty +1
+
+```
+total_penalty = 2
+```
+
+Compare:
+
+```
+2 < 1 → no
+(best stays 2)
+```
+
+---
+
+## 🔹 Hour 3 → 'Y'
+
+Penalty −1
+
+```
+total_penalty = 1
+```
+
+Compare:
+
+```
+1 < 1 → no (strictly less needed)
+```
+
+So **earliest** hour with penalty=1 stays at **2**.
+
+---
+
+# 🎯 FINAL RESULT
+
+```
+best = 2
+```
+
+---
+
+# ⏱ Complexity
+
+```
+O(n) time
+O(1) space
+```
+
+Fast & optimal.
+
+---
+
+---
+
+# 🔵 APPROACH 2 — **Brute force checking every closing hour**
+
+```python
+class Solution:
+    def bestClosingTime(self, customers: str) -> int:
+        state = [0] * (len(customers))
+        min_penalty_idx = []
+        min_penalty = float('inf')
+
+        for i in range(len(customers) + 1):
+            penalty = 0
+
+            for j in range(len(customers)):
+                if j < i: 
+                    if customers[j] == 'N':
+                        penalty += 1
+                else:       
+                    if customers[j] == 'Y':
+                        penalty += 1
+
+            min_penalty = min(min_penalty, penalty)
+            min_penalty_idx.append(penalty)
+
+        return min_penalty_idx.index(min_penalty)
+```
+
+---
+
+## 🧠 IDEA (simple words)
+
+Here you literally **try every possible closing hour**:
+
+```
+close at 0
+close at 1
+close at 2
+...
+close at n
+```
+
+For each closing time `i`
+
+* Hours **0 → i-1**  = OPEN
+  Bad case = `'N'`
+
+* Hours **i → n-1**  = CLOSED
+  Bad case = `'Y'`
+
+Count penalties
+Store in a list
+Return the earliest index with the smallest penalty
+
+---
+
+# 🧪 DRY-RUN ON `"YYNY"`
+
+Hours:
+0:Y  1:Y  2:N  3:Y
+
+---
+
+## 🔹 Close at 0
+
+All hours CLOSED
+Bad when `'Y'`
+
+Y Y N Y  → 3 penalties
+
+```
+penalty = 3
+```
+
+---
+
+## 🔹 Close at 1
+
+Hour0 OPEN
+Rest CLOSED
+
+Hour0 open + Y → OK
+Hour1 closed + Y → +1
+Hour2 closed + N → OK
+Hour3 closed + Y → +1
+
+```
+penalty = 2
+```
+
+---
+
+## 🔹 Close at 2
+
+Hours0-1 OPEN
+Hours2-3 CLOSED
+
+Hour0 open + Y → OK
+Hour1 open + Y → OK
+Hour2 closed + N → OK
+Hour3 closed + Y → +1
+
+```
+penalty = 1
+```
+
+---
+
+## 🔹 Close at 3
+
+Hours0-2 OPEN
+Hour3 CLOSED
+
+Hour2 open + N → +1
+Hour3 closed + Y → +1
+
+```
+penalty = 2
+```
+
+---
+
+## 🔹 Close at 4
+
+All OPEN
+
+Only
+Hour2 open + N → +1
+
+```
+penalty = 1
+```
+
+---
+
+# 📊 Penalty List
+
+```
+[3, 2, 1, 2, 1]
+```
+
+Minimum = 1
+Earliest index = **2**
+
+---
+
+# 🎯 FINAL RESULT
+
+```
+2
+```
+
+---
+
+# ⏱ Complexity
+
+```
+O(n²) time
+O(n) space
+```
+
+Slower — but easy to understand.
