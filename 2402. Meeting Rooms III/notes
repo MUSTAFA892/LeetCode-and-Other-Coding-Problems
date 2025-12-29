@@ -1,0 +1,238 @@
+# 🧾 Explanation of the Code
+
+### Goal
+
+We want to assign meetings to rooms under these rules:
+
+1. If any rooms are free → pick the **smallest-numbered** one
+2. If none are free → **delay** the meeting until some room is free
+3. A delayed meeting keeps its **original duration**
+4. Track how many meetings each room hosts
+5. Return the room with the **most meetings** (smallest index if tie)
+
+---
+
+## 🧠 Data Structures Used
+
+### ✔ `available` (min-heap of room IDs)
+
+Holds IDs of rooms that are free
+Always gives the **smallest room number first**
+
+---
+
+### ✔ `busy_rooms` (min-heap of `(endTime, roomId)`)
+
+Tracks currently occupied rooms
+
+* sorted by **earliest end time**
+* top element = room that becomes free first
+
+---
+
+### ✔ `counts`
+
+`counts[i] = number of meetings hosted by room i`
+
+---
+
+## 📍 Algorithm Flow
+
+### 1️⃣ Sort meetings by start time
+
+```python
+meetings.sort()
+```
+
+---
+
+### 2️⃣ Process meetings one-by-one
+
+```python
+for each meeting:
+```
+
+Let:
+
+```
+start = meetings[i][0]
+end   = meetings[i][1]
+duration = end - start
+```
+
+---
+
+### 3️⃣ Before assigning, free rooms that have finished
+
+```python
+while busy_rooms and busy_rooms[0][0] <= start:
+```
+
+If a room’s endTime ≤ current meeting start:
+
+* pop it from busy_rooms
+* push its roomId back into available
+
+This simulates rooms becoming free **at the correct times**.
+
+---
+
+### 4️⃣ Case A — There is a free room
+
+```python
+if available:
+    pop smallest roomId
+    schedule normally (endTime = meeting end)
+    increment count
+```
+
+---
+
+### 5️⃣ Case B — No free rooms → Delay meeting
+
+```python
+else:
+    pop earliest-finishing room
+    new_endTime = earliest_end + duration
+    push back with new_endTime
+    increment that room's count
+```
+
+So the meeting **starts when the room frees**.
+
+---
+
+### 6️⃣ After all meetings
+
+Return the room with max count:
+
+```python
+return counts.index(max(counts))
+```
+
+Leetcode guarantee makes tie-breaking correct.
+
+---
+
+# 🧪 Worked Example
+
+Let’s simulate:
+
+```
+n = 2
+meetings = [[0,10],[1,5],[2,7],[3,4]]
+```
+
+Rooms: `0 and 1`
+
+---
+
+## INITIAL
+
+```
+available = [0,1]
+busy_rooms = []
+counts = [0,0]
+```
+
+---
+
+## ⭐ Meeting 1 → [0,10]
+
+start = 0, end = 10, duration = 10
+
+Free finished rooms? → none
+
+available not empty → take room 0
+
+```
+busy_rooms push (10,0)
+counts = [1,0]
+available = [1]
+```
+
+---
+
+## ⭐ Meeting 2 → [1,5]
+
+start = 1, end = 5, duration = 4
+
+Free rooms?
+earliest busy = 10 > 1 → none
+
+available has room 1 → use it
+
+```
+busy_rooms push (5,1)
+counts = [1,1]
+available = []
+busy_rooms = [(5,1),(10,0)]
+```
+
+(Heap sorted by endTime)
+
+---
+
+## ⭐ Meeting 3 → [2,7]
+
+start = 2, duration = 5
+
+Free rooms?
+(5,1) ends at 5 > 2 → none
+No available rooms → delay
+
+Pop earliest:
+
+```
+(5,1)
+```
+
+Delayed start = 5
+So new end = 5 + 5 = 10
+
+Push back:
+
+```
+busy_rooms = [(10,0),(10,1)]
+counts = [1,2]
+```
+
+---
+
+## ⭐ Meeting 4 → [3,4]
+
+start = 3, duration = 1
+
+Free rooms?
+earliest = 10 > 3 → none
+
+No available rooms → delay again
+
+Pop earliest — tie → room 0 (smaller id)
+
+```
+(10,0)
+```
+
+Delayed start = 10
+New end = 10 + 1 = 11
+
+Push:
+
+```
+busy_rooms = [(10,1),(11,0)]
+counts = [2,2]
+```
+
+---
+
+# 🏁 Final Counts
+
+```
+Room 0 → 2 meetings
+Room 1 → 2 meetings
+```
+
+Tie → smallest index
+
+### ✅ Output = 0
