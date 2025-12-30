@@ -1,0 +1,255 @@
+# 🧠 Step-by-Step Explanation
+
+## 🔹 Initialize count
+
+```python
+count = 0
+```
+
+This will store how many **magic squares** you find.
+
+---
+
+## 🔹 Loop over all possible 3×3 starting positions
+
+```python
+for r in range(len(grid) - 2):
+    for c in range(len(grid[0]) - 2):
+```
+
+* `r` = top row of the 3×3 block
+* `c` = left column of the 3×3 block
+
+`-2` because a 3×3 block needs 3 rows & 3 cols.
+
+So:
+
+* rows go from `0 → row-3`
+* cols go from `0 → col-3`
+
+Each `(r,c)` = one 3×3 subgrid.
+
+---
+
+## 🔹 Gather the 9 numbers in the block
+
+```python
+nums = []
+for i in range(r, r + 3):
+    for j in range(c,c+3):
+        nums.append(grid[i][j])
+```
+
+This collects:
+
+```
+grid[r][c] ... grid[r][c+2]
+grid[r+1][c] ... grid[r+1][c+2]
+grid[r+2][c] ... grid[r+2][c+2]
+```
+
+into one list of 9 numbers.
+
+---
+
+## 🔹 Check rule #1
+
+### Must contain exactly numbers 1–9
+
+```python
+if sorted(nums) != [1,2,3,4,5,6,7,8,9]:
+    continue
+```
+
+If this fails, skip the block.
+
+This removes:
+✔ duplicates
+✔ 0 or >9
+✔ missing numbers
+
+Good optimization.
+
+---
+
+## 🔹 Compute row sums
+
+```python
+row1 = ...
+row2 = ...
+row3 = ...
+```
+
+Each row has 3 numbers
+
+---
+
+## 🔹 Compute column sums
+
+```python
+col1 = ...
+col2 = ...
+col3 = ...
+```
+
+Each column has 3 numbers
+
+---
+
+## 🔹 Compute diagonal sums
+
+```python
+d1 = main diagonal
+d2 = other diagonal
+```
+
+---
+
+## 🔹 Check all must equal 15
+
+```python
+if (row1 == row2 == row3 ==
+    col1 == col2 == col3 ==
+    d1 == d2 == 15):
+        count += 1
+```
+
+Only then it is a magic square
+Increase count
+
+---
+
+## 🔹 Return answer
+
+```python
+return count
+```
+
+---
+
+# 🧪 Working Example With Test Case
+
+Let’s test:
+
+```
+grid =
+[
+ [4,3,8,4],
+ [9,5,1,9],
+ [2,7,6,2]
+]
+```
+
+Rows = 3
+Cols = 4
+
+So valid `(r,c)`:
+
+| r | c |
+| - | - |
+| 0 | 0 |
+| 0 | 1 |
+
+There are **2 subgrids to check**.
+
+---
+
+## 🔷 Subgrid 1 — starting at (0,0)
+
+```
+4 3 8
+9 5 1
+2 7 6
+```
+
+### nums list becomes:
+
+```
+[4,3,8,9,5,1,2,7,6]
+```
+
+Sorted:
+
+```
+[1,2,3,4,5,6,7,8,9]  ✔ ok
+```
+
+### Row sums
+
+4+3+8 = 15
+9+5+1 = 15
+2+7+6 = 15
+
+### Column sums
+
+4+9+2 = 15
+3+5+7 = 15
+8+1+6 = 15
+
+### Diagonals
+
+4+5+6 = 15
+8+5+2 = 15
+
+✔ ALL = 15
+
+So
+
+```
+count = 1
+```
+
+---
+
+## 🔷 Subgrid 2 — starting at (0,1)
+
+```
+3 8 4
+5 1 9
+7 6 2
+```
+
+### nums list
+
+```
+[3,8,4,5,1,9,7,6,2]
+```
+
+Sorted:
+
+```
+[1,2,3,4,5,6,7,8,9] ✔ ok
+```
+
+### Row sums
+
+3+8+4 = 15
+5+1+9 = 15
+7+6+2 = 15
+
+### Column sums
+
+3+5+7 = 15
+8+1+6 = 15
+4+9+2 = 15
+
+### Diagonals
+
+3+1+2 = ❌ 6
+4+1+7 = ❌ 12
+
+Not equal to 15 → reject
+
+So
+
+```
+count remains = 1
+```
+
+---
+
+# ✅ Final Output
+
+```
+1
+```
