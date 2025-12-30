@@ -1,0 +1,61 @@
+## ❓ Question: Spiral Matrix Traversal
+
+Given a 2D matrix of size `m × n`, print all the elements of the matrix in **spiral order**, starting from the **top-left corner** and moving in a **clockwise direction**.
+
+---
+
+### 📊 Input Matrix
+
+```
+4   3   8   4
+9   5   1   9
+2   7   6   2
+```
+
+---
+
+### 🔄 Spiral Traversal Path (Diagram)
+
+```
+→  →  →  ↓
+↑        ↓
+↑  ←  ←  ←
+```
+
+---
+
+### 🖨️ Output
+
+```
+4 → 3 → 8 → 4 → 9 → 2 → 6 → 7 → 2 → 9 → 5 → 1
+```
+
+---
+
+### 📌 Explanation (Problem Description)
+
+* Start from the **top-left element**
+* Traverse:
+
+  1. Left to Right (top row)
+  2. Top to Bottom (right column)
+  3. Right to Left (bottom row)
+  4. Bottom to Top (left column)
+* Repeat the process for inner layers until all elements are printed
+
+---
+
+### 🧠 Constraints
+
+* Do not print any element more than once
+* Use boundary pointers to avoid revisiting elements
+* Matrix may be **rectangular**, not necessarily square
+
+---
+
+### ⏱️ Expected Complexity
+
+* **Time Complexity:** `O(m × n)`
+* **Space Complexity:** `O(1)`
+
+---

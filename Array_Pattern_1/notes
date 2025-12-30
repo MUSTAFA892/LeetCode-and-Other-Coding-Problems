@@ -1,0 +1,117 @@
+## 🌀 Problem Note: Spiral Matrix Traversal (Two-Pointer Approach)
+
+### 📌 Problem Statement
+
+Given a 2D matrix, print all elements in **spiral order** starting from the **top-left corner** and moving **clockwise**.
+
+---
+
+### 📊 Example Input Matrix
+
+```
+[
+ [4, 3, 8, 4],
+ [9, 5, 1, 9],
+ [2, 7, 6, 2]
+]
+```
+
+### ✅ Expected Output (Spiral Order)
+
+```
+4 → 3 → 8 → 4 → 9 → 2 → 6 → 7 → 2 → 9 → 5 → 1 → end
+```
+
+---
+
+## 🧠 Key Idea (Two Pointer / Boundary Method)
+
+We maintain **four pointers** that represent the current boundaries of the matrix:
+
+| Pointer  | Meaning                        |
+| -------- | ------------------------------ |
+| `top`    | First row not yet traversed    |
+| `bottom` | Last row not yet traversed     |
+| `left`   | First column not yet traversed |
+| `right`  | Last column not yet traversed  |
+
+After traversing one boundary, we **shrink the matrix** by moving the pointer inward.
+
+---
+
+## 🔁 Traversal Order (Clockwise)
+
+1. **Top row** → left to right
+2. **Right column** → top to bottom
+3. **Bottom row** → right to left
+4. **Left column** → bottom to top
+
+Repeat until all elements are printed.
+
+---
+
+## 🧪 Step-by-Step Working (Visual Explanation)
+
+### Initial Boundaries:
+
+```
+top = 0, bottom = 2
+left = 0, right = 3
+```
+
+### 🔹 Step 1: Top Row
+
+```
+4 → 3 → 8 → 4
+```
+
+Move `top = 1`
+
+---
+
+### 🔹 Step 2: Right Column
+
+```
+9 → 2
+```
+
+Move `right = 2`
+
+---
+
+### 🔹 Step 3: Bottom Row (reverse)
+
+```
+6 → 7 → 2
+```
+
+Move `bottom = 1`
+
+---
+
+### 🔹 Step 4: Left Column (reverse)
+
+```
+9
+```
+
+Move `left = 1`
+
+---
+
+### 🔹 Final Remaining Middle
+
+```
+5 → 1
+```
+
+---
+
+## 📐 Diagram Representation
+
+```
+→ → → ↓
+↑     ↓
+↑ ← ← ←
+```
+
