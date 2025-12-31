@@ -1,0 +1,303 @@
+# ✅ HIGH-LEVEL IDEA
+
+You are trying to find:
+
+> the **largest k × k magic square** in the grid
+> where every row sum, column sum, and both diagonals have the same sum
+
+So you:
+
+* start from the **largest possible k**
+* scan every k×k sub-grid
+* check if it’s magic
+* if yes → return k immediately
+* otherwise → shrink k and repeat
+
+That guarantees the first valid answer is the largest one 👍
+
+---
+
+# 🧠 STEP-BY-STEP EXPLANATION OF YOUR CODE
+
+```python
+m, n = len(grid), len(grid[0])
+```
+
+Stores number of rows & columns.
+
+```python
+k = min(m, n)
+```
+
+Largest possible square side.
+
+```python
+count = 1
+```
+
+At minimum, answer is 1 (1×1 is always magic).
+
+---
+
+## 🔁 While Loop — try sizes from largest to smallest
+
+```python
+while k != 1:
+```
+
+Meaning:
+
+```
+k = max_size, max_size-1, ..., 2
+```
+
+---
+
+## 🔁 Loops to slide window across the grid
+
+```python
+for r in range(m-k+1):
+    for c in range(n-k+1):
+```
+
+(r, c) = **top-left corner** of current k×k square.
+
+---
+
+## 🎯 Set the target sum
+
+```python
+target = sum(grid[r][c:c+k])
+```
+
+Sum of **the first row** in the square.
+All rows / columns / diagonals must match this.
+
+---
+
+## ✔ ROW CHECK
+
+Loop through each row inside the square:
+
+```python
+for i in range(k):
+    row = 0
+    for j in range(k):
+        row += grid[r+i][c+j]
+```
+
+If any row sum ≠ target → not magic → stop checking.
+
+---
+
+## ✔ COLUMN CHECK
+
+Only runs if rows were valid:
+
+```python
+for i in range(k):
+    col = 0
+    for j in range(k):
+        col += grid[r+j][c+i]
+```
+
+If any column ≠ target → not magic.
+
+---
+
+## ✔ DIAGONAL CHECK
+
+Only runs if rows & columns matched:
+
+```python
+for i in range(k):
+    d1 += grid[r+i][c+i]
+    d2 += grid[r+i][c+k-1-i]
+```
+
+Check both diagonals equal target.
+
+---
+
+## 🎉 If ALL checks pass
+
+```python
+if ok:
+    return k
+```
+
+Return immediately — because this is the **largest size** you are currently testing.
+
+---
+
+## ⬇ If nothing worked at this size
+
+```python
+k -= 1
+```
+
+Try smaller square.
+
+---
+
+## 🏁 If you reach k=1
+
+```python
+return 1
+```
+
+---
+
+# 🧪 WORKING EXAMPLE
+
+Use the official example grid:
+
+```
+grid =
+[
+ [7,1,4,5,6],
+ [2,5,1,6,4],
+ [1,5,4,3,2],
+ [1,2,7,3,4]
+]
+```
+
+m = 4
+n = 5
+so:
+
+```
+k = min(4,5) = 4
+```
+
+---
+
+## 🔹 Try k = 4
+
+Possible starting positions:
+
+* (0,0)
+* (0,1)
+
+Check each:
+
+### Sub-grid at (0,0)
+
+```
+7 1 4 5
+2 5 1 6
+1 5 4 3
+1 2 7 3
+```
+
+target = first row sum:
+
+```
+7+1+4+5 = 17
+```
+
+Row 2 sum = 14 ❌
+→ Not magic
+
+---
+
+### Sub-grid at (0,1)
+
+```
+1 4 5 6
+5 1 6 4
+5 4 3 2
+2 7 3 4
+```
+
+First row sum:
+
+```
+1+4+5+6 = 16
+```
+
+2nd row = 16
+3rd row = 14 ❌
+Not magic
+
+---
+
+So **no 4×4 magic square exists**
+
+Decrease size:
+
+```
+k = 3
+```
+
+---
+
+## 🔹 Try k = 3
+
+Possible starting positions (r,c):
+
+```
+(0,0) (0,1) (0,2)
+(1,0) (1,1) (1,2)
+```
+
+---
+
+### Check square at (1,1)
+
+```
+5 1 6
+5 4 3
+2 7 3
+```
+
+target = sum of first row:
+
+```
+5+1+6 = 12
+```
+
+Row sums:
+
+```
+5+1+6 = 12
+5+4+3 = 12
+2+7+3 = 12
+✔ all rows ok
+```
+
+Column sums:
+
+```
+5+5+2 = 12
+1+4+7 = 12
+6+3+3 = 12
+✔ all columns ok
+```
+
+Diagonals:
+
+```
+5+4+3 = 12
+6+4+2 = 12
+✔ both ok
+```
+
+🎉 MAGIC SQUARE FOUND OF SIZE 3
+
+---
+
+So your code executes:
+
+```python
+return 3
+```
+
+---
+
+# ✅ FINAL ANSWER
+
+```
+3
+```
+
