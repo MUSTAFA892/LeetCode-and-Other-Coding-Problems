@@ -1,0 +1,155 @@
+
+# ✅ Problem Goal 
+
+Given a list of strings:
+
+👉 **return the first word that is a palindrome**
+(A palindrome reads the same forward & backward)
+
+If **none** are palindromes → return an empty string `""`.
+
+---
+
+# 🧩 Step-by-Step Explanation
+
+## 🔹 Loop through each word
+
+```python
+for i in words:
+```
+
+`i` is each string in the list.
+
+---
+
+## 🔹 Check if the word is a palindrome
+
+```python
+if i == i[::-1]:
+```
+
+### What is `i[::-1]`?
+
+It means:
+👉 create a **reversed copy** of the string
+
+Example:
+
+```
+"abc"[::-1] → "cba"
+"racecar"[::-1] → "racecar"
+```
+
+So:
+
+* if **original == reversed**
+* then it’s a palindrome
+
+---
+
+## 🔹 If palindrome → return it immediately
+
+```python
+return i
+```
+
+Because we only want the **first one**.
+
+Loop stops here.
+
+---
+
+## 🔹 If loop finishes with no palindrome
+
+```python
+return ""
+```
+
+Meaning:
+👉 nothing matched
+
+---
+
+# 🎯 Key Behavior
+
+* First palindrome — returned ✔
+* Others later — ignored ✖
+* No palindrome — return empty ✔
+
+---
+
+# 🧪 Working Example
+
+### Input
+
+```
+words = ["abc", "car", "ada", "racecar", "cool"]
+```
+
+### Execution Flow
+
+1️⃣ Check `"abc"`
+
+```
+"abc" != "cba"   → not palindrome
+```
+
+2️⃣ Check `"car"`
+
+```
+"car" != "rac"   → not palindrome
+```
+
+3️⃣ Check `"ada"`
+
+```
+"ada" == "ada"   → palindrome!
+```
+
+So the function returns:
+
+```
+"ada"
+```
+
+Stops there — `"racecar"` is never checked.
+
+---
+
+# 🧪 Another Example
+
+### Input
+
+```
+["not","a","single","pal"]
+```
+
+Check each:
+
+```
+"not"   != "ton"
+"a"     == "a"   → palindrome
+```
+
+So output:
+
+```
+"a"
+```
+
+---
+
+# 🧪 Example With No Palindromes
+
+### Input
+
+```
+["abc","def","ghi"]
+```
+
+None match
+So result:
+
+```
+""
+```
