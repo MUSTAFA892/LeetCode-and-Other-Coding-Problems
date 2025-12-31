@@ -1,0 +1,31 @@
+# 📌 The Question (what are we trying to do?)
+
+> Given a 2D grid of numbers,
+> print out **every possible k × k sub-matrix (window)** inside it,
+> starting from the largest k and shrinking it.
+
+Here:
+
+```
+grid =
+7 1 4 5 6
+2 5 1 6 4
+1 5 4 3 2
+1 2 7 3 4
+```
+
+Rows = 4
+Cols = 5
+So the **largest possible square size = 4**
+
+So the program prints:
+
+* all **4×4** blocks first
+* then all **3×3** blocks
+* then all **2×2** blocks
+
+(Stops before size = 1)
+
+This is mainly for **visualizing windows** before checking magic-square logic.
+
+---

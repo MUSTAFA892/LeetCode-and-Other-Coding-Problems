@@ -1,0 +1,192 @@
+# 🧠 NOTES — What Each Part Does
+
+### ✔ Set sizes
+
+```python
+m, n = len(grid), len(grid[0])
+k = 4
+```
+
+m = 4 rows
+n = 5 cols
+k = size of square window (starts at 4)
+
+---
+
+### ✔ Print the grid
+
+Just for reference.
+
+---
+
+### ✔ Outer loop — shrinking k
+
+```python
+while k != 1:
+```
+
+Runs for:
+
+```
+k = 4
+k = 3
+k = 2
+```
+
+Stops before 1.
+
+---
+
+### ✔ Two loops — choose starting position of square
+
+```python
+for r in range(m-k+1):
+    for c in range(n-k+1):
+```
+
+(r,c) = **top-left corner of the square**
+
+This slides the k×k window across the grid.
+
+---
+
+### ✔ Inner loops — collect numbers inside the square
+
+```python
+for i in range(r, r+k):
+    for j in range(c, c+k):
+        nums.append(grid[i][j])
+```
+
+This walks inside the square and prints each **row slice**.
+
+Then you reset `nums` to print the next row cleanly.
+
+So visually you see the square printed row-by-row.
+
+---
+
+### ✔ Reduce window size
+
+```python
+k -= 1
+```
+
+Try smaller square next.
+
+---
+
+# 🧪 FULL WORKING EXAMPLE (What prints)
+
+## 🔷 Initial Grid
+
+```
+7 1 4 5 6
+2 5 1 6 4
+1 5 4 3 2
+1 2 7 3 4
+```
+
+---
+
+## ▶ Size k = 4
+
+There are **2 possible 4×4 squares**
+
+### 🟦 Square starting at (0,0)
+
+```
+7 1 4 5
+2 5 1 6
+1 5 4 3
+1 2 7 3
+```
+
+Your code prints it row-by-row as:
+
+```
+[7, 1, 4, 5]
+[2, 5, 1, 6]
+[1, 5, 4, 3]
+[1, 2, 7, 3]
+```
+
+---
+
+### 🟦 Square starting at (0,1)
+
+```
+1 4 5 6
+5 1 6 4
+5 4 3 2
+2 7 3 4
+```
+
+Printed as:
+
+```
+[1, 4, 5, 6]
+[5, 1, 6, 4]
+[5, 4, 3, 2]
+[2, 7, 3, 4]
+```
+
+---
+
+Then k becomes 3
+
+---
+
+## ▶ Size k = 3
+
+You now print **every 3×3 square**
+
+There are:
+
+* 2 starting rows
+* 3 starting cols
+  → 6 total
+
+Example:
+
+### Square at (1,1)
+
+```
+5 1 6
+5 4 3
+2 7 3
+```
+
+Printed as rows.
+
+(You see all 6 printed one-by-one.)
+
+---
+
+Then k becomes 2
+
+---
+
+## ▶ Size k = 2
+
+You now print all **2×2** blocks
+There are:
+
+* 3 starting rows
+* 4 starting cols
+  → 12 total
+
+Example:
+
+### Square at (2,3)
+
+```
+3 2
+3 4
+```
+
+Printed row-by-row
+
+---
+
+Then k becomes 1 → loop stops
