@@ -1,37 +1,257 @@
+# Explanation (First Approach)
 
+## Step 1️⃣
 
-1. **Class Definition**: 
+```python
+mul_val = []
+```
+
+This will store all **partial multiplication results**, similar to what we do manually on paper.
+
+---
+
+## Step 2️⃣ — Loop through digits of num2
+
+```python
+for i in range(len(num2)):
+    zeros = (len(num2)-1)-i
+    mul_val.append(str(int(num2[i])*int(num1))+'0'*zeros)
+```
+
+For each digit in `num2`:
+
+1. Convert digit → integer
+2. Multiply it with the **entire num1**
+3. Add trailing zeros based on its digit position
+
+This mimics manual multiplication like:
+
+```
+   num1
+x  num2
+---------
+ partial results
+```
+
+Trailing zeros = place value.
+
+---
+
+## Step 3️⃣ — Add all partial results
+
+```python
+product_val = 0
+for i in mul_val:
+    product_val += int(i)
+```
+
+Sum everything.
+
+---
+
+## Step 4️⃣ — Return as string
+
+```python
+return str(product_val)
+```
+
+---
+
+# 📌 Example Test Case
+
+Let’s take:
+
+```
+num1 = "12"
+num2 = "34"
+```
+
+So we compute:
+
+```
+12 × 34 = 408
+```
+
+Let’s see how your code arrives at this.
+
+---
+
+# 🔍 Detailed Working
+
+`num2 = "34"`
+
+Digits (by index):
+
+```
+i = 0 → '3'
+i = 1 → '4'
+```
+
+Length = 2
+
+---
+
+## ⭐ Iteration 1
+
+`i = 0`
+
+```
+digit = '3'
+zeros = (2-1)-0 = 1
+```
+
+Multiply:
+
+```
+3 × 12 = 36
+```
+
+Add 1 zero:
+
+```
+"36" + "0" = "360"
+```
+
+Store:
+
+```
+mul_val = ["360"]
+```
+
+---
+
+## ⭐ Iteration 2
+
+`i = 1`
+
+```
+digit = '4'
+zeros = (2-1)-1 = 0
+```
+
+Multiply:
+
+```
+4 × 12 = 48
+```
+
+Add 0 zeros:
+
+```
+"48"
+```
+
+Store:
+
+```
+mul_val = ["360","48"]
+```
+
+---
+
+# ➕ Sum Partial Results
+
+```
+360
++ 48
+----
+408
+```
+
+So:
+
+```
+product_val = 408
+```
+
+Return `"408"`
+
+---
+
+# 🎉 Final Output
+
+```
+"408"
+```
+
+# Explanation — Second Approach
+
+1. **Class Definition**
+
    ```python
    class Solution:
    ```
-   - Defines a class `Solution` where the `multiply` method is implemented.
 
-2. **Method Definition**:
+   * This defines a class named `Solution`.
+   * The multiplication function is written inside this class.
+
+---
+
+2. **Method Definition**
+
    ```python
    def multiply(self, num1: str, num2: str) -> str:
    ```
-   - `multiply` is a method that belongs to the `Solution` class.
-   - It takes `self` (the instance of the class), `num1`, and `num2` as parameters.
-   - The type hints (`num1: str` and `num2: str`) indicate that `num1` and `num2` are expected to be strings, and `-> str` specifies that the method will return a string.
 
-3. **Conversion to Integers and Multiplication**:
+   * `multiply` is a method belonging to the `Solution` class.
+   * Parameters:
+
+     * `self` → reference to the current object
+     * `num1` → first number as a string
+     * `num2` → second number as a string
+   * `-> str` means the method will return a **string**.
+
+---
+
+3. **Conversion to Integers and Multiplication**
+
    ```python
    mul = int(num1) * int(num2)
    ```
-   - `int(num1)` converts `num1` from a string to an integer.
-   - `int(num2)` converts `num2` from a string to an integer.
-   - The two integers are multiplied, and the result is stored in `mul`.
 
-4. **Convert Result Back to String and Return**:
+   * `int(num1)` converts the string `num1` into an integer.
+   * `int(num2)` converts the string `num2` into an integer.
+   * The two integers are multiplied.
+   * The result is stored in the variable `mul`.
+
+---
+
+4. **Convert Result Back to String and Return**
+
    ```python
    return str(mul)
    ```
-   - `str(mul)` converts the result of the multiplication back to a string.
-   - The method returns this string, which is the final product of `num1` and `num2` as a string.
 
-### Example Usage
+   * `str(mul)` converts the numeric result back into a string.
+   * This string is returned as the final answer.
 
-If `num1 = "3"` and `num2 = "4"`, then:
-1. `int(num1) * int(num2)` would compute `3 * 4 = 12`.
-2. `str(mul)` converts `12` back to `"12"`.
-3. The function returns `"12"` as the final output.
+---
+
+# 🔍 Example
+
+If:
+
+```
+num1 = "3"
+num2 = "4"
+```
+
+Then:
+
+```
+int(num1) = 3
+int(num2) = 4
+3 × 4 = 12
+```
+
+Convert back to string:
+
+```
+"12"
+```
+
+So the function returns:
+
+```
+"12"
+```
