@@ -1,0 +1,318 @@
+# Code Explanation
+
+```python
+class Solution:
+    def discountPrices(self, sentence: str, discount: int) -> str:
+        sentence = sentence.split()
+```
+
+### ✔ Split Sentence
+
+* Converts the sentence into a **list of words**
+* Words are separated by a single space
+* Example:
+
+  ```
+  "I paid $100 today"
+  → ["I","paid","$100","today"]
+  ```
+
+---
+
+```python
+        for i in range(len(sentence)):
+            value = sentence[i]
+```
+
+### ✔ Loop through every word
+
+* `value` = current word
+* `i` keeps the index (so we can update it later)
+
+---
+
+```python
+            try:
+                int(value[1:])
+                price = int(value[1:])
+```
+
+### ✔ Try converting characters after `$` to an integer
+
+This checks if the word **looks like a valid price**:
+
+* `$100` → `100` → valid
+* `$30` → `30` → valid
+* `$` → `""` → ❌ error → caught
+* `$5e` → `"5e"` → ❌ error → caught
+* `abc` → `"bc"` → ❌ error → caught
+
+If conversion fails → `ValueError` → we skip this word.
+
+If successful → assign numeric value to `price`.
+
+---
+
+```python
+                if value[0] == '$':
+```
+
+### ✔ Ensure it actually starts with `$`
+
+Even if conversion works, we still confirm the first character is `$`.
+
+---
+
+```python
+                    final = price * (100 - discount) / 100
+```
+
+### ✔ Apply Discount Formula
+
+```
+Final Price = price × (100 − discount) / 100
+```
+
+Example
+price = 100
+discount = 20%
+
+```
+final = 100 × 80 / 100 = 80
+```
+
+---
+
+```python
+                    value_updation = str('$'+str(final))
+```
+
+### ✔ Convert result back to a string and attach `$`
+
+Example:
+
+```
+80.0  → "$80.0"
+```
+
+---
+
+```python
+                    if '.' in value_updation:
+                        decimal_part = value_updation.split('.')[-1]
+                        if len(decimal_part) == 1:
+                            value_updation += '0'
+```
+
+### ✔ Handle decimal formatting
+
+If value contains a decimal point:
+
+* Check decimal digits count
+* If only **1 digit**, add one zero
+
+Examples:
+
+```
+$80.0  → $80.00
+$41.2 → $41.20
+```
+
+---
+
+```python
+                    else:
+                        value_updation += '.00'
+```
+
+### ✔ If no decimal part
+
+Add `.00`
+
+Example:
+
+```
+$27 → $27.00
+```
+
+---
+
+```python
+                    sentence[i] = value_updation
+```
+
+### ✔ Replace the original word with updated price
+
+---
+
+```python
+            except ValueError:
+    
+                continue
+```
+
+### ✔ If price is invalid
+
+Skip it — leave word unchanged.
+
+---
+
+```python
+        return " ".join(sentence)
+```
+
+### ✔ Re-join words into a sentence string and return it
+
+---
+
+# 🧪 Working Test Case (Note)
+
+### **Input**
+
+```
+sentence = "I bought a $100 phone and a $5e pen and a $30 case"
+discount = 20
+```
+
+---
+
+## Execution Flow
+
+Sentence becomes:
+
+```
+["I","bought","a","$100","phone","and","a","$5e","pen","and","a","$30","case"]
+```
+
+---
+
+### 🔹 Word: `"I"`
+
+* Not a price
+* Skipped
+
+---
+
+### 🔹 Word: `"bought"`
+
+* Not a price
+* Skipped
+
+---
+
+### 🔹 Word: `"a"`
+
+* Not a price
+* Skipped
+
+---
+
+### 🔹 Word: `"$100"`
+
+* `value[1:] = "100"`
+* `int("100")` → valid
+* starts with `$` → valid price
+* price = 100
+* discount = 20%
+
+```
+final = 100 × 80 / 100 = 80.0
+```
+
+Format:
+
+```
+"$80.0" → "$80.00"
+```
+
+Word becomes:
+
+```
+"$80.00"
+```
+
+---
+
+### 🔹 Word: `"phone"`
+
+Not a price
+
+---
+
+### 🔹 Word: `"and"`
+
+Not a price
+
+---
+
+### 🔹 Word: `"a"`
+
+Not a price
+
+---
+
+### 🔹 Word: `"$5e"`
+
+* `value[1:] = "5e"`
+* `int("5e")` → ERROR
+* Goes to except block
+* Word remains unchanged
+
+---
+
+### 🔹 Word: `"pen"`
+
+Not a price
+
+---
+
+### 🔹 Word: `"and"`
+
+Not a price
+
+---
+
+### 🔹 Word: `"a"`
+
+Not a price
+
+---
+
+### 🔹 Word: `"$30"`
+
+* `value[1:] = "30"`
+* valid integer
+* valid price
+* price = 30
+
+Apply discount:
+
+```
+30 × 80 / 100 = 24.0
+```
+
+Format:
+
+```
+"$24.0" → "$24.00"
+```
+
+Word becomes:
+
+```
+"$24.00"
+```
+
+---
+
+### 🔹 Word: `"case"`
+
+Not a price
+
+---
+
+# 🎯 Final Output
+
+```
+"I bought a $80.00 phone and a $5e pen and a $24.00 case"
+```
