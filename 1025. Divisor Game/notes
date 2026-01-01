@@ -1,0 +1,186 @@
+# 📝 Problem Idea (Divisor Game)
+
+Two players play a game:
+
+* Player 1 → **Alice**
+* Player 2 → **Bob**
+* They start with a number **n**
+* On each turn, the player chooses a number **x** such that:
+
+  * `1 ≤ x < n`
+  * `x` divides `n` perfectly (`n % x == 0`)
+* Then the player **replaces n with n − x**
+* The player who **cannot make a move loses**
+
+The function returns:
+
+* `True` → Alice wins
+* `False` → Bob wins
+
+---
+
+# ✅ Key Insight
+
+Your code:
+
+```python
+class Solution:
+    def divisorGame(self, n: int) -> bool:
+        if n % 2 == 0:
+            return True
+        else:
+            return False
+```
+
+This means:
+
+### ✔ If `n` is even → Alice always wins
+
+### ✔ If `n` is odd → Alice always loses
+
+And this is **mathematically correct**.
+
+---
+
+# 🔍 Why is this true?
+
+* If `n` is **even**, Alice can always choose an **odd divisor**, making the number odd for Bob.
+* If `n` is **odd**, every divisor is odd, so after subtraction the result becomes **even**, giving Alice an even number back but only after Bob’s move — meaning Alice eventually gets stuck.
+
+So the pattern becomes:
+
+| n | Winner |
+| - | ------ |
+| 1 | Bob    |
+| 2 | Alice  |
+| 3 | Bob    |
+| 4 | Alice  |
+| 5 | Bob    |
+| 6 | Alice  |
+
+So:
+
+```
+Even → Alice wins
+Odd  → Alice loses
+```
+
+---
+
+# 🧪 Working Example Flow
+
+### Example: `n = 4`
+
+We check:
+
+```
+4 % 2 == 0  → True
+```
+
+So the function returns:
+
+```
+True  → Alice wins
+```
+
+But let’s see the game flow:
+
+---
+
+## 🎮 Game Play
+
+### Start:
+
+```
+n = 4
+Alice's turn
+```
+
+Alice must choose a divisor `x` of 4:
+
+Possible x:
+
+```
+1, 2
+```
+
+Suppose Alice chooses:
+
+```
+x = 1
+```
+
+Then:
+
+```
+n = 4 − 1 = 3
+```
+
+---
+
+### Bob’s turn:
+
+```
+n = 3
+```
+
+Divisors of 3:
+
+```
+1
+```
+
+Bob must choose:
+
+```
+x = 1
+```
+
+So:
+
+```
+n = 3 − 1 = 2
+```
+
+---
+
+### Alice’s turn:
+
+```
+n = 2
+```
+
+Divisors of 2:
+
+```
+1
+```
+
+Alice chooses:
+
+```
+x = 1
+```
+
+So:
+
+```
+n = 2 − 1 = 1
+```
+
+---
+
+### Bob’s turn:
+
+```
+n = 1
+```
+
+Bob has **no valid moves**
+
+So:
+
+```
+Bob loses
+Alice wins
+```
