@@ -1,0 +1,241 @@
+# 🧠 Problem Summary
+
+### Input
+
+```
+n = 3
+```
+
+### Output Matrix
+
+```
+[
+ [1, 2, 3],
+ [8, 9, 4],
+ [7, 6, 5]
+]
+```
+
+We fill the matrix in spiral form starting from 1 → 9.
+
+---
+# 🔍 Explanation (Concept)
+
+You maintain **four boundaries**:
+
+| Variable | Meaning                     |
+| -------- | --------------------------- |
+| `top`    | first row not yet filled    |
+| `bottom` | last row not yet filled     |
+| `left`   | first column not yet filled |
+| `right`  | last column not yet filled  |
+
+And a number counter:
+
+```
+val = 1
+```
+
+We fill:
+
+1️⃣ Left → Right across `top` row
+2️⃣ Top → Bottom down `right` column
+3️⃣ Right → Left across `bottom` row
+4️⃣ Bottom → Top up `left` column
+
+After each direction, you **shrink the boundary** so the spiral moves inward.
+
+Loop runs while:
+
+```
+left <= right and top <= bottom
+```
+
+---
+
+# 🧪 Step-By-Step Example
+
+### Input
+
+```
+n = 3
+```
+
+### Initial grid
+
+```
+[ [1,1,1],
+  [1,1,1],
+  [1,1,1] ]
+```
+
+Boundaries:
+
+```
+top = 0
+bottom = 2
+left = 0
+right = 2
+val = 1
+```
+
+---
+
+## 🔁 Loop 1
+
+### 1️⃣ Left → Right (top row)
+
+Fill row 0 from col 0 → 2:
+
+```
+1 2 3
+```
+
+grid:
+
+```
+[ [1,2,3],
+  [1,1,1],
+  [1,1,1] ]
+```
+
+Update:
+
+```
+top = 1
+val = 4
+```
+
+---
+
+### 2️⃣ Top → Bottom (right column)
+
+Fill column 2 from row 1 → 2:
+
+```
+4
+5
+```
+
+grid:
+
+```
+[ [1,2,3],
+  [1,1,4],
+  [1,1,5] ]
+```
+
+Update:
+
+```
+right = 1
+val = 6
+```
+
+---
+
+### 3️⃣ Right → Left (bottom row)
+
+Fill row 2 from col 1 → 0:
+
+```
+6 7
+```
+
+grid:
+
+```
+[ [1,2,3],
+  [1,1,4],
+  [7,6,5] ]
+```
+
+Update:
+
+```
+bottom = 1
+val = 8
+```
+
+---
+
+### 4️⃣ Bottom → Top (left column)
+
+Fill column 0 from row 1 → 1:
+
+```
+8
+```
+
+grid:
+
+```
+[ [1,2,3],
+  [8,1,4],
+  [7,6,5] ]
+```
+
+Update:
+
+```
+left = 1
+val = 9
+```
+
+---
+
+## Boundaries now
+
+```
+top = 1
+bottom = 1
+left = 1
+right = 1
+```
+
+Still valid → continue
+
+---
+
+## 🔁 Loop 2
+
+### 1️⃣ Left → Right (center cell)
+
+Fill row 1 col 1:
+
+```
+9
+```
+
+grid:
+
+```
+[ [1,2,3],
+  [8,9,4],
+  [7,6,5] ]
+```
+
+Update:
+
+```
+top = 2
+val = 10
+```
+
+Now:
+
+```
+top > bottom  → loop ends
+```
+
+---
+
+# ✅ Final Output
+
+```
+[
+ [1,2,3],
+ [8,9,4],
+ [7,6,5]
+]
+```
