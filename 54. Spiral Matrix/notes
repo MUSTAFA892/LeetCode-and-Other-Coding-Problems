@@ -1,0 +1,230 @@
+# 🧠 Problem Summary
+
+Given a 2D matrix (grid), return all elements in **spiral order**:
+
+Right → Down → Left → Up → repeat
+
+Example
+
+```
+Input:
+[
+ [1,2,3],
+ [4,5,6],
+ [7,8,9]
+]
+
+Output:
+[1,2,3,6,9,8,7,4,5]
+```
+
+---
+
+# 🔍 Explanation (Concept)
+
+We keep **4 boundaries**:
+
+| Variable | Meaning                            |
+| -------- | ---------------------------------- |
+| `top`    | topmost row not yet processed      |
+| `bottom` | bottommost row not yet processed   |
+| `left`   | leftmost column not yet processed  |
+| `right`  | rightmost column not yet processed |
+
+We repeatedly:
+
+1️⃣ Traverse **Left → Right** along `top` row
+2️⃣ Traverse **Top → Bottom** along `right` column
+3️⃣ Traverse **Right → Left** along `bottom` row
+4️⃣ Traverse **Bottom → Top** along `left` column
+
+After each direction, we **shrink the boundary**.
+
+Loop stops when:
+
+```
+left > right OR top > bottom
+```
+
+---
+
+# 🧪 Working Example (Step-by-Step)
+
+### Input
+
+```
+grid =
+[
+ [1, 2, 3, 4],
+ [5, 6, 7, 8],
+ [9,10,11,12]
+]
+```
+
+Rows = 3
+Cols = 4
+
+Initial boundaries:
+
+```
+top = 0
+bottom = 2
+left = 0
+right = 3
+arr = []
+```
+
+---
+
+## 🔁 Iteration 1
+
+### 1️⃣ Left → Right (top row)
+
+Row = 0
+Values added:
+
+```
+1, 2, 3, 4
+```
+
+`arr = [1,2,3,4]`
+
+Move top down:
+
+```
+top = 1
+```
+
+---
+
+### 2️⃣ Top → Bottom (right column)
+
+Column = 3
+Values added:
+
+```
+8, 12
+```
+
+`arr = [1,2,3,4,8,12]`
+
+Move right left:
+
+```
+right = 2
+```
+
+---
+
+### 3️⃣ Right → Left (bottom row — only if top ≤ bottom)
+
+Row = 2
+Values added:
+
+```
+11,10,9
+```
+
+`arr = [1,2,3,4,8,12,11,10,9]`
+
+Move bottom up:
+
+```
+bottom = 1
+```
+
+---
+
+### 4️⃣ Bottom → Top (left column — only if left ≤ right)
+
+Column = 0
+Values added:
+
+```
+5
+```
+
+`arr = [1,2,3,4,8,12,11,10,9,5]`
+
+Move left right:
+
+```
+left = 1
+```
+
+---
+
+## Boundaries Now
+
+```
+top = 1
+bottom = 1
+left = 1
+right = 2
+```
+
+Still valid → continue
+
+---
+
+## 🔁 Iteration 2
+
+### 1️⃣ Left → Right
+
+Row = 1
+Values added:
+
+```
+6,7
+```
+
+`arr = [1,2,3,4,8,12,11,10,9,5,6,7]`
+
+Move top down:
+
+```
+top = 2
+```
+
+Now:
+
+```
+top (2) > bottom (1)
+```
+
+Loop ends.
+
+---
+
+## ✅ Final Output
+
+```
+[1,2,3,4,8,12,11,10,9,5,6,7]
+```
+
+---
+
+# ⚙ Edge Case Handling
+
+### ✔ Single Row
+
+```
+[[1,2,3]]
+→ returns row directly
+```
+
+Because of:
+
+```python
+if len(grid) <= 1:
+    return grid[0]
+```
+
+### ✔ Single Column
+
+Still works because boundaries shrink correctly.
+
+### ✔ Non-square matrix
+
+Works fine.
+
