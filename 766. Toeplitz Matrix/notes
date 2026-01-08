@@ -1,0 +1,246 @@
+## **Code Explanation**
+
+The algorithm checks if each element equals the element diagonally below-right:
+- Compare `matrix[i][j]` with `matrix[i+1][j+1]`
+- If any pair doesn't match → return `False`
+- If all pairs match → return `True`
+
+**Why `range(len(matrix)-1)` and `range(len(matrix[0])-1)`?**
+- We check element with the one **below-right**, so we can't check the last row or last column (no element below-right exists)
+
+---
+
+## **Test Case 1: Valid Toeplitz Matrix**
+
+```python
+matrix = [[1,2,3,4],
+          [5,1,2,3],
+          [9,5,1,2]]
+
+rows = 3, cols = 4
+```
+
+### **Visual Grid with Indices**
+```
+       j=0  j=1  j=2  j=3
+     +----+----+----+----+
+i=0  |  1 |  2 |  3 |  4 |
+     +----+----+----+----+
+i=1  |  5 |  1 |  2 |  3 |
+     +----+----+----+----+
+i=2  |  9 |  5 |  1 |  2 |
+     +----+----+----+----+
+```
+
+### **Diagonals to Check**
+```
+Diagonal 1: 1 → 1 → 1
+Diagonal 2: 2 → 2 → 2
+Diagonal 3: 3 → 3
+Diagonal 4: 4
+Diagonal 5: 5 → 5
+Diagonal 6: 9
+```
+
+---
+
+## **ITERATION BY ITERATION**
+
+### **Outer Loop: i = 0 (Row 0)**
+
+#### **Inner Loop: j = 0**
+```
+Checking: matrix[0][0] vs matrix[1][1]
+Position: (0,0) vs (1,1)
+Values:   1 vs 1
+
+       j=0  j=1  j=2  j=3
+     +----+----+----+----+
+i=0  | [1]|  2 |  3 |  4 |  ← Current element
+     +----+----+----+----+
+i=1  |  5 | [1]|  2 |  3 |  ← Diagonal element
+     +----+----+----+----+
+i=2  |  9 |  5 |  1 |  2 |
+     +----+----+----+----+
+
+Comparison: 1 == 1 ✓
+Continue...
+```
+
+#### **Inner Loop: j = 1**
+```
+Checking: matrix[0][1] vs matrix[1][2]
+Position: (0,1) vs (1,2)
+Values:   2 vs 2
+
+       j=0  j=1  j=2  j=3
+     +----+----+----+----+
+i=0  |  1 | [2]|  3 |  4 |  ← Current element
+     +----+----+----+----+
+i=1  |  5 |  1 | [2]|  3 |  ← Diagonal element
+     +----+----+----+----+
+i=2  |  9 |  5 |  1 |  2 |
+     +----+----+----+----+
+
+Comparison: 2 == 2 ✓
+Continue...
+```
+
+#### **Inner Loop: j = 2**
+```
+Checking: matrix[0][2] vs matrix[1][3]
+Position: (0,2) vs (1,3)
+Values:   3 vs 3
+
+       j=0  j=1  j=2  j=3
+     +----+----+----+----+
+i=0  |  1 |  2 | [3]|  4 |  ← Current element
+     +----+----+----+----+
+i=1  |  5 |  1 |  2 | [3]|  ← Diagonal element
+     +----+----+----+----+
+i=2  |  9 |  5 |  1 |  2 |
+     +----+----+----+----+
+
+Comparison: 3 == 3 ✓
+Continue...
+```
+
+#### **Why j = 3 is NOT checked?**
+```
+j loops through range(len(matrix[0])-1) = range(3) = [0, 1, 2]
+
+At j=3, we would check matrix[0][3] vs matrix[1][4]
+But matrix[1][4] doesn't exist! (only 4 columns: 0,1,2,3)
+So we stop at j=2
+```
+
+---
+
+### **Outer Loop: i = 1 (Row 1)**
+
+#### **Inner Loop: j = 0**
+```
+Checking: matrix[1][0] vs matrix[2][1]
+Position: (1,0) vs (2,1)
+Values:   5 vs 5
+
+       j=0  j=1  j=2  j=3
+     +----+----+----+----+
+i=0  |  1 |  2 |  3 |  4 |
+     +----+----+----+----+
+i=1  | [5]|  1 |  2 |  3 |  ← Current element
+     +----+----+----+----+
+i=2  |  9 | [5]|  1 |  2 |  ← Diagonal element
+     +----+----+----+----+
+
+Comparison: 5 == 5 ✓
+Continue...
+```
+
+#### **Inner Loop: j = 1**
+```
+Checking: matrix[1][1] vs matrix[2][2]
+Position: (1,1) vs (2,2)
+Values:   1 vs 1
+
+       j=0  j=1  j=2  j=3
+     +----+----+----+----+
+i=0  |  1 |  2 |  3 |  4 |
+     +----+----+----+----+
+i=1  |  5 | [1]|  2 |  3 |  ← Current element
+     +----+----+----+----+
+i=2  |  9 |  5 | [1]|  2 |  ← Diagonal element
+     +----+----+----+----+
+
+Comparison: 1 == 1 ✓
+Continue...
+```
+
+#### **Inner Loop: j = 2**
+```
+Checking: matrix[1][2] vs matrix[2][3]
+Position: (1,2) vs (2,3)
+Values:   2 vs 2
+
+       j=0  j=1  j=2  j=3
+     +----+----+----+----+
+i=0  |  1 |  2 |  3 |  4 |
+     +----+----+----+----+
+i=1  |  5 |  1 | [2]|  3 |  ← Current element
+     +----+----+----+----+
+i=2  |  9 |  5 |  1 | [2]|  ← Diagonal element
+     +----+----+----+----+
+
+Comparison: 2 == 2 ✓
+Continue...
+```
+
+---
+
+### **Why i = 2 is NOT checked?**
+```
+i loops through range(len(matrix)-1) = range(2) = [0, 1]
+
+At i=2, we would check matrix[2][j] vs matrix[3][j+1]
+But matrix[3] doesn't exist! (only 3 rows: 0,1,2)
+So we stop at i=1
+```
+
+---
+
+## **Summary of Checks**
+
+```
+Total checks = (rows-1) × (cols-1) = 2 × 3 = 6 checks
+
+Check 1: matrix[0][0] vs matrix[1][1] → 1 == 1 ✓
+Check 2: matrix[0][1] vs matrix[1][2] → 2 == 2 ✓
+Check 3: matrix[0][2] vs matrix[1][3] → 3 == 3 ✓
+Check 4: matrix[1][0] vs matrix[2][1] → 5 == 5 ✓
+Check 5: matrix[1][1] vs matrix[2][2] → 1 == 1 ✓
+Check 6: matrix[1][2] vs matrix[2][3] → 2 == 2 ✓
+
+All checks passed!
+return True ✓
+```
+
+---
+
+## **Test Case 2: Invalid Toeplitz Matrix**
+
+```python
+matrix = [[1,2],
+          [2,2]]
+```
+
+### **Visual Grid**
+```
+       j=0  j=1
+     +----+----+
+i=0  |  1 |  2 |
+     +----+----+
+i=1  |  2 |  2 |
+     +----+----+
+```
+
+### **Iteration**
+
+#### **i = 0, j = 0**
+```
+Checking: matrix[0][0] vs matrix[1][1]
+Position: (0,0) vs (1,1)
+Values:   1 vs 2
+
+       j=0  j=1
+     +----+----+
+i=0  | [1]|  2 |  ← Current element
+     +----+----+
+i=1  |  2 | [2]|  ← Diagonal element
+     +----+----+
+
+Comparison: 1 != 2 ✗
+
+return False immediately!
+```
+
+**We stop here because we found a mismatch!**
