@@ -1,0 +1,446 @@
+## **Algorithm Explanation**
+
+**DP State Definition:**
+- `dp[i][j]` = Minimum ASCII delete sum to make `s1[0:i]` equal to `s2[0:j]`
+
+**Three Cases:**
+1. **Base case (empty string)**: Cost to delete all characters
+2. **Characters match**: No deletion needed, inherit cost from `dp[i-1][j-1]`
+3. **Characters don't match**: Delete from s1 OR delete from s2, take minimum
+
+---
+
+## **Test Case: s1 = "sea", s2 = "eat"**
+
+### **ASCII Values Reference**
+```
+s1 = "sea"
+s1[0] = 's' → ASCII 115
+s1[1] = 'e' → ASCII 101
+s1[2] = 'a' → ASCII 97
+
+s2 = "eat"
+s2[0] = 'e' → ASCII 101
+s2[1] = 'a' → ASCII 97
+s2[2] = 't' → ASCII 116
+```
+
+---
+
+### **STEP 1: Initialize DP Table**
+
+```python
+m = 3, n = 3
+dp = [[0] * 4 for _ in range(4)]
+
+Initial DP table (all zeros):
+       j=0   j=1   j=2   j=3
+     +-----+-----+-----+-----+
+i=0  |  0  |  0  |  0  |  0  |  (empty s1)
+     +-----+-----+-----+-----+
+i=1  |  0  |  0  |  0  |  0  |  (s1 = "s")
+     +-----+-----+-----+-----+
+i=2  |  0  |  0  |  0  |  0  |  (s1 = "se")
+     +-----+-----+-----+-----+
+i=3  |  0  |  0  |  0  |  0  |  (s1 = "sea")
+     +-----+-----+-----+-----+
+       ""   "e"  "ea" "eat"
+```
+
+---
+
+### **STEP 2: Fill First Column (Delete all characters from s1)**
+
+**Meaning:** Cost to transform s1 to empty string (delete all from s1)
+
+```python
+for i in range(1, m + 1):
+    dp[i][0] = dp[i - 1][0] + ord(s1[i - 1])
+```
+
+#### **i = 1: Delete 's' from s1**
+```
+dp[1][0] = dp[0][0] + ord('s')
+         = 0 + 115
+         = 115
+
+To make "" from "s": delete 's' (cost 115)
+```
+
+#### **i = 2: Delete 's' and 'e' from s1**
+```
+dp[2][0] = dp[1][0] + ord('e')
+         = 115 + 101
+         = 216
+
+To make "" from "se": delete 's' + 'e' (cost 115 + 101 = 216)
+```
+
+#### **i = 3: Delete 's', 'e', and 'a' from s1**
+```
+dp[3][0] = dp[2][0] + ord('a')
+         = 216 + 97
+         = 313
+
+To make "" from "sea": delete all (cost 115 + 101 + 97 = 313)
+```
+
+**DP Table after first column:**
+```
+       j=0   j=1   j=2   j=3
+     +-----+-----+-----+-----+
+i=0  |  0  |  0  |  0  |  0  |
+     +-----+-----+-----+-----+
+i=1  | 115 |  0  |  0  |  0  |  ← delete "s"
+     +-----+-----+-----+-----+
+i=2  | 216 |  0  |  0  |  0  |  ← delete "se"
+     +-----+-----+-----+-----+
+i=3  | 313 |  0  |  0  |  0  |  ← delete "sea"
+     +-----+-----+-----+-----+
+```
+
+---
+
+### **STEP 3: Fill First Row (Delete all characters from s2)**
+
+**Meaning:** Cost to transform empty string to s2 (delete all from s2)
+
+```python
+for j in range(1, n + 1):
+    dp[0][j] = dp[0][j - 1] + ord(s2[j - 1])
+```
+
+#### **j = 1: Delete 'e' from s2**
+```
+dp[0][1] = dp[0][0] + ord('e')
+         = 0 + 101
+         = 101
+
+To make "" from "e": delete 'e' (cost 101)
+```
+
+#### **j = 2: Delete 'e' and 'a' from s2**
+```
+dp[0][2] = dp[0][1] + ord('a')
+         = 101 + 97
+         = 198
+
+To make "" from "ea": delete 'e' + 'a' (cost 101 + 97 = 198)
+```
+
+#### **j = 3: Delete 'e', 'a', and 't' from s2**
+```
+dp[0][3] = dp[0][2] + ord('t')
+         = 198 + 116
+         = 314
+
+To make "" from "eat": delete all (cost 101 + 97 + 116 = 314)
+```
+
+**DP Table after first row:**
+```
+       j=0   j=1   j=2   j=3
+     +-----+-----+-----+-----+
+i=0  |  0  | 101 | 198 | 314 |  ← delete "", "e", "ea", "eat"
+     +-----+-----+-----+-----+
+i=1  | 115 |  0  |  0  |  0  |
+     +-----+-----+-----+-----+
+i=2  | 216 |  0  |  0  |  0  |
+     +-----+-----+-----+-----+
+i=3  | 313 |  0  |  0  |  0  |
+     +-----+-----+-----+-----+
+```
+
+---
+
+### **STEP 4: Fill Rest of DP Table**
+
+Now we process each cell comparing characters.
+
+---
+
+#### **i=1, j=1: Compare s1[0]='s' with s2[0]='e'**
+
+```
+Comparing: 's' (ASCII 115) vs 'e' (ASCII 101)
+Are they equal? NO
+
+Since they don't match, we have 2 options:
+Option 1: Delete 's' from s1
+  Cost = dp[0][1] + ord('s')
+       = 101 + 115
+       = 216
+
+Option 2: Delete 'e' from s2
+  Cost = dp[1][0] + ord('e')
+       = 115 + 101
+       = 216
+
+dp[1][1] = min(216, 216) = 216
+
+       j=0   j=1   j=2   j=3
+     +-----+-----+-----+-----+
+i=0  |  0  | 101 | 198 | 314 |
+     +-----+-----+-----+-----+
+i=1  | 115 | 216 |  0  |  0  |  ← Updated
+     +-----+-----+-----+-----+
+
+Meaning: To make "s" equal to "e", delete both (cost 216)
+Result: "" = ""
+```
+
+---
+
+#### **i=1, j=2: Compare s1[0]='s' with s2[1]='a'**
+
+```
+Comparing: 's' (ASCII 115) vs 'a' (ASCII 97)
+Current goal: Make "s" equal to "ea"
+
+Are they equal? NO
+
+Option 1: Delete 's' from s1
+  Cost = dp[0][2] + ord('s')
+       = 198 + 115
+       = 313
+  (Delete "s", then handle "" vs "ea" which costs 198)
+
+Option 2: Delete 'a' from s2
+  Cost = dp[1][1] + ord('a')
+       = 216 + 97
+       = 313
+  (Handle "s" vs "e" which costs 216, then delete "a")
+
+dp[1][2] = min(313, 313) = 313
+
+       j=0   j=1   j=2   j=3
+     +-----+-----+-----+-----+
+i=1  | 115 | 216 | 313 |  0  |  ← Updated
+     +-----+-----+-----+-----+
+```
+
+---
+
+#### **i=1, j=3: Compare s1[0]='s' with s2[2]='t'**
+
+```
+Comparing: 's' (ASCII 115) vs 't' (ASCII 116)
+Current goal: Make "s" equal to "eat"
+
+Are they equal? NO
+
+Option 1: Delete 's' from s1
+  Cost = dp[0][3] + ord('s')
+       = 314 + 115
+       = 429
+
+Option 2: Delete 't' from s2
+  Cost = dp[1][2] + ord('t')
+       = 313 + 116
+       = 429
+
+dp[1][3] = min(429, 429) = 429
+
+       j=0   j=1   j=2   j=3
+     +-----+-----+-----+-----+
+i=1  | 115 | 216 | 313 | 429 |  ← Updated
+     +-----+-----+-----+-----+
+```
+
+---
+
+#### **i=2, j=1: Compare s1[1]='e' with s2[0]='e'**
+
+```
+Comparing: 'e' (ASCII 101) vs 'e' (ASCII 101)
+Current goal: Make "se" equal to "e"
+
+Are they equal? YES! ✓
+
+When characters match, we don't delete them!
+dp[2][1] = dp[1][0]
+         = 115
+
+       j=0   j=1   j=2   j=3
+     +-----+-----+-----+-----+
+i=2  | 216 | 115 |  0  |  0  |  ← Updated
+     +-----+-----+-----+-----+
+
+Meaning: To make "se" equal to "e":
+  - Keep 'e' (no cost)
+  - Delete 's' from s1 (cost 115)
+Result: "e" = "e"
+```
+
+---
+
+#### **i=2, j=2: Compare s1[1]='e' with s2[1]='a'**
+
+```
+Comparing: 'e' (ASCII 101) vs 'a' (ASCII 97)
+Current goal: Make "se" equal to "ea"
+
+Are they equal? NO
+
+Option 1: Delete 'e' from s1
+  Cost = dp[1][2] + ord('e')
+       = 313 + 101
+       = 414
+
+Option 2: Delete 'a' from s2
+  Cost = dp[2][1] + ord('a')
+       = 115 + 97
+       = 212
+
+dp[2][2] = min(414, 212) = 212
+
+       j=0   j=1   j=2   j=3
+     +-----+-----+-----+-----+
+i=2  | 216 | 115 | 212 |  0  |  ← Updated
+     +-----+-----+-----+-----+
+
+Meaning: To make "se" equal to "ea":
+  - Delete 's' (cost 115) → "e" vs "ea"
+  - Delete 'a' (cost 97)  → "e" vs "e"
+  - Keep 'e' = 'e'
+Total: 115 + 97 = 212
+```
+
+---
+
+#### **i=2, j=3: Compare s1[1]='e' with s2[2]='t'**
+
+```
+Comparing: 'e' (ASCII 101) vs 't' (ASCII 116)
+Current goal: Make "se" equal to "eat"
+
+Are they equal? NO
+
+Option 1: Delete 'e' from s1
+  Cost = dp[1][3] + ord('e')
+       = 429 + 101
+       = 530
+
+Option 2: Delete 't' from s2
+  Cost = dp[2][2] + ord('t')
+       = 212 + 116
+       = 328
+
+dp[2][3] = min(530, 328) = 328
+
+       j=0   j=1   j=2   j=3
+     +-----+-----+-----+-----+
+i=2  | 216 | 115 | 212 | 328 |  ← Updated
+     +-----+-----+-----+-----+
+```
+
+---
+
+#### **i=3, j=1: Compare s1[2]='a' with s2[0]='e'**
+
+```
+Comparing: 'a' (ASCII 97) vs 'e' (ASCII 101)
+Current goal: Make "sea" equal to "e"
+
+Are they equal? NO
+
+Option 1: Delete 'a' from s1
+  Cost = dp[2][1] + ord('a')
+       = 115 + 97
+       = 212
+
+Option 2: Delete 'e' from s2
+  Cost = dp[3][0] + ord('e')
+       = 313 + 101
+       = 414
+
+dp[3][1] = min(212, 414) = 212
+
+       j=0   j=1   j=2   j=3
+     +-----+-----+-----+-----+
+i=3  | 313 | 212 |  0  |  0  |  ← Updated
+     +-----+-----+-----+-----+
+```
+
+---
+
+#### **i=3, j=2: Compare s1[2]='a' with s2[1]='a'**
+
+```
+Comparing: 'a' (ASCII 97) vs 'a' (ASCII 97)
+Current goal: Make "sea" equal to "ea"
+
+Are they equal? YES! ✓
+
+When characters match:
+dp[3][2] = dp[2][1]
+         = 115
+
+       j=0   j=1   j=2   j=3
+     +-----+-----+-----+-----+
+i=3  | 313 | 212 | 115 |  0  |  ← Updated
+     +-----+-----+-----+-----+
+
+Meaning: To make "sea" equal to "ea":
+  - Delete 's' from s1 (cost 115)
+  - Keep 'e' = 'e' (no cost)
+  - Keep 'a' = 'a' (no cost)
+Result: "ea" = "ea"
+Total cost: 115
+```
+
+---
+
+#### **i=3, j=3: Compare s1[2]='a' with s2[2]='t'**
+
+```
+Comparing: 'a' (ASCII 97) vs 't' (ASCII 116)
+Current goal: Make "sea" equal to "eat"
+
+Are they equal? NO
+
+Option 1: Delete 'a' from s1
+  Cost = dp[2][3] + ord('a')
+       = 328 + 97
+       = 425
+
+Option 2: Delete 't' from s2
+  Cost = dp[3][2] + ord('t')
+       = 115 + 116
+       = 231
+
+dp[3][3] = min(425, 231) = 231
+
+       j=0   j=1   j=2   j=3
+     +-----+-----+-----+-----+
+i=3  | 313 | 212 | 115 | 231 |  ← FINAL ANSWER!
+     +-----+-----+-----+-----+
+
+Meaning: To make "sea" equal to "eat":
+  - Delete 's' from s1 (cost 115)
+  - Keep 'e' = 'e' (no cost)
+  - Keep 'a' = 'a' (no cost)
+  - Delete 't' from s2 (cost 116)
+Result: "ea" = "ea"
+Total cost: 115 + 116 = 231 ✓
+```
+
+---
+
+## **FINAL DP TABLE**
+
+```
+       j=0   j=1   j=2   j=3
+       ""    "e"   "ea"  "eat"
+     +-----+-----+-----+-----+
+i=0  |  0  | 101 | 198 | 314 |  ""
+     +-----+-----+-----+-----+
+i=1  | 115 | 216 | 313 | 429 |  "s"
+     +-----+-----+-----+-----+
+i=2  | 216 | 115 | 212 | 328 |  "se"
+     +-----+-----+-----+-----+
+i=3  | 313 | 212 | 115 | 231 |  "sea"
+     +-----+-----+-----+-----+
+
+Answer: dp[3][3] = 231
+```
