@@ -1,0 +1,124 @@
+# **Sum of Indices with K Set Bits**
+
+## **Problem**
+Return sum of `nums[i]` where index `i` has exactly `k` ones in its binary representation.
+
+---
+
+## **Test Case: nums = [5, 10, 1, 5, 2], k = 1**
+
+```
+We need indices with exactly 1 bit set to '1'
+```
+
+---
+
+## **Step-by-Step Execution**
+
+```python
+nums = [5, 10, 1, 5, 2]
+k = 1
+sum_ = 0
+```
+
+---
+
+### **i = 0**
+```
+Binary of index 0: bin(0) = '0b0'
+Remove '0b': '0b0'[2:] = '0'
+val = '0'
+
+Count '1's: '0'.count('1') = 0
+Is count == k? 0 == 1? NO
+
+sum_ = 0 (unchanged)
+
+Visual:
+Index: 0 → Binary: 0 → Set bits: 0 ✗
+```
+
+---
+
+### **i = 1**
+```
+Binary of index 1: bin(1) = '0b1'
+Remove '0b': '0b1'[2:] = '1'
+val = '1'
+
+Count '1's: '1'.count('1') = 1
+Is count == k? 1 == 1? YES ✓
+
+sum_ = 0 + nums[1] = 0 + 10 = 10
+
+Visual:
+Index: 1 → Binary: 1 → Set bits: 1 ✓
+nums[1] = 10 added to sum
+```
+
+---
+
+### **i = 2**
+```
+Binary of index 2: bin(2) = '0b10'
+Remove '0b': '0b10'[2:] = '10'
+val = '10'
+
+Count '1's: '10'.count('1') = 1
+Is count == k? 1 == 1? YES ✓
+
+sum_ = 10 + nums[2] = 10 + 1 = 11
+
+Visual:
+Index: 2 → Binary: 10 → Set bits: 1 ✓
+nums[2] = 1 added to sum
+```
+
+---
+
+### **i = 3**
+```
+Binary of index 3: bin(3) = '0b11'
+Remove '0b': '0b11'[2:] = '11'
+val = '11'
+
+Count '1's: '11'.count('1') = 2
+Is count == k? 2 == 1? NO
+
+sum_ = 11 (unchanged)
+
+Visual:
+Index: 3 → Binary: 11 → Set bits: 2 ✗
+```
+
+---
+
+### **i = 4**
+```
+Binary of index 4: bin(4) = '0b100'
+Remove '0b': '0b100'[2:] = '100'
+val = '100'
+
+Count '1's: '100'.count('1') = 1
+Is count == k? 1 == 1? YES ✓
+
+sum_ = 11 + nums[4] = 11 + 2 = 13
+
+Visual:
+Index: 4 → Binary: 100 → Set bits: 1 ✓
+nums[4] = 2 added to sum
+```
+
+---
+
+## **Visual Summary**
+
+| i | Binary | Set Bits | Match k=1? | nums[i] | sum_ |
+|---|--------|----------|------------|---------|------|
+| 0 | 0 | 0 | ✗ | 5 | 0 |
+| 1 | 1 | 1 | ✓ | 10 | 10 |
+| 2 | 10 | 1 | ✓ | 1 | 11 |
+| 3 | 11 | 2 | ✗ | 5 | 11 |
+| 4 | 100 | 1 | ✓ | 2 | **13** |
+
+**Result:** `13`
