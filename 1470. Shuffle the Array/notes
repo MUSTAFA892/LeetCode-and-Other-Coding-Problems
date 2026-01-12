@@ -1,0 +1,134 @@
+## Problem
+
+**Shuffle the Array**
+
+You are given:
+
+* An array `nums` of length `2n`
+* An integer `n`
+
+The array is structured as:
+
+```
+[x1, x2, ..., xn, y1, y2, ..., yn]
+```
+
+You must return:
+
+```
+[x1, y1, x2, y2, ..., xn, yn]
+```
+
+---
+
+## Code
+
+```python
+class Solution:
+    def shuffle(self, nums: List[int], n: int) -> List[int]:
+        a1 = nums[:n]
+        a2 = nums[n:]
+        ans = []
+        for i in range(n):
+            ans.append(a1[i])
+            ans.append(a2[i])
+        return ans
+```
+
+---
+
+## Step-by-Step Explanation
+
+### Step 1: Split the array
+
+```python
+a1 = nums[:n]
+a2 = nums[n:]
+```
+
+* `a1` → first `n` elements
+* `a2` → remaining `n` elements
+
+📌 Now we have two equal-sized arrays.
+
+---
+
+### Step 2: Create an empty result list
+
+```python
+ans = []
+```
+
+This list will store the shuffled output.
+
+---
+
+### Step 3: Interleave elements
+
+```python
+for i in range(n):
+    ans.append(a1[i])
+    ans.append(a2[i])
+```
+
+For each index `i`:
+
+1. Add one element from `a1`
+2. Add one element from `a2`
+
+This creates the required alternating pattern.
+
+---
+
+### Step 4: Return the result
+
+```python
+return ans
+```
+
+---
+
+## Working Example
+
+### Input
+
+```python
+nums = [2, 5, 1, 3, 4, 7]
+n = 3
+```
+
+### Step 1: Split
+
+```python
+a1 = [2, 5, 1]
+a2 = [3, 4, 7]
+```
+
+---
+
+### Step 2: Loop execution
+
+| i | ans after append   |
+| - | ------------------ |
+| 0 | [2, 3]             |
+| 1 | [2, 3, 5, 4]       |
+| 2 | [2, 3, 5, 4, 1, 7] |
+
+---
+
+### Output
+
+```python
+[2, 3, 5, 4, 1, 7]
+```
+
+---
+
+## Visual Diagram
+
+```
+a1 = [ x1   x2   x3 ]
+a2 = [ y1   y2   y3 ]
+
+ans = [ x1, y1, x2, y2, x3, y3 ]
+```
