@@ -1,0 +1,89 @@
+## Problem
+
+**Get Concatenation of Array**
+
+Given an integer array `nums`, return an array `ans` such that:
+
+```
+ans = nums + nums
+```
+
+That means the array is **concatenated with itself**.
+
+---
+
+## Code Given
+
+```python
+class Solution:
+    def getConcatenation(self, nums: List[int]) -> List[int]:     
+        ans = nums
+        nums += ans
+        return nums
+```
+
+---
+
+## Step-by-Step Explanation
+
+### Step 1:
+
+```python
+ans = nums
+```
+
+* This does **NOT** create a new array.
+* `ans` is just **another reference** to the same list as `nums`.
+
+📌 Important:
+
+```
+ans and nums point to the SAME list in memory
+```
+
+---
+
+### Step 2:
+
+```python
+nums += ans
+```
+
+* `+=` **extends** the list `nums`
+* Since `ans` is the same list as `nums`, this effectively appends the original elements to the same list.
+
+This is equivalent to:
+
+```python
+nums.extend(ans)
+```
+
+---
+
+### Step 3:
+
+```python
+return nums
+```
+
+* The final list now contains two copies of the original elements.
+
+---
+
+## Working Example
+
+### Input
+
+```python
+nums = [1, 2, 3]
+```
+
+### Execution Flow
+
+| Step                | nums                 | ans                          |
+| ------------------- | -------------------- | ---------------------------- |
+| Initial             | `[1, 2, 3]`          | —                            |
+| After `ans = nums`  | `[1, 2, 3]`          | `[1, 2, 3]` (same reference) |
+| After `nums += ans` | `[1, 2, 3, 1, 2, 3]` | same list                    |
+| Returned value      | `[1, 2, 3, 1, 2, 3]` |                              |
+
