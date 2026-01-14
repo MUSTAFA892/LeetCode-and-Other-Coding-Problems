@@ -1,0 +1,320 @@
+# **Separate Squares with Horizontal Line**
+
+## **Problem**
+Find a horizontal line `y = h` that divides squares so that the total area below the line equals the total area above the line (split area in half).
+
+---
+
+## **Test Case: squares = [[0, 0, 2], [2, 1, 1]]**
+
+Each square: `[x, y, side_length]`
+- Square 1: Bottom-left at (0,0), side = 2
+- Square 2: Bottom-left at (2,1), side = 1
+
+---
+
+## **Visual Representation**
+
+```
+Grid view:
+    0   1   2   3
+  +---+---+---+---+
+3 |       | S2|   |
+  +---+---+---+---+
+2 | S1| S1| S2|   |
+  +---+---+---+---+
+1 | S1| S1|   |   |
+  +---+---+---+---+
+0 |   |   |   |   |
+  +---+---+---+---+
+
+Square 1: x=0, y=0, side=2
+  Covers: (0,0) to (2,2)
+  Area: 2×2 = 4
+
+Square 2: x=2, y=1, side=1
+  Covers: (2,1) to (3,2)
+  Area: 1×1 = 1
+
+Total area = 4 + 1 = 5
+Target (half) = 5/2 = 2.5
+```
+
+---
+
+## **STEP 1: Calculate Total Area**
+
+```python
+total_area = 0
+for x, y, l in squares:
+    total_area += l * l
+
+Processing:
+Square 1: l=2 → area = 2×2 = 4 → total_area = 4
+Square 2: l=1 → area = 1×1 = 1 → total_area = 5
+
+total_area = 5
+target = 5 / 2 = 2.5
+```
+
+**Goal:** Find horizontal line where area below = 2.5
+
+---
+
+## **STEP 2: Set Binary Search Bounds**
+
+```python
+low = min(y for _, y, _ in squares)
+high = max(y + l for _, y, l in squares)
+
+Square 1: y = 0, bottom y = 0
+Square 2: y = 1, bottom y = 1
+low = min(0, 1) = 0
+
+Square 1: top y = 0 + 2 = 2
+Square 2: top y = 1 + 1 = 2
+high = max(2, 2) = 2
+
+Initial search range: [0, 2]
+```
+
+---
+
+## **STEP 3: Binary Search (60 iterations)**
+
+We'll show key iterations:
+
+---
+
+### **Iteration 1**
+
+```python
+mid = (0 + 2) / 2 = 1.0
+below = 0
+
+Check line y = 1.0:
+```
+
+#### **Square 1: x=0, y=0, l=2**
+```
+bottom = 0
+top = 0 + 2 = 2
+
+Is mid (1.0) <= bottom (0)? NO
+Is mid (1.0) >= top (2)? NO
+So mid is inside the square (partially cuts it)
+
+Area below line:
+below += l × (mid - bottom)
+below += 2 × (1.0 - 0)
+below += 2 × 1.0
+below = 2.0
+
+Visual:
+    0   1
+  +---+---+
+2 | S1| S1|  ← Above line
+  +===+===+  ← Line at y=1.0
+1 | S1| S1|  ← Below line (area = 2×1 = 2)
+  +---+---+
+0 |   |   |
+  +---+---+
+```
+
+#### **Square 2: x=2, y=1, l=1**
+```
+bottom = 1
+top = 1 + 1 = 2
+
+Is mid (1.0) <= bottom (1)? YES
+Line is at or below square bottom, so nothing below line
+continue (skip this square)
+
+Visual:
+    2   3
+  +---+---+
+2 | S2|   |  ← Entirely above line
+  +===+===+  ← Line at y=1.0
+1 |   |   |
+  +---+---+
+```
+
+**Summary of Iteration 1:**
+```
+mid = 1.0
+below = 2.0
+target = 2.5
+
+Is below (2.0) < target (2.5)? YES
+Line is too low, need to move up
+low = mid = 1.0
+
+New range: [1.0, 2.0]
+```
+
+---
+
+### **Iteration 2**
+
+```python
+mid = (1.0 + 2.0) / 2 = 1.5
+below = 0
+```
+
+#### **Square 1: x=0, y=0, l=2**
+```
+bottom = 0, top = 2
+
+Is mid (1.5) inside? YES
+
+below += 2 × (1.5 - 0) = 2 × 1.5 = 3.0
+below = 3.0
+
+Visual:
+    0   1
+  +---+---+
+2 | S1| S1|  ← Above line (0.5 height)
+  +===+===+  ← Line at y=1.5
+1 | S1| S1|  ← Below line (1.5 height, area = 2×1.5 = 3)
+  +---+---+
+0 |   |   |
+  +---+---+
+```
+
+#### **Square 2: x=2, y=1, l=1**
+```
+bottom = 1, top = 2
+
+Is mid (1.5) inside? YES
+
+below += 1 × (1.5 - 1) = 1 × 0.5 = 0.5
+below = 3.0 + 0.5 = 3.5
+
+Visual:
+    2   3
+  +---+---+
+2 | S2|   |  ← Above line (0.5 height)
+  +===+===+  ← Line at y=1.5
+1 |###|   |  ← Below line (0.5 height, area = 1×0.5 = 0.5)
+  +---+---+
+```
+
+**Summary of Iteration 2:**
+```
+mid = 1.5
+below = 3.5
+target = 2.5
+
+Is below (3.5) < target (2.5)? NO
+Line is too high, need to move down
+high = mid = 1.5
+
+New range: [1.0, 1.5]
+```
+
+---
+
+### **Iteration 3**
+
+```python
+mid = (1.0 + 1.5) / 2 = 1.25
+below = 0
+```
+
+#### **Square 1:**
+```
+below += 2 × (1.25 - 0) = 2.5
+below = 2.5
+```
+
+#### **Square 2:**
+```
+bottom = 1, mid = 1.25
+
+below += 1 × (1.25 - 1) = 0.25
+below = 2.5 + 0.25 = 2.75
+```
+
+**Summary:**
+```
+mid = 1.25
+below = 2.75
+target = 2.5
+
+Is below (2.75) < target (2.5)? NO
+high = 1.25
+
+New range: [1.0, 1.25]
+```
+
+---
+
+### **Iteration 4**
+
+```python
+mid = (1.0 + 1.25) / 2 = 1.125
+```
+
+#### **Square 1:**
+```
+below = 2 × 1.125 = 2.25
+```
+
+#### **Square 2:**
+```
+below = 2.25 + 1 × (1.125 - 1) = 2.25 + 0.125 = 2.375
+```
+
+**Summary:**
+```
+below = 2.375 < target = 2.5
+low = 1.125
+
+New range: [1.125, 1.25]
+```
+
+---
+
+### **Convergence Pattern**
+
+```
+Iteration  | low    | high   | mid    | below | Comparison | Action
+-----------|--------|--------|--------|-------|------------|--------
+1          | 0.0    | 2.0    | 1.0    | 2.0   | < 2.5      | low=1.0
+2          | 1.0    | 2.0    | 1.5    | 3.5   | > 2.5      | high=1.5
+3          | 1.0    | 1.5    | 1.25   | 2.75  | > 2.5      | high=1.25
+4          | 1.0    | 1.25   | 1.125  | 2.375 | < 2.5      | low=1.125
+5          | 1.125  | 1.25   | 1.1875 | 2.562 | > 2.5      | high=1.1875
+...        | ...    | ...    | ...    | ...   | ...        | ...
+60         | ~1.184 | ~1.184 | ~1.184 | ~2.5  | ≈ 2.5      | converged
+```
+
+After 60 iterations, the range narrows to approximately **y ≈ 1.184**
+
+---
+
+## **Final Result**
+
+```python
+return low  # ≈ 1.184
+```
+
+---
+
+## **Visual Result**
+
+```
+Final line at y ≈ 1.184:
+
+    0   1   2   3
+  +---+---+---+
+2 | S1| S1| S2|   ← Above: area ≈ 2.5
+  +===+===+===+   ← Line at y≈1.184
+1 | S1| S1|###|   ← Below: area ≈ 2.5
+  +---+---+---+
+0 |   |   |   |
+  +---+---+---+
+
+Square 1 below line: 2 × 1.184 ≈ 2.368
+Square 2 below line: 1 × 0.184 ≈ 0.184
+Total below: ≈ 2.5 ✓
