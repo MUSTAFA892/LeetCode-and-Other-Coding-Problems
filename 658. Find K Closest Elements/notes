@@ -1,0 +1,317 @@
+# **Find K Closest Elements**
+
+## **Problem**
+Find `k` closest elements to `x` in a sorted array. If tied, prefer smaller value. Return result in sorted order.
+
+---
+
+## **Test Case: arr = [1, 2, 3, 4, 5], k = 4, x = 3**
+
+---
+
+## **STEP 1: Find Closest Element to x**
+
+```python
+def distance(num):
+    return abs(num - x)  # Distance from x=3
+
+closest = arr[0] = 1
+min_dist = abs(1 - 3) = 2
+
+Loop through array to find element closest to x=3:
+```
+
+---
+
+### **Check num = 1**
+```
+dist = abs(1 - 3) = 2
+Is 2 < min_dist (2)? NO
+closest = 1, min_dist = 2
+```
+
+### **Check num = 2**
+```
+dist = abs(2 - 3) = 1
+Is 1 < min_dist (2)? YES ✓
+
+Update:
+closest = 2
+min_dist = 1
+```
+
+### **Check num = 3**
+```
+dist = abs(3 - 3) = 0
+Is 0 < min_dist (1)? YES ✓
+
+Update:
+closest = 3
+min_dist = 0
+```
+
+### **Check num = 4**
+```
+dist = abs(4 - 3) = 1
+Is 1 < min_dist (0)? NO
+closest = 3, min_dist = 0
+```
+
+### **Check num = 5**
+```
+dist = abs(5 - 3) = 2
+Is 2 < min_dist (0)? NO
+closest = 3, min_dist = 0
+```
+
+**Result:** `closest = 3` (distance = 0)
+
+---
+
+## **STEP 2: Find Index of Closest Element**
+
+```python
+idx = arr.index(closest)
+idx = arr.index(3) = 2
+
+Array with index:
+Index:  0   1   2   3   4
+Value: [1,  2,  3,  4,  5]
+              ↑
+           closest
+```
+
+---
+
+## **STEP 3: Initialize Two Pointers**
+
+```python
+l = idx - 1 = 2 - 1 = 1
+r = idx + 1 = 2 + 1 = 3
+
+ans = [closest] = [3]
+
+Visual:
+Index:  0   1   2   3   4
+Value: [1,  2,  3,  4,  5]
+           ↑   ↑   ↑
+           l  ans  r
+```
+
+**Goal:** Expand outward from closest element, adding k=4 total elements
+
+---
+
+## **STEP 4: Expand with Two Pointers**
+
+Current state: `ans = [3]`, need 3 more elements (k=4)
+
+---
+
+### **Iteration 1: len(ans) = 1 < 4**
+
+```python
+l = 1 (valid: 1 >= 0)
+r = 3 (valid: 3 < 5)
+
+Compare:
+distance(arr[l]) = distance(arr[1]) = abs(2 - 3) = 1
+distance(arr[r]) = distance(arr[3]) = abs(4 - 3) = 1
+
+Is 1 <= 1? YES ✓
+Choose left (when tied, prefer smaller value)
+
+ans.append(arr[1])
+ans = [3, 2]
+l = 1 - 1 = 0
+
+Visual:
+Index:  0   1   2   3   4
+Value: [1,  2,  3,  4,  5]
+        ↑       ↑   ↑
+        l      ans  r
+        
+Distances from x=3:
+        2       0   1
+```
+
+---
+
+### **Iteration 2: len(ans) = 2 < 4**
+
+```python
+l = 0 (valid)
+r = 3 (valid)
+
+Compare:
+distance(arr[0]) = abs(1 - 3) = 2
+distance(arr[3]) = abs(4 - 3) = 1
+
+Is 2 <= 1? NO
+Choose right (distance 1 is smaller)
+
+ans.append(arr[3])
+ans = [3, 2, 4]
+r = 3 + 1 = 4
+
+Visual:
+Index:  0   1   2   3   4
+Value: [1,  2,  3,  4,  5]
+        ↑       ↑       ↑
+        l      ans      r
+        
+Distances from x=3:
+        2       0       1
+```
+
+---
+
+### **Iteration 3: len(ans) = 3 < 4**
+
+```python
+l = 0 (valid)
+r = 4 (valid)
+
+Compare:
+distance(arr[0]) = abs(1 - 3) = 2
+distance(arr[4]) = abs(5 - 3) = 2
+
+Is 2 <= 2? YES ✓
+Choose left (when tied, prefer smaller value)
+
+ans.append(arr[0])
+ans = [3, 2, 4, 1]
+l = 0 - 1 = -1
+
+Visual:
+Index:  0   1   2   3   4
+Value: [1,  2,  3,  4,  5]
+            ↑       ↑
+           ans      r
+        
+l = -1 (out of bounds)
+```
+
+---
+
+### **Iteration 4: len(ans) = 4 == k**
+
+```
+Loop exits: len(ans) == k ✓
+ans = [3, 2, 4, 1]
+```
+
+---
+
+## **STEP 5: Sort Result**
+
+```python
+return sorted(ans)
+sorted([3, 2, 4, 1]) = [1, 2, 3, 4]
+
+Final answer: [1, 2, 3, 4]
+```
+
+---
+
+## **Complete Trace Table**
+
+| Iteration | l | r | arr[l] | arr[r] | dist(l) | dist(r) | Choice | ans | len(ans) |
+|-----------|---|---|--------|--------|---------|---------|--------|-----|----------|
+| Start | 1 | 3 | - | - | - | - | - | [3] | 1 |
+| 1 | 1 | 3 | 2 | 4 | 1 | 1 | left (tie) | [3,2] | 2 |
+| 2 | 0 | 3 | 1 | 4 | 2 | 1 | right | [3,2,4] | 3 |
+| 3 | 0 | 4 | 1 | 5 | 2 | 2 | left (tie) | [3,2,4,1] | 4 |
+| Done | -1 | 4 | - | - | - | - | - | [3,2,4,1] | 4 |
+
+**After sorting:** `[1, 2, 3, 4]`
+
+---
+
+## **Visual Summary**
+
+```
+Array: [1, 2, 3, 4, 5]
+x = 3, k = 4
+
+Distances from x=3:
+[2, 1, 0, 1, 2]
+ ↓  ↓  ↓  ↓  ↓
+[1, 2, 3, 4, 5]
+
+Step-by-step selection:
+1. Start with closest: 3 (distance 0)
+   ans = [3]
+
+2. Expand left vs right: 2 (dist 1) vs 4 (dist 1)
+   Tie → choose left (smaller value)
+   ans = [3, 2]
+
+3. Expand left vs right: 1 (dist 2) vs 4 (dist 1)
+   Choose right (smaller distance)
+   ans = [3, 2, 4]
+
+4. Expand left vs right: 1 (dist 2) vs 5 (dist 2)
+   Tie → choose left (smaller value)
+   ans = [3, 2, 4, 1]
+
+5. Sort: [1, 2, 3, 4]
+```
+
+---
+
+## **Another Example: arr = [1, 1, 1, 10, 10, 10], k = 1, x = 9**
+
+### **Find Closest**
+```
+Distances from x=9:
+[8, 8, 8, 1, 1, 1]
+
+closest = 10 (first occurrence at index 3, distance 1)
+idx = 3
+```
+
+### **Expand**
+```
+l = 2, r = 4
+ans = [10]
+
+len(ans) = 1 == k, done!
+```
+
+### **Result**
+```
+sorted([10]) = [10]
+```
+
+---
+
+## **Edge Cases Handled**
+
+### **Case 1: Left pointer out of bounds**
+```python
+elif l >= 0:
+    ans.append(arr[l])
+    l -= 1
+```
+Only expand right when left exhausted.
+
+### **Case 2: Right pointer out of bounds**
+```python
+elif r < len(arr):
+    ans.append(arr[r])
+    r += 1
+```
+Only expand left when right exhausted.
+
+### **Case 3: Both pointers valid**
+```python
+if l >= 0 and r < len(arr):
+    if distance(arr[l]) <= distance(arr[r]):
+        ans.append(arr[l])
+        l -= 1
+    else:
+        ans.append(arr[r])
+        r += 1
+```
+Compare distances, choose closer (or left if tied).
