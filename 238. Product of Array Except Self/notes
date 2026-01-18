@@ -1,0 +1,397 @@
+# **Product of Array Except Self**
+
+## **Problem**
+Return an array where `result[i]` = product of all elements except `nums[i]`, without using division.
+
+---
+
+## **APPROACH 1: Math with Division (Your First Approach)**
+
+### **Test Case: nums = [1, 2, 3, 4]**
+
+---
+
+#### **STEP 1: Calculate Total Product**
+
+```python
+sum_ = math.prod(nums)
+sum_ = 1 × 2 × 3 × 4 = 24
+
+result = nums.copy() = [1, 2, 3, 4]
+zero_idx = 0
+zero_count = 0
+ok = False
+prod = 1
+```
+
+---
+
+#### **STEP 2: Process Each Element**
+
+### **i = 0: nums[0] = 1**
+```python
+Is result[0] == 0? NO
+
+prod *= result[0]
+prod = 1 × 1 = 1
+
+result[0] = sum_ // result[0]
+result[0] = 24 // 1 = 24
+
+result = [24, 2, 3, 4]
+prod = 1
+```
+
+### **i = 1: nums[1] = 2**
+```python
+Is result[1] == 0? NO
+
+prod *= result[1]
+prod = 1 × 2 = 2
+
+result[1] = sum_ // result[1]
+result[1] = 24 // 2 = 12
+
+result = [24, 12, 3, 4]
+prod = 2
+```
+
+### **i = 2: nums[2] = 3**
+```python
+Is result[2] == 0? NO
+
+prod *= result[2]
+prod = 2 × 3 = 6
+
+result[2] = sum_ // result[2]
+result[2] = 24 // 3 = 8
+
+result = [24, 12, 8, 4]
+prod = 6
+```
+
+### **i = 3: nums[3] = 4**
+```python
+Is result[3] == 0? NO
+
+prod *= result[3]
+prod = 6 × 4 = 24
+
+result[3] = sum_ // result[3]
+result[3] = 24 // 4 = 6
+
+result = [24, 12, 8, 6]
+prod = 24
+```
+
+---
+
+#### **STEP 3: Check for Zeros**
+
+```python
+zero_count = 0
+
+No special handling needed
+return [24, 12, 8, 6]
+```
+
+---
+
+### **Verification**
+
+```
+nums = [1, 2, 3, 4]
+
+result[0] = 2 × 3 × 4 = 24 ✓
+result[1] = 1 × 3 × 4 = 12 ✓
+result[2] = 1 × 2 × 4 = 8 ✓
+result[3] = 1 × 2 × 3 = 6 ✓
+```
+
+---
+
+## **Edge Case: Array with Zeros**
+
+### **Test Case: nums = [1, 2, 0, 4]**
+
+---
+
+#### **STEP 1: Calculate Total Product**
+
+```python
+sum_ = math.prod([1, 2, 0, 4])
+sum_ = 0  (product contains 0)
+
+result = [1, 2, 0, 4]
+zero_idx = 0
+zero_count = 0
+ok = False
+prod = 1
+```
+
+---
+
+#### **STEP 2: Process Each Element**
+
+### **i = 0: nums[0] = 1**
+```python
+Is result[0] == 0? NO
+
+prod *= 1 = 1
+result[0] = 0 // 1 = 0
+
+result = [0, 2, 0, 4]
+prod = 1
+```
+
+### **i = 1: nums[1] = 2**
+```python
+Is result[1] == 0? NO
+
+prod *= 2 = 2
+result[1] = 0 // 2 = 0
+
+result = [0, 0, 0, 4]
+prod = 2
+```
+
+### **i = 2: nums[2] = 0**
+```python
+Is result[2] == 0? YES ✓
+
+First zero encountered:
+ok = False, so execute:
+  zero_idx = nums.index(0) = 2
+  zero_count = nums.count(0) = 1
+  ok = True
+
+result[2] = 0
+
+result = [0, 0, 0, 4]
+prod = 2 (unchanged)
+```
+
+### **i = 3: nums[3] = 4**
+```python
+Is result[3] == 0? NO
+
+prod *= 4 = 8
+result[3] = 0 // 4 = 0
+
+result = [0, 0, 0, 0]
+prod = 8
+```
+
+---
+
+#### **STEP 3: Handle Single Zero**
+
+```python
+zero_count = 1
+
+Special case: Exactly one zero
+result[zero_idx] = prod
+result[2] = 8
+
+result = [0, 0, 8, 0]
+```
+
+---
+
+### **Verification**
+
+```
+nums = [1, 2, 0, 4]
+
+result[0] = 2 × 0 × 4 = 0 ✓
+result[1] = 1 × 0 × 4 = 0 ✓
+result[2] = 1 × 2 × 4 = 8 ✓  (exclude the zero)
+result[3] = 1 × 2 × 0 = 0 ✓
+```
+
+---
+
+## **APPROACH 2: Prefix-Suffix (No Division) ✓ OPTIMAL**
+
+### **Test Case: nums = [1, 2, 3, 4]**
+
+This approach avoids division entirely!
+
+---
+
+#### **STEP 1: Initialize Result**
+
+```python
+n = 4
+result = [1] * 4 = [1, 1, 1, 1]
+prefix = 1
+```
+
+---
+
+#### **STEP 2: Build Prefix Products (Left to Right)**
+
+**Concept:** `result[i]` = product of all elements to the LEFT of `i`
+
+---
+
+### **i = 0**
+```python
+result[0] = prefix = 1
+prefix *= nums[0] = 1 × 1 = 1
+
+result = [1, 1, 1, 1]
+prefix = 1
+
+Meaning: No elements to left of index 0
+```
+
+### **i = 1**
+```python
+result[1] = prefix = 1
+prefix *= nums[1] = 1 × 2 = 2
+
+result = [1, 1, 1, 1]
+prefix = 2
+
+Meaning: Product of elements left of index 1 = nums[0] = 1
+```
+
+### **i = 2**
+```python
+result[2] = prefix = 2
+prefix *= nums[2] = 2 × 3 = 6
+
+result = [1, 1, 2, 1]
+prefix = 6
+
+Meaning: Product left of index 2 = nums[0] × nums[1] = 1 × 2 = 2
+```
+
+### **i = 3**
+```python
+result[3] = prefix = 6
+prefix *= nums[3] = 6 × 4 = 24
+
+result = [1, 1, 2, 6]
+prefix = 24
+
+Meaning: Product left of index 3 = nums[0] × nums[1] × nums[2] = 1 × 2 × 3 = 6
+```
+
+**After prefix pass:**
+```
+result = [1, 1, 2, 6]
+
+Index:     0   1   2   3
+nums:     [1,  2,  3,  4]
+prefix:   [1,  1,  2,  6]
+          ↑   ↑   ↑   ↑
+          1  1×1 1×2 1×2×3
+```
+
+---
+
+#### **STEP 3: Build Suffix Products (Right to Left)**
+
+**Concept:** Multiply `result[i]` by product of all elements to the RIGHT of `i`
+
+```python
+suffix = 1
+```
+
+---
+
+### **i = 3**
+```python
+result[3] *= suffix
+result[3] = 6 × 1 = 6
+
+suffix *= nums[3] = 1 × 4 = 4
+
+result = [1, 1, 2, 6]
+suffix = 4
+
+Meaning: No elements to right of index 3
+Final result[3] = (left products) × (right products) = 6 × 1 = 6
+```
+
+### **i = 2**
+```python
+result[2] *= suffix
+result[2] = 2 × 4 = 8
+
+suffix *= nums[2] = 4 × 3 = 12
+
+result = [1, 1, 8, 6]
+suffix = 12
+
+Meaning: Product right of index 2 = nums[3] = 4
+Final result[2] = 2 × 4 = 8
+```
+
+### **i = 1**
+```python
+result[1] *= suffix
+result[1] = 1 × 12 = 12
+
+suffix *= nums[1] = 12 × 2 = 24
+
+result = [1, 12, 8, 6]
+suffix = 24
+
+Meaning: Product right of index 1 = nums[2] × nums[3] = 3 × 4 = 12
+Final result[1] = 1 × 12 = 12
+```
+
+### **i = 0**
+```python
+result[0] *= suffix
+result[0] = 1 × 24 = 24
+
+suffix *= nums[0] = 24 × 1 = 24
+
+result = [24, 12, 8, 6]
+suffix = 24
+
+Meaning: Product right of index 0 = nums[1] × nums[2] × nums[3] = 2 × 3 × 4 = 24
+Final result[0] = 1 × 24 = 24
+```
+
+---
+
+#### **Final Result**
+
+```python
+return [24, 12, 8, 6]
+```
+
+---
+
+## **Visual Breakdown of Prefix-Suffix**
+
+```
+nums = [1, 2, 3, 4]
+
+Step 1: Prefix products (left of each index)
+Index:  0   1   2   3
+nums:  [1,  2,  3,  4]
+       ↓   ↓   ↓   ↓
+Left:  1  1×1 1×2 1×2×3
+      [1,  1,  2,  6]
+
+Step 2: Suffix products (right of each index)
+Index:  0   1   2   3
+nums:  [1,  2,  3,  4]
+       ↓   ↓   ↓   ↓
+Right: 2×3×4 3×4 4  1
+      [24, 12, 4,  1]
+
+Step 3: Multiply left × right
+result[0] = 1 × 24 = 24
+result[1] = 1 × 12 = 12
+result[2] = 2 × 4 = 8
+result[3] = 6 × 1 = 6
+
+Final: [24, 12, 8, 6]
+```
