@@ -1,0 +1,365 @@
+# **Minimum Bitwise Array - Optimized Approach**
+
+## **Problem**
+For each `nums[i]`, find the smallest `ans[i]` such that `ans[i] | (ans[i] + 1) == nums[i]`.
+
+This optimized solution finds the answer by **manipulating binary strings** instead of brute force search!
+
+---
+
+## **Test Case: nums = [2, 3, 5, 7, 11]**
+
+---
+
+## **Key Insight**
+
+```
+When we do j | (j+1), the rightmost 0 bit in j becomes 1,
+and all bits to its right also become 1.
+
+To reverse this:
+- Find rightmost '0' in nums[i]
+- Flip the bit immediately AFTER that '0' to '0'
+
+Special cases:
+- If nums[i] is even → return -1
+- If nums[i] has no '0' bits (all 1's like 111) → remove leftmost '1'
+```
+
+---
+
+## **Processing Each Number**
+
+---
+
+### **n = 2 (Even Number)**
+
+```python
+n = 2
+
+Check: n % 2 == 0?
+2 % 2 = 0? YES
+
+ans.append(-1)
+continue
+
+ans = [-1]
+```
+
+**Reason:** Even numbers are impossible (OR always produces odd)
+
+---
+
+### **n = 3 (Binary: 11)**
+
+#### **STEP 1: Check if Even**
+```python
+3 % 2 = 1 (odd) → continue processing
+```
+
+#### **STEP 2: Convert to Binary List**
+```python
+bin(3) = '0b11'
+bin(3)[2:] = '11'
+bin_ = list('11') = ['1', '1']
+
+Index:  0   1
+Value: ['1','1']
+```
+
+#### **STEP 3: Find Rightmost '0'**
+```python
+idx = -1
+Loop from right to left (i from len-1 to 0):
+
+i = 1: bin_[1] = '1'
+  Is '1' == '0'? NO
+
+i = 0: bin_[0] = '1'
+  Is '1' == '0'? NO
+
+Loop ends: idx = -1 (no '0' found)
+```
+
+#### **STEP 4: Handle No '0' Case**
+```python
+idx == -1? YES
+
+This means all bits are '1' (like 11, 111, 1111)
+Solution: Remove leftmost '1'
+
+bin_ = bin_[1:]
+bin_ = ['1', '1'][1:]
+bin_ = ['1']
+```
+
+#### **STEP 5: Convert to Integer**
+```python
+''.join(bin_) = '1'
+int('1', 2) = 1
+
+ans.append(1)
+ans = [-1, 1]
+```
+
+**Verification:**
+```
+1 | 2 = ?
+  1 = 0b01
+| 2 = 0b10
+--------
+  3 = 0b11 ✓
+```
+
+---
+
+### **n = 5 (Binary: 101)**
+
+#### **STEP 1-2: Setup**
+```python
+5 % 2 = 1 (odd) → continue
+
+bin(5) = '0b101'
+bin_ = ['1', '0', '1']
+
+Index:  0   1   2
+Value: ['1','0','1']
+```
+
+#### **STEP 3: Find Rightmost '0'**
+```python
+idx = -1
+Loop from right to left:
+
+i = 2: bin_[2] = '1'
+  Is '1' == '0'? NO
+
+i = 1: bin_[1] = '0'
+  Is '0' == '0'? YES ✓
+  idx = 1
+  break
+
+idx = 1 (found '0' at position 1)
+```
+
+#### **STEP 4: Flip Bit After the '0'**
+```python
+idx != -1, so:
+
+Flip bit at position idx+1:
+bin_[idx+1] = '0'
+bin_[1+1] = '0'
+bin_[2] = '0'
+
+Before: ['1', '0', '1']
+After:  ['1', '0', '0']
+
+Index:  0   1   2
+Value: ['1','0','0']
+         ↑   ↑
+       found flipped
+```
+
+#### **STEP 5: Convert to Integer**
+```python
+''.join(['1','0','0']) = '100'
+int('100', 2) = 4
+
+ans.append(4)
+ans = [-1, 1, 4]
+```
+
+**Verification:**
+```
+4 | 5 = ?
+  4 = 0b100
+| 5 = 0b101
+--------
+  5 = 0b101 ✓
+```
+
+---
+
+### **n = 7 (Binary: 111)**
+
+#### **STEP 1-2: Setup**
+```python
+7 % 2 = 1 (odd)
+
+bin_ = ['1', '1', '1']
+```
+
+#### **STEP 3: Find Rightmost '0'**
+```python
+Loop through all positions:
+i = 2: '1' ≠ '0'
+i = 1: '1' ≠ '0'
+i = 0: '1' ≠ '0'
+
+idx = -1 (no '0' found)
+```
+
+#### **STEP 4: Remove Leftmost '1'**
+```python
+idx == -1
+
+bin_ = bin_[1:]
+bin_ = ['1','1','1'][1:]
+bin_ = ['1', '1']
+```
+
+#### **STEP 5: Convert**
+```python
+''.join(['1','1']) = '11'
+int('11', 2) = 3
+
+ans.append(3)
+ans = [-1, 1, 4, 3]
+```
+
+**Verification:**
+```
+3 | 4 = ?
+  3 = 0b011
+| 4 = 0b100
+--------
+  7 = 0b111 ✓
+```
+
+---
+
+### **n = 11 (Binary: 1011)**
+
+#### **STEP 1-2: Setup**
+```python
+11 % 2 = 1 (odd)
+
+bin(11) = '0b1011'
+bin_ = ['1', '0', '1', '1']
+
+Index:  0   1   2   3
+Value: ['1','0','1','1']
+```
+
+#### **STEP 3: Find Rightmost '0'**
+```python
+Loop from right to left:
+
+i = 3: bin_[3] = '1' → NO
+i = 2: bin_[2] = '1' → NO
+i = 1: bin_[1] = '0' → YES ✓
+
+idx = 1
+break
+```
+
+#### **STEP 4: Flip Bit After '0'**
+```python
+bin_[idx+1] = '0'
+bin_[1+1] = '0'
+bin_[2] = '0'
+
+Before: ['1', '0', '1', '1']
+After:  ['1', '0', '0', '1']
+
+Index:  0   1   2   3
+Value: ['1','0','0','1']
+              ↑   ↑
+            found flipped
+```
+
+#### **STEP 5: Convert**
+```python
+''.join(['1','0','0','1']) = '1001'
+int('1001', 2) = 9
+
+ans.append(9)
+ans = [-1, 1, 4, 3, 9]
+```
+
+**Verification:**
+```
+9 | 10 = ?
+  9 = 0b1001
+|10 = 0b1010
+--------
+ 11 = 0b1011 ✓
+```
+
+---
+
+## **Complete Trace Table**
+
+| n | Binary | Even? | Rightmost '0' idx | Action | Result Binary | Result | Verification |
+|---|--------|-------|-------------------|--------|---------------|--------|--------------|
+| 2 | 10 | YES | - | return -1 | - | -1 | impossible |
+| 3 | 11 | NO | -1 | remove left | 1 | 1 | 1\|2=3 ✓ |
+| 5 | 101 | NO | 1 | flip idx+1 | 100 | 4 | 4\|5=5 ✓ |
+| 7 | 111 | NO | -1 | remove left | 11 | 3 | 3\|4=7 ✓ |
+| 11 | 1011 | NO | 1 | flip idx+1 | 1001 | 9 | 9\|10=11 ✓ |
+
+**Final Answer: [-1, 1, 4, 3, 9]**
+
+---
+
+## **Visual Examples**
+
+### **Case 1: Number with '0' (like 5 = 101)**
+```
+Original: 101
+          ↑ ↑
+      '0' at idx=1
+
+Flip bit at idx+1 (position 2):
+Result:   100
+          ↑ ↑
+      '0' flipped
+
+100 (4) | 101 (5) = 101 (5) ✓
+```
+
+### **Case 2: All '1's (like 7 = 111)**
+```
+Original: 111
+No '0' found → remove leftmost bit
+
+Result:    11
+
+011 (3) | 100 (4) = 111 (7) ✓
+```
+
+### **Case 3: Complex (like 13 = 1101)**
+```
+Original: 1101
+           ↑ ↑
+       '0' at idx=1
+
+Flip bit at idx+1 (position 2):
+Result:   1100
+
+1100 (12) | 1101 (13) = 1101 (13) ✓
+```
+
+---
+
+## **Algorithm Summary**
+
+```
+For each number n:
+
+1. If n is even → return -1
+   (OR always produces odd, impossible)
+
+2. Convert n to binary string (list of chars)
+
+3. Find rightmost '0' bit:
+   - If found at index i:
+     → Flip bit at position i+1 to '0'
+   
+   - If NOT found (all bits are '1'):
+     → Remove leftmost '1' bit
+
+4. Convert modified binary back to integer
+
+5. This gives the minimum j where j | (j+1) = n
+```
