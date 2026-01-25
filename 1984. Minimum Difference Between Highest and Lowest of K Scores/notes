@@ -1,96 +1,377 @@
-## 🔹 Step-by-Step Explanation of Code
+# **Minimum Difference Between Highest and Lowest of K Scores**
 
-```python
-class Solution:
-    def minimumDifference(self, nums: List[int], k: int) -> int:
-        if len(nums) == 0:
-            return 0
-```
+## **Problem**
+Select exactly `k` students' scores. Return the **minimum difference** between the highest and lowest scores in the selection.
 
-* If there are no scores, return 0. (Edge case).
-
-```python
-        nums.sort()
-```
-
-* Sort the scores.
-* This is important because the **smallest difference between k scores will always be among consecutive elements** after sorting.
-
-```python
-        l, r = 0, k-1
-        min_val = float('inf')
-```
-
-* Use two pointers `l` and `r` to represent a **window of size k**.
-* Start with the first `k` elements.
-* `min_val` is initialized to infinity to track the **minimum difference found so far**.
-
-```python
-        while r < len(nums):
-            difference = nums[r] - nums[l]
-            min_val = min(min_val, difference)
-            l += 1
-            r += 1
-```
-
-* Slide the window across the sorted list.
-* For each window of size `k`, compute `difference = max - min = nums[r] - nums[l]`.
-* Update the minimum difference.
-* Move both pointers forward by 1 to check the next window.
-
-```python
-        return min_val
-```
-
-* Return the smallest difference found.
+**Strategy:** Sort array, use sliding window of size `k` to find minimum range.
 
 ---
 
-## 🔹 Working Example (Better & Clear)
+## **Test Case: nums = [90, 50, 10, 40, 30], k = 3**
 
-Let’s take:
+---
 
-```
-nums = [10, 100, 300, 200, 1000, 20, 30]
+## **STEP 1: Sort the Array**
+
+```python
+nums = [90, 50, 10, 40, 30]
 k = 3
+
+nums.sort()
+
+nums = [10, 30, 40, 50, 90]
+
+Sorted array:
+Index:  0   1   2   3   4
+Value: [10, 30, 40, 50, 90]
 ```
 
-### Step 1: Sort the scores
-
-```
-Sorted nums = [10, 20, 30, 100, 200, 300, 1000]
-```
-
-## 🔹 Why this works
-
-* Sorting ensures that in each window of size `k`, the **leftmost is the smallest** and the **rightmost is the largest**.
-* That way, the difference `nums[r] - nums[l]` directly gives the spread.
-* Sliding the window ensures we check **all possible groups of k students**.
+**Why sort?** To minimize difference, we want scores that are **close together**. Sorting brings similar values next to each other.
 
 ---
 
-👉 Do you want me to also **draw a number line visualization** (showing windows sliding step by step) to make it even clearer?
+## **STEP 2: Initialize Sliding Window**
 
-### Step 2: Apply sliding window of size k=3
+```python
+l = 0 (left pointer)
+r = k - 1 = 3 - 1 = 2 (right pointer)
+min_diff = float('inf')
 
-* Window `[10, 20, 30]`
-  → difference = 30 - 10 = **20**
+Initial window (size k=3):
+Index:  0   1   2   3   4
+Value: [10, 30, 40, 50, 90]
+        ↑   ↑   ↑
+        l       r
+        └───────┘
+        Window 1
+```
 
-* Window `[20, 30, 100]`
-  → difference = 100 - 20 = **80**
+---
 
-* Window `[30, 100, 200]`
-  → difference = 200 - 30 = **170**
+## **STEP 3: Slide Window and Find Minimum Difference**
 
-* Window `[100, 200, 300]`
-  → difference = 300 - 100 = **200**
+---
 
-* Window `[200, 300, 1000]`
-  → difference = 1000 - 200 = **800**
+### **Iteration 1: l=0, r=2**
 
-### Step 3: Find minimum
+```python
+Condition: r < len(nums)? 2 < 5? YES ✓
 
-Differences = `[20, 80, 170, 200, 800]`
-Minimum = **20**
+Window: nums[0] to nums[2] = [10, 30, 40]
 
-✅ So the result = **20**
+diff = nums[r] - nums[l]
+diff = nums[2] - nums[0]
+diff = 40 - 10 = 30
+
+min_diff = min(diff, min_diff)
+min_diff = min(30, inf)
+min_diff = 30
+
+l += 1 → l = 1
+r += 1 → r = 3
+
+Visual:
+[10, 30, 40, 50, 90]
+ └──────┘
+ Window: [10, 30, 40]
+ Range: 40 - 10 = 30
+
+min_diff = 30
+```
+
+---
+
+### **Iteration 2: l=1, r=3**
+
+```python
+Condition: r < len(nums)? 3 < 5? YES ✓
+
+Window: nums[1] to nums[3] = [30, 40, 50]
+
+diff = nums[r] - nums[l]
+diff = nums[3] - nums[1]
+diff = 50 - 30 = 20
+
+min_diff = min(diff, min_diff)
+min_diff = min(20, 30)
+min_diff = 20 ✓ (new minimum!)
+
+l += 1 → l = 2
+r += 1 → r = 4
+
+Visual:
+[10, 30, 40, 50, 90]
+     └──────┘
+     Window: [30, 40, 50]
+     Range: 50 - 30 = 20
+
+min_diff = 20
+```
+
+---
+
+### **Iteration 3: l=2, r=4**
+
+```python
+Condition: r < len(nums)? 4 < 5? YES ✓
+
+Window: nums[2] to nums[4] = [40, 50, 90]
+
+diff = nums[r] - nums[l]
+diff = nums[4] - nums[2]
+diff = 90 - 40 = 50
+
+min_diff = min(diff, min_diff)
+min_diff = min(50, 20)
+min_diff = 20 (unchanged)
+
+l += 1 → l = 3
+r += 1 → r = 5
+
+Visual:
+[10, 30, 40, 50, 90]
+         └──────┘
+         Window: [40, 50, 90]
+         Range: 90 - 40 = 50
+
+min_diff = 20
+```
+
+---
+
+### **Exit Loop**
+
+```python
+Condition: r < len(nums)? 5 < 5? NO ✗
+
+Exit while loop
+
+All possible windows of size k=3 checked!
+```
+
+---
+
+## **STEP 4: Return Result**
+
+```python
+return min_diff
+return 20
+```
+
+---
+
+## **Complete Trace Table**
+
+| Iteration | l | r | Window | nums[l] | nums[r] | diff | min_diff |
+|-----------|---|---|--------|---------|---------|------|----------|
+| Start | 0 | 2 | - | - | - | - | inf |
+| 1 | 0 | 2 | [10,30,40] | 10 | 40 | 30 | 30 |
+| 2 | 1 | 3 | [30,40,50] | 30 | 50 | 20 | 20 |
+| 3 | 2 | 4 | [40,50,90] | 40 | 90 | 50 | 20 |
+| End | 3 | 5 | - | - | - | - | 20 |
+
+---
+
+## **Visual Summary**
+
+```
+Sorted: [10, 30, 40, 50, 90]
+k = 3 (need to select 3 scores)
+
+All possible windows of size 3:
+
+Window 1: [10, 30, 40]
+           └───────┘
+           diff = 40-10 = 30
+
+Window 2: [30, 40, 50]
+               └───────┘
+               diff = 50-30 = 20 ← MINIMUM!
+
+Window 3: [40, 50, 90]
+                   └───────┘
+                   diff = 90-40 = 50
+
+Answer: 20 (select scores 30, 40, 50)
+```
+
+---
+
+## **Why This Works**
+
+### **Key Insight:**
+After sorting, any selection of `k` elements that **minimizes the range** must be **consecutive elements** in the sorted array.
+
+**Proof:**
+```
+If we skip an element in sorted array:
+
+Sorted: [a, b, c, d, e]
+Select: [a, c, e] (skipping b and d)
+
+Range: e - a
+
+Alternative: [c, d, e] (consecutive)
+Range: e - c
+
+Since c > a:
+e - c < e - a
+
+Consecutive selection always has smaller or equal range!
+```
+
+---
+
+## **Another Example: nums = [9, 4, 1, 7], k = 2**
+
+### **Step 1: Sort**
+```python
+nums = [9, 4, 1, 7]
+nums.sort()
+nums = [1, 4, 7, 9]
+```
+
+### **Step 2: Initialize**
+```python
+l = 0
+r = k - 1 = 2 - 1 = 1
+min_diff = inf
+
+[1, 4, 7, 9]
+ ↑  ↑
+ l  r
+```
+
+### **Iteration 1**
+```python
+Window: [1, 4]
+diff = 4 - 1 = 3
+min_diff = 3
+
+l = 1, r = 2
+
+[1, 4, 7, 9]
+    ↑  ↑
+    l  r
+```
+
+### **Iteration 2**
+```python
+Window: [4, 7]
+diff = 7 - 4 = 3
+min_diff = min(3, 3) = 3
+
+l = 2, r = 3
+
+[1, 4, 7, 9]
+       ↑  ↑
+       l  r
+```
+
+### **Iteration 3**
+```python
+Window: [7, 9]
+diff = 9 - 7 = 2
+min_diff = min(2, 3) = 2 ✓
+
+l = 3, r = 4
+
+[1, 4, 7, 9]
+          ↑  ↑
+          l  r (out of bounds)
+```
+
+### **Exit**
+```python
+r = 4 >= len(nums)
+Exit loop
+
+return 2
+```
+
+**Windows checked:**
+- [1, 4] → diff = 3
+- [4, 7] → diff = 3
+- [7, 9] → diff = 2 ← minimum
+
+**Answer: 2** (select scores 7 and 9)
+
+---
+
+## **Example with k = 1: nums = [87, 100, 40], k = 1**
+
+```python
+nums.sort() → [40, 87, 100]
+
+l = 0, r = 0
+min_diff = inf
+
+Iteration 1:
+  Window: [40]
+  diff = nums[0] - nums[0] = 0
+  min_diff = 0
+  
+  l = 1, r = 1
+
+Iteration 2:
+  Window: [87]
+  diff = nums[1] - nums[1] = 0
+  min_diff = 0
+  
+  l = 2, r = 2
+
+Iteration 3:
+  Window: [100]
+  diff = nums[2] - nums[2] = 0
+  min_diff = 0
+  
+  l = 3, r = 3 (exit)
+
+return 0
+```
+
+**When k=1:** Only one score selected, so difference is always 0!
+
+---
+
+## **Sliding Window Visualization**
+
+```
+Array: [10, 30, 40, 50, 90]
+k = 3
+
+Window slides from left to right:
+
+Position 1:
+[10, 30, 40, 50, 90]
+ └──────┘
+ diff = 30
+
+Position 2:
+[10, 30, 40, 50, 90]
+     └──────┘
+     diff = 20 ← minimum
+
+Position 3:
+[10, 30, 40, 50, 90]
+         └──────┘
+         diff = 50
+
+Total windows: n - k + 1 = 5 - 3 + 1 = 3
+```
+
+---
+
+## **Number of Windows**
+
+```
+For array of size n with window size k:
+Number of windows = n - k + 1
+
+Example:
+n = 5, k = 3
+Windows = 5 - 3 + 1 = 3
+
+Starting positions: 0, 1, 2
+Ending positions:   2, 3, 4
+```
