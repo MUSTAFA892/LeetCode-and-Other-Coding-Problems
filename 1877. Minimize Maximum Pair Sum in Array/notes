@@ -1,0 +1,323 @@
+# **Minimize Maximum Pair Sum**
+
+## **Problem**
+Pair up all elements in the array. Return the **minimum possible maximum pair sum**.
+
+**Strategy:** Sort array, then pair smallest with largest to minimize the maximum sum.
+
+---
+
+## **Test Case: nums = [3, 5, 2, 3]**
+
+---
+
+## **STEP 1: Sort the Array**
+
+```python
+nums = [3, 5, 2, 3]
+
+nums.sort()
+
+nums = [2, 3, 3, 5]
+
+Sorted array:
+Index:  0   1   2   3
+Value: [2,  3,  3,  5]
+```
+
+---
+
+## **STEP 2: Initialize Two Pointers**
+
+```python
+l = 0 (leftmost/smallest)
+r = len(nums) - 1 = 3 (rightmost/largest)
+max_ = 0
+
+Visual:
+Index:  0   1   2   3
+Value: [2,  3,  3,  5]
+        ↑           ↑
+        l           r
+```
+
+---
+
+## **STEP 3: Pair Elements from Extremes**
+
+### **Iteration 1: l=0, r=3**
+
+```python
+Condition: l <= r? 0 <= 3? YES ✓
+
+Pair: nums[0] + nums[3]
+min_max_pair = nums[0] + nums[3]
+min_max_pair = 2 + 5 = 7
+
+max_ = max(min_max_pair, max_)
+max_ = max(7, 0)
+max_ = 7
+
+l += 1 → l = 1
+r -= 1 → r = 2
+
+Visual:
+[2,  3,  3,  5]
+ └──────────┘
+   Pair = 7
+
+Current pairs: [(2,5)]
+max_ = 7
+```
+
+---
+
+### **Iteration 2: l=1, r=2**
+
+```python
+Condition: l <= r? 1 <= 2? YES ✓
+
+Pair: nums[1] + nums[2]
+min_max_pair = nums[1] + nums[2]
+min_max_pair = 3 + 3 = 6
+
+max_ = max(min_max_pair, max_)
+max_ = max(6, 7)
+max_ = 7 (unchanged)
+
+l += 1 → l = 2
+r -= 1 → r = 1
+
+Visual:
+[2,  3,  3,  5]
+     └──┘
+    Pair = 6
+
+Current pairs: [(2,5), (3,3)]
+max_ = 7
+```
+
+---
+
+### **Iteration 3: l=2, r=1**
+
+```python
+Condition: l <= r? 2 <= 1? NO ✗
+
+Exit while loop
+
+All elements paired!
+```
+
+---
+
+## **STEP 4: Return Result**
+
+```python
+return max_
+return 7
+```
+
+---
+
+## **Complete Trace Table**
+
+| Iteration | l | r | nums[l] | nums[r] | Pair Sum | max_ | New l,r | All Pairs |
+|-----------|---|---|---------|---------|----------|------|---------|-----------|
+| Start | 0 | 3 | - | - | - | 0 | - | [] |
+| 1 | 0 | 3 | 2 | 5 | 7 | 7 | 1,2 | [(2,5)] |
+| 2 | 1 | 2 | 3 | 3 | 6 | 7 | 2,1 | [(2,5),(3,3)] |
+| End | 2 | 1 | - | - | - | 7 | - | Done |
+
+---
+
+## **Visual Summary**
+
+```
+Original: [3, 5, 2, 3]
+Sorted:   [2, 3, 3, 5]
+
+Pairing Strategy (smallest with largest):
+
+Step 1: [2, 3, 3, 5]
+         └────────┘
+         2 + 5 = 7
+
+Step 2: [2, 3, 3, 5]
+            └──┘
+            3 + 3 = 6
+
+Pairs formed: (2,5) and (3,3)
+Sums:         7      6
+
+Maximum pair sum: 7
+```
+
+---
+
+## **Why This Greedy Strategy Works**
+
+### **Key Insight:**
+Pairing **smallest with largest** minimizes the maximum pair sum.
+
+**Proof by Contradiction:**
+
+```
+Sorted: [a, b, c, d] where a ≤ b ≤ c ≤ d
+
+Our strategy pairs: (a,d) and (b,c)
+Sums: a+d and b+c
+
+Alternative pairing: (a,c) and (b,d)
+Sums: a+c and b+d
+
+Compare maximum sums:
+max(a+d, b+c) vs max(a+c, b+d)
+
+Since d ≥ c and b ≥ a:
+b+d ≥ b+c and b+d ≥ a+d
+
+So max(a+c, b+d) = b+d
+And max(a+d, b+c) could be either a+d or b+c
+
+But: b+d > a+d (since b > a)
+And: b+d ≥ b+c (since d ≥ c)
+
+Therefore: b+d ≥ max(a+d, b+c)
+
+Our strategy produces smaller or equal maximum! ✓
+```
+
+---
+
+## **Another Example: nums = [3, 5, 4, 2, 4, 6]**
+
+### **Step 1: Sort**
+```python
+nums = [3, 5, 4, 2, 4, 6]
+nums.sort()
+nums = [2, 3, 4, 4, 5, 6]
+```
+
+### **Step 2: Initialize**
+```python
+l = 0, r = 5
+max_ = 0
+
+[2, 3, 4, 4, 5, 6]
+ ↑              ↑
+ l              r
+```
+
+### **Iteration 1**
+```python
+Pair: nums[0] + nums[5] = 2 + 6 = 8
+max_ = max(8, 0) = 8
+
+l = 1, r = 4
+
+Pairs: [(2,6)]
+max_ = 8
+```
+
+### **Iteration 2**
+```python
+Pair: nums[1] + nums[4] = 3 + 5 = 8
+max_ = max(8, 8) = 8
+
+l = 2, r = 3
+
+Pairs: [(2,6), (3,5)]
+max_ = 8
+```
+
+### **Iteration 3**
+```python
+Pair: nums[2] + nums[3] = 4 + 4 = 8
+max_ = max(8, 8) = 8
+
+l = 3, r = 2
+
+Pairs: [(2,6), (3,5), (4,4)]
+max_ = 8
+```
+
+### **Exit**
+```python
+l > r → exit
+
+All pairs: [(2,6), (3,5), (4,4)]
+All sums: [8, 8, 8]
+
+return 8
+```
+
+**Interesting:** All pairs have the same sum! This is optimal.
+
+---
+
+## **Example with Different Sums: nums = [1, 9, 2, 8]**
+
+### **Sorted: [1, 2, 8, 9]**
+
+```python
+Iteration 1:
+  Pair: 1 + 9 = 10
+  max_ = 10
+  
+Iteration 2:
+  Pair: 2 + 8 = 10
+  max_ = 10
+
+All pairs: [(1,9), (2,8)]
+All sums: [10, 10]
+
+return 10
+```
+
+**Again, all pairs equal!** This happens when array is balanced.
+
+---
+
+## **Example with Unequal Sums: nums = [1, 2, 3, 10]**
+
+### **Sorted: [1, 2, 3, 10]**
+
+```python
+Iteration 1:
+  Pair: 1 + 10 = 11
+  max_ = 11
+  
+Iteration 2:
+  Pair: 2 + 3 = 5
+  max_ = max(5, 11) = 11
+
+All pairs: [(1,10), (2,3)]
+Sums: [11, 5]
+
+return 11 (the maximum)
+```
+
+---
+
+## **Algorithm Visualization**
+
+```
+Sorted array (visualize as a balancing act):
+
+Small values              Large values
+     ↓                         ↓
+[a, b, c, d, e, f, g, h, i, j]
+ ↑                             ↑
+ └─────────────────────────────┘  Pair 1
+    ↑                       ↑
+    └───────────────────────┘     Pair 2
+       ↑                 ↑
+       └─────────────────┘         Pair 3
+          ↑           ↑
+          └───────────┘             Pair 4
+             ↑     ↑
+             └─────┘                Pair 5
+
+Balance smallest with largest to minimize max sum!
+```
