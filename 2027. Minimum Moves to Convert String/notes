@@ -1,0 +1,472 @@
+# **Minimum Moves to Convert String**
+
+## **Problem**
+Given a string with 'X' and 'O', in one move you can choose an index and convert 3 consecutive characters to 'O'. Return the **minimum number of moves** to convert all 'X' to 'O'.
+
+**Strategy:** Greedy - whenever you see an 'X', cover it and the next 2 characters.
+
+---
+
+## **Test Case: s = "XXOX"**
+
+---
+
+## **Initial State**
+
+```python
+s = "XXOX"
+count = 0  (number of moves)
+skip = 0   (characters to skip after a move)
+
+String visualization:
+Index:  0   1   2   3
+Char:  ['X','X','O','X']
+```
+
+---
+
+## **CHARACTER BY CHARACTER PROCESSING**
+
+---
+
+### **i = 0: s[0] = 'X'**
+
+```python
+Check: s[i] == 'X' and skip == 0?
+       'X' == 'X' and 0 == 0? YES ✓
+
+Found an 'X' and not skipping!
+Make a move to cover positions 0, 1, 2
+
+count += 1
+count = 1
+
+skip = 2
+(We'll skip the next 2 characters)
+
+Visual:
+Index:  0   1   2   3
+Char:  ['X','X','O','X']
+        └───────┘
+        Move 1 covers these 3 positions
+        
+Current state:
+count = 1
+skip = 2
+```
+
+---
+
+### **i = 1: s[1] = 'X'**
+
+```python
+Check: s[i] == 'X' and skip == 0?
+       'X' == 'X' and 2 == 0? NO
+
+Check: elif skip > 0?
+       2 > 0? YES ✓
+
+We're still in the coverage of the previous move
+skip -= 1
+skip = 1
+
+Visual:
+Index:  0   1   2   3
+Char:  ['X','X','O','X']
+            ↑
+        Already covered by Move 1
+        
+Current state:
+count = 1
+skip = 1
+```
+
+---
+
+### **i = 2: s[2] = 'O'**
+
+```python
+Check: s[i] == 'X' and skip == 0?
+       'O' == 'X'? NO
+
+Check: elif skip > 0?
+       1 > 0? YES ✓
+
+Still in coverage of Move 1
+skip -= 1
+skip = 0
+
+Visual:
+Index:  0   1   2   3
+Char:  ['X','X','O','X']
+                ↑
+        Already covered by Move 1
+        
+Current state:
+count = 1
+skip = 0
+```
+
+---
+
+### **i = 3: s[3] = 'X'**
+
+```python
+Check: s[i] == 'X' and skip == 0?
+       'X' == 'X' and 0 == 0? YES ✓
+
+Found a new 'X' and not skipping!
+Make another move to cover positions 3, 4, 5
+(Note: positions 4 and 5 don't exist, but that's okay)
+
+count += 1
+count = 2
+
+skip = 2
+
+Visual:
+Index:  0   1   2   3
+Char:  ['X','X','O','X']
+                    └───(would cover 3,4,5 if they existed)
+        Move 2 covers position 3
+        
+Current state:
+count = 2
+skip = 2
+```
+
+---
+
+### **Loop Ends**
+
+```python
+No more characters to process
+i = 4 would be >= len(s)
+
+Final state:
+count = 2
+skip = 2 (unused, loop ended)
+```
+
+---
+
+## **Return Result**
+
+```python
+return count
+return 2
+```
+
+---
+
+## **Complete Trace Table**
+
+| i | s[i] | skip (before) | Condition | Action | count | skip (after) |
+|---|------|---------------|-----------|--------|-------|--------------|
+| 0 | 'X' | 0 | X and skip==0 | Move 1 | 1 | 2 |
+| 1 | 'X' | 2 | skip > 0 | Decrement | 1 | 1 |
+| 2 | 'O' | 1 | skip > 0 | Decrement | 1 | 0 |
+| 3 | 'X' | 0 | X and skip==0 | Move 2 | 2 | 2 |
+
+**Final Answer: 2 moves**
+
+---
+
+## **Visual Summary**
+
+```
+Original: "XXOX"
+
+Move 1 at position 0:
+Index:  0   1   2   3
+Before: X   X   O   X
+        └───────┘
+        Covered by Move 1
+        
+After:  O   O   O   X
+                    ↑
+                Still has X
+
+Move 2 at position 3:
+Index:  0   1   2   3
+Before: O   O   O   X
+                    └─── (covers 3,4,5)
+                    
+After:  O   O   O   O
+
+Total moves: 2
+```
+
+---
+
+## **Another Example: s = "XXXXX"**
+
+### **Processing**
+
+```python
+s = "XXXXX"
+count = 0, skip = 0
+```
+
+#### **i=0: 'X'**
+```
+s[0]=='X' and skip==0 → Move 1
+count = 1, skip = 2
+Covers: [0, 1, 2]
+```
+
+#### **i=1: 'X'**
+```
+skip=2 > 0 → Skip
+skip = 1
+```
+
+#### **i=2: 'X'**
+```
+skip=1 > 0 → Skip
+skip = 0
+```
+
+#### **i=3: 'X'**
+```
+s[3]=='X' and skip==0 → Move 2
+count = 2, skip = 2
+Covers: [3, 4, 5]
+```
+
+#### **i=4: 'X'**
+```
+skip=2 > 0 → Skip
+skip = 1
+```
+
+**Result: 2 moves**
+
+```
+Visual:
+"XXXXX"
+ └───┘  Move 1 covers indices 0,1,2
+    └───┘ Move 2 covers indices 3,4,5 (5 doesn't exist)
+
+After Move 1: "OOOXX"
+After Move 2: "OOOOO"
+```
+
+---
+
+## **Example: s = "OXOX"**
+
+### **Processing**
+
+#### **i=0: 'O'**
+```
+s[0]=='X'? NO
+skip>0? NO
+Do nothing
+count = 0, skip = 0
+```
+
+#### **i=1: 'X'**
+```
+s[1]=='X' and skip==0? YES
+Move 1
+count = 1, skip = 2
+Covers: [1, 2, 3]
+```
+
+#### **i=2: 'O'**
+```
+skip=2 > 0? YES
+Skip
+skip = 1
+```
+
+#### **i=3: 'X'**
+```
+skip=1 > 0? YES
+Skip (already covered by Move 1)
+skip = 0
+```
+
+**Result: 1 move**
+
+```
+Visual:
+"OXOX"
+  └───┘ Move 1 covers indices 1,2,3
+
+After Move 1: "OOOO"
+```
+
+---
+
+## **Example: s = "OOOO"**
+
+### **Processing**
+
+```python
+Loop through all characters:
+i=0: 'O' → s[i]!='X', skip=0 → nothing
+i=1: 'O' → s[i]!='X', skip=0 → nothing
+i=2: 'O' → s[i]!='X', skip=0 → nothing
+i=3: 'O' → s[i]!='X', skip=0 → nothing
+
+count = 0
+```
+
+**Result: 0 moves** (already all 'O')
+
+---
+
+## **Greedy Strategy Explanation**
+
+```
+Key Insight:
+When you encounter an 'X', immediately make a move
+covering that position and the next 2 positions.
+
+Why greedy works:
+- Each move covers 3 positions
+- Once you see an 'X', you MUST cover it somehow
+- Covering it immediately (along with next 2) is optimal
+- No benefit in delaying the move
+
+Example comparison:
+"XXXX"
+
+Greedy approach:
+Move 1: Cover [0,1,2]
+Move 2: Cover [3,4,5]
+Total: 2 moves
+
+Alternative (not greedy):
+Move 1: Cover [1,2,3]  (starts at position 1)
+Still need Move 2 for position 0
+Total: 2 moves (same or worse)
+```
+
+---
+
+## **Skip Mechanism**
+
+```
+When we make a move at position i:
+- Position i is covered
+- Position i+1 is covered
+- Position i+2 is covered
+
+skip = 2 means:
+"Skip the next 2 characters (they're already covered)"
+
+As we process:
+i+1: skip = 2 → decrement → skip = 1
+i+2: skip = 1 → decrement → skip = 0
+i+3: skip = 0 → can make a new move if needed
+```
+
+---
+
+## **State Machine View**
+
+```
+State 1: skip = 0 (ready for new move)
+  ↓
+  If 'X' encountered:
+    - Make move (count++)
+    - Set skip = 2
+    - Go to State 2
+  If 'O' encountered:
+    - Stay in State 1
+
+State 2: skip = 2 (just made move)
+  ↓
+  Decrement skip to 1
+  Go to State 3
+
+State 3: skip = 1 (one more to skip)
+  ↓
+  Decrement skip to 0
+  Go to State 1
+```
+
+---
+
+## **Edge Cases**
+
+### **Single Character**
+```python
+s = "X"
+i=0: 'X', skip=0 → Move 1
+count = 1
+
+s = "O"
+i=0: 'O', skip=0 → nothing
+count = 0
+```
+
+### **Two Characters**
+```python
+s = "XX"
+i=0: Move 1, covers [0,1,2]
+i=1: skip=2>0, decrement
+count = 1
+```
+
+### **Pattern: "XOXOXOXO"**
+```python
+i=0: 'X', Move 1, skip=2, count=1  (covers 0,1,2)
+i=1: 'O', skip=1
+i=2: 'X', skip=0 but already covered
+i=3: 'O', skip=0
+i=4: 'X', Move 2, skip=2, count=2  (covers 4,5,6)
+i=5: 'O', skip=1
+i=6: 'X', skip=0 but already covered
+i=7: 'O', skip=0
+
+count = 2
+```
+
+---
+
+## **Complexity**
+
+- **Time:** O(n) - single pass through string
+- **Space:** O(1) - only variables
+
+---
+
+## **Algorithm Summary**
+
+```
+1. Initialize count=0, skip=0
+2. For each character:
+   a. If it's 'X' AND skip==0:
+      - Make a move (count++)
+      - Set skip=2 (next 2 are covered)
+   b. If skip > 0:
+      - Decrement skip (processing covered position)
+3. Return count
+```
+
+---
+
+## **Key Insights**
+
+1. **Greedy is optimal** - cover 'X' as soon as you see it
+2. **Skip counter** tracks coverage of a move
+3. **Each move covers 3 positions** (current + next 2)
+4. **Early coverage** is better than late coverage
+5. **Simple one-pass solution** - very efficient!
+
+---
+
+## **Final Example Walkthrough**
+
+For `s = "XXOX"`:
+1. See 'X' at 0 → Make Move 1 → covers [0,1,2] → count=1, skip=2
+2. At position 1 → skip>0 → just decrement skip → skip=1
+3. At position 2 → skip>0 → just decrement skip → skip=0
+4. See 'X' at 3 → Make Move 2 → covers [3,4,5] → count=2, skip=2
+5. **Result: 2 moves** ✓
+
+Elegant greedy solution! ✓
