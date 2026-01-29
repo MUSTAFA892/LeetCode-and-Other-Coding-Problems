@@ -1,0 +1,207 @@
+# **Find Closest Person**
+
+## **Problem**
+
+Three people are standing at positions `x`, `y`, and `z` on a number line.
+
+* Person **1** is at position `x`
+* Person **2** is at position `y`
+* Person **3** is at position `z`
+
+You must determine **who reaches person 3 first**.
+
+### **Return Rules**
+
+* Return `1` → Person 1 is closer to `z`
+* Return `2` → Person 2 is closer to `z`
+* Return `0` → Both are at the same distance
+
+---
+
+## **Given Code**
+
+```python
+class Solution:
+    def findClosest(self, x: int, y: int, z: int) -> int:
+        per_1 = abs(x-z)
+        per_2 = abs(y-z)
+
+        if per_1 > per_2:
+            return 2
+        
+        elif per_1 < per_2:
+            return 1
+
+        else:
+            return 0
+```
+
+---
+
+## **Key Idea**
+
+* Distance on a number line is measured using **absolute difference**
+* The smaller the distance → the closer the person
+
+---
+
+## **Step 1: Distance Calculation**
+
+```python
+per_1 = abs(x - z)
+per_2 = abs(y - z)
+```
+
+### Why `abs()`?
+
+Because distance cannot be negative.
+
+Example:
+
+```
+Distance between 2 and 5 = |2 - 5| = 3
+Distance between 7 and 3 = |7 - 3| = 4
+```
+
+---
+
+## **Working Example 1**
+
+### **Input**
+
+```python
+x = 2
+y = 7
+z = 4
+```
+
+### **Distance Calculation**
+
+```python
+per_1 = abs(2 - 4) = 2
+per_2 = abs(7 - 4) = 3
+```
+
+### **Comparison**
+
+```python
+per_1 < per_2  →  2 < 3  → TRUE
+```
+
+### **Return**
+
+```python
+return 1
+```
+
+✅ **Person 1 is closer**
+
+---
+
+## **Working Example 2**
+
+### **Input**
+
+```python
+x = 10
+y = 6
+z = 8
+```
+
+### **Distance Calculation**
+
+```python
+per_1 = abs(10 - 8) = 2
+per_2 = abs(6 - 8)  = 2
+```
+
+### **Comparison**
+
+```python
+per_1 == per_2
+```
+
+### **Return**
+
+```python
+return 0
+```
+
+✅ **Both are equally close**
+
+---
+
+## **Working Example 3**
+
+### **Input**
+
+```python
+x = 1
+y = 4
+z = 10
+```
+
+### **Distance Calculation**
+
+```python
+per_1 = abs(1 - 10) = 9
+per_2 = abs(4 - 10) = 6
+```
+
+### **Comparison**
+
+```python
+per_1 > per_2  →  9 > 6  → TRUE
+```
+
+### **Return**
+
+```python
+return 2
+```
+
+✅ **Person 2 is closer**
+
+---
+
+## **Trace Table**
+
+| x | y | z | per_1 = |x−z| | per_2 = |y−z| | Result |
+|---|---|---|------------|------------|--------|
+| 2 | 7 | 4 | 2 | 3 | 1 |
+| 10 | 6 | 8 | 2 | 2 | 0 |
+| 1 | 4 | 10 | 9 | 6 | 2 |
+
+---
+
+## **Why This Logic Works**
+
+* Absolute distance correctly models movement on a number line
+* Only **three outcomes** exist:
+
+  * Person 1 closer
+  * Person 2 closer
+  * Tie
+* Simple comparisons handle all cases cleanly
+
+---
+
+## **Edge Cases**
+
+### Same Positions
+
+```python
+x = 5, y = 5, z = 5
+per_1 = 0
+per_2 = 0
+return 0
+```
+
+### One Person Already at z
+
+```python
+x = 3, y = 10, z = 3
+per_1 = 0
+per_2 = 7
+return 1
+```
