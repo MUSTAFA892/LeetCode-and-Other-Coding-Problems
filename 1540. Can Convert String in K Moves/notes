@@ -1,0 +1,470 @@
+# **Can Convert String in K Moves**
+
+## **Problem**
+Given two strings `s` and `t` of equal length, you can shift any character in `s` by adding values 1 to k. Can you convert `s` to `t` within `k` moves?
+
+**Key Constraint:** Each shift value (1, 2, 3, ..., k) can only be used **once**.
+
+---
+
+## **Test Case: s = "input", t = "ouput", k = 9**
+
+---
+
+## **Initial Setup**
+
+```python
+s = "input"
+t = "ouput"
+k = 9
+
+shifts = []
+count = {}
+
+Check lengths:
+len(s) = 5
+len(t) = 5
+5 == 5? YES ✓ Continue
+
+Character comparison:
+Index:  0   1   2   3   4
+s:     'i' 'n' 'p' 'u' 't'
+t:     'o' 'u' 'p' 'u' 't'
+```
+
+---
+
+## **CHARACTER BY CHARACTER PROCESSING**
+
+---
+
+### **i = 0: s[0]='i' → t[0]='o'**
+
+```python
+Check: s[0] != t[0]?
+       'i' != 'o'? YES
+
+Need to shift 'i' to 'o'
+
+Calculate distance:
+distance = (ord(t[i]) - ord(s[i]) + 26) % 26
+distance = (ord('o') - ord('i') + 26) % 26
+
+ASCII values:
+ord('i') = 105
+ord('o') = 111
+
+distance = (111 - 105 + 26) % 26
+distance = (6 + 26) % 26
+distance = 32 % 26
+distance = 6
+
+Meaning: Need to shift 'i' forward by 6 positions
+'i' + 6 = 'o' ✓
+
+Check how many times we've used shift of 6:
+times_used = count.get(6, 0)
+times_used = 0 (first time)
+
+Calculate actual shift value needed:
+shift = distance + 26 * times_used
+shift = 6 + 26 * 0
+shift = 6
+
+Update count:
+count[6] = 0 + 1 = 1
+
+Check if shift <= k:
+6 <= 9? YES ✓
+
+count = {6: 1}
+
+Visual:
+'i' → shift by 6 → 'o'
+ i  j  k  l  m  n  o
+ +1 +2 +3 +4 +5 +6
+```
+
+---
+
+### **i = 1: s[1]='n' → t[1]='u'**
+
+```python
+Check: s[1] != t[1]?
+       'n' != 'u'? YES
+
+Calculate distance:
+distance = (ord('u') - ord('n') + 26) % 26
+
+ASCII:
+ord('n') = 110
+ord('u') = 117
+
+distance = (117 - 110 + 26) % 26
+distance = (7 + 26) % 26
+distance = 33 % 26
+distance = 7
+
+Check times_used:
+times_used = count.get(7, 0)
+times_used = 0 (first time)
+
+shift = 7 + 26 * 0 = 7
+
+Update count:
+count[7] = 1
+
+Check: 7 <= 9? YES ✓
+
+count = {6: 1, 7: 1}
+
+Visual:
+'n' → shift by 7 → 'u'
+ n  o  p  q  r  s  t  u
+ +1 +2 +3 +4 +5 +6 +7
+```
+
+---
+
+### **i = 2: s[2]='p' → t[2]='p'**
+
+```python
+Check: s[2] != t[2]?
+       'p' != 'p'? NO
+
+Characters already match!
+No shift needed, skip
+
+count = {6: 1, 7: 1}
+```
+
+---
+
+### **i = 3: s[3]='u' → t[3]='u'**
+
+```python
+Check: s[3] != t[3]?
+       'u' != 'u'? NO
+
+Already match, skip
+
+count = {6: 1, 7: 1}
+```
+
+---
+
+### **i = 4: s[4]='t' → t[4]='t'**
+
+```python
+Check: s[4] != t[4]?
+       't' != 't'? NO
+
+Already match, skip
+
+count = {6: 1, 7: 1}
+```
+
+---
+
+## **Loop Complete**
+
+```python
+All characters processed successfully
+All required shifts <= k
+
+return True
+```
+
+---
+
+## **Complete Trace Table**
+
+| i | s[i] | t[i] | Match? | distance | times_used | shift | shift<=k? | count |
+|---|------|------|--------|----------|------------|-------|-----------|-------|
+| 0 | 'i' | 'o' | NO | 6 | 0 | 6 | YES | {6:1} |
+| 1 | 'n' | 'u' | NO | 7 | 0 | 7 | YES | {6:1, 7:1} |
+| 2 | 'p' | 'p' | YES | - | - | - | - | {6:1, 7:1} |
+| 3 | 'u' | 'u' | YES | - | - | - | - | {6:1, 7:1} |
+| 4 | 't' | 't' | YES | - | - | - | - | {6:1, 7:1} |
+
+**Result: True** (all shifts possible within k=9)
+
+---
+
+## **Visual Summary**
+
+```
+s = "input"
+t = "ouput"
+
+Transformation:
+i → o (shift +6, use move 6)
+n → u (shift +7, use move 7)
+p → p (no shift needed)
+u → u (no shift needed)
+t → t (no shift needed)
+
+Moves used: 6, 7
+k = 9 (enough moves available)
+
+Result: TRUE ✓
+```
+
+---
+
+## **Example with Duplicate Shifts: s = "abc", t = "bcd", k = 27**
+
+### **Processing**
+
+#### **i=0: 'a' → 'b'**
+```python
+distance = (ord('b') - ord('a') + 26) % 26
+distance = (98 - 97 + 26) % 26
+distance = 1
+
+times_used = count.get(1, 0) = 0
+shift = 1 + 26 * 0 = 1
+
+1 <= 27? YES
+count[1] = 1
+
+count = {1: 1}
+```
+
+#### **i=1: 'b' → 'c'**
+```python
+distance = (ord('c') - ord('b') + 26) % 26
+distance = 1
+
+times_used = count.get(1, 0) = 1 (used once already!)
+shift = 1 + 26 * 1 = 27
+
+27 <= 27? YES ✓
+count[1] = 2
+
+count = {1: 2}
+
+Explanation:
+We need shift of 1 again, but move "1" is already used.
+So we use move "27" (which is 1 + 26, wraps around)
+```
+
+#### **i=2: 'c' → 'd'**
+```python
+distance = 1
+
+times_used = count.get(1, 0) = 2
+shift = 1 + 26 * 2 = 53
+
+53 <= 27? NO ✗
+
+return False
+```
+
+**Result: False** (need shift of 1 three times, but only have moves 1, 27 available within k=27)
+
+---
+
+## **Understanding the Distance Formula**
+
+```python
+distance = (ord(t[i]) - ord(s[i]) + 26) % 26
+```
+
+### **Why +26 and %26?**
+
+```
+Case 1: Forward shift (no wrap)
+'a' → 'c'
+distance = (99 - 97 + 26) % 26
+         = (2 + 26) % 26
+         = 28 % 26
+         = 2 ✓
+
+Case 2: Wrap around (backwards becomes forward)
+'z' → 'a'
+distance = (97 - 122 + 26) % 26
+         = (-25 + 26) % 26
+         = 1 % 26
+         = 1 ✓
+
+Without +26, we'd get negative numbers!
+'z' → 'a' would be -25, but we want +1 (shift forward 1)
+
+The alphabet wraps: z → a → b → c...
+```
+
+---
+
+## **Understanding Duplicate Shifts**
+
+```
+Problem: Each shift value can only be used ONCE
+
+Example: Need to shift by 3 twice
+
+First use:  shift = 3 (move 3)
+Second use: shift = 3 + 26 = 29 (move 29)
+Third use:  shift = 3 + 52 = 55 (move 55)
+
+Why +26 each time?
+- Shifting by 26 does nothing (full alphabet cycle)
+- So shift of 29 = shift of 3 (wraps around)
+- But uses a different "move number"
+
+Formula: shift = distance + 26 * times_used
+```
+
+---
+
+## **Detailed Example: s = "aa", t = "bb", k = 27**
+
+### **i=0: 'a' → 'b'**
+```python
+distance = 1
+times_used = 0
+shift = 1 + 26*0 = 1
+1 <= 27? YES
+count = {1: 1}
+```
+
+### **i=1: 'a' → 'b'**
+```python
+distance = 1 (same shift needed!)
+times_used = count.get(1, 0) = 1 (already used once)
+shift = 1 + 26*1 = 27
+27 <= 27? YES ✓
+count = {1: 2}
+
+Result: True
+```
+
+**Visual:**
+```
+Move 1:  Shift s[0] 'a' by 1 → 'b'
+Move 27: Shift s[1] 'a' by 1 → 'b' (uses move 27, which wraps to +1)
+
+Both transformations use "+1" shift but different move numbers!
+```
+
+---
+
+## **Example: Different Lengths**
+
+```python
+s = "ab"
+t = "abc"
+
+len(s) = 2
+len(t) = 3
+2 != 3? YES
+
+return False immediately
+```
+
+---
+
+## **Example with Wrap: s = "za", t = "ab", k = 5**
+
+### **i=0: 'z' → 'a'**
+```python
+distance = (ord('a') - ord('z') + 26) % 26
+distance = (97 - 122 + 26) % 26
+distance = 1
+
+shift = 1
+1 <= 5? YES
+count = {1: 1}
+
+Visual:
+'z' + 1 = 'a' (wraps around)
+```
+
+### **i=1: 'a' → 'b'**
+```python
+distance = 1
+times_used = 1
+shift = 1 + 26*1 = 27
+27 <= 5? NO ✗
+
+return False
+```
+
+**Result: False** (need two shifts of 1, but k=5 only allows moves 1-5)
+
+---
+
+## **Edge Cases**
+
+### **Identical Strings**
+```python
+s = "abc", t = "abc", k = 0
+All characters match, no shifts needed
+return True
+```
+
+### **k = 0**
+```python
+s = "a", t = "b", k = 0
+Need shift of 1, but k=0
+return False
+```
+
+### **Full Alphabet Shift**
+```python
+s = "a", t = "a", k = 26
+distance = 0 (no shift needed, already match)
+return True
+```
+
+---
+
+## **Complexity**
+
+- **Time:** O(n) - single pass through strings
+- **Space:** O(1) or O(26) - count dictionary has at most 26 keys (one per letter shift)
+
+---
+
+## **Algorithm Summary**
+
+```
+1. Check if lengths match (return False if not)
+
+2. For each character position i:
+   a. If s[i] != t[i]:
+      - Calculate distance needed (circular shift)
+      - Check how many times this distance was used
+      - Calculate actual move number needed:
+        move = distance + 26 * times_already_used
+      - If move > k: return False
+      - Increment usage count for this distance
+   
+   b. If s[i] == t[i]:
+      - Skip (no shift needed)
+
+3. If all checks pass: return True
+```
+
+---
+
+## **Key Insights**
+
+1. **Each move number (1 to k) can only be used once**
+2. **Same shift can be reused via wrapping** (shift+26, shift+52, etc.)
+3. **Distance formula handles wrap-around** (z→a is shift of 1, not -25)
+4. **Count dictionary tracks usage** of each shift distance
+5. **Greedy approach works** - assign moves as soon as needed
+
+---
+
+## **Final Example**
+
+For `s = "input"`, `t = "ouput"`, `k = 9`:
+- 'i'→'o': shift +6, use move 6 ✓
+- 'n'→'u': shift +7, use move 7 ✓
+- 'p'='p': no shift ✓
+- 'u'='u': no shift ✓
+- 't'='t': no shift ✓
+
+**Result: True** - all transformations possible within k=9 moves! ✓
