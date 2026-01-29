@@ -1,0 +1,358 @@
+# **Search a 2D Matrix**
+
+## **Problem**
+Search for a target value in a 2D matrix where:
+- Each row is sorted in ascending order
+- First integer of each row > last integer of previous row
+
+Return `True` if target exists, `False` otherwise.
+
+---
+
+## **Test Case: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3**
+
+---
+
+## **Matrix Visualization**
+
+```
+     col0 col1 col2 col3
+row0 [ 1,   3,   5,   7 ]
+row1 [10,  11,  16,  20 ]
+row2 [23,  30,  34,  60 ]
+
+target = 3
+```
+
+---
+
+## **ROW 0: Search in [1, 3, 5, 7]**
+
+### **Setup**
+```python
+i = 0
+arr = matrix[0] = [1, 3, 5, 7]
+l = 0
+r = len(arr) - 1 = 3
+flag = False
+
+Array with indices:
+Index:  0   1   2   3
+Value: [1,  3,  5,  7]
+        ↑           ↑
+        l           r
+```
+
+---
+
+### **Binary Search Iteration 1**
+
+```python
+Condition: l <= r? 0 <= 3? YES ✓
+
+mid = (l + r) // 2
+mid = (0 + 3) // 2 = 3 // 2 = 1
+
+Check arr[mid]:
+arr[1] = 3
+
+Is target == arr[mid]? Is 3 == 3? YES ✓
+
+flag = True
+break (exit while loop)
+
+Visual:
+Index:  0   1   2   3
+Value: [1,  3,  5,  7]
+        ↑   ↑       ↑
+        l  mid      r
+            ↑
+         FOUND!
+```
+
+---
+
+### **After Finding Target**
+
+```python
+if flag: YES (flag is True)
+    return True
+    break
+
+Function returns True immediately!
+```
+
+---
+
+## **Complete Trace for Row 0**
+
+| Iteration | l | r | mid | arr[mid] | target | Comparison | Action | flag |
+|-----------|---|---|-----|----------|--------|------------|--------|------|
+| 1 | 0 | 3 | 1 | 3 | 3 | 3 == 3 | FOUND! | True |
+
+**Result:** Found target in row 0! Return `True`
+
+---
+
+## **What if Target Not Found? - Example: target = 16**
+
+Let's trace through with `target = 16` to see all rows:
+
+---
+
+### **ROW 0: Search in [1, 3, 5, 7]**
+
+```python
+arr = [1, 3, 5, 7]
+l = 0, r = 3, flag = False
+target = 16
+```
+
+#### **Iteration 1**
+```python
+mid = (0 + 3) // 2 = 1
+arr[1] = 3
+
+Is 16 == 3? NO
+Is 16 < 3? NO
+else: 16 > 3
+
+l = mid + 1 = 2
+
+[1, 3, 5, 7]
+       ↑   ↑
+       l   r
+```
+
+#### **Iteration 2**
+```python
+mid = (2 + 3) // 2 = 2
+arr[2] = 5
+
+Is 16 == 5? NO
+Is 16 < 5? NO
+else: 16 > 5
+
+l = mid + 1 = 3
+
+[1, 3, 5, 7]
+           ↑
+          l,r
+```
+
+#### **Iteration 3**
+```python
+mid = (3 + 3) // 2 = 3
+arr[3] = 7
+
+Is 16 == 7? NO
+Is 16 < 7? NO
+else: 16 > 7
+
+l = mid + 1 = 4
+
+[1, 3, 5, 7]
+              ← l=4 (out of bounds)
+```
+
+#### **Exit Loop**
+```python
+l <= r? 4 <= 3? NO
+Exit while loop
+
+flag = False (not found in row 0)
+```
+
+---
+
+### **ROW 1: Search in [10, 11, 16, 20]**
+
+```python
+i = 1
+arr = matrix[1] = [10, 11, 16, 20]
+l = 0, r = 3, flag = False
+```
+
+#### **Iteration 1**
+```python
+mid = (0 + 3) // 2 = 1
+arr[1] = 11
+
+Is 16 == 11? NO
+Is 16 < 11? NO
+else: 16 > 11
+
+l = mid + 1 = 2
+
+[10, 11, 16, 20]
+         ↑   ↑
+         l   r
+```
+
+#### **Iteration 2**
+```python
+mid = (2 + 3) // 2 = 2
+arr[2] = 16
+
+Is 16 == 16? YES ✓
+
+flag = True
+break
+
+Visual:
+[10, 11, 16, 20]
+         ↑
+       FOUND!
+
+return True
+```
+
+**Result:** Found `16` in row 1!
+
+---
+
+## **Detailed Trace Table for target = 16**
+
+### **Row 0: [1, 3, 5, 7]**
+
+| Iter | l | r | mid | arr[mid] | Comparison | Action |
+|------|---|---|-----|----------|------------|--------|
+| 1 | 0 | 3 | 1 | 3 | 16 > 3 | l = 2 |
+| 2 | 2 | 3 | 2 | 5 | 16 > 5 | l = 3 |
+| 3 | 3 | 3 | 3 | 7 | 16 > 7 | l = 4 |
+| Exit | 4 | 3 | - | - | l > r | Not found |
+
+### **Row 1: [10, 11, 16, 20]**
+
+| Iter | l | r | mid | arr[mid] | Comparison | Action |
+|------|---|---|-----|----------|------------|--------|
+| 1 | 0 | 3 | 1 | 11 | 16 > 11 | l = 2 |
+| 2 | 2 | 3 | 2 | 16 | 16 == 16 | FOUND! ✓ |
+
+**Result:** `True`
+
+---
+
+## **Example: target = 13 (Not in Matrix)**
+
+### **Row 0: [1, 3, 5, 7]**
+```
+Binary search: 13 > 7
+Not found
+```
+
+### **Row 1: [10, 11, 16, 20]**
+```
+Iter 1: mid=1, arr[1]=11, 13>11 → l=2
+Iter 2: mid=2, arr[2]=16, 13<16 → r=1
+Exit: l>r
+Not found
+```
+
+### **Row 2: [23, 30, 34, 60]**
+```
+Iter 1: mid=1, arr[1]=30, 13<30 → r=0
+Iter 2: mid=0, arr[0]=23, 13<23 → r=-1
+Exit: l>r
+Not found
+```
+
+**Result:** `False` (searched all rows, not found)
+
+---
+
+## **Visual Binary Search Process**
+
+### **For target = 3 in row [1, 3, 5, 7]:**
+
+```
+Step 1: Calculate mid
+[1, 3, 5, 7]
+ ↑     ↑   ↑
+ l    mid  r
+ 
+mid = (0+3)//2 = 1
+arr[1] = 3
+3 == 3 ✓ FOUND!
+```
+
+### **For target = 16 in row [10, 11, 16, 20]:**
+
+```
+Step 1:
+[10, 11, 16, 20]
+ ↑   ↑       ↑
+ l  mid      r
+
+mid = 1, arr[1] = 11
+16 > 11 → search right
+
+Step 2:
+[10, 11, 16, 20]
+         ↑   ↑
+         l,  r
+        mid
+
+mid = 2, arr[2] = 16
+16 == 16 ✓ FOUND!
+```
+
+---
+
+## **Algorithm Flow Diagram**
+
+```
+Start
+  ↓
+For each row in matrix:
+  ↓
+  Set l=0, r=len(row)-1, flag=False
+  ↓
+  Binary Search:
+    ↓
+    Calculate mid = (l+r)//2
+    ↓
+    if arr[mid] == target → flag=True, break
+    if arr[mid] > target  → r = mid-1
+    if arr[mid] < target  → l = mid+1
+    ↓
+    Repeat while l <= r
+  ↓
+  if flag: return True
+  ↓
+Next row
+  ↓
+All rows searched → return False
+```
+
+---
+
+## **Edge Cases**
+
+### **Single Element Matrix**
+```python
+matrix = [[5]], target = 5
+
+Row 0: [5]
+l=0, r=0
+mid = 0, arr[0] = 5
+5 == 5 → True
+```
+
+### **Target Smaller than All Elements**
+```python
+matrix = [[1,3,5],[7,9,11]], target = 0
+
+Row 0: Binary search finds 0 < 1
+Row 1: Binary search finds 0 < 7
+return False
+```
+
+### **Target Larger than All Elements**
+```python
+matrix = [[1,3,5],[7,9,11]], target = 20
+
+Row 0: Binary search finds 20 > 5
+Row 1: Binary search finds 20 > 11
+return False
+```
