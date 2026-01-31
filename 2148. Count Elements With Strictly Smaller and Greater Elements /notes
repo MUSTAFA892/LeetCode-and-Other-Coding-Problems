@@ -1,0 +1,472 @@
+# **Count Elements With Strictly Smaller and Greater Elements**
+
+## **Problem**
+Count how many elements have at least one **strictly smaller** element AND at least one **strictly greater** element in the array.
+
+---
+
+## **Test Case: nums = [11, 7, 2, 15]**
+
+---
+
+## **Initial Setup**
+
+```python
+nums = [11, 7, 2, 15]
+count = 0
+
+Array visualization:
+Index:  0   1   2   3
+Value: [11, 7,  2,  15]
+```
+
+---
+
+## **ELEMENT BY ELEMENT PROCESSING**
+
+---
+
+### **i = 0: nums[0] = 11**
+
+```python
+Check if 11 has smaller and greater elements
+
+small = 0
+large = 0
+
+Create sample array (all elements except current):
+sample_arr = [n for n in nums if n != nums[0]]
+sample_arr = [n for n in [11,7,2,15] if n != 11]
+sample_arr = [7, 2, 15]
+```
+
+#### **Loop through sample_arr:**
+
+**j = 7:**
+```python
+end = 0
+
+Check 1: Is nums[i] <= j? Is 11 <= 7? NO
+  small stays 0
+
+Check 2: Is nums[i] >= j? Is 11 >= 7? YES ✓
+  AND large != 1? 0 != 1? YES
+  
+  large += 1 → large = 1
+  end += 1 → end = 1
+
+Is end == 2? 1 == 2? NO
+Continue...
+
+Current state: small=0, large=1
+```
+
+**j = 2:**
+```python
+end = 0
+
+Check 1: Is nums[i] <= j? Is 11 <= 2? NO
+  small stays 0
+
+Check 2: Is nums[i] >= j? Is 11 >= 2? YES ✓
+  AND large != 1? 1 != 1? NO
+  (We already found a larger element, skip)
+
+Is end == 2? 0 == 2? NO
+Continue...
+
+Current state: small=0, large=1
+```
+
+**j = 15:**
+```python
+end = 0
+
+Check 1: Is nums[i] <= j? Is 11 <= 15? YES ✓
+  AND small != 1? 0 != 1? YES
+  
+  small += 1 → small = 1
+  end += 1 → end = 1
+
+Check 2: Is nums[i] >= j? Is 11 >= 15? NO
+  large stays 1
+  
+  end += 0 (second check didn't trigger)
+
+Is end == 2? 1 == 2? NO
+Continue...
+
+Current state: small=1, large=1
+```
+
+#### **After sample_arr loop:**
+```python
+small = 1, large = 1
+
+Check: small == 1 and large == 1?
+       1 == 1 and 1 == 1? YES ✓
+
+count += 1
+count = 1
+
+Summary for nums[0]=11:
+- Found smaller element: 7 (or 2)
+- Found greater element: 15
+- Has both! ✓
+```
+
+---
+
+### **i = 1: nums[1] = 7**
+
+```python
+Check if 7 has smaller and greater elements
+
+small = 0
+large = 0
+
+sample_arr = [n for n in nums if n != 7]
+sample_arr = [11, 2, 15]
+```
+
+#### **Loop through sample_arr:**
+
+**j = 11:**
+```python
+end = 0
+
+Check 1: Is 7 <= 11? YES ✓
+  small != 1? YES
+  small = 1, end = 1
+
+Check 2: Is 7 >= 11? NO
+  large stays 0
+
+end == 2? NO
+
+State: small=1, large=0
+```
+
+**j = 2:**
+```python
+end = 0
+
+Check 1: Is 7 <= 2? NO
+  small stays 1
+
+Check 2: Is 7 >= 2? YES ✓
+  large != 1? 0 != 1? YES
+  large = 1, end = 1
+
+end == 2? 1 == 2? NO
+
+State: small=1, large=1
+```
+
+**j = 15:**
+```python
+end = 0
+
+Check 1: Is 7 <= 15? YES ✓
+  small != 1? 1 != 1? NO (already found)
+
+Check 2: Is 7 >= 15? NO
+
+end == 2? 0 == 2? NO
+
+State: small=1, large=1
+```
+
+#### **After loop:**
+```python
+small = 1, large = 1
+
+Check: small == 1 and large == 1? YES ✓
+
+count += 1
+count = 2
+
+Summary for nums[1]=7:
+- Found smaller: 2
+- Found greater: 11 (or 15)
+- Has both! ✓
+```
+
+---
+
+### **i = 2: nums[2] = 2**
+
+```python
+small = 0
+large = 0
+
+sample_arr = [n for n in nums if n != 2]
+sample_arr = [11, 7, 15]
+```
+
+#### **Loop through sample_arr:**
+
+**j = 11:**
+```python
+end = 0
+
+Check 1: Is 2 <= 11? YES ✓
+  small = 1, end = 1
+
+Check 2: Is 2 >= 11? NO
+
+end == 2? NO
+
+State: small=1, large=0
+```
+
+**j = 7:**
+```python
+end = 0
+
+Check 1: Is 2 <= 7? YES ✓
+  small != 1? NO (already 1)
+
+Check 2: Is 2 >= 7? NO
+
+State: small=1, large=0
+```
+
+**j = 15:**
+```python
+end = 0
+
+Check 1: Is 2 <= 15? YES ✓
+  small != 1? NO
+
+Check 2: Is 2 >= 15? NO
+
+State: small=1, large=0
+```
+
+#### **After loop:**
+```python
+small = 1, large = 0
+
+Check: small == 1 and large == 1?
+       1 == 1 and 0 == 1? NO ✗
+
+count stays 2
+
+Summary for nums[2]=2:
+- Found greater: 11, 7, 15
+- No smaller element! ✗
+- Does NOT have both
+```
+
+---
+
+### **i = 3: nums[3] = 15**
+
+```python
+small = 0
+large = 0
+
+sample_arr = [n for n in nums if n != 15]
+sample_arr = [11, 7, 2]
+```
+
+#### **Loop through sample_arr:**
+
+**j = 11:**
+```python
+end = 0
+
+Check 1: Is 15 <= 11? NO
+
+Check 2: Is 15 >= 11? YES ✓
+  large = 1, end = 1
+
+State: small=0, large=1
+```
+
+**j = 7:**
+```python
+end = 0
+
+Check 1: Is 15 <= 7? NO
+
+Check 2: Is 15 >= 7? YES ✓
+  large != 1? NO (already 1)
+
+State: small=0, large=1
+```
+
+**j = 2:**
+```python
+end = 0
+
+Check 1: Is 15 <= 2? NO
+
+Check 2: Is 15 >= 2? YES ✓
+  large != 1? NO
+
+State: small=0, large=1
+```
+
+#### **After loop:**
+```python
+small = 0, large = 1
+
+Check: small == 1 and large == 1?
+       0 == 1 and 1 == 1? NO ✗
+
+count stays 2
+
+Summary for nums[3]=15:
+- Found smaller: 11, 7, 2
+- No greater element! ✗
+- Does NOT have both
+```
+
+---
+
+## **Final Result**
+
+```python
+return count
+return 2
+```
+
+---
+
+## **Complete Trace Table**
+
+| i | nums[i] | sample_arr | Smaller Found? | Greater Found? | small | large | Count? | count |
+|---|---------|------------|----------------|----------------|-------|-------|--------|-------|
+| 0 | 11 | [7,2,15] | YES (7,2) | YES (15) | 1 | 1 | YES ✓ | 1 |
+| 1 | 7 | [11,2,15] | YES (2) | YES (11,15) | 1 | 1 | YES ✓ | 2 |
+| 2 | 2 | [11,7,15] | NO | YES (all) | 1 | 0 | NO ✗ | 2 |
+| 3 | 15 | [11,7,2] | YES (all) | NO | 0 | 1 | NO ✗ | 2 |
+
+**Final Answer: 2** (elements 11 and 7 qualify)
+
+---
+
+## **Visual Summary**
+
+```
+nums = [11, 7, 2, 15]
+
+Element 11:
+  Smaller: 7, 2 ✓
+  Greater: 15 ✓
+  → COUNT IT
+
+Element 7:
+  Smaller: 2 ✓
+  Greater: 11, 15 ✓
+  → COUNT IT
+
+Element 2:
+  Smaller: NONE ✗
+  Greater: 7, 11, 15 ✓
+  → DON'T COUNT (minimum element)
+
+Element 15:
+  Smaller: 2, 7, 11 ✓
+  Greater: NONE ✗
+  → DON'T COUNT (maximum element)
+
+Total: 2 elements (11 and 7)
+```
+
+---
+
+## **Another Example: nums = [1, 2, 3, 4, 5]**
+
+### **Element 1 (minimum):**
+```
+Smaller: NONE
+Greater: 2,3,4,5
+Don't count
+```
+
+### **Element 2:**
+```
+Smaller: 1 ✓
+Greater: 3,4,5 ✓
+COUNT IT
+```
+
+### **Element 3:**
+```
+Smaller: 1,2 ✓
+Greater: 4,5 ✓
+COUNT IT
+```
+
+### **Element 4:**
+```
+Smaller: 1,2,3 ✓
+Greater: 5 ✓
+COUNT IT
+```
+
+### **Element 5 (maximum):**
+```
+Smaller: 1,2,3,4 ✓
+Greater: NONE
+Don't count
+```
+
+**Result: 3** (elements 2, 3, 4)
+
+---
+
+## **Example: nums = [5, 5, 5]**
+
+### **All elements equal:**
+
+**Element at index 0 (value 5):**
+```
+sample_arr = [5, 5] (other 5's)
+
+Check j=5:
+  5 <= 5? YES → small=1
+  5 >= 5? YES → large=1
+  
+small=1, large=1 → COUNT IT
+```
+
+**Element at index 1 (value 5):**
+```
+Same logic → COUNT IT
+```
+
+**Element at index 2 (value 5):**
+```
+Same logic → COUNT IT
+```
+
+**Result: 3** (all elements, because <= and >= include equality)
+
+---
+
+## **Code Logic Breakdown**
+
+### **Key Conditions:**
+
+```python
+# Condition 1: Find element greater or equal
+if nums[i] <= j and small != 1:
+    small += 1
+
+# Condition 2: Find element smaller or equal
+if nums[i] >= j and large != 1:
+    large += 1
+```
+
+**Note:** Uses `<=` and `>=`, so equals are counted!
+
+### **Early Exit:**
+```python
+if end == 2:
+    break
+```
+Once both conditions are met (end==2), stop searching.
