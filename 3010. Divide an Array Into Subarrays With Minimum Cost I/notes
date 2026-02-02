@@ -1,0 +1,351 @@
+# **Minimum Cost of Buying Three Items**
+
+## **Problem**
+Given an array where the **first element must be selected**, find the minimum sum of selecting exactly 3 items (including the first).
+
+**Key Constraint:** `nums[0]` is mandatory!
+
+---
+
+## **Test Case: nums = [10, 2, 3, 1, 4]**
+
+---
+
+## **APPROACH 1: Optimized (Sorting) ✓**
+
+### **Algorithm**
+Since `nums[0]` is mandatory, minimize cost by choosing the **two smallest** elements from the rest.
+
+---
+
+### **STEP 1: Sort Everything Except First Element**
+
+```python
+nums = [10, 2, 3, 1, 4]
+
+Original array:
+Index:  0   1   2   3   4
+Value: [10, 2,  3,  1,  4]
+        ↑   └───────────┘
+     Must    Sort these
+     keep
+
+Sort nums[1:]:
+nums[1:] = [2, 3, 1, 4]
+sorted([2, 3, 1, 4]) = [1, 2, 3, 4]
+
+nums[1:] = [1, 2, 3, 4]
+
+After sorting:
+Index:  0   1   2   3   4
+Value: [10, 1,  2,  3,  4]
+        ↑   ↑   ↑
+      Fixed  Two smallest
+```
+
+---
+
+### **STEP 2: Calculate Minimum Cost**
+
+```python
+return nums[0] + nums[1] + nums[2]
+return 10 + 1 + 2
+return 13
+
+Visual:
+[10, 1, 2, 3, 4]
+ └───┴───┘
+  Selected items: 10 + 1 + 2 = 13
+```
+
+---
+
+### **Why This Works**
+
+```
+Since nums[0] is mandatory:
+  Minimum cost = nums[0] + (two smallest from rest)
+
+After sorting nums[1:]:
+  nums[1] = smallest remaining
+  nums[2] = second smallest remaining
+
+Therefore:
+  nums[0] + nums[1] + nums[2] = minimum cost ✓
+```
+
+---
+
+## **APPROACH 2: Brute Force (Try All Combinations)**
+
+### **Algorithm**
+Try every possible combination of selecting 2 items from `nums[1:]` and find minimum sum.
+
+---
+
+### **STEP 1: Try All Pairs**
+
+```python
+nums = [10, 2, 3, 1, 4]
+min_sum = float('inf')
+
+Must include nums[0] = 10
+Need to select 2 more from indices [1, 2, 3, 4]
+```
+
+---
+
+#### **i=1, j=2: Select nums[1]=2 and nums[2]=3**
+
+```python
+sum_ = nums[0] + nums[i] + nums[j]
+sum_ = 10 + 2 + 3
+sum_ = 15
+
+min_sum = min(inf, 15)
+min_sum = 15
+
+Current state:
+Selected: [10, 2, 3]
+Sum: 15
+min_sum = 15
+
+Visual:
+Index:  0   1   2   3   4
+Value: [10, 2,  3,  1,  4]
+        ✓   ✓   ✓
+        Selected items
+```
+
+---
+
+#### **i=1, j=3: Select nums[1]=2 and nums[3]=1**
+
+```python
+sum_ = nums[0] + nums[i] + nums[j]
+sum_ = 10 + 2 + 1
+sum_ = 13
+
+min_sum = min(15, 13)
+min_sum = 13
+
+Current state:
+Selected: [10, 2, 1]
+Sum: 13
+min_sum = 13 ← NEW MINIMUM!
+
+Visual:
+Index:  0   1   2   3   4
+Value: [10, 2,  3,  1,  4]
+        ✓   ✓       ✓
+        Selected items
+```
+
+---
+
+#### **i=1, j=4: Select nums[1]=2 and nums[4]=4**
+
+```python
+sum_ = 10 + 2 + 4
+sum_ = 16
+
+min_sum = min(13, 16)
+min_sum = 13 (unchanged)
+
+Visual:
+Index:  0   1   2   3   4
+Value: [10, 2,  3,  1,  4]
+        ✓   ✓           ✓
+```
+
+---
+
+#### **i=2, j=3: Select nums[2]=3 and nums[3]=1**
+
+```python
+sum_ = 10 + 3 + 1
+sum_ = 14
+
+min_sum = min(13, 14)
+min_sum = 13 (unchanged)
+
+Visual:
+Index:  0   1   2   3   4
+Value: [10, 2,  3,  1,  4]
+        ✓       ✓   ✓
+```
+
+---
+
+#### **i=2, j=4: Select nums[2]=3 and nums[4]=4**
+
+```python
+sum_ = 10 + 3 + 4
+sum_ = 17
+
+min_sum = min(13, 17)
+min_sum = 13 (unchanged)
+
+Visual:
+Index:  0   1   2   3   4
+Value: [10, 2,  3,  1,  4]
+        ✓       ✓       ✓
+```
+
+---
+
+#### **i=3, j=4: Select nums[3]=1 and nums[4]=4**
+
+```python
+sum_ = 10 + 1 + 4
+sum_ = 15
+
+min_sum = min(13, 15)
+min_sum = 13 (unchanged)
+
+Visual:
+Index:  0   1   2   3   4
+Value: [10, 2,  3,  1,  4]
+        ✓           ✓   ✓
+```
+
+---
+
+### **STEP 2: Return Result**
+
+```python
+return min_sum
+return 13
+```
+
+---
+
+## **Complete Trace Table for Brute Force**
+
+| i | j | nums[i] | nums[j] | sum = 10+nums[i]+nums[j] | min_sum |
+|---|---|---------|---------|--------------------------|---------|
+| 1 | 2 | 2 | 3 | 10+2+3 = 15 | 15 |
+| 1 | 3 | 2 | 1 | 10+2+1 = 13 | 13 ← min |
+| 1 | 4 | 2 | 4 | 10+2+4 = 16 | 13 |
+| 2 | 3 | 3 | 1 | 10+3+1 = 14 | 13 |
+| 2 | 4 | 3 | 4 | 10+3+4 = 17 | 13 |
+| 3 | 4 | 1 | 4 | 10+1+4 = 15 | 13 |
+
+**Final: 13**
+
+---
+
+## **Visual Comparison**
+
+```
+nums = [10, 2, 3, 1, 4]
+
+APPROACH 1 (Sorting):
+Step 1: Sort [2,3,1,4] → [1,2,3,4]
+        Result: [10, 1, 2, 3, 4]
+                  ↑   ↑  ↑
+                 10 + 1 + 2 = 13
+
+Time: O(n log n)
+
+
+APPROACH 2 (Brute Force):
+Try all C(4,2) = 6 combinations:
+[10,2,3] = 15
+[10,2,1] = 13 ← minimum
+[10,2,4] = 16
+[10,3,1] = 14
+[10,3,4] = 17
+[10,1,4] = 15
+
+Time: O(n²)
+
+Both give answer: 13
+```
+
+---
+
+## **Another Example: nums = [5, 4, 3, 2, 1]**
+
+### **Approach 1 (Sorting):**
+
+```python
+nums = [5, 4, 3, 2, 1]
+
+Sort nums[1:]:
+[4, 3, 2, 1] → [1, 2, 3, 4]
+
+Result: [5, 1, 2, 3, 4]
+
+return 5 + 1 + 2 = 8
+
+Visual:
+[5, 1, 2, 3, 4]
+ └──┴──┘
+ 5+1+2 = 8
+```
+
+### **Approach 2 (Brute Force):**
+
+```python
+All combinations (must include 5):
+
+i=1,j=2: 5+4+3=12
+i=1,j=3: 5+4+2=11
+i=1,j=4: 5+4+1=10
+i=2,j=3: 5+3+2=10
+i=2,j=4: 5+3+1=9
+i=3,j=4: 5+2+1=8 ← minimum
+
+return 8
+```
+
+**Both approaches: 8** ✓
+
+---
+
+## **Example: nums = [1, 1, 1]**
+
+### **Approach 1:**
+```python
+nums = [1, 1, 1]
+Sort [1,1] → [1,1]
+Result: [1, 1, 1]
+
+return 1 + 1 + 1 = 3
+```
+
+### **Approach 2:**
+```python
+Only one combination:
+i=1,j=2: 1+1+1=3
+
+return 3
+```
+
+---
+
+## **Example: nums = [10, 100, 1, 2]**
+
+### **Approach 1:**
+```python
+nums = [10, 100, 1, 2]
+Sort [100,1,2] → [1,2,100]
+Result: [10, 1, 2, 100]
+
+return 10 + 1 + 2 = 13
+
+Visual:
+[10, 1, 2, 100]
+ └──┴──┘
+  Best choice
+```
+
+### **Approach 2:**
+```python
+i=1,j=2: 10+100+1=111
+i=1,j=3: 10+100+2=112
+i=2,j=3: 10+1+2=13 ← minimum
+
+return 13
+```
