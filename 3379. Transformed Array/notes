@@ -1,0 +1,397 @@
+# **Construct Transformed Array**
+
+## **Problem**
+Transform array where `result[i]` is determined by `nums[i]`:
+- If `nums[i] > 0`: Move **right** by `nums[i]` positions (wrap around)
+- If `nums[i] < 0`: Move **left** by `|nums[i]|` positions (wrap around)
+- If `nums[i] == 0`: Keep same value
+
+---
+
+## **Test Case: nums = [3, -2, 0, 1]**
+
+---
+
+## **Initial Setup**
+
+```python
+nums = [3, -2, 0, 1]
+result = []
+
+Array visualization:
+Index:  0   1   2   3
+Value: [3, -2,  0,  1]
+```
+
+---
+
+## **ELEMENT BY ELEMENT PROCESSING**
+
+---
+
+### **i = 0: nums[0] = 3 (Positive)**
+
+```python
+Check: nums[i] > 0?
+       3 > 0? YES ✓
+
+Move RIGHT by 3 positions
+
+val = i + nums[i]
+val = 0 + 3
+val = 3
+
+Check if out of bounds:
+val > len(nums) - 1?
+3 > 3? NO
+
+val is within bounds [0, 3]
+No adjustment needed
+
+result.append(nums[val])
+result.append(nums[3])
+result.append(1)
+
+result = [1]
+
+Visual:
+Index:  0   1   2   3
+Value: [3, -2,  0,  1]
+        ↑           ↑
+      Start      Land here
+      Move right 3 steps: 0→1→2→3
+```
+
+---
+
+### **i = 1: nums[1] = -2 (Negative)**
+
+```python
+Check: nums[i] > 0?
+       -2 > 0? NO
+
+Check: nums[i] < 0?
+       -2 < 0? YES ✓
+
+Move LEFT by |-2| = 2 positions
+
+val = i - abs(nums[i])
+val = 1 - abs(-2)
+val = 1 - 2
+val = -1
+
+Check if negative:
+val < 0?
+-1 < 0? YES ✓
+
+Need to wrap around!
+
+val += len(nums)
+val = -1 + 4
+val = 3
+
+val %= len(nums)
+val = 3 % 4
+val = 3
+
+result.append(nums[val])
+result.append(nums[3])
+result.append(1)
+
+result = [1, 1]
+
+Visual:
+Index:  0   1   2   3
+Value: [3, -2,  0,  1]
+            ↑           ↑
+          Start      Land here
+      Move left 2: 1→0→3 (wraps)
+```
+
+---
+
+### **i = 2: nums[2] = 0 (Zero)**
+
+```python
+Check: nums[i] > 0?
+       0 > 0? NO
+
+Check: nums[i] < 0?
+       0 < 0? NO
+
+else:
+  nums[i] == 0
+  Keep same value
+
+result.append(nums[i])
+result.append(nums[2])
+result.append(0)
+
+result = [1, 1, 0]
+
+Visual:
+Index:  0   1   2   3
+Value: [3, -2,  0,  1]
+                ↑
+            Stay here (no move)
+```
+
+---
+
+### **i = 3: nums[3] = 1 (Positive)**
+
+```python
+Check: nums[i] > 0?
+       1 > 0? YES ✓
+
+Move RIGHT by 1 position
+
+val = i + nums[i]
+val = 3 + 1
+val = 4
+
+Check if out of bounds:
+val > len(nums) - 1?
+4 > 3? YES ✓
+
+Wrap around!
+
+val -= len(nums)
+val = 4 - 4
+val = 0
+
+val %= len(nums)
+val = 0 % 4
+val = 0
+
+result.append(nums[val])
+result.append(nums[0])
+result.append(3)
+
+result = [1, 1, 0, 3]
+
+Visual:
+Index:  0   1   2   3
+Value: [3, -2,  0,  1]
+        ↑           ↑
+     Land here    Start
+     Move right 1: 3→0 (wraps)
+```
+
+---
+
+## **Return Result**
+
+```python
+return result
+return [1, 1, 0, 3]
+```
+
+---
+
+## **Complete Trace Table**
+
+| i | nums[i] | Direction | Calculation | val (before wrap) | val (after wrap) | result[i] | result |
+|---|---------|-----------|-------------|-------------------|------------------|-----------|--------|
+| 0 | 3 | Right +3 | 0 + 3 = 3 | 3 | 3 | nums[3] = 1 | [1] |
+| 1 | -2 | Left -2 | 1 - 2 = -1 | -1 | 3 | nums[3] = 1 | [1,1] |
+| 2 | 0 | None | - | - | 2 | nums[2] = 0 | [1,1,0] |
+| 3 | 1 | Right +1 | 3 + 1 = 4 | 4 | 0 | nums[0] = 3 | [1,1,0,3] |
+
+**Final: [1, 1, 0, 3]**
+
+---
+
+## **Visual Step-by-Step**
+
+```
+Original: [3, -2, 0, 1]
+           0   1  2  3  (indices)
+
+Result[0]: Start at 0, move right 3 → land at 3
+           nums[3] = 1
+
+Result[1]: Start at 1, move left 2 → 1→0→3 (wrap)
+           nums[3] = 1
+
+Result[2]: Start at 2, value is 0 → stay
+           nums[2] = 0
+
+Result[3]: Start at 3, move right 1 → 3→0 (wrap)
+           nums[0] = 3
+
+Final: [1, 1, 0, 3]
+```
+
+---
+
+## **Understanding Wrapping**
+
+### **Right Wrap (Positive):**
+```python
+Index 3, move right 1:
+3 + 1 = 4 (out of bounds!)
+
+Circle back:
+4 - 4 = 0
+Then: 0 % 4 = 0
+
+Visual circle:
+0 → 1 → 2 → 3 → 0 → 1 → ...
+                ↑ wrap ↑
+```
+
+### **Left Wrap (Negative):**
+```python
+Index 1, move left 2:
+1 - 2 = -1 (out of bounds!)
+
+Circle back:
+-1 + 4 = 3
+Then: 3 % 4 = 3
+
+Visual circle:
+... ← 1 ← 0 ← 3 ← 2 ← 1 ← ...
+      ↑       ↑ wrap
+```
+
+---
+
+## **Another Example: nums = [5, -3, 2, 0, -1]**
+
+### **i=0: nums[0]=5 (Right +5)**
+```python
+val = 0 + 5 = 5
+5 > 4? YES
+val = 5 - 5 = 0
+val = 0 % 5 = 0
+
+result[0] = nums[0] = 5
+
+Path: 0→1→2→3→4→0 (full circle)
+```
+
+### **i=1: nums[1]=-3 (Left -3)**
+```python
+val = 1 - 3 = -2
+-2 < 0? YES
+val = -2 + 5 = 3
+val = 3 % 5 = 3
+
+result[1] = nums[3] = 0
+
+Path: 1→0→4→3 (wraps)
+```
+
+### **i=2: nums[2]=2 (Right +2)**
+```python
+val = 2 + 2 = 4
+4 > 4? NO
+result[2] = nums[4] = -1
+
+Path: 2→3→4
+```
+
+### **i=3: nums[3]=0 (Zero)**
+```python
+result[3] = nums[3] = 0
+
+Path: stay at 3
+```
+
+### **i=4: nums[4]=-1 (Left -1)**
+```python
+val = 4 - 1 = 3
+3 < 0? NO
+result[4] = nums[3] = 0
+
+Path: 4→3
+```
+
+**Result: [5, 0, -1, 0, 0]**
+
+---
+
+## **Edge Cases**
+
+### **All Zeros:**
+```python
+nums = [0, 0, 0]
+
+result[0] = nums[0] = 0
+result[1] = nums[1] = 0
+result[2] = nums[2] = 0
+
+result = [0, 0, 0]
+```
+
+### **Single Element:**
+```python
+nums = [5]
+
+i=0: val = 0 + 5 = 5
+     5 > 0? YES
+     val = 5 - 1 = 4
+     val = 4 % 1 = 0
+     
+result = [nums[0]] = [5]
+```
+
+### **Large Positive:**
+```python
+nums = [10, 1, 2]
+length = 3
+
+i=0: val = 0 + 10 = 10
+     10 > 2? YES
+     val = 10 - 3 = 7
+     val = 7 % 3 = 1
+     
+result[0] = nums[1] = 1
+
+Explanation: 10 steps = 3 full circles + 1 extra
+```
+
+### **Large Negative:**
+```python
+nums = [1, -10, 2]
+
+i=1: val = 1 - 10 = -9
+     -9 < 0? YES
+     val = -9 + 3 = -6
+     val = -6 % 3 = 0
+     
+Wait, still negative after one add!
+Need multiple adds...
+
+Actually the code does:
+val = -9 + 3 = -6
+val = -6 % 3 = 0 (in Python, modulo handles negatives correctly)
+
+result[1] = nums[0] = 1
+```
+
+---
+
+## **Python Modulo Behavior**
+
+```python
+In Python:
+-1 % 4 = 3  (not -1)
+-5 % 4 = 3  (not -1)
+-6 % 3 = 0  (not 0)
+
+Python's % always returns non-negative result when modulus is positive!
+```
+
+So the code could be simplified:
+
+```python
+# Simpler version
+for i in range(len(nums)):
+    if nums[i] == 0:
+        result.append(nums[i])
+    else:
+        val = (i + nums[i]) % len(nums)
+        result.append(nums[val])
+```
