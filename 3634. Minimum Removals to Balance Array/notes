@@ -1,0 +1,583 @@
+# **Minimum Removals to Make Valid Array**
+
+## **Problem**
+Remove minimum number of elements so that in the remaining array:
+**max_element ≤ min_element × k**
+
+**Strategy:** Find the **longest valid subarray**, then remove everything else.
+
+---
+
+## **Test Case: nums = [1, 3, 6, 4, 2], k = 3**
+
+---
+
+## **APPROACH 1: Optimized Sliding Window ✓**
+
+### **STEP 1: Sort Array**
+
+```python
+nums = [1, 3, 6, 4, 2]
+k = 3
+
+nums.sort()
+nums = [1, 2, 3, 4, 6]
+
+max_size = 0
+l = 0
+
+Sorted:
+Index:  0   1   2   3   4
+Value: [1,  2,  3,  4,  6]
+```
+
+---
+
+### **STEP 2: Sliding Window**
+
+---
+
+#### **r = 0: Check window [1]**
+
+```python
+Current window: nums[l:r+1] = nums[0:1] = [1]
+
+Check condition: nums[r] > nums[l] * k?
+                 nums[0] > nums[0] * 3?
+                 1 > 1 * 3?
+                 1 > 3? NO ✓
+
+Window is valid!
+
+while condition false, skip the while loop
+
+Calculate window size:
+max_size = max(max_size, r - l + 1)
+max_size = max(0, 0 - 0 + 1)
+max_size = max(0, 1)
+max_size = 1
+
+State:
+[1, 2, 3, 4, 6]
+ ↑
+ l,r
+Window: [1], size=1, valid
+```
+
+---
+
+#### **r = 1: Check window [1, 2]**
+
+```python
+Current window: nums[0:2] = [1, 2]
+
+Check: nums[r] > nums[l] * k?
+       nums[1] > nums[0] * 3?
+       2 > 1 * 3?
+       2 > 3? NO ✓
+
+Window is valid!
+
+max_size = max(1, 1 - 0 + 1)
+max_size = max(1, 2)
+max_size = 2
+
+State:
+[1, 2, 3, 4, 6]
+ ↑  ↑
+ l  r
+Window: [1, 2], size=2, valid
+```
+
+---
+
+#### **r = 2: Check window [1, 2, 3]**
+
+```python
+Current window: nums[0:3] = [1, 2, 3]
+
+Check: nums[2] > nums[0] * 3?
+       3 > 1 * 3?
+       3 > 3? NO ✓ (equal is okay)
+
+max_size = max(2, 2 - 0 + 1)
+max_size = max(2, 3)
+max_size = 3
+
+State:
+[1, 2, 3, 4, 6]
+ ↑     ↑
+ l     r
+Window: [1, 2, 3], size=3, valid
+```
+
+---
+
+#### **r = 3: Check window [1, 2, 3, 4]**
+
+```python
+Current window: nums[0:4] = [1, 2, 3, 4]
+
+Check: nums[3] > nums[0] * 3?
+       4 > 1 * 3?
+       4 > 3? YES ✗
+
+Window is INVALID! Need to shrink from left
+
+while l <= r and nums[r] > nums[l] * k:
+    l += 1
+```
+
+##### **While Loop Iteration 1:**
+```python
+l = 0, r = 3
+Check: 0 <= 3 and 4 > 1 * 3?
+       True and 4 > 3? YES
+
+l += 1
+l = 1
+
+Current state:
+[1, 2, 3, 4, 6]
+    ↑     ↑
+    l     r
+Check again: 4 > 2 * 3?
+             4 > 6? NO ✓
+
+Exit while loop
+```
+
+**After shrinking:**
+```python
+Window: nums[1:4] = [2, 3, 4]
+
+Check validity: max(window) ≤ min(window) * k?
+                4 ≤ 2 * 3?
+                4 ≤ 6? YES ✓
+
+max_size = max(3, 3 - 1 + 1)
+max_size = max(3, 3)
+max_size = 3
+
+State:
+[1, 2, 3, 4, 6]
+    ↑     ↑
+    l     r
+Window: [2, 3, 4], size=3, valid
+```
+
+---
+
+#### **r = 4: Check window [2, 3, 4, 6]**
+
+```python
+Current window: nums[1:5] = [2, 3, 4, 6]
+
+Check: nums[4] > nums[1] * 3?
+       6 > 2 * 3?
+       6 > 6? NO ✓ (equal is okay)
+
+max_size = max(3, 4 - 1 + 1)
+max_size = max(3, 4)
+max_size = 4
+
+State:
+[1, 2, 3, 4, 6]
+    ↑        ↑
+    l        r
+Window: [2, 3, 4, 6], size=4, valid
+```
+
+---
+
+### **STEP 3: Calculate Removals**
+
+```python
+return len(nums) - max_size
+return 5 - 4
+return 1
+```
+
+**Answer:** Remove **1 element** (the element '1')
+
+---
+
+## **Complete Trace Table for Approach 1**
+
+| r | Window | nums[r] | nums[l] | nums[r] > nums[l]×k? | Action | l | max_size |
+|---|--------|---------|---------|----------------------|--------|---|----------|
+| 0 | [1] | 1 | 1 | 1>3? NO | Keep | 0 | 1 |
+| 1 | [1,2] | 2 | 1 | 2>3? NO | Keep | 0 | 2 |
+| 2 | [1,2,3] | 3 | 1 | 3>3? NO | Keep | 0 | 3 |
+| 3 | [1,2,3,4] | 4 | 1 | 4>3? YES | Shrink l | 1 | 3 |
+| 3 | [2,3,4] | 4 | 2 | 4>6? NO | Keep | 1 | 3 |
+| 4 | [2,3,4,6] | 6 | 2 | 6>6? NO | Keep | 1 | 4 |
+
+**Largest valid window: [2, 3, 4, 6] (size 4)**
+**Removals: 5 - 4 = 1**
+
+---
+
+## **Visual Summary - Approach 1**
+
+```
+Sorted: [1, 2, 3, 4, 6], k = 3
+
+Finding longest valid subarray:
+
+Try [1, 2, 3]:
+  max=3, min=1
+  3 ≤ 1×3 = 3 ✓ Valid
+
+Try [1, 2, 3, 4]:
+  max=4, min=1
+  4 ≤ 1×3 = 3 ✗ Invalid (4 > 3)
+  
+Shrink to [2, 3, 4]:
+  max=4, min=2
+  4 ≤ 2×3 = 6 ✓ Valid
+
+Try [2, 3, 4, 6]:
+  max=6, min=2
+  6 ≤ 2×3 = 6 ✓ Valid (best!)
+
+Remove elements not in [2,3,4,6]:
+Remove: {1}
+Answer: 1
+```
+
+---
+
+## **APPROACH 2: Commented Code (Less Efficient)**
+
+### **STEP 1: Sort**
+
+```python
+nums.sort()
+nums = [1, 2, 3, 4, 6]
+
+max_size = 0
+l = 0
+r = 0
+```
+
+---
+
+### **Iteration 1: r=0**
+
+```python
+window = nums[l:r+1]
+window = nums[0:1] = [1]
+
+max_window = nums[r] = nums[0] = 1
+min_window = nums[l] = nums[0] = 1
+
+Check: max_window <= (min_window * k)?
+       1 <= (1 * 3)?
+       1 <= 3? YES ✓
+
+max_size = max(0, len([1]))
+max_size = max(0, 1)
+max_size = 1
+
+r += 1
+r = 1
+
+State: l=0, r=1, max_size=1
+```
+
+---
+
+### **Iteration 2: r=1**
+
+```python
+window = nums[0:2] = [1, 2]
+
+max_window = nums[1] = 2
+min_window = nums[0] = 1
+
+Check: 2 <= (1 * 3)?
+       2 <= 3? YES ✓
+
+max_size = max(1, 2)
+max_size = 2
+
+r += 1
+r = 2
+
+State: l=0, r=2, max_size=2
+```
+
+---
+
+### **Iteration 3: r=2**
+
+```python
+window = nums[0:3] = [1, 2, 3]
+
+max_window = 3
+min_window = 1
+
+Check: 3 <= 3? YES ✓
+
+max_size = max(2, 3)
+max_size = 3
+
+r += 1
+r = 3
+
+State: l=0, r=3, max_size=3
+```
+
+---
+
+### **Iteration 4: r=3**
+
+```python
+window = nums[0:4] = [1, 2, 3, 4]
+
+max_window = 4
+min_window = 1
+
+Check: 4 <= (1 * 3)?
+       4 <= 3? NO ✗
+
+Window invalid!
+
+else:
+  l += 1
+  l = 1
+  r = l
+  r = 1
+
+State: l=1, r=1, max_size=3
+
+Visual:
+[1, 2, 3, 4, 6]
+    ↑
+   l,r
+Reset r to l
+```
+
+---
+
+### **Iteration 5: r=1**
+
+```python
+window = nums[1:2] = [2]
+
+max_window = 2
+min_window = 2
+
+Check: 2 <= (2 * 3)?
+       2 <= 6? YES ✓
+
+max_size = max(3, 1)
+max_size = 3
+
+r += 1
+r = 2
+
+State: l=1, r=2
+```
+
+---
+
+### **Iteration 6: r=2**
+
+```python
+window = nums[1:3] = [2, 3]
+
+max_window = 3
+min_window = 2
+
+Check: 3 <= (2 * 3)?
+       3 <= 6? YES ✓
+
+max_size = max(3, 2)
+max_size = 3
+
+r += 1
+r = 3
+```
+
+---
+
+### **Iteration 7: r=3**
+
+```python
+window = nums[1:4] = [2, 3, 4]
+
+max_window = 4
+min_window = 2
+
+Check: 4 <= (2 * 3)?
+       4 <= 6? YES ✓
+
+max_size = max(3, 3)
+max_size = 3
+
+r += 1
+r = 4
+```
+
+---
+
+### **Iteration 8: r=4**
+
+```python
+window = nums[1:5] = [2, 3, 4, 6]
+
+max_window = 6
+min_window = 2
+
+Check: 6 <= (2 * 3)?
+       6 <= 6? YES ✓
+
+max_size = max(3, 4)
+max_size = 4
+
+r += 1
+r = 5
+```
+
+---
+
+### **Exit Loop**
+
+```python
+r < len(nums)?
+5 < 5? NO
+
+return len(nums) - max_size
+return 5 - 4
+return 1
+```
+
+---
+
+## **Trace Table for Approach 2**
+
+| Iteration | l | r | window | max | min | Valid? | Action | max_size |
+|-----------|---|---|--------|-----|-----|--------|--------|----------|
+| 1 | 0 | 0 | [1] | 1 | 1 | YES | r++ | 1 |
+| 2 | 0 | 1 | [1,2] | 2 | 1 | YES | r++ | 2 |
+| 3 | 0 | 2 | [1,2,3] | 3 | 1 | YES | r++ | 3 |
+| 4 | 0 | 3 | [1,2,3,4] | 4 | 1 | NO | Reset | 3 |
+| 5 | 1 | 1 | [2] | 2 | 2 | YES | r++ | 3 |
+| 6 | 1 | 2 | [2,3] | 3 | 2 | YES | r++ | 3 |
+| 7 | 1 | 3 | [2,3,4] | 4 | 2 | YES | r++ | 3 |
+| 8 | 1 | 4 | [2,3,4,6] | 6 | 2 | YES | r++ | 4 |
+
+**Answer: 1**
+
+---
+
+## **Comparison of Both Approaches**
+
+### **Approach 1 (Optimal):**
+```
+- Uses sliding window efficiently
+- Shrinks left when invalid
+- Never resets r
+- Time: O(n log n + n) = O(n log n)
+```
+
+### **Approach 2 (Less Efficient):**
+```
+- Resets r when invalid
+- Creates window slice each iteration
+- More iterations overall
+- Time: O(n log n + n²) in worst case
+```
+
+---
+
+## **Another Example: nums = [2, 4, 8, 16], k = 2**
+
+### **Approach 1:**
+
+```python
+Sorted: [2, 4, 8, 16]
+
+r=0: [2], 2≤2×2=4 ✓, max_size=1
+r=1: [2,4], 4≤2×2=4 ✓, max_size=2
+r=2: [2,4,8], 8>2×2=4 ✗
+     Shrink: l=1
+     [4,8], 8≤4×2=8 ✓, max_size=2
+r=3: [4,8,16], 16>4×2=8 ✗
+     Shrink: l=2
+     [8,16], 16≤8×2=16 ✓, max_size=2
+
+Max window: size 2
+Removals: 4 - 2 = 2
+```
+
+### **Approach 2:**
+
+```python
+Would also find max_size=2
+But with more iterations due to resets
+```
+
+---
+
+## **Complexity Comparison**
+
+| Aspect | Approach 1 | Approach 2 |
+|--------|-----------|-----------|
+| **Time** | O(n log n) | O(n²) worst case |
+| **Space** | O(1) | O(n) for window slicing |
+| **Efficiency** | ✓ Optimal | ✗ Slower |
+| **r pointer** | Never resets | Resets on invalid |
+
+---
+
+## **Key Insights**
+
+### **Why Sort?**
+```
+After sorting, in any valid subarray:
+- min = leftmost element
+- max = rightmost element
+
+So we only need to check: max ≤ min × k
+```
+
+### **Why Approach 1 is Better?**
+```
+1. Two-pointer never backtracks r
+2. Each element visited at most twice (once by r, once by l)
+3. No array slicing overhead
+4. Linear time after sorting
+```
+
+---
+
+## **Algorithm Summary**
+
+```
+Approach 1 (Optimal):
+1. Sort array
+2. Use sliding window [l, r]
+3. Expand r, check if nums[r] > nums[l] × k
+4. If invalid, shrink l until valid
+5. Track maximum valid window size
+6. Return: total elements - max window size
+
+Approach 2:
+1. Sort array
+2. Expand r until invalid
+3. When invalid, reset r to l+1
+4. Continues from new starting point
+5. Less efficient due to resets
+```
+
+---
+
+## **Final Answer**
+
+For `nums = [1, 3, 6, 4, 2]`, `k = 3`:
+- Sorted: `[1, 2, 3, 4, 6]`
+- Longest valid: `[2, 3, 4, 6]` (size 4)
+- **Remove: 1 element** (the '1') ✓
