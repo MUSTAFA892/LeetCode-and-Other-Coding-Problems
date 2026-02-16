@@ -1,0 +1,383 @@
+# **Reverse Bits of 32-bit Integer**
+
+## **Problem**
+Reverse the bits of a 32-bit unsigned integer.
+
+**Example:** `00000000000000000000000000001011` → `11010000000000000000000000000000`
+
+---
+
+## **Test Case: n = 43261596**
+
+---
+
+## **STEP 1: Convert to Binary String**
+
+```python
+n = 43261596
+
+s = bin(n)[2:]
+
+Calculation:
+bin(43261596) = '0b10100101000001111010011100'
+bin(43261596)[2:] = '10100101000001111010011100'
+                     ↑
+                Remove '0b' prefix
+
+s = '10100101000001111010011100'
+
+Length: 26 characters
+```
+
+---
+
+## **STEP 2: Pad to 32 Bits**
+
+```python
+Check: len(s) != 32?
+       26 != 32? YES
+
+Need to add leading zeros!
+
+diff = 32 - len(s)
+diff = 32 - 26
+diff = 6
+
+addition = '0' * diff
+addition = '0' * 6
+addition = '000000'
+
+s = addition + str(s)
+s = '000000' + '10100101000001111010011100'
+s = '00000010100101000001111010011100'
+
+Visual:
+Original (26 bits): 10100101000001111010011100
+Padded (32 bits):   00000010100101000001111010011100
+                    └────┘
+                  6 zeros added
+```
+
+---
+
+## **STEP 3: Reverse the String**
+
+```python
+conversion = s[::-1]
+conversion = '00000010100101000001111010011100'[::-1]
+
+Reversal process:
+Original:  00000010100101000001111010011100
+           ↓                              ↓
+Reversed:  00111001011110000101010100000000
+
+conversion = '00111001011110000101010100000000'
+
+Visual:
+Position:  0                            31
+Original:  0 0 0 0 0 0 1 0 ... 1 1 1 0 0
+           ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ... ↓ ↓ ↓ ↓ ↓
+Reversed:  0 0 1 1 1 0 0 1 ... 0 1 0 0 0
+Position: 31                            0
+```
+
+---
+
+## **STEP 4: Convert to Integer**
+
+```python
+return int(conversion, 2)
+
+conversion = '00111001011110000101010100000000'
+
+Convert from binary to decimal:
+int('00111001011110000101010100000000', 2)
+
+Calculation:
+Position: 31 30 29 28 27 26 25 24 ... 3  2  1  0
+Binary:   0  0  1  1  1  0  0  1  ... 0  0  0  0
+Value:    ×  ×  ↓  ↓  ↓  ×  ×  ↓      ×  ×  ×  ×
+          0  0  2²⁹ 2²⁸ 2²⁷ 0 0 2²⁴
+
+= 2²⁹ + 2²⁸ + 2²⁷ + 2²⁴ + ... (all set bits)
+= 964176192
+
+return 964176192
+```
+
+---
+
+## **Complete Step-by-Step Visualization**
+
+```
+Input: n = 43261596
+
+Step 1: Convert to binary
+43261596 (decimal)
+↓
+'0b10100101000001111010011100' (Python binary string)
+↓
+'10100101000001111010011100' (remove '0b')
+
+Step 2: Pad to 32 bits
+'10100101000001111010011100' (26 bits)
+↓
+'00000010100101000001111010011100' (32 bits)
+ └────┘
+ 6 zeros added
+
+Step 3: Reverse bits
+'00000010100101000001111010011100'
+ ↓                              ↓
+'00111001011110000101010100000000'
+
+Step 4: Convert back to decimal
+'00111001011110000101010100000000' (binary)
+↓
+964176192 (decimal)
+```
+
+---
+
+## **Detailed Binary Breakdown**
+
+```
+Original Number: 43261596
+
+32-bit representation:
+Bit position: 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16
+Value:        0  0  0  0  0  0  1  0  1  0  0  1  0  1  0  0
+
+Bit position: 15 14 13 12 11 10 9  8  7  6  5  4  3  2  1  0
+Value:        0  0  0  1  1  1  1  0  1  0  0  1  1  1  0  0
+
+
+After Reversal: 964176192
+
+32-bit representation:
+Bit position: 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16
+Value:        0  0  1  1  1  0  0  1  0  1  1  1  1  0  0  0
+
+Bit position: 15 14 13 12 11 10 9  8  7  6  5  4  3  2  1  0
+Value:        0  1  0  1  0  1  0  1  0  0  0  0  0  0  0  0
+
+
+Notice: 
+Position 0 in original → Position 31 in reversed
+Position 31 in original → Position 0 in reversed
+```
+
+---
+
+## **Another Example: n = 1**
+
+### **Step 1: Convert to Binary**
+```python
+n = 1
+s = bin(1)[2:]
+s = '1'
+
+Length = 1
+```
+
+### **Step 2: Pad to 32 bits**
+```python
+len(s) != 32? 1 != 32? YES
+
+diff = 32 - 1 = 31
+addition = '0' * 31
+addition = '0000000000000000000000000000000'
+
+s = addition + '1'
+s = '00000000000000000000000000000001'
+
+Visual:
+31 zeros followed by one 1
+```
+
+### **Step 3: Reverse**
+```python
+conversion = '00000000000000000000000000000001'[::-1]
+conversion = '10000000000000000000000000000000'
+
+Visual:
+Original:  00000000000000000000000000000001
+           ↓                              ↓
+Reversed:  10000000000000000000000000000000
+```
+
+### **Step 4: Convert**
+```python
+int('10000000000000000000000000000000', 2)
+
+This is 2³¹ = 2147483648
+
+return 2147483648
+```
+
+---
+
+## **Example: n = 0**
+
+### **Steps:**
+```python
+n = 0
+
+Step 1: bin(0) = '0b0' → s = '0'
+
+Step 2: Pad to 32 bits
+s = '00000000000000000000000000000000'
+
+Step 3: Reverse
+conversion = '00000000000000000000000000000000'
+(all zeros reversed is still all zeros)
+
+Step 4: Convert
+int('00000000000000000000000000000000', 2) = 0
+
+return 0
+```
+
+---
+
+## **Example: n = 4294967295 (all 1s)**
+
+### **Steps:**
+```python
+n = 4294967295 (largest 32-bit unsigned int)
+
+Step 1: bin(4294967295) = '0b11111111111111111111111111111111'
+s = '11111111111111111111111111111111'
+
+Step 2: len(s) = 32, no padding needed
+
+Step 3: Reverse
+'11111111111111111111111111111111'[::-1]
+= '11111111111111111111111111111111'
+(all 1s reversed is still all 1s)
+
+Step 4: Convert
+int('11111111111111111111111111111111', 2)
+= 4294967295
+
+return 4294967295
+```
+
+---
+
+## **Trace Table**
+
+| n | Binary (before pad) | Binary (32-bit) | Reversed | Result |
+|---|---------------------|-----------------|----------|--------|
+| 0 | 0 | 00000000...0000 | 00000000...0000 | 0 |
+| 1 | 1 | 00000000...0001 | 10000000...0000 | 2147483648 |
+| 43261596 | 10100101...1100 | 00000010...1100 | 00111001...0000 | 964176192 |
+| 4294967295 | 11111111...1111 | 11111111...1111 | 11111111...1111 | 4294967295 |
+
+---
+
+## **Visual Pattern Recognition**
+
+```
+Example: n = 43261596
+
+Original (binary):
+Positions: 31-24    23-16    15-8     7-0
+           00000010 10010100 00011110 10011100
+
+After reversal:
+Positions: 31-24    23-16    15-8     7-0
+           00111001 01111000 01010101 00000000
+
+Notice how bytes are reversed AND bits within each byte:
+Original byte 0 (rightmost):  10011100
+Reversed byte 0 (now leftmost): 00111001
+
+It's a complete bit-level reversal!
+```
+
+---
+
+## **Code Breakdown**
+
+### **Line-by-line:**
+
+```python
+# Step 1: Convert to binary, remove '0b'
+s = bin(n)[2:]
+
+# Step 2: Check if padding needed
+if len(s) != 32:
+    diff = 32 - len(s)
+    addition = '0' * diff
+    s = addition + str(s)  # Note: str(s) is redundant, s is already string
+
+# Step 3: Reverse the string
+conversion = s[::-1]
+
+# Step 4: Convert binary string to integer
+return int(conversion, 2)
+```
+
+---
+
+## **Minor Code Improvement**
+
+The `str(s)` is redundant since `s` is already a string:
+
+```python
+# Current:
+s = addition + str(s)
+
+# Better:
+s = addition + s
+```
+
+---
+
+## **Alternative Approaches**
+
+### **Approach 1: Bit Manipulation (More Efficient)**
+```python
+def reverseBits(n: int) -> int:
+    result = 0
+    for i in range(32):
+        result <<= 1           # Shift result left by 1
+        result |= (n & 1)      # Add rightmost bit of n
+        n >>= 1                # Shift n right by 1
+    return result
+```
+
+### **Approach 2: Built-in (Python-specific)**
+```python
+def reverseBits(n: int) -> int:
+    return int(format(n, '032b')[::-1], 2)
+```
+
+---
+
+## **Complexity**
+
+- **Time:** O(1) - always processes 32 bits
+- **Space:** O(1) - fixed size string (32 characters)
+
+---
+
+## **Key Concepts**
+
+1. **bin(n)** - Converts integer to binary string with '0b' prefix
+2. **[2:]** - Removes '0b' prefix
+3. **String padding** - Ensures 32-bit representation
+4. **[::-1]** - Python string reversal (goes backwards)
+5. **int(s, 2)** - Converts binary string to integer (base 2)
+
+---
+
+## **Common Edge Cases**
+
+| Input | Binary (32-bit) | Reversed | Output |
+|-------|-----------------|----------|--------|
+| 0 | 00000000000000000000000000000000 | 00000000000000000000000000000000 | 0 |
+| 1 | 00000000000000000000000000000001 | 10000000000000000000000000000000 | 2147483648 |
+| 2 | 00000000000000000000000000000010 | 01000000000000000000000000000000 | 1073741824 |
+| Max | 11111111111111111111111111111111 | 11111111111111111111111111111111 | 4294967295 |
