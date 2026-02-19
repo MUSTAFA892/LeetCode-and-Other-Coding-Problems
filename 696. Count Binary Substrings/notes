@@ -1,0 +1,571 @@
+# **Count Binary Substrings**
+
+## **Problem**
+Count substrings where there are equal consecutive 0s and 1s grouped together.
+
+**Valid examples:** "0011", "01", "10", "0001111" (4 zeros, 4 ones)
+**Invalid:** "001101" (0s and 1s not grouped)
+
+---
+
+## **Test Case: s = "00110011"**
+
+---
+
+## **APPROACH 1: Optimized (Group Counting) ✓**
+
+### **Algorithm**
+Count consecutive groups of same characters, then between each pair of adjacent groups, we can form `min(group1_len, group2_len)` valid substrings.
+
+---
+
+### **Initial Setup**
+
+```python
+s = "00110011"
+count = 0
+prev_group = 0  (length of previous group)
+curr_group = 1  (length of current group being built)
+
+Visual:
+Index:  0   1   2   3   4   5   6   7
+Char:  '0' '0' '1' '1' '0' '0' '1' '1'
+        └───┘   └───┘   └───┘   └───┘
+       Group1  Group2  Group3  Group4
+```
+
+---
+
+### **STEP-BY-STEP PROCESSING**
+
+---
+
+#### **i = 1: Compare s[1]='0' with s[0]='0'**
+
+```python
+Check: s[i] == s[i-1]?
+       '0' == '0'? YES
+
+Same character, extend current group
+
+curr_group += 1
+curr_group = 2
+
+State:
+prev_group = 0
+curr_group = 2
+count = 0
+
+Visual:
+s = "00110011"
+     ↑↑
+    Building group of '0's
+```
+
+---
+
+#### **i = 2: Compare s[2]='1' with s[1]='0'**
+
+```python
+Check: s[i] == s[i-1]?
+       '1' == '0'? NO
+
+Character changed! Transition point!
+
+count += min(prev_group, curr_group)
+count += min(0, 2)
+count += 0
+count = 0
+
+prev_group = curr_group
+prev_group = 2
+
+curr_group = 1
+
+State:
+prev_group = 2 (just finished group of 2 zeros)
+curr_group = 1 (starting group of 1s)
+count = 0
+
+Visual:
+s = "00110011"
+     └─┘ ↑
+    Prev  Start new group
+```
+
+---
+
+#### **i = 3: Compare s[3]='1' with s[2]='1'**
+
+```python
+Check: s[i] == s[i-1]?
+       '1' == '1'? YES
+
+curr_group += 1
+curr_group = 2
+
+State:
+prev_group = 2
+curr_group = 2
+count = 0
+
+Visual:
+s = "00110011"
+     └─┘ └─┘
+    Prev Curr
+    "00" "11"
+```
+
+---
+
+#### **i = 4: Compare s[4]='0' with s[3]='1'**
+
+```python
+Check: s[i] == s[i-1]?
+       '0' == '1'? NO
+
+Transition!
+
+count += min(prev_group, curr_group)
+count += min(2, 2)
+count += 2
+count = 2
+
+prev_group = curr_group = 2
+curr_group = 1
+
+State:
+prev_group = 2 (group of "11")
+curr_group = 1 (starting "0")
+count = 2
+
+Valid substrings formed from "00" and "11":
+- "0011" (2 zeros, 2 ones)
+- "01" (1 zero, 1 one)
+
+Visual:
+s = "00110011"
+        ↑↑ ↑
+       Prev Start
+```
+
+---
+
+#### **i = 5: Compare s[5]='0' with s[4]='0'**
+
+```python
+Check: '0' == '0'? YES
+
+curr_group += 1
+curr_group = 2
+
+State:
+prev_group = 2
+curr_group = 2
+count = 2
+```
+
+---
+
+#### **i = 6: Compare s[6]='1' with s[5]='0'**
+
+```python
+Check: '1' == '0'? NO
+
+Transition!
+
+count += min(prev_group, curr_group)
+count += min(2, 2)
+count += 2
+count = 4
+
+prev_group = 2
+curr_group = 1
+
+Valid substrings from "11" and "00":
+- "1100" (2 ones, 2 zeros)
+- "10" (1 one, 1 zero)
+
+State:
+prev_group = 2 (group of "00")
+curr_group = 1 (starting "1")
+count = 4
+
+Visual:
+s = "00110011"
+            ↑↑ ↑
+           Prev Start
+```
+
+---
+
+#### **i = 7: Compare s[7]='1' with s[6]='1'**
+
+```python
+Check: '1' == '1'? YES
+
+curr_group += 1
+curr_group = 2
+
+State:
+prev_group = 2
+curr_group = 2
+count = 4
+```
+
+---
+
+### **After Loop - Final Group**
+
+```python
+count += min(prev_group, curr_group)
+count += min(2, 2)
+count += 2
+count = 6
+
+Valid substrings from "00" and "11":
+- "0011" (2 zeros, 2 ones)
+- "01" (1 zero, 1 one)
+
+return 6
+```
+
+---
+
+## **Complete Trace Table for Approach 1**
+
+| i | s[i] | s[i-1] | Same? | Action | prev_group | curr_group | count | Explanation |
+|---|------|--------|-------|--------|------------|------------|-------|-------------|
+| Start | - | - | - | - | 0 | 1 | 0 | Initialize |
+| 1 | '0' | '0' | YES | Extend | 0 | 2 | 0 | Group of '0's |
+| 2 | '1' | '0' | NO | Transition | 2 | 1 | 0 | min(0,2)=0 |
+| 3 | '1' | '1' | YES | Extend | 2 | 2 | 0 | Group of '1's |
+| 4 | '0' | '1' | NO | Transition | 2 | 1 | 2 | min(2,2)=2 |
+| 5 | '0' | '0' | YES | Extend | 2 | 2 | 2 | Group of '0's |
+| 6 | '1' | '0' | NO | Transition | 2 | 1 | 4 | min(2,2)=2 |
+| 7 | '1' | '1' | YES | Extend | 2 | 2 | 4 | Group of '1's |
+| End | - | - | - | Final | 2 | 2 | 6 | min(2,2)=2 |
+
+**Final Answer: 6**
+
+---
+
+## **Visual Summary - Approach 1**
+
+```
+s = "00110011"
+
+Groups:
+"00" (len=2) | "11" (len=2) | "00" (len=2) | "11" (len=2)
+
+Between each pair, count min substrings:
+
+Between "00" and "11":
+  min(2, 2) = 2 substrings
+  → "0011", "01"
+
+Between "11" and "00":
+  min(2, 2) = 2 substrings
+  → "1100", "10"
+
+Between "00" and "11":
+  min(2, 2) = 2 substrings
+  → "0011", "01"
+
+Total: 2 + 2 + 2 = 6
+```
+
+---
+
+## **Valid Substrings Found**
+
+```
+s = "00110011"
+    └──┘        "0011" (positions 0-3)
+     └┘         "01" (positions 1-2)
+      └──┘      "1100" (positions 2-5)
+       └┘       "10" (positions 3-4)
+        └──┘    "0011" (positions 4-7)
+         └┘     "01" (positions 5-6)
+
+Total: 6 substrings
+```
+
+---
+
+## **APPROACH 2: Brute Force (Commented Code)**
+
+### **Algorithm**
+Check all even-length substrings:
+1. Split in half
+2. First half all same character?
+3. Second half all same character?
+4. Both halves different characters?
+
+---
+
+### **Execution for s = "00110011"**
+
+```python
+s = "00110011"
+count = 0
+
+Loop through even lengths: 2, 4, 6, 8
+```
+
+---
+
+#### **Length i = 2:**
+
+**j = 0: window = "00"**
+```python
+window = s[0:2] = "00"
+half = 1
+
+first_half = "00"[:1] = "0"
+second_half = "00"[1:] = "0"
+
+Check: first_half[0] != second_half[0]?
+       "0" != "0"? NO
+
+Skip (both halves same character)
+```
+
+**j = 1: window = "01"**
+```python
+window = "01"
+half = 1
+
+first_half = "0"
+second_half = "1"
+
+first_half[0] != second_half[0]? "0" != "1"? YES ✓
+
+first_half.count("0") == half?
+"0".count("0") == 1? YES ✓
+
+second_half.count("1") == half?
+"1".count("1") == 1? YES ✓
+
+count += 1
+count = 1
+
+Valid: "01" ✓
+```
+
+**j = 2: window = "11"**
+```python
+window = "11"
+first_half = "1"
+second_half = "1"
+
+"1" != "1"? NO
+Skip
+```
+
+**j = 3: window = "10"**
+```python
+window = "10"
+first_half = "1"
+second_half = "0"
+
+"1" != "0"? YES
+All checks pass
+count = 2
+
+Valid: "10" ✓
+```
+
+**j = 4, 5, 6: Similar process**
+```python
+j=4: "00" - Skip
+j=5: "01" - count = 3 ✓
+j=6: "11" - Skip
+```
+
+---
+
+#### **Length i = 4:**
+
+**j = 0: window = "0011"**
+```python
+window = "0011"
+half = 2
+
+first_half = "00"
+second_half = "11"
+
+"0" != "1"? YES ✓
+
+first_half.count("0") == 2?
+"00".count("0") == 2? YES ✓
+
+second_half.count("1") == 2?
+"11".count("1") == 2? YES ✓
+
+count += 1
+count = 4
+
+Valid: "0011" ✓
+```
+
+**j = 1: window = "0110"**
+```python
+window = "0110"
+first_half = "01"
+second_half = "10"
+
+first_half[0] = "0"
+second_half[0] = "1"
+
+"0" != "1"? YES
+
+first_half.count("0") == 2?
+"01".count("0") == 1? NO ✗
+
+Skip (first half not all same)
+```
+
+**j = 2: window = "1100"**
+```python
+window = "1100"
+half = 2
+
+first_half = "11"
+second_half = "00"
+
+All checks pass
+count = 5
+
+Valid: "1100" ✓
+```
+
+**j = 3, 4: Similar**
+```python
+j=3: "1001" - Skip (not grouped)
+j=4: "0011" - count = 6 ✓
+```
+
+---
+
+#### **Length i = 6, 8:**
+
+```python
+i=6: Check windows of length 6
+     None satisfy the grouped constraint
+
+i=8: "00110011"
+     first_half = "0011"
+     "0011".count("0") != 4
+     Skip
+```
+
+**Final: count = 6**
+
+---
+
+## **Trace Table for Approach 2 (Key Substrings)**
+
+| Length | j | window | first_half | second_half | Valid? | count |
+|--------|---|--------|------------|-------------|--------|-------|
+| 2 | 1 | "01" | "0" | "1" | YES ✓ | 1 |
+| 2 | 3 | "10" | "1" | "0" | YES ✓ | 2 |
+| 2 | 5 | "01" | "0" | "1" | YES ✓ | 3 |
+| 4 | 0 | "0011" | "00" | "11" | YES ✓ | 4 |
+| 4 | 2 | "1100" | "11" | "00" | YES ✓ | 5 |
+| 4 | 4 | "0011" | "00" | "11" | YES ✓ | 6 |
+
+**Final: 6**
+
+---
+
+## **Comparison of Approaches**
+
+| Aspect | Approach 1 (Optimal) | Approach 2 (Brute Force) |
+|--------|----------------------|--------------------------|
+| **Strategy** | Count groups | Check all even substrings |
+| **Time** | O(n) | O(n³) |
+| **Space** | O(1) | O(n) for substrings |
+| **Efficiency** | ✓ Fast | ✗ Slow |
+| **Code** | Clean | Complex |
+
+---
+
+## **Another Example: s = "10101"**
+
+### **Approach 1:**
+
+```python
+Groups: "1" | "0" | "1" | "0" | "1"
+        len=1  len=1  len=1  len=1  len=1
+
+i=1: '0'!='1' → count += min(0,1) = 0, prev=1, curr=1
+i=2: '1'!='0' → count += min(1,1) = 1, prev=1, curr=1
+i=3: '0'!='1' → count += min(1,1) = 1, count=2
+i=4: '1'!='0' → count += min(1,1) = 1, count=3
+
+Final: count += min(1,1) = 1
+Total: 4
+
+Valid: "10", "01", "10", "01"
+```
+
+---
+
+## **Complexity**
+
+### **Approach 1:**
+- **Time:** O(n) - single pass
+- **Space:** O(1) - only variables
+
+### **Approach 2:**
+- **Time:** O(n³) - nested loops + string operations
+- **Space:** O(n) - substring creation
+
+---
+
+## **Key Insight - Why min() Works**
+
+```
+Between two groups of lengths a and b:
+- We can form min(a, b) valid substrings
+
+Example: "000" and "11"
+         len=3    len=2
+
+Valid substrings:
+- "0011" (2 zeros, 2 ones)
+- "01" (1 zero, 1 one)
+
+Can't form more because we run out of 1s!
+So: min(3, 2) = 2 substrings
+```
+
+---
+
+## **Algorithm Summary**
+
+### **Approach 1 (Recommended):**
+```
+1. Track consecutive groups
+2. At each transition:
+   - Add min(prev_group, curr_group) to count
+   - Update prev_group and reset curr_group
+3. After loop, add final group pair
+4. Return count
+
+Key: Between adjacent groups, we can form
+     min(group1_len, group2_len) valid substrings
+```
+
+---
+
+## **Final Answer**
+
+For `s = "00110011"`:
+- Groups: [2, 2, 2, 2] (lengths)
+- Between groups: min(2,2) + min(2,2) + min(2,2) = 6
+- Valid substrings: "0011", "01", "1100", "10", "0011", "01"
+- **Result: 6** ✓
+
+**Approach 1 is clearly optimal** - O(n) time, elegant solution! ✓
