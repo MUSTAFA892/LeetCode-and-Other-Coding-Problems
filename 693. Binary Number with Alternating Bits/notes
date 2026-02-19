@@ -1,0 +1,57 @@
+# **Has Alternating Bits - Quick Reference**
+
+## **Problem**
+Check if binary representation has alternating bits (no two consecutive bits are the same).
+
+---
+
+## **Quick Example: n = 5**
+
+```python
+n = 5 → binary = "101"
+
+Check pairs:
+1→0 ✓ (different)
+0→1 ✓ (different)
+
+Result: True
+```
+
+---
+
+## **Quick Example: n = 7**
+
+```python
+n = 7 → binary = "111"
+
+Check pairs:
+1→1 ✗ (same!)
+
+Result: False (immediately)
+```
+
+---
+
+## **Algorithm Flow**
+
+```
+1. Convert to binary: bin(n)[2:] removes "0b"
+2. Single bit? → Always True
+3. Check each adjacent pair:
+   - If 1→0 or 0→1: flag = True, continue
+   - Otherwise: return False immediately
+4. Return flag
+```
+
+---
+
+## **Quick Trace Table**
+
+| n | Binary | Pattern | Result |
+|---|--------|---------|--------|
+| 1 | 1 | Single bit | True |
+| 2 | 10 | 1→0 ✓ | True |
+| 3 | 11 | 1→1 ✗ | False |
+| 5 | 101 | 1→0, 0→1 ✓ | True |
+| 7 | 111 | 1→1 ✗ | False |
+| 10 | 1010 | All alternate ✓ | True |
