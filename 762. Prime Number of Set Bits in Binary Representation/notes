@@ -1,0 +1,455 @@
+# **Count Prime Set Bits**
+
+## **Problem**
+Count how many numbers in range [left, right] have a **prime number of 1-bits** in their binary representation.
+
+---
+
+## **Test Case: left = 6, right = 10**
+
+---
+
+## **Helper Function: is_prime(n)**
+
+```python
+def is_prime(n):
+    if n <= 1:
+        return False  # 0 and 1 are not prime
+    
+    for i in range(2, int(math.sqrt(n)) + 1):
+        if n % i == 0:
+            return False  # Divisible, not prime
+    
+    return True  # No divisors found, prime!
+
+Examples:
+is_prime(1) = False
+is_prime(2) = True
+is_prime(3) = True
+is_prime(4) = False
+is_prime(5) = True
+```
+
+---
+
+## **Main Algorithm Execution**
+
+```python
+left = 6, right = 10
+count = 0
+
+Loop through range [6, 10]
+```
+
+---
+
+### **i = 6**
+
+#### **Step 1: Convert to Binary**
+
+```python
+bin_ = bin(i)[2:]
+bin_ = bin(6)[2:]
+
+Calculation:
+6 in decimal = 110 in binary
+bin(6) = '0b110'
+bin(6)[2:] = '110'
+
+bin_ = '110'
+```
+
+#### **Step 2: Count Set Bits (1s)**
+
+```python
+no_1 = str(bin_).count('1')
+no_1 = '110'.count('1')
+no_1 = 2
+
+Visual:
+Binary: 1 1 0
+        ↑ ↑
+        Two 1s
+```
+
+#### **Step 3: Check if Prime**
+
+```python
+if is_prime(no_1):
+   is_prime(2)?
+
+Check is_prime(2):
+  n = 2
+  n <= 1? NO
+  Loop: range(2, int(sqrt(2)) + 1)
+        = range(2, 2)
+        = [] (empty, no iterations)
+  return True
+
+2 is prime! ✓
+
+count += 1
+count = 1
+
+Result for 6:
+Binary: 110
+Set bits: 2
+Is 2 prime? YES ✓
+```
+
+---
+
+### **i = 7**
+
+#### **Step 1: Convert to Binary**
+
+```python
+bin(7) = '0b111'
+bin_ = '111'
+```
+
+#### **Step 2: Count Set Bits**
+
+```python
+no_1 = '111'.count('1')
+no_1 = 3
+
+Visual:
+Binary: 1 1 1
+        ↑ ↑ ↑
+        Three 1s
+```
+
+#### **Step 3: Check if Prime**
+
+```python
+is_prime(3)?
+
+Check:
+  n = 3
+  n <= 1? NO
+  Loop: range(2, int(sqrt(3)) + 1)
+        = range(2, 2)
+        = [] (empty)
+  return True
+
+3 is prime! ✓
+
+count += 1
+count = 2
+
+Result for 7:
+Binary: 111
+Set bits: 3
+Is 3 prime? YES ✓
+```
+
+---
+
+### **i = 8**
+
+#### **Step 1: Convert to Binary**
+
+```python
+bin(8) = '0b1000'
+bin_ = '1000'
+```
+
+#### **Step 2: Count Set Bits**
+
+```python
+no_1 = '1000'.count('1')
+no_1 = 1
+
+Visual:
+Binary: 1 0 0 0
+        ↑
+        One 1
+```
+
+#### **Step 3: Check if Prime**
+
+```python
+is_prime(1)?
+
+Check:
+  n = 1
+  n <= 1? YES
+  return False
+
+1 is NOT prime! ✗
+
+count stays 2
+
+Result for 8:
+Binary: 1000
+Set bits: 1
+Is 1 prime? NO ✗
+```
+
+---
+
+### **i = 9**
+
+#### **Step 1: Convert to Binary**
+
+```python
+bin(9) = '0b1001'
+bin_ = '1001'
+```
+
+#### **Step 2: Count Set Bits**
+
+```python
+no_1 = '1001'.count('1')
+no_1 = 2
+
+Visual:
+Binary: 1 0 0 1
+        ↑     ↑
+        Two 1s
+```
+
+#### **Step 3: Check if Prime**
+
+```python
+is_prime(2)? YES ✓
+
+count += 1
+count = 3
+
+Result for 9:
+Binary: 1001
+Set bits: 2
+Is 2 prime? YES ✓
+```
+
+---
+
+### **i = 10**
+
+#### **Step 1: Convert to Binary**
+
+```python
+bin(10) = '0b1010'
+bin_ = '1010'
+```
+
+#### **Step 2: Count Set Bits**
+
+```python
+no_1 = '1010'.count('1')
+no_1 = 2
+
+Visual:
+Binary: 1 0 1 0
+        ↑   ↑
+        Two 1s
+```
+
+#### **Step 3: Check if Prime**
+
+```python
+is_prime(2)? YES ✓
+
+count += 1
+count = 4
+
+Result for 10:
+Binary: 1010
+Set bits: 2
+Is 2 prime? YES ✓
+```
+
+---
+
+## **Return Result**
+
+```python
+return count
+return 4
+```
+
+---
+
+## **Complete Trace Table**
+
+| i | Decimal | Binary | Set Bits (1s) | Is Prime? | count |
+|---|---------|--------|---------------|-----------|-------|
+| 6 | 6 | 110 | 2 | YES ✓ | 1 |
+| 7 | 7 | 111 | 3 | YES ✓ | 2 |
+| 8 | 8 | 1000 | 1 | NO ✗ | 2 |
+| 9 | 9 | 1001 | 2 | YES ✓ | 3 |
+| 10 | 10 | 1010 | 2 | YES ✓ | 4 |
+
+**Final Answer: 4**
+
+---
+
+## **Visual Summary**
+
+```
+Range: [6, 10]
+
+Number: 6 = 110
+        Set bits: 2 → Prime? YES ✓
+
+Number: 7 = 111
+        Set bits: 3 → Prime? YES ✓
+
+Number: 8 = 1000
+        Set bits: 1 → Prime? NO ✗
+
+Number: 9 = 1001
+        Set bits: 2 → Prime? YES ✓
+
+Number: 10 = 1010
+        Set bits: 2 → Prime? YES ✓
+
+Total with prime set bits: 4
+```
+
+---
+
+## **Prime Check Breakdown**
+
+### **is_prime(1):**
+```python
+n = 1
+n <= 1? YES
+return False
+
+1 is NOT prime (by definition)
+```
+
+### **is_prime(2):**
+```python
+n = 2
+n <= 1? NO
+
+Loop: range(2, int(sqrt(2)) + 1)
+      sqrt(2) ≈ 1.414
+      int(1.414) = 1
+      range(2, 2) = [] (empty)
+
+No divisors checked
+return True
+
+2 is prime ✓
+```
+
+### **is_prime(3):**
+```python
+n = 3
+n <= 1? NO
+
+Loop: range(2, int(sqrt(3)) + 1)
+      sqrt(3) ≈ 1.732
+      int(1.732) = 1
+      range(2, 2) = [] (empty)
+
+return True
+
+3 is prime ✓
+```
+
+### **is_prime(4):**
+```python
+n = 4
+n <= 1? NO
+
+Loop: range(2, int(sqrt(4)) + 1)
+      sqrt(4) = 2
+      range(2, 3) = [2]
+
+i = 2: 4 % 2 == 0? YES
+       return False
+
+4 is NOT prime (divisible by 2)
+```
+
+---
+
+## **Another Example: left = 10, right = 15**
+
+```python
+i=10: 1010 → 2 set bits → prime? YES ✓
+i=11: 1011 → 3 set bits → prime? YES ✓
+i=12: 1100 → 2 set bits → prime? YES ✓
+i=13: 1101 → 3 set bits → prime? YES ✓
+i=14: 1110 → 3 set bits → prime? YES ✓
+i=15: 1111 → 4 set bits → prime? NO ✗ (4 not prime)
+
+count = 5
+```
+
+---
+
+## **Edge Cases**
+
+### **left = 1, right = 1**
+```python
+i=1: binary = 1
+     set bits = 1
+     is_prime(1)? NO
+     
+count = 0
+```
+
+### **left = 2, right = 3**
+```python
+i=2: binary = 10 → 1 set bit → NO
+i=3: binary = 11 → 2 set bits → YES ✓
+
+count = 1
+```
+
+### **Powers of 2**
+```python
+Numbers with 1 set bit (powers of 2):
+1, 2, 4, 8, 16, 32, ...
+
+Set bits = 1 (not prime)
+All return NO
+```
+
+---
+
+## **Set Bit Counts and Prime Status**
+
+| Set Bits | Prime? | Numbers with this count |
+|----------|--------|------------------------|
+| 1 | NO | 1, 2, 4, 8, 16, ... |
+| 2 | YES ✓ | 3, 5, 6, 9, 10, ... |
+| 3 | YES ✓ | 7, 11, 13, 14, ... |
+| 4 | NO | 15, 23, 27, 29, ... |
+| 5 | YES ✓ | 31, 47, 55, 59, ... |
+| 6 | NO | 63, 95, 111, ... |
+| 7 | YES ✓ | 127, 191, 223, ... |
+
+---
+
+## **Optimization Note**
+
+Since binary representations in typical range have at most 20 bits, we only need to check primes up to 20:
+
+```python
+primes_up_to_20 = {2, 3, 5, 7, 11, 13, 17, 19}
+
+# Faster:
+if no_1 in primes_up_to_20:
+    count += 1
+```
+
+This avoids calling `is_prime()` for each number!
+
+---
+
+## **Complexity**
+
+- **Time:** O(n × √m) where:
+  - n = range size (right - left + 1)
+  - m = max set bit count (≤ log₂(right))
+  - Typically O(n) since m is small
+  
+- **Space:** O(1) - only variables
