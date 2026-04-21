@@ -1,6 +1,9 @@
-# **Maximum Distance Between Different Colored Houses**
+Here’s your content formatted cleanly as a Markdown file:
 
-## **Problem**
+```markdown
+# Maximum Distance Between Different Colored Houses
+
+## Problem
 Find the maximum distance between two houses with **different colors**.
 
 **Key Insight:** Maximum distance is either:
@@ -9,169 +12,149 @@ Find the maximum distance between two houses with **different colors**.
 
 ---
 
-## **Test Case: colors = [1, 1, 1, 6, 1, 1, 1]**
+## Test Case
+```
+
+colors = [1, 1, 1, 6, 1, 1, 1]
+
+````
 
 ---
 
-## **Code Analysis - There's a Bug!**
+## Code Analysis - There's a Bug!
 
-### **Initial Setup**
+### Initial Setup
 
 ```python
 colors = [1, 1, 1, 6, 1, 1, 1]
 l = 0
-r = len(colors) - 1 = 6
+r = len(colors) - 1  # 6
 max_distance = 0
+````
 
-Visual:
+```
 Index:  0   1   2   3   4   5   6
 Color: [1,  1,  1,  6,  1,  1,  1]
         ↑                       ↑
         l                       r
 ```
 
-**Issue:** `l` **never changes** in the loop!
+**Issue:** `l` never changes in the loop.
 
 ---
 
-### **Iteration 1: l=0, r=6**
+### Iteration 1: l=0, r=6
 
 ```python
-Check: colors[l] != colors[r]?
-       colors[0] != colors[6]?
-       1 != 1? NO
-
-else:
-    r -= 1
-    r = 5
-
-State: l=0, r=5, max_distance=0
+colors[0] != colors[6]  # 1 != 1 → False
+r -= 1  # r = 5
 ```
 
 ---
 
-### **Iteration 2: l=0, r=5**
+### Iteration 2: l=0, r=5
 
 ```python
-Check: colors[0] != colors[5]?
-       1 != 1? NO
-
-r -= 1
-r = 4
-
-State: l=0, r=4, max_distance=0
+colors[0] != colors[5]  # 1 != 1 → False
+r -= 1  # r = 4
 ```
 
 ---
 
-### **Iteration 3: l=0, r=4**
+### Iteration 3: l=0, r=4
 
 ```python
-Check: colors[0] != colors[4]?
-       1 != 1? NO
-
-r -= 1
-r = 3
-
-State: l=0, r=3, max_distance=0
+colors[0] != colors[4]  # 1 != 1 → False
+r -= 1  # r = 3
 ```
 
 ---
 
-### **Iteration 4: l=0, r=3**
+### Iteration 4: l=0, r=3
 
 ```python
-Check: colors[0] != colors[3]?
-       1 != 6? YES ✓
+colors[0] != colors[3]  # 1 != 6 → True
 
-Different colors found!
+distance1 = r                  # 3
+distance2 = (len(colors)-1)-r  # 6 - 3 = 3
 
-distance1 = r = 3
+distance = max(distance1, distance2)  # 3
+max_distance = 3
+
+r -= 1  # r = 2
+```
+
+---
+
+### Remaining Iterations
+
+```python
+r=2 → same → r=1
+r=1 → same → r=0
+r=0 → same → r=-1
+```
+
+Loop exits.
+
+---
+
+## Result
+
+```python
+return max_distance  # 3
+```
+
+**Correct answer:** 3 ✅
+But the logic is flawed.
+
+---
+
+## Issues with the Code
+
+### Bug 1: Incorrect `distance2`
+
+```python
 distance2 = (len(colors) - 1) - r
-distance2 = 6 - 3 = 3
-
-distance = max(distance1, distance2)
-distance = max(3, 3) = 3
-
-max_distance = max(max_distance, distance)
-max_distance = max(0, 3) = 3
-
-r -= 1
-r = 2
-
-State: l=0, r=2, max_distance=3
 ```
+
+This assumes the end index has a different color, which is **not verified**.
 
 ---
 
-### **Continue Until r < l**
+### Bug 2: Only Left Side Checked
 
-```python
-Remaining iterations:
-r=2: colors[0]=1, colors[2]=1 → Same, r=1
-r=1: colors[0]=1, colors[1]=1 → Same, r=0
-r=0: colors[0]=1, colors[0]=1 → Same, r=-1
-
-Exit: l=0, r=-1 (l > r)
-```
+* `l` never moves
+* Only compares with `colors[0]`
+* Ignores right-side perspective
 
 ---
 
-## **Return Result**
+### Bug 3: Confusing Logic
 
 ```python
-return max_distance
-return 3
+max(distance1, distance2)
 ```
 
-**But this is WRONG!** The correct answer should be **6** (from index 0 to index 3, distance = 3) or better yet from index 3 to index 6 which is also 3... 
-
-Wait, let me reconsider. Actually the maximum distance would be from index 3 (color 6) to either end:
-- Index 0 to 3: distance = 3
-- Index 3 to 6: distance = 3
-
-So max is 3. But there's still a logical issue with the code.
+These distances are unrelated comparisons and shouldn't be combined this way.
 
 ---
 
-## **Issues with the Code**
-
-### **Bug 1: Incorrect distance2 calculation**
+## Correct Algorithm
 
 ```python
-distance1 = r          # Distance from index 0 to r
-distance2 = (len(colors) - 1) - r  # Distance from r to end
-
-Problem: distance2 assumes there's a different color at the end,
-but we never check if colors[r] != colors[last]!
-```
-
-### **Bug 2: Only checks from left**
-
-```python
-l never changes! It stays at 0.
-We only check distances from colors[0] to colors[r].
-We never check from the right side properly.
-```
-
----
-
-## **Corrected Algorithm**
-
-```python
-def maxDistance(self, colors: List[int]) -> int:
+def maxDistance(colors):
     n = len(colors)
     max_dist = 0
     
-    # From left: find farthest different from colors[0]
+    # From left
     for i in range(n - 1, -1, -1):
         if colors[i] != colors[0]:
-            max_dist = max(max_dist, i - 0)
+            max_dist = i
             break
     
-    # From right: find farthest different from colors[n-1]
+    # From right
     for i in range(n):
-        if colors[i] != colors[n-1]:
+        if colors[i] != colors[n - 1]:
             max_dist = max(max_dist, (n - 1) - i)
             break
     
@@ -180,152 +163,92 @@ def maxDistance(self, colors: List[int]) -> int:
 
 ---
 
-## **Trace Corrected Version: colors = [1, 1, 1, 6, 1, 1, 1]**
+## Trace (Corrected)
 
-### **From Left (colors[0] = 1):**
+### From Left
 
-```python
-Search from right to left for first != 1:
+```
+colors[0] = 1
 
-i=6: colors[6] = 1 → Same
-i=5: colors[5] = 1 → Same
-i=4: colors[4] = 1 → Same
-i=3: colors[3] = 6 → Different! ✓
+Scan from right:
+i=6 → same  
+i=5 → same  
+i=4 → same  
+i=3 → different (6)
 
-Distance from 0 to 3 = 3 - 0 = 3
+Distance = 3
+```
+
+---
+
+### From Right
+
+```
+colors[6] = 1
+
+Scan from left:
+i=0 → same  
+i=1 → same  
+i=2 → same  
+i=3 → different (6)
+
+Distance = 3
+```
+
+---
+
+### Final Answer
+
+```
 max_dist = 3
 ```
 
-### **From Right (colors[6] = 1):**
+---
 
-```python
-Search from left to right for first != 1:
+## Example 2
 
-i=0: colors[0] = 1 → Same
-i=1: colors[1] = 1 → Same
-i=2: colors[2] = 1 → Same
-i=3: colors[3] = 6 → Different! ✓
-
-Distance from 3 to 6 = 6 - 3 = 3
-max_dist = max(3, 3) = 3
+```
+colors = [1, 4, 3, 5, 2]
 ```
 
-**Corrected Answer: 3** ✓
+* From left → distance = 4
+* From right → distance = 4
+
+**Answer: 4**
 
 ---
 
-## **Example 2: colors = [1, 4, 3, 5, 2]**
+## When Original Code is Risky
 
-### **Original Buggy Code:**
-
-```python
-l=0, r=4
-
-Iteration 1:
-colors[0]=1, colors[4]=2 → Different!
-distance1 = 4
-distance2 = 4 - 4 = 0
-distance = max(4, 0) = 4
-max_distance = 4
-
-Return 4 ✓ (accidentally correct!)
+```
+colors = [4, 1, 1, 1, 1, 4]
 ```
 
-### **Corrected Code:**
-
-```python
-From left (colors[0] = 1):
-Search from right: all different
-First different: i=4 → distance = 4
-
-From right (colors[4] = 2):
-Search from left: all different
-First different: i=0 → distance = 4
-
-max_dist = 4 ✓
-```
+Original code returns correct result **by coincidence**, not correctness.
 
 ---
 
-## **When Original Code Fails**
+## Summary
 
-### **Example: colors = [4, 1, 1, 1, 1, 4]**
+### Bugs
 
-**Original Code:**
-```python
-l=0, r=5
-colors[0]=4, colors[5]=4 → Same
-r=4: colors[0]=4, colors[4]=1 → Different!
-distance1 = 4
-distance2 = 5 - 4 = 1
-distance = max(4, 1) = 4
-max_distance = 4
+* ❌ Wrong `distance2` logic
+* ❌ Only checks from left
+* ❌ Misleading max comparison
 
-Return 4
-```
+### Correct Insight
 
-**But Correct Answer:**
-```python
-From left: colors[0]=4
-Farthest different: i=4 (color 1)
-Distance: 4 - 0 = 4
+The answer is always the maximum of:
 
-From right: colors[5]=4
-Farthest different: i=1 (color 1)
-Distance: 5 - 1 = 4
-
-Both give 4, so answer is correct by luck!
-```
+1. Distance from index `0`
+2. Distance from index `n-1`
 
 ---
 
-## **Summary of Issues**
+## Complexity
 
-### **Bug #1: distance2 Logic**
-```python
-# Current (WRONG):
-distance2 = (len(colors) - 1) - r
-
-# This calculates distance from r to end,
-# but doesn't verify colors[r] != colors[end]
-```
-
-### **Bug #2: Only Checks Left**
-```python
-# l never changes!
-# Only finds: max distance from colors[0] to different color
-# Misses: max distance from colors[end] to different color
-```
-
-### **Bug #3: Confusing Logic**
-```python
-# Taking max(distance1, distance2) doesn't make sense
-# distance1 = distance from 0 to r
-# distance2 = distance from r to end (unverified)
-# Why take max of these?
-```
-
----
-
-## **Correct Approach**
-
-```
-The maximum distance is ALWAYS either:
-1. From index 0 to farthest index with different color
-2. From index n-1 to farthest index with different color
-
-Why? Because these give the longest possible distances!
-```
-
----
-
-## **Complexity**
-
-**Original (buggy):**
-- Time: O(n)
-- Space: O(1)
-
-**Corrected:**
-- Time: O(n)
-- Space: O(1)
+| Approach  | Time | Space |
+| --------- | ---- | ----- |
+| Original  | O(n) | O(1)  |
+| Corrected | O(n) | O(1)  |
 
