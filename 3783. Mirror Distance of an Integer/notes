@@ -1,0 +1,73 @@
+# 🧠 Step-by-step explanation
+
+#### 1. Convert number to string and reverse it
+```python
+mirror = str(n)[::-1]
+```
+- `str(n)` → converts the integer into a string  
+- `[::-1]` → reverses the string  
+
+So if `n = 123`, then:
+- `str(n)` → `"123"`
+- `"123"[::-1]` → `"321"`
+
+---
+
+#### 2. Convert back to integer
+```python
+int(mirror)
+```
+- `"321"` → `321`
+
+---
+
+#### 3. Find the absolute difference
+```python
+abs(n - int(mirror))
+```
+- Subtract the reversed number from the original
+- `abs()` ensures the result is always positive
+
+---
+
+### 📌 Example
+
+Let’s take:
+
+```python
+n = 123
+```
+
+#### Step-by-step:
+- Convert to string → `"123"`
+- Reverse → `"321"`
+- Convert to int → `321`
+- Compute difference:
+  ```
+  123 - 321 = -198
+  abs(-198) = 198
+  ```
+
+✅ Output:
+```python
+198
+```
+
+---
+
+### 📌 Another example
+
+```python
+n = 400
+```
+
+Steps:
+- `"400"` → reversed → `"004"`
+- `"004"` → `4`
+- `400 - 4 = 396`
+- `abs(396) = 396`
+
+✅ Output:
+```python
+396
+```
