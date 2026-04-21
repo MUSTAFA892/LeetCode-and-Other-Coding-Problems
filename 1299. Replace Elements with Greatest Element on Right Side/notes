@@ -1,0 +1,227 @@
+# Replace Elements with Greatest Element on Right Side
+
+## Problem
+Given an array `arr`, replace every element with the **greatest element among the elements to its right**, and replace the last element with `-1`.
+
+---
+
+## Example
+
+```
+
+arr = [17, 18, 5, 4, 6, 1]
+
+```
+
+### Expected Output
+
+```
+
+[18, 6, 6, 6, 1, -1]
+
+````
+
+---
+
+## Key Insight
+
+- We need the **maximum element to the right** of each index.
+- Instead of recomputing max for every index (**O(n²)** ❌), we:
+  - Traverse **from right to left**
+  - Keep track of the **maximum seen so far**
+
+---
+
+## Optimized Approach (Right-to-Left Traversal)
+
+```python
+def replaceElements(arr):
+    maxRight = -1
+
+    for i in range(len(arr) - 1, -1, -1):
+        temp = arr[i]
+        arr[i] = maxRight
+        maxRight = max(maxRight, temp)
+
+    return arr
+````
+
+---
+
+## Step-by-Step Trace
+
+### Initial State
+
+```id="init123"
+arr = [17, 18, 5, 4, 6, 1]
+maxRight = -1
+```
+
+---
+
+### Iteration 1 (i = 5)
+
+```python id="step1"
+temp = 1
+arr[5] = -1
+maxRight = max(-1, 1) = 1
+```
+
+```
+arr = [17, 18, 5, 4, 6, -1]
+```
+
+---
+
+### Iteration 2 (i = 4)
+
+```python id="step2"
+temp = 6
+arr[4] = 1
+maxRight = max(1, 6) = 6
+```
+
+```
+arr = [17, 18, 5, 4, 1, -1]
+```
+
+---
+
+### Iteration 3 (i = 3)
+
+```python id="step3"
+temp = 4
+arr[3] = 6
+maxRight = max(6, 4) = 6
+```
+
+```
+arr = [17, 18, 5, 6, 1, -1]
+```
+
+---
+
+### Iteration 4 (i = 2)
+
+```python id="step4"
+temp = 5
+arr[2] = 6
+maxRight = max(6, 5) = 6
+```
+
+```
+arr = [17, 18, 6, 6, 1, -1]
+```
+
+---
+
+### Iteration 5 (i = 1)
+
+```python id="step5"
+temp = 18
+arr[1] = 6
+maxRight = max(6, 18) = 18
+```
+
+```
+arr = [17, 6, 6, 6, 1, -1]
+```
+
+---
+
+### Iteration 6 (i = 0)
+
+```python id="step6"
+temp = 17
+arr[0] = 18
+maxRight = max(18, 17) = 18
+```
+
+```
+arr = [18, 6, 6, 6, 1, -1]
+```
+
+---
+
+## Final Result
+
+```python id="final123"
+return [18, 6, 6, 6, 1, -1]
+```
+
+---
+
+## Why This Works
+
+At every step:
+
+* `maxRight` stores the **maximum value seen so far from the right**
+* Before updating it, we assign it to `arr[i]`
+* This ensures each element gets the **correct right-side maximum**
+
+---
+
+## Important Trick
+
+```python id="trick987"
+temp = arr[i]
+arr[i] = maxRight
+maxRight = max(maxRight, temp)
+```
+
+Order matters! ⚠️
+If you update `maxRight` first, you lose the original value.
+
+---
+
+## Edge Cases
+
+### Single Element
+
+```
+arr = [10] → [-1]
+```
+
+### Already Decreasing
+
+```
+arr = [5,4,3,2,1] → [4,3,2,1,-1]
+```
+
+### All Same
+
+```
+arr = [7,7,7] → [7,7,-1]
+```
+
+---
+
+## Complexity
+
+| Metric | Value |
+| ------ | ----- |
+| Time   | O(n)  |
+| Space  | O(1)  |
+
+---
+
+## Brute Force (For Comparison)
+
+```python id="brute123"
+def replaceElements(arr):
+    n = len(arr)
+    result = []
+
+    for i in range(n):
+        if i == n - 1:
+            result.append(-1)
+        else:
+            result.append(max(arr[i+1:]))
+
+    return result
+```
+
+* Time: **O(n²)** ❌
+* Space: **O(n)**
+
+---
