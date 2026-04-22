@@ -1,0 +1,226 @@
+    # 🧠 Step-by-step explanation
+
+### 1. Import required structures
+
+```python
+from collections import Counter, defaultdict
+```
+
+* `defaultdict(list)` → automatically creates a list for new keys
+* `Counter` is imported but **not used** here
+
+---
+
+### 2. Store positions of each number
+
+```python
+positions = defaultdict(list)
+
+for i, num in enumerate(nums):
+    positions[num].append(i)
+```
+
+* Create a dictionary where:
+
+  * **key** → number
+  * **value** → list of indices where it appears
+
+---
+
+### 📌 Example mapping
+
+If:
+
+```python
+nums = [1, 2, 1, 1, 2]
+```
+
+Then:
+
+```python
+positions = {
+    1: [0, 2, 3],
+    2: [1, 4]
+}
+```
+
+---
+
+### 3. Initialize minimum distance
+
+```python
+min_distance = float('inf')
+```
+
+* Start with infinity to find the minimum value
+
+---
+
+### 4. Iterate over each number group
+
+```python
+for key in positions:
+    idx = positions[key]
+```
+
+* `idx` contains all indices of the same number
+
+---
+
+### 5. Skip if less than 3 occurrences
+
+```python
+if len(idx) < 3:
+    continue
+```
+
+* We need **at least 3 occurrences** to form a triplet
+
+---
+
+### 6. Check every group of 3 consecutive indices
+
+```python
+for i in range(len(idx) - 2):
+    a, b, c = idx[i], idx[i+1], idx[i+2]
+```
+
+* Take 3 consecutive positions of the same number
+
+---
+
+### 7. Compute total pairwise distance
+
+```python
+val = abs(a-b) + abs(b-c) + abs(c-a)
+```
+
+👉 This calculates:
+
+* distance between `a` & `b`
+* distance between `b` & `c`
+* distance between `c` & `a`
+
+---
+
+### 8. Update minimum distance
+
+```python
+min_distance = min(min_distance, val)
+```
+
+* Keep track of smallest value
+
+---
+
+### 9. Return result
+
+```python
+if min_distance == float('inf'):
+    return -1
+else:
+    return min_distance
+```
+
+* If no valid triplet found → return `-1`
+* Otherwise → return minimum distance
+
+---
+
+# 📌 Example
+
+Let’s take:
+
+```python
+nums = [1, 2, 1, 1, 2, 1]
+```
+
+---
+
+### 🔄 Step-by-step:
+
+#### Step 1: Build positions
+
+```python
+1 → [0, 2, 3, 5]
+2 → [1, 4]
+```
+
+---
+
+#### Step 2: Process number `1`
+
+Triplets:
+
+---
+
+### 🔹 Triplet 1:
+
+* `a = 0`, `b = 2`, `c = 3`
+
+```
+|0-2| = 2
+|2-3| = 1
+|3-0| = 3
+
+Total = 2 + 1 + 3 = 6
+```
+
+---
+
+### 🔹 Triplet 2:
+
+* `a = 2`, `b = 3`, `c = 5`
+
+```
+|2-3| = 1
+|3-5| = 2
+|5-2| = 3
+
+Total = 1 + 2 + 3 = 6
+```
+
+---
+
+#### Step 3: Process number `2`
+
+* Only 2 occurrences → skipped ❌
+
+---
+
+# 🎯 Final Output
+
+```python
+6
+```
+
+---
+
+# ⚡ Key Insight (IMPORTANT)
+
+👉 Since indices are sorted (`a < b < c`), this formula:
+
+```python
+abs(a-b) + abs(b-c) + abs(c-a)
+```
+
+always simplifies to:
+
+```python
+2 * (c - a)
+```
+
+💡 So you can optimize:
+
+```python
+val = 2 * (c - a)
+```
+
+---
+
+# 🚀 Optimized Thought
+
+👉 Only need:
+
+* First and third index of triplet
+* No need to compute all three distances
