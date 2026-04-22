@@ -1,0 +1,117 @@
+
+# 🧠 Step-by-step explanation
+
+### 1. Initialize minimum distance
+
+```python
+min_val = float('inf')
+```
+
+* `float('inf')` → represents **infinity**
+* Used so any real distance will be smaller
+* Helps in finding the **minimum distance**
+
+---
+
+### 2. Traverse the array
+
+```python
+for i in range(len(nums)):
+```
+
+* Loop through all indices of `nums`
+* `i` represents the current index
+
+---
+
+### 3. Check for target match
+
+```python
+if nums[i] == target:
+```
+
+* Only consider indices where value equals `target`
+
+---
+
+### 4. Calculate distance from start
+
+```python
+abs(i - start)
+```
+
+* Finds distance between current index `i` and given `start`
+* `abs()` ensures it is always positive
+
+---
+
+### 5. Update minimum distance
+
+```python
+min_val = min(min_val, abs(i - start))
+```
+
+* Compare current distance with previous minimum
+* Store the smallest value
+
+---
+
+### 6. Return the result
+
+```python
+return min_val
+```
+
+* Final minimum distance between `start` and any index where `target` exists
+
+---
+
+# 📌 Example
+
+Let’s take:
+
+```python
+nums = [1, 2, 3, 4, 5, 3]
+target = 3
+start = 2
+```
+
+---
+
+### 🔄 Step-by-step:
+
+#### Step 1:
+
+* `i = 0` → nums[0] = 1 ❌ (not target)
+
+#### Step 2:
+
+* `i = 1` → nums[1] = 2 ❌
+
+#### Step 3:
+
+* `i = 2` → nums[2] = 3 ✅
+* Distance = `|2 - 2| = 0`
+* `min_val = 0`
+
+#### Step 4:
+
+* `i = 3` → nums[3] = 4 ❌
+
+#### Step 5:
+
+* `i = 4` → nums[4] = 5 ❌
+
+#### Step 6:
+
+* `i = 5` → nums[5] = 3 ✅
+* Distance = `|5 - 2| = 3`
+* `min_val = min(0, 3) = 0`
+
+---
+
+# 🎯 Final Output
+
+```python
+0
+```
