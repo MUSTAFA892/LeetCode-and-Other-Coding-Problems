@@ -1,0 +1,144 @@
+
+# 🧠 Step-by-step explanation
+
+### 1. Initialize variables and pointers
+
+```python
+max_distance = 0
+l, r = 0, 0
+```
+
+* `max_distance` → stores the maximum value of `(r - l)`
+* `l` → pointer for `nums1`
+* `r` → pointer for `nums2`
+
+---
+
+### 2. Traverse both arrays using two pointers
+
+```python
+while l < len(nums1) and r < len(nums2):
+```
+
+* Loop runs until either pointer reaches the end
+* Ensures valid indices
+
+---
+
+### 3. Check valid condition
+
+```python
+if nums1[l] <= nums2[r]:
+```
+
+* This is the **main condition**
+* We need `nums1[l] ≤ nums2[r]` to form a valid pair
+
+---
+
+### 4. Update maximum distance
+
+```python
+max_distance = max(max_distance, r - l)
+```
+
+* Calculate distance `(r - l)`
+* Store the maximum value found so far
+
+---
+
+### 5. Move right pointer to increase distance
+
+```python
+r += 1
+```
+
+* Since condition is valid, try to expand `r`
+* This may give a larger distance
+
+---
+
+### 6. Handle invalid condition
+
+```python
+else:
+    l += 1
+```
+
+* If `nums1[l] > nums2[r]`, it's invalid
+* Move `l` forward to reduce value
+
+---
+
+### 7. Maintain valid indices (important)
+
+```python
+if l > r:
+    r = l
+```
+
+* Ensures `r ≥ l` (since `i ≤ j` is required)
+* Keeps pointers aligned
+
+---
+
+# 📌 Example
+
+Let’s take:
+
+```python
+nums1 = [30, 29, 19, 5]
+nums2 = [25, 25, 25, 25, 25]
+```
+
+---
+
+### 🔄 Step-by-step:
+
+* Start: `l = 0`, `r = 0`
+
+---
+
+#### Step 1:
+
+* `nums1[0] = 30`, `nums2[0] = 25`
+* ❌ Invalid → `l += 1`
+
+---
+
+#### Step 2:
+
+* `nums1[1] = 29`, `nums2[1] = 25`
+* ❌ Invalid → `l += 1`
+
+---
+
+#### Step 3:
+
+* `nums1[2] = 19`, `nums2[2] = 25`
+* ✅ Valid → distance = `2 - 2 = 0`
+* `r += 1`
+
+---
+
+#### Step 4:
+
+* `nums1[2] = 19`, `nums2[3] = 25`
+* ✅ Valid → distance = `3 - 2 = 1`
+* `r += 1`
+
+---
+
+#### Step 5:
+
+* `nums1[2] = 19`, `nums2[4] = 25`
+* ✅ Valid → distance = `4 - 2 = 2`
+* `r += 1`
+
+---
+
+# 🎯 Final Output
+
+```python
+2
+```
