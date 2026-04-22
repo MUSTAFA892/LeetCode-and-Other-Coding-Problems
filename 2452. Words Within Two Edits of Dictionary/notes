@@ -1,0 +1,130 @@
+
+# 🧠 Step-by-step explanation
+
+### 1. Initialize result list
+
+```python
+arr = []
+```
+
+* This list will store all valid words from `queries`
+
+---
+
+### 2. Iterate through each query word
+
+```python
+for i in queries:
+```
+
+* `i` represents each word in the `queries` list
+
+---
+
+### 3. Check if exact match exists
+
+```python
+if i in dictionary:
+    arr.append(i)
+```
+
+* If the word already exists in `dictionary`, directly add it
+* No need to check differences
+
+---
+
+### 4. Compare with each dictionary word
+
+```python
+else:
+    for j in dictionary:
+```
+
+* If no exact match, compare `i` with every word `j` in `dictionary`
+
+---
+
+### 5. Count character differences
+
+```python
+diff_count = sum(1 for c1, c2 in zip(i, j) if c1 != c2)
+```
+
+* `zip(i, j)` → pairs characters from both words
+* Compare each pair:
+
+  * If different → count it
+* `sum(...)` → total number of differing positions
+
+---
+
+### 6. Check if difference ≤ 2
+
+```python
+if diff_count <= 2:
+    arr.append(i)
+    break
+```
+
+* If the word differs by **at most 2 characters**, it's valid
+* Add `i` to result
+* `break` → stop checking further dictionary words
+
+---
+
+### 7. Return result
+
+```python
+return arr
+```
+
+* Final list of valid query words
+
+---
+
+# 📌 Example
+
+Let’s take:
+
+```python
+queries = ["word", "note", "ants"]
+dictionary = ["wood", "joke", "ants"]
+```
+
+---
+
+### 🔄 Step-by-step:
+
+#### 🔹 Query = `"word"`
+
+* Compare with `"wood"`
+
+  * Differences: `r ≠ o` → 1 difference
+* ✅ Valid (≤ 2) → add `"word"`
+
+---
+
+#### 🔹 Query = `"note"`
+
+* Compare with `"wood"`
+
+  * Differences: `n≠w`, `t≠o`, `e≠d` → 3 differences ❌
+* Compare with `"joke"`
+
+  * Differences: `n≠j`, `t≠k` → 2 differences ✅
+* Add `"note"`
+
+---
+
+#### 🔹 Query = `"ants"`
+
+* Exact match in dictionary ✅
+* Add `"ants"`
+
+---
+
+# 🎯 Final Output
+
+```python
+["word", "note", "ants"]
+```
