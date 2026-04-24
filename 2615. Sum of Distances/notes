@@ -1,0 +1,579 @@
+# **Distance Between Same Elements**
+
+## **Problem**
+For each index `i`, find the sum of absolute distances to all other indices containing the **same value**.
+
+**Example:** `nums = [1, 3, 1, 1, 2]`
+- Index 0 (value 1): distances to indices 2, 4 → |0-2| + |0-4| = 6
+- Index 2 (value 1): distances to indices 0, 4 → |2-0| + |2-4| = 4
+
+---
+
+## **Test Case: nums = [1, 3, 1, 1, 2]**
+
+---
+
+## **APPROACH 1: Optimized (Prefix/Suffix Sums) ✓**
+
+### **STEP 1: Build Index Map**
+
+```python
+nums = [1, 3, 1, 1, 2]
+map_ = {}
+arr = [0, 0, 0, 0, 0]
+
+Build map of value → list of indices
+```
+
+#### **i = 0: nums[0] = 1**
+```python
+Check: 1 not in map_? YES
+
+map_[1] = []
+map_[1].append(0)
+map_ = {1: [0]}
+```
+
+#### **i = 1: nums[1] = 3**
+```python
+Check: 3 not in map_? YES
+
+map_[3] = []
+map_[3].append(1)
+map_ = {1: [0], 3: [1]}
+```
+
+#### **i = 2: nums[2] = 1**
+```python
+Check: 1 not in map_? NO (already exists)
+
+map_[1].append(2)
+map_ = {1: [0, 2], 3: [1]}
+```
+
+#### **i = 3: nums[3] = 1**
+```python
+map_[1].append(3)
+map_ = {1: [0, 2, 3], 3: [1]}
+```
+
+#### **i = 4: nums[4] = 2**
+```python
+map_[2] = []
+map_[2].append(4)
+map_ = {1: [0, 2, 3], 3: [1], 2: [4]}
+```
+
+**Final Map:**
+```
+Value 1 appears at indices: [0, 2, 3]
+Value 3 appears at indices: [1]
+Value 2 appears at indices: [4]
+```
+
+---
+
+### **STEP 2: Process Each Group**
+
+---
+
+#### **Process Group: Value 1, Indices [0, 2, 3]**
+
+```python
+pos = [0, 2, 3]
+total = sum(pos) = 0 + 2 + 3 = 5
+left_sum = 0
+
+For each position in this group, calculate distances to all others
+```
+
+---
+
+##### **i = 0: Position 0**
+
+```python
+Current index: pos[0] = 0
+
+right_sum = total - left_sum - pos[i]
+right_sum = 5 - 0 - 0
+right_sum = 5
+
+left = pos[i] * i - left_sum
+left = 0 * 0 - 0
+left = 0
+
+right = right_sum - pos[i] * (len(pos) - i - 1)
+right = 5 - 0 * (3 - 0 - 1)
+right = 5 - 0 * 2
+right = 5
+
+arr[pos[i]] = left + right
+arr[0] = 0 + 5 = 5
+
+left_sum += pos[i]
+left_sum = 0 + 0 = 0
+
+State:
+arr = [5, 0, 0, 0, 0]
+left_sum = 0
+
+Explanation:
+Index 0 (value 1) distances:
+- To index 2: |0-2| = 2
+- To index 3: |0-3| = 3
+- Total: 2 + 3 = 5 ✓
+```
+
+**Visual:**
+```
+Indices: [0, 2, 3]
+          ↑
+      Current (i=0)
+
+Left of 0: none → sum = 0
+Right of 0: [2, 3] → sum = 2 + 3 = 5
+
+Distance calculation:
+Left: 0 elements * 0 - 0 = 0
+Right: (2+3) - 0*(2 elements) = 5
+Total: 5
+```
+
+---
+
+##### **i = 1: Position 2**
+
+```python
+Current index: pos[1] = 2
+
+right_sum = total - left_sum - pos[i]
+right_sum = 5 - 0 - 2
+right_sum = 3
+
+left = pos[i] * i - left_sum
+left = 2 * 1 - 0
+left = 2
+
+right = right_sum - pos[i] * (len(pos) - i - 1)
+right = 3 - 2 * (3 - 1 - 1)
+right = 3 - 2 * 1
+right = 1
+
+arr[pos[i]] = left + right
+arr[2] = 2 + 1 = 3
+
+left_sum += pos[i]
+left_sum = 0 + 2 = 2
+
+State:
+arr = [5, 0, 3, 0, 0]
+left_sum = 2
+
+Explanation:
+Index 2 (value 1) distances:
+- To index 0: |2-0| = 2
+- To index 3: |2-3| = 1
+- Total: 2 + 1 = 3 ✓
+```
+
+**Visual:**
+```
+Indices: [0, 2, 3]
+             ↑
+         Current (i=1)
+
+Left of 2: [0] → sum = 0
+Right of 2: [3] → sum = 3
+
+Left calculation:
+- 1 element to the left
+- Distance: 2 * 1 - 0 = 2
+
+Right calculation:
+- Sum of right indices: 3
+- Subtract: 3 - 2*1 = 1
+
+Total: 2 + 1 = 3
+```
+
+---
+
+##### **i = 2: Position 3**
+
+```python
+Current index: pos[2] = 3
+
+right_sum = total - left_sum - pos[i]
+right_sum = 5 - 2 - 3
+right_sum = 0
+
+left = pos[i] * i - left_sum
+left = 3 * 2 - 2
+left = 6 - 2
+left = 4
+
+right = right_sum - pos[i] * (len(pos) - i - 1)
+right = 0 - 3 * (3 - 2 - 1)
+right = 0 - 3 * 0
+right = 0
+
+arr[pos[i]] = left + right
+arr[3] = 4 + 0 = 4
+
+left_sum += pos[i]
+left_sum = 2 + 3 = 5
+
+State:
+arr = [5, 0, 3, 4, 0]
+left_sum = 5
+
+Explanation:
+Index 3 (value 1) distances:
+- To index 0: |3-0| = 3
+- To index 2: |3-2| = 1
+- Total: 3 + 1 = 4 ✓
+```
+
+**Visual:**
+```
+Indices: [0, 2, 3]
+                ↑
+            Current (i=2)
+
+Left of 3: [0, 2] → sum = 0 + 2 = 2
+Right of 3: none → sum = 0
+
+Left calculation:
+- 2 elements to the left
+- Distance: 3*2 - 2 = 4
+
+Right calculation:
+- No elements to the right: 0
+
+Total: 4 + 0 = 4
+```
+
+---
+
+#### **Process Group: Value 3, Indices [1]**
+
+```python
+pos = [1]
+total = 1
+left_sum = 0
+
+i = 0: Position 1
+right_sum = 1 - 0 - 1 = 0
+left = 1 * 0 - 0 = 0
+right = 0 - 1 * 0 = 0
+
+arr[1] = 0 + 0 = 0
+
+State:
+arr = [5, 0, 3, 4, 0]
+
+Explanation:
+Index 1 (value 3) has no other occurrences
+Distance: 0
+```
+
+---
+
+#### **Process Group: Value 2, Indices [4]**
+
+```python
+pos = [4]
+total = 4
+left_sum = 0
+
+i = 0: Position 4
+right_sum = 4 - 0 - 4 = 0
+left = 4 * 0 - 0 = 0
+right = 0 - 4 * 0 = 0
+
+arr[4] = 0 + 0 = 0
+
+State:
+arr = [5, 0, 3, 4, 0]
+
+Explanation:
+Index 4 (value 2) has no other occurrences
+Distance: 0
+```
+
+---
+
+### **STEP 3: Return Result**
+
+```python
+return arr
+return [5, 0, 3, 4, 0]
+```
+
+---
+
+## **Understanding the Math**
+
+### **Key Formula Breakdown**
+
+For position `pos[i]` with `i` positions to the left and `(len(pos) - i - 1)` to the right:
+
+**Left Distance:**
+```
+Sum of distances to all left positions
+
+Formula: pos[i] * i - left_sum
+
+Example: pos = [0, 2, 3], current i=1 (position 2)
+- 1 position to the left (index 0)
+- Distance: (2 - 0) = 2
+- Formula: 2 * 1 - 0 = 2 ✓
+
+Why this works:
+- pos[i] * i: If all left positions were at 0, distance = pos[i] * count
+- left_sum: Sum of actual left positions
+- Difference gives actual distance sum
+```
+
+**Right Distance:**
+```
+Sum of distances to all right positions
+
+Formula: right_sum - pos[i] * (count_right)
+
+Example: pos = [0, 2, 3], current i=1 (position 2)
+- 1 position to the right (index 3)
+- right_sum = 3
+- Distance: (3 - 2) = 1
+- Formula: 3 - 2 * 1 = 1 ✓
+
+Why this works:
+- right_sum: Sum of all right positions
+- pos[i] * count_right: If current was at all right positions
+- Difference gives actual distance sum
+```
+
+---
+
+## **Complete Trace Table - Approach 1**
+
+| Group | pos | i | pos[i] | left_sum | right_sum | left | right | arr[pos[i]] |
+|-------|-----|---|--------|----------|-----------|------|-------|-------------|
+| [0,2,3] | [0,2,3] | 0 | 0 | 0 | 5 | 0 | 5 | arr[0]=5 |
+| [0,2,3] | [0,2,3] | 1 | 2 | 0 | 3 | 2 | 1 | arr[2]=3 |
+| [0,2,3] | [0,2,3] | 2 | 3 | 2 | 0 | 4 | 0 | arr[3]=4 |
+| [1] | [1] | 0 | 1 | 0 | 0 | 0 | 0 | arr[1]=0 |
+| [4] | [4] | 0 | 4 | 0 | 0 | 0 | 0 | arr[4]=0 |
+
+**Final: [5, 0, 3, 4, 0]**
+
+---
+
+## **APPROACH 2: Brute Force (Commented Code)**
+
+### **STEP 1: Build Map (Same as Approach 1)**
+
+```python
+map_ = {1: [0, 2, 3], 3: [1], 2: [4]}
+```
+
+---
+
+### **STEP 2: Process Each Index**
+
+---
+
+#### **i = 0: nums[0] = 1**
+
+```python
+val = map_[1] = [0, 2, 3]
+
+Check: len(val) <= 1? 3 <= 1? NO
+
+comp = 0
+Calculate distances from val[0]=0 to all others:
+
+j=1: comp += abs(0 - 2) = 2
+     comp = 2
+     
+j=2: comp += abs(0 - 3) = 3
+     comp = 5
+
+arr.append(5)
+arr = [5]
+
+Rotate list:
+temp = val[0] = 0
+map_[1].remove(0)  → map_[1] = [2, 3]
+map_[1].append(0)  → map_[1] = [2, 3, 0]
+
+State:
+arr = [5]
+map_ = {1: [2, 3, 0], 3: [1], 2: [4]}
+```
+
+**Visual:**
+```
+Value 1 positions: [0, 2, 3]
+Current: 0
+Distances: |0-2| + |0-3| = 2 + 3 = 5
+
+After rotation: [2, 3, 0]
+(Move processed position to end)
+```
+
+---
+
+#### **i = 1: nums[1] = 3**
+
+```python
+val = map_[3] = [1]
+
+Check: len(val) <= 1? 1 <= 1? YES
+
+arr.append(0)
+arr = [5, 0]
+
+State:
+arr = [5, 0]
+map_ unchanged
+```
+
+---
+
+#### **i = 2: nums[2] = 1**
+
+```python
+val = map_[1] = [2, 3, 0]
+
+comp = 0
+
+j=1: comp += abs(2 - 3) = 1
+     comp = 1
+     
+j=2: comp += abs(2 - 0) = 2
+     comp = 3
+
+arr.append(3)
+arr = [5, 0, 3]
+
+Rotate:
+temp = 2
+map_[1] = [3, 0, 2]
+
+State:
+arr = [5, 0, 3]
+map_ = {1: [3, 0, 2], ...}
+```
+
+**Visual:**
+```
+Value 1 positions (after rotation): [2, 3, 0]
+Current: 2 (first in list)
+Distances: |2-3| + |2-0| = 1 + 2 = 3
+
+After rotation: [3, 0, 2]
+```
+
+---
+
+#### **i = 3: nums[3] = 1**
+
+```python
+val = map_[1] = [3, 0, 2]
+
+comp = 0
+
+j=1: comp += abs(3 - 0) = 3
+     comp = 3
+     
+j=2: comp += abs(3 - 2) = 1
+     comp = 4
+
+arr.append(4)
+arr = [5, 0, 3, 4]
+
+Rotate:
+map_[1] = [0, 2, 3]
+
+State:
+arr = [5, 0, 3, 4]
+```
+
+---
+
+#### **i = 4: nums[4] = 2**
+
+```python
+val = map_[2] = [4]
+
+len(val) <= 1? YES
+
+arr.append(0)
+arr = [5, 0, 3, 4, 0]
+```
+
+---
+
+### **Return Result**
+
+```python
+return arr
+return [5, 0, 3, 4, 0]
+```
+
+---
+
+## **Comparison of Approaches**
+
+| Aspect | Approach 1 (Optimal) | Approach 2 (Brute Force) |
+|--------|----------------------|--------------------------|
+| **Strategy** | Prefix/suffix sums | Calculate each directly |
+| **Time** | O(n) | O(n × k) where k = max occurrences |
+| **Space** | O(n) | O(n) |
+| **Math** | Complex formulas | Simple absolute differences |
+| **Efficiency** | ✓ Fast | ✗ Slower |
+
+---
+
+## **Why Approach 1 is Faster**
+
+**Approach 1:**
+- For each group, processes once
+- Uses math to avoid recalculation
+- O(n) total
+
+**Approach 2:**
+- For each occurrence, loops through all others
+- If value appears k times, does k² operations
+- O(n × k) total
+
+---
+
+## **Verification**
+
+```
+nums = [1, 3, 1, 1, 2]
+
+Index 0 (value 1):
+  Other 1s at: [2, 3]
+  Distances: |0-2| + |0-3| = 5 ✓
+
+Index 1 (value 3):
+  No other 3s
+  Distance: 0 ✓
+
+Index 2 (value 1):
+  Other 1s at: [0, 3]
+  Distances: |2-0| + |2-3| = 3 ✓
+
+Index 3 (value 1):
+  Other 1s at: [0, 2]
+  Distances: |3-0| + |3-2| = 4 ✓
+
+Index 4 (value 2):
+  No other 2s
+  Distance: 0 ✓
+
+Result: [5, 0, 3, 4, 0] ✓
+```
