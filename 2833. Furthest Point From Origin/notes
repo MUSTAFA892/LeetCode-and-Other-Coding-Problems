@@ -1,0 +1,201 @@
+
+# **Furthest Distance From Origin**
+
+## **Problem**
+
+You are given a string `moves` consisting of:
+
+* `'L'` → move left (−1)
+* `'R'` → move right (+1)
+* `'_'` → can be either `'L'` or `'R'`
+
+👉 Replace `'_'` in such a way that **final distance from origin is maximum**
+
+👉 Return **maximum possible distance**
+
+---
+
+## **Given Code**
+
+```python
+class Solution:
+    def furthestDistanceFromOrigin(self, moves: str) -> int:
+        L_occ = moves.count('L')
+        R_occ = moves.count('R')
+        change = 0
+        if L_occ > R_occ:
+            change = -1
+        else:
+            change = 1
+
+        count = 0
+        for i in moves:
+            if i == 'L' or (i == '_' and change == -1) :
+                count -= 1
+            else:
+                count += 1
+
+        return abs(count)
+```
+
+---
+
+# **CORE IDEA 💡**
+
+👉 You want to go as far as possible in **one direction**
+
+So:
+
+```
+Convert all '_' → same direction
+```
+
+✔ If more `R` → go right
+✔ If more `L` → go left
+
+---
+
+# **STEP 1: Count L and R**
+
+```python
+L_occ = moves.count('L')
+R_occ = moves.count('R')
+```
+
+👉 Count fixed moves
+
+---
+
+# **STEP 2: Decide Direction**
+
+```python
+if L_occ > R_occ:
+    change = -1
+else:
+    change = 1
+```
+
+👉 Meaning:
+
+```
+change = -1 → go LEFT
+change = +1 → go RIGHT
+```
+
+---
+
+## **Why This Works 🔥**
+
+We want:
+
+```
+Maximum distance = maximize imbalance
+```
+
+👉 So we push `'_'` towards the dominant side
+
+---
+
+# **STEP 3: Traverse Moves**
+
+```python
+count = 0
+```
+
+---
+
+## **Logic Inside Loop**
+
+```python
+for i in moves:
+```
+
+---
+
+### **Case 1: Move Left**
+
+```python
+if i == 'L' or (i == '_' and change == -1):
+    count -= 1
+```
+
+👉 Either:
+
+* Already `'L'`
+* OR `'_'` converted to `'L'`
+
+---
+
+### **Case 2: Move Right**
+
+```python
+else:
+    count += 1
+```
+
+👉 Covers:
+
+* `'R'`
+* `'_'` converted to `'R'`
+
+---
+
+# **STEP 4: Return Absolute Distance**
+
+```python
+return abs(count)
+```
+
+👉 Distance from origin
+
+---
+
+# **EXAMPLE WALKTHROUGH**
+
+### **Input**
+
+```
+moves = "L_RL__R"
+```
+
+---
+
+## **Step 1: Count**
+
+```
+L_occ = 2
+R_occ = 2
+```
+
+👉 Equal → default go RIGHT (`change = +1`)
+
+---
+
+## **Step 2: Replace '_'**
+
+```
+moves = "L R R L R R R"
+         (convert all '_' → R)
+```
+
+---
+
+## **Step 3: Traverse**
+
+| Move  | Action | Count |
+| ----- | ------ | ----- |
+| L     | -1     | -1    |
+| _ → R | +1     | 0     |
+| R     | +1     | 1     |
+| L     | -1     | 0     |
+| _ → R | +1     | 1     |
+| _ → R | +1     | 2     |
+| R     | +1     | 3     |
+
+---
+
+## **Final**
+
+```
+abs(3) = 3
+```
