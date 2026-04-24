@@ -1,0 +1,227 @@
+# **Closest Target in Circular Array**
+
+## **Problem**
+
+You are given:
+
+* `words[]` → circular array
+* `target` → word to find
+* `startIndex` → starting position
+
+👉 Find **minimum steps** to reach any occurrence of `target`.
+
+👉 You can move:
+
+* **Right → (i + 1)**
+* **Left → (i - 1)**
+* Array is **circular**
+
+---
+
+## **Given Code**
+
+```python
+class Solution:
+    def closestTarget(self, words: List[str], target: str, startIndex: int) -> int:
+        target_idx = []
+        min_distance = float('inf')
+        n = len(words)
+
+        if target not in words:
+            return -1
+
+        for i in range(len(words)):
+            if words[i] == target:
+                right_side = (i - startIndex) % n
+                left_side = (startIndex - i) % n    
+                min_distance = min(min_distance, left_side, right_side)
+
+        return min_distance
+```
+
+---
+
+## **CORE IDEA 💡**
+
+Since array is **circular**, distance is NOT simple:
+
+👉 You have **2 choices**:
+
+```
+1. Move right (clockwise)
+2. Move left (anticlockwise)
+```
+
+👉 Take **minimum of both**
+
+---
+
+## **STEP 1: Check if Target Exists**
+
+```python
+if target not in words:
+    return -1
+```
+
+❌ If not present → impossible
+
+---
+
+## **STEP 2: Traverse Array**
+
+```python
+for i in range(len(words)):
+    if words[i] == target:
+```
+
+👉 Find all positions where `target` exists
+
+---
+
+## **STEP 3: Calculate Distance**
+
+### **RIGHT SIDE (Clockwise)**
+
+```python
+right_side = (i - startIndex) % n
+```
+
+👉 Move forward from `startIndex → i`
+
+---
+
+### **LEFT SIDE (Anticlockwise)**
+
+```python
+left_side = (startIndex - i) % n
+```
+
+👉 Move backward from `startIndex → i`
+
+---
+
+## **WHY MODULO? 🔥**
+
+Because array is **circular**
+
+```
+Example:
+n = 5
+
+(-1 % 5) = 4  ✅
+```
+
+👉 Automatically wraps around
+
+---
+
+## **STEP 4: Take Minimum**
+
+```python
+min_distance = min(min_distance, left_side, right_side)
+```
+
+👉 Choose shortest path
+
+---
+
+## **STEP 5: Return Answer**
+
+```python
+return min_distance
+```
+
+---
+
+# **EXAMPLE WALKTHROUGH**
+
+### **Input**
+
+```
+words = ["a","b","c","d","a"]
+target = "a"
+startIndex = 2
+```
+
+```
+Index:   0   1   2   3   4
+Words:  [a , b , c , d , a]
+                ↑
+          startIndex = 2
+```
+
+---
+
+## **Target Positions**
+
+```
+i = 0 and i = 4
+```
+
+---
+
+## **For i = 0**
+
+### Right:
+
+```
+(0 - 2) % 5 = -2 % 5 = 3
+```
+
+### Left:
+
+```
+(2 - 0) % 5 = 2
+```
+
+👉 Min = 2
+
+---
+
+## **For i = 4**
+
+### Right:
+
+```
+(4 - 2) % 5 = 2
+```
+
+### Left:
+
+```
+(2 - 4) % 5 = -2 % 5 = 3
+```
+
+👉 Min = 2
+
+---
+
+## **Final Answer**
+
+```
+2
+```
+
+---
+
+# **VISUAL UNDERSTANDING**
+
+```
+Array (circular):
+
+        0(a)
+      /      \
+   4(a)      1(b)
+     |        |
+   3(d) ---- 2(c)
+
+Start = 2
+
+Paths to 0:
+→ Right: 2 → 3 → 4 → 0 = 3 steps
+→ Left:  2 → 1 → 0 = 2 steps ✅
+
+Paths to 4:
+→ Right: 2 → 3 → 4 = 2 steps ✅
+→ Left:  2 → 1 → 0 → 4 = 3 steps
+```
