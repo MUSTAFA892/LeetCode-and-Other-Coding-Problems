@@ -1,0 +1,217 @@
+# **Check If Two Strings Can Be Equal (By Swapping Indices)**
+
+## **Problem**
+
+You are given two strings `s1` and `s2` (length = 4).
+
+You can swap:
+
+* indices **0 ↔ 2**
+* indices **1 ↔ 3**
+
+👉 Check if `s1` can become `s2` using these swaps.
+
+---
+
+## **Given Code**
+
+```python
+class Solution:
+    def canBeEqual(self, s1: str, s2: str) -> bool:
+        g1_s1 = sorted([s1[0], s1[2]])
+        g1_s2 = sorted([s2[0], s2[2]])
+
+        g2_s1 = sorted([s1[1], s1[3]])
+        g2_s2 = sorted([s2[1], s2[3]])
+
+        return g1_s1 == g1_s2 and g2_s1 == g2_s2
+```
+
+---
+
+## **CORE IDEA 💡**
+
+You can only swap:
+
+* **Even indices → (0, 2)**
+* **Odd indices → (1, 3)**
+
+👉 So characters stay within their group.
+
+---
+
+## **STEP 1: Split into Groups**
+
+```
+Group 1 → indices (0, 2)
+Group 2 → indices (1, 3)
+```
+
+---
+
+### **For s1**
+
+```python
+g1_s1 = sorted([s1[0], s1[2]])
+g2_s1 = sorted([s1[1], s1[3]])
+```
+
+### **For s2**
+
+```python
+g1_s2 = sorted([s2[0], s2[2]])
+g2_s2 = sorted([s2[1], s2[3]])
+```
+
+---
+
+## **STEP 2: Why Sorting?**
+
+Because order doesn’t matter after swaps.
+
+Example:
+
+```
+['a', 'c'] → sorted → ['a', 'c']
+['c', 'a'] → sorted → ['a', 'c']
+```
+
+👉 Both are same after sorting
+
+---
+
+## **STEP 3: Compare Groups**
+
+```python
+return g1_s1 == g1_s2 and g2_s1 == g2_s2
+```
+
+✔ Both groups must match
+❌ If any group differs → not possible
+
+---
+
+## **EXAMPLE WALKTHROUGH**
+
+### **Example 1**
+
+```
+s1 = "abcd"
+s2 = "cdab"
+```
+
+---
+
+### **Step 1: Grouping**
+
+```
+s1:
+Group1 → [a, c]
+Group2 → [b, d]
+
+s2:
+Group1 → [c, a]
+Group2 → [d, b]
+```
+
+---
+
+### **Step 2: Sort**
+
+```
+s1:
+g1_s1 = ['a', 'c']
+g2_s1 = ['b', 'd']
+
+s2:
+g1_s2 = ['a', 'c']
+g2_s2 = ['b', 'd']
+```
+
+---
+
+### **Step 3: Compare**
+
+```
+g1_s1 == g1_s2 → True
+g2_s1 == g2_s2 → True
+```
+
+✅ **Answer: True**
+
+---
+
+## **EXAMPLE 2**
+
+```
+s1 = "abcd"
+s2 = "dacb"
+```
+
+---
+
+### **Groups**
+
+```
+s1:
+Group1 → [a, c]
+Group2 → [b, d]
+
+s2:
+Group1 → [d, c]
+Group2 → [a, b]
+```
+
+---
+
+### **Sorted**
+
+```
+s1:
+['a','c'], ['b','d']
+
+s2:
+['c','d'], ['a','b']
+```
+
+---
+
+### **Compare**
+
+```
+Group1 ❌
+Group2 ❌
+```
+
+❌ **Answer: False**
+
+---
+
+## **KEY OBSERVATION 🔥**
+
+You are NOT rearranging freely.
+
+You are only allowed:
+
+```
+Index 0 ↔ 2  (even positions)
+Index 1 ↔ 3  (odd positions)
+```
+
+So:
+
+```
+Even characters must match
+Odd characters must match
+```
+
+---
+
+## **TIME & SPACE COMPLEXITY**
+
+| Metric | Value |
+| ------ | ----- |
+| Time   | O(1)  |
+| Space  | O(1)  |
+
+👉 Only 4 elements → constant time
