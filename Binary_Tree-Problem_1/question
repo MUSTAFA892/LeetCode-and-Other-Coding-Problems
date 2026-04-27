@@ -1,0 +1,374 @@
+# **Problem: Binary Tree Zigzag Level Order Traversal**
+
+---
+
+## **Problem Statement**
+
+Given the root of a binary tree, return the **zigzag level order traversal** of its nodes' values. (i.e., from left to right, then right to left for the next level and alternate between).
+
+**LeetCode #103 - Binary Tree Zigzag Level Order Traversal**
+
+---
+
+## **What is Zigzag Level Order Traversal?**
+
+### **Normal Level Order (BFS):**
+```
+        1
+       / \
+      2   3
+     / \ / \
+    4  5 6  7
+
+Level Order: [[1], [2, 3], [4, 5, 6, 7]]
+Flat: [1, 2, 3, 4, 5, 6, 7]
+```
+
+### **Zigzag Level Order:**
+```
+        1           ← Level 0: Left to Right
+       / \
+      2   3         ← Level 1: Right to Left (reversed!)
+     / \ / \
+    4  5 6  7       ← Level 2: Left to Right
+
+Zigzag: [[1], [3, 2], [4, 5, 6, 7]]
+Flat: [1, 3, 2, 4, 5, 6, 7]
+```
+
+---
+
+## **Visual Explanation with Arrows**
+
+```
+        1           
+       / \          →  Direction: Left to Right
+      2   3         
+                    Result: [1]
+
+        1           
+       / \          
+      2   3         ←  Direction: Right to Left (REVERSE!)
+     
+                    Result: [1, 3, 2]
+
+        1           
+       / \          
+      2   3         
+     / \ / \        →  Direction: Left to Right
+    4  5 6  7       
+                    Result: [1, 3, 2, 4, 5, 6, 7]
+```
+
+---
+
+## **Detailed Example 1**
+
+### **Input:**
+```python
+root = [3, 9, 20, null, null, 15, 7]
+```
+
+### **Tree Structure:**
+```
+        3
+       / \
+      9   20
+         /  \
+        15   7
+```
+
+### **Step-by-Step:**
+
+**Level 0 (depth 0): →** (Left to Right)
+```
+        3
+       / \
+      9   20
+         /  \
+        15   7
+
+Nodes at this level: [3]
+Direction: → (left to right)
+Result: [3]
+```
+
+**Level 1 (depth 1): ←** (Right to Left - REVERSED!)
+```
+        3
+       / \
+     [9] [20]  ← Process right to left
+         /  \
+        15   7
+
+Nodes at this level: [9, 20]
+Direction: ← (right to left)
+Reversed: [20, 9]
+Result: [3, 20, 9]
+```
+
+**Level 2 (depth 2): →** (Left to Right)
+```
+        3
+       / \
+      9   20
+         /  \
+       [15] [7]  → Process left to right
+
+Nodes at this level: [15, 7]
+Direction: → (left to right)
+Result: [3, 20, 9, 15, 7]
+```
+
+### **Output:**
+```python
+[[3], [20, 9], [15, 7]]
+
+# Or as flat list:
+[3, 20, 9, 15, 7]
+```
+
+---
+
+## **Detailed Example 2**
+
+### **Input:**
+```python
+root = [1, 2, 3, 4, null, null, 5]
+```
+
+### **Tree Structure:**
+```
+        1
+       / \
+      2   3
+     /     \
+    4       5
+```
+
+### **Level-by-Level Visualization:**
+
+```
+Level 0: →
+        [1]
+       /   \
+      2     3
+     /       \
+    4         5
+
+Process: [1]
+Result: [[1]]
+```
+
+```
+Level 1: ←
+        1
+       / \
+     [2] [3]  ← Reverse!
+     /     \
+    4       5
+
+Process: [2, 3] → Reverse to [3, 2]
+Result: [[1], [3, 2]]
+```
+
+```
+Level 2: →
+        1
+       / \
+      2   3
+     /     \
+   [4]     [5]  → Normal order
+
+Process: [4, 5]
+Result: [[1], [3, 2], [4, 5]]
+```
+
+### **Output:**
+```python
+[[1], [3, 2], [4, 5]]
+
+# Or as flat list:
+[1, 3, 2, 4, 5]
+```
+
+---
+
+## **Pattern Recognition**
+
+### **The Snake/Zigzag Pattern:**
+
+```
+        1
+       / \
+      2   3
+     / \ / \
+    4  5 6  7
+   / \
+  8   9
+
+Level 0: →  [1]
+Level 1: ←  [3, 2]
+Level 2: →  [4, 5, 6, 7]
+Level 3: ←  [9, 8]
+
+Visual as snake:
+    1
+      ↘
+    3 → 2
+    ↓
+    4 → 5 → 6 → 7
+                ↓
+          9 ← 8
+```
+
+---
+
+## **What Your Code Does**
+
+### **Input Format (Array-based):**
+```python
+arr = [1, 2, 3, -1, 5, -1, 7, -1, -1, 6]
+#     root L1  L1  L2  L2  L2  L2  L3  L3  L3
+```
+
+### **Tree Reconstruction:**
+```
+Index:  0   1   2   3   4   5   6   7   8   9
+Value:  1   2   3  -1   5  -1   7  -1  -1   6
+
+        1              (index 0)
+       / \
+      2   3            (indices 1, 2)
+       \   \
+        5   7          (indices 4, 6, skipping -1 at 3, 5)
+           /
+          6            (index 9, skipping -1 at 7, 8)
+```
+
+### **Your Processing:**
+
+**Level 0:**
+```
+map_[0] = [1]
+Direction: → (change = 1)
+Add: 1
+Result: [1]
+```
+
+**Level 1:**
+```
+map_[1] = [2, 3]
+Direction: → (change = 1)
+Add: 2, 3
+Result: [1, 2, 3]
+```
+
+**Level 2:**
+```
+map_[2] = [-1, 5, -1, 7]
+Direction: ← (change = -1)
+Reversed: [7, -1, 5, -1]
+Add: 7, 5 (skip -1)
+Result: [1, 2, 3, 7, 5]
+```
+
+**Level 3:**
+```
+map_[3] = [-1, -1, 6]
+Direction: → (change = 1)
+Add: 6 (skip -1)
+Result: [1, 2, 3, 7, 5, 6]
+```
+
+---
+
+## **Problem Constraints**
+
+- Number of nodes: `0 ≤ nodes ≤ 2000`
+- Node values: `-100 ≤ Node.val ≤ 100`
+
+---
+
+## **Expected Output Format**
+
+### **Option 1: Grouped by Levels**
+```python
+[[1], [3, 2], [4, 5, 6, 7]]
+```
+
+### **Option 2: Flat List (Your Approach)**
+```python
+[1, 3, 2, 4, 5, 6, 7]
+```
+
+---
+
+## **Complete Visual Example**
+
+```
+Input Tree:
+        1
+       / \
+      2   3
+     / \   \
+    4   5   6
+   /
+  7
+
+Step-by-Step Processing:
+
+┌─────────────────────────────────────┐
+│ Level 0 (depth 0):                  │
+│ Direction: →                        │
+│ Nodes: [1]                          │
+│ Output: [1]                         │
+└─────────────────────────────────────┘
+        [1]
+       /   \
+      2     3
+
+┌─────────────────────────────────────┐
+│ Level 1 (depth 1):                  │
+│ Direction: ←                        │
+│ Nodes: [2, 3]                       │
+│ Reversed: [3, 2]                    │
+│ Output: [1, 3, 2]                   │
+└─────────────────────────────────────┘
+        1
+       / \
+     [2] [3] ← Process right to left
+     / \   \
+    4   5   6
+
+┌─────────────────────────────────────┐
+│ Level 2 (depth 2):                  │
+│ Direction: →                        │
+│ Nodes: [4, 5, 6]                    │
+│ Output: [1, 3, 2, 4, 5, 6]          │
+└─────────────────────────────────────┘
+        1
+       / \
+      2   3
+     / \   \
+   [4] [5] [6] → Process left to right
+   /
+  7
+
+┌─────────────────────────────────────┐
+│ Level 3 (depth 3):                  │
+│ Direction: ←                        │
+│ Nodes: [7]                          │
+│ Output: [1, 3, 2, 4, 5, 6, 7]       │
+└─────────────────────────────────────┘
+        1
+       / \
+      2   3
+     / \   \
+    4   5   6
+   /
+ [7] ← (only one node, so reverse doesn't matter)
+
+Final Result: [1, 3, 2, 4, 5, 6, 7]
+```
+
