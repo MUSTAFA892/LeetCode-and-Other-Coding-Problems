@@ -1,0 +1,466 @@
+# **Rotate Function - Maximum Value**
+
+## **Problem: LeetCode #396**
+
+Given an array `nums`, find the maximum value of `F(k)` for all rotations, where:
+
+**F(k) = 0×nums[k] + 1×nums[k+1] + 2×nums[k+2] + ... + (n-1)×nums[k+n-1]**
+
+(indices wrap around)
+
+---
+
+## **Understanding the Problem**
+
+### **Example: nums = [4, 3, 2, 6]**
+
+```
+F(0) = 0×4 + 1×3 + 2×2 + 3×6 = 0 + 3 + 4 + 18 = 25
+       ↓   ↓   ↓   ↓
+      [4,  3,  2,  6]  (no rotation)
+
+F(1) = 0×6 + 1×4 + 2×3 + 3×2 = 0 + 4 + 6 + 6 = 16
+       ↓   ↓   ↓   ↓
+      [6,  4,  3,  2]  (rotate right 1)
+
+F(2) = 0×2 + 1×6 + 2×4 + 3×3 = 0 + 6 + 8 + 9 = 23
+       ↓   ↓   ↓   ↓
+      [2,  6,  4,  3]  (rotate right 2)
+
+F(3) = 0×3 + 1×2 + 2×6 + 3×4 = 0 + 2 + 12 + 12 = 26
+       ↓   ↓   ↓   ↓
+      [3,  2,  6,  4]  (rotate right 3)
+
+Maximum: 26
+```
+
+---
+
+## **APPROACH 1: Optimized (Math Formula) ✓**
+
+### **Key Insight**
+
+Instead of recalculating from scratch, use the relationship:
+```
+F(k) = F(k-1) + sum(nums) - n × nums[n-k]
+```
+
+---
+
+### **Test Case: nums = [4, 3, 2, 6]**
+
+---
+
+#### **STEP 1: Calculate Initial F(0)**
+
+```python
+def initial_ele(nums):
+    prod = 0
+    for i in range(len(nums)):
+        prod += (i * nums[i])
+    return prod
+
+nums = [4, 3, 2, 6]
+
+i=0: prod = 0 + (0 × 4) = 0
+i=1: prod = 0 + (1 × 3) = 3
+i=2: prod = 3 + (2 × 2) = 7
+i=3: prod = 7 + (3 × 6) = 25
+
+Return: 25
+
+Visual:
+F(0) = 0×4 + 1×3 + 2×2 + 3×6 = 25
+```
+
+---
+
+#### **STEP 2: Initialize Variables**
+
+```python
+max_val = float('-inf')
+base_sum = initial_ele(nums) = 25
+max_val = max(-inf, 25) = 25
+
+arr_sum = sum([4, 3, 2, 6]) = 15
+n = 4
+
+State:
+base_sum = 25 (F(0))
+arr_sum = 15
+max_val = 25
+```
+
+---
+
+#### **STEP 3: Calculate Subsequent Rotations**
+
+```python
+Loop: for i in range(len(nums)-1, 0, -1)
+      range(3, 0, -1) = [3, 2, 1]
+```
+
+---
+
+##### **i = 3: Calculate F(1)**
+
+```python
+comp = (base_sum + arr_sum) - (n × nums[i])
+comp = (25 + 15) - (4 × nums[3])
+comp = 40 - (4 × 6)
+comp = 40 - 24
+comp = 16
+
+base_sum = 16
+max_val = max(25, 16) = 25
+
+State:
+base_sum = 16 (F(1))
+max_val = 25
+
+Verification:
+F(1) = 0×6 + 1×4 + 2×3 + 3×2
+     = 0 + 4 + 6 + 6 = 16 ✓
+```
+
+**Formula Explanation:**
+```
+From F(0) to F(1), we rotate right by 1:
+[4, 3, 2, 6] → [6, 4, 3, 2]
+
+F(0) = 0×4 + 1×3 + 2×2 + 3×6
+
+When we rotate:
+- Every element shifts right (index increases by 1)
+- Element at last position (6) moves to front (index 0)
+
+F(1) = F(0) + sum(nums) - n × last_element
+     = 25 + 15 - 4×6
+     = 16 ✓
+
+Why this works:
+- Each element's coefficient increases by 1 → adds sum(nums)
+- But the last element (6) goes from coefficient 3 to 0 → subtract n×6
+```
+
+---
+
+##### **i = 2: Calculate F(2)**
+
+```python
+comp = (base_sum + arr_sum) - (n × nums[i])
+comp = (16 + 15) - (4 × nums[2])
+comp = 31 - (4 × 2)
+comp = 31 - 8
+comp = 23
+
+base_sum = 23
+max_val = max(25, 23) = 25
+
+State:
+base_sum = 23 (F(2))
+max_val = 25
+
+Verification:
+F(2) = 0×2 + 1×6 + 2×4 + 3×3
+     = 0 + 6 + 8 + 9 = 23 ✓
+```
+
+---
+
+##### **i = 1: Calculate F(3)**
+
+```python
+comp = (base_sum + arr_sum) - (n × nums[i])
+comp = (23 + 15) - (4 × nums[1])
+comp = 38 - (4 × 3)
+comp = 38 - 12
+comp = 26
+
+base_sum = 26
+max_val = max(25, 26) = 26
+
+State:
+base_sum = 26 (F(3))
+max_val = 26
+
+Verification:
+F(3) = 0×3 + 1×2 + 2×6 + 3×4
+     = 0 + 2 + 12 + 12 = 26 ✓
+```
+
+---
+
+#### **STEP 4: Return Result**
+
+```python
+return max_val
+return 26
+```
+
+---
+
+## **Complete Trace Table - Approach 1**
+
+| i | nums[i] | base_sum (before) | Calculation | comp | base_sum (after) | max_val |
+|---|---------|-------------------|-------------|------|------------------|---------|
+| Init | - | - | F(0) | 25 | 25 | 25 |
+| 3 | 6 | 25 | (25+15) - 4×6 | 16 | 16 | 25 |
+| 2 | 2 | 16 | (16+15) - 4×2 | 23 | 23 | 25 |
+| 1 | 3 | 23 | (23+15) - 4×3 | 26 | 26 | **26** |
+
+**Final Answer: 26**
+
+---
+
+## **Visual Formula Breakdown**
+
+```
+From F(k-1) to F(k):
+
+Before rotation:
+[4, 3, 2, 6]
+ 0  1  2  3  (indices)
+
+After rotation (move last to front):
+[6, 4, 3, 2]
+ 0  1  2  3  (indices)
+
+Changes:
+- Element 6: was at index 3, now at index 0 (coefficient: 3 → 0)
+- Element 4: was at index 0, now at index 1 (coefficient: 0 → 1)
+- Element 3: was at index 1, now at index 2 (coefficient: 1 → 2)
+- Element 2: was at index 2, now at index 3 (coefficient: 2 → 3)
+
+Net change:
+All elements gain +1 in coefficient except last
+→ Add sum(nums)
+→ Subtract n × last_element
+
+Formula: F(k) = F(k-1) + sum - n×last
+```
+
+---
+
+## **APPROACH 2: Brute Force (Commented Code)**
+
+### **Algorithm**
+Physically rotate array, calculate sum each time.
+
+---
+
+### **Execution for nums = [4, 3, 2, 6]**
+
+---
+
+#### **Iteration 1: i = 0**
+
+```python
+Current array: [4, 3, 2, 6]
+
+prod = 0
+Calculate F(0):
+j=0: prod = 0 + (0 × 4) = 0
+j=1: prod = 0 + (1 × 3) = 3
+j=2: prod = 3 + (2 × 2) = 7
+j=3: prod = 7 + (3 × 6) = 25
+
+max_val = max(-inf, 25) = 25
+
+Rotate:
+temp = nums[-1] = 6
+nums.pop()  → nums = [4, 3, 2]
+nums.insert(0, 6)  → nums = [6, 4, 3, 2]
+
+State after rotation:
+nums = [6, 4, 3, 2]
+max_val = 25
+```
+
+---
+
+#### **Iteration 2: i = 1**
+
+```python
+Current array: [6, 4, 3, 2]
+
+prod = 0
+Calculate F(1):
+j=0: prod = 0 + (0 × 6) = 0
+j=1: prod = 0 + (1 × 4) = 4
+j=2: prod = 4 + (2 × 3) = 10
+j=3: prod = 10 + (3 × 2) = 16
+
+max_val = max(25, 16) = 25
+
+Rotate:
+temp = 2
+nums = [6, 4, 3]
+nums = [2, 6, 4, 3]
+
+State:
+nums = [2, 6, 4, 3]
+max_val = 25
+```
+
+---
+
+#### **Iteration 3: i = 2**
+
+```python
+Current array: [2, 6, 4, 3]
+
+Calculate F(2):
+prod = 0×2 + 1×6 + 2×4 + 3×3 = 23
+
+max_val = max(25, 23) = 25
+
+Rotate:
+temp = 3
+nums = [3, 2, 6, 4]
+
+State:
+nums = [3, 2, 6, 4]
+max_val = 25
+```
+
+---
+
+#### **Iteration 4: i = 3**
+
+```python
+Current array: [3, 2, 6, 4]
+
+Calculate F(3):
+prod = 0×3 + 1×2 + 2×6 + 3×4 = 26
+
+max_val = max(25, 26) = 26
+
+Rotate:
+temp = 4
+nums = [4, 3, 2, 6]
+
+State:
+nums = [4, 3, 2, 6] (back to original)
+max_val = 26
+```
+
+---
+
+### **Return Result**
+
+```python
+return max_val
+return 26
+```
+
+---
+
+## **Trace Table - Approach 2**
+
+| i | nums (before) | F(i) Calculation | F(i) | max_val | nums (after) |
+|---|---------------|------------------|------|---------|--------------|
+| 0 | [4,3,2,6] | 0×4+1×3+2×2+3×6 | 25 | 25 | [6,4,3,2] |
+| 1 | [6,4,3,2] | 0×6+1×4+2×3+3×2 | 16 | 25 | [2,6,4,3] |
+| 2 | [2,6,4,3] | 0×2+1×6+2×4+3×3 | 23 | 25 | [3,2,6,4] |
+| 3 | [3,2,6,4] | 0×3+1×2+2×6+3×4 | 26 | **26** | [4,3,2,6] |
+
+**Final Answer: 26**
+
+---
+
+## **Comparison of Approaches**
+
+| Aspect | Approach 1 (Optimal) | Approach 2 (Brute Force) |
+|--------|----------------------|--------------------------|
+| **Strategy** | Math formula | Physical rotation |
+| **Rotations** | Virtual (formula) | Actual (modify array) |
+| **Calculations** | O(n) once, then O(1) each | O(n) every iteration |
+| **Time** | O(n) | O(n²) |
+| **Space** | O(1) | O(1) |
+| **Array Modified** | NO | YES |
+| **Efficiency** | ✓ Fast | ✗ Slow |
+
+---
+
+## **Why Approach 1 is Better**
+
+```
+For array of size n:
+
+Approach 1:
+- Calculate F(0): O(n)
+- Calculate F(1) to F(n-1): O(1) each = O(n)
+- Total: O(n) + O(n) = O(n) ✓
+
+Approach 2:
+- Each rotation: O(n) calculations
+- n rotations: O(n) × O(n) = O(n²) ✗
+```
+
+---
+
+## **Mathematical Proof**
+
+```
+Given:
+F(k) = 0×nums[k] + 1×nums[k+1] + ... + (n-1)×nums[k+n-1]
+
+When we rotate right by 1:
+F(k+1) = 0×nums[k+1] + 1×nums[k+2] + ... + (n-1)×nums[k]
+
+Relationship:
+F(k+1) = F(k) + sum(nums) - n×nums[k+n-1]
+
+Why?
+- All elements shift right (coefficient +1): adds sum(nums)
+- Last element moves to front (coefficient n-1 → 0): subtracts n×last
+```
+
+---
+
+## **Another Example: nums = [1, 2, 3]**
+
+### **Approach 1:**
+
+```python
+F(0) = 0×1 + 1×2 + 2×3 = 8
+arr_sum = 6, n = 3
+
+i=2: F(1) = (8 + 6) - 3×3 = 14 - 9 = 5
+i=1: F(2) = (5 + 6) - 3×2 = 11 - 6 = 5
+
+max = 8
+
+Verification:
+F(0) = [1,2,3] → 0+2+6 = 8
+F(1) = [3,1,2] → 0+1+4 = 5
+F(2) = [2,3,1] → 0+3+2 = 5
+```
+
+---
+
+## **Edge Cases**
+
+### **Single Element**
+```python
+nums = [5]
+F(0) = 0×5 = 0
+max = 0
+```
+
+### **All Zeros**
+```python
+nums = [0, 0, 0]
+All F(k) = 0
+max = 0
+```
+
+### **Negative Numbers**
+```python
+nums = [-2, 1, 3]
+F(0) = 0×(-2) + 1×1 + 2×3 = 7
+F(1) = 0×3 + 1×(-2) + 2×1 = 0
+F(2) = 0×1 + 1×3 + 2×(-2) = -1
+max = 7
+```
