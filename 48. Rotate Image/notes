@@ -1,0 +1,202 @@
+# ✅ **Code Explanation – Rotate Matrix (90° Clockwise)**
+
+---
+
+## 🔷 **CODE (Your Code)**
+
+```python
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        def get_transporse(matrix):
+            arr = [[1 for i in range(len(matrix))]for i in range(len(matrix))]
+            for k in range(len(matrix)):
+                for j in range(len(matrix)):
+                    arr[k][j] = matrix[j][k]
+            return arr
+            
+        final = get_transporse(matrix)
+        for i in range(len(matrix)):
+            matrix[i] = final[i][::-1]
+```
+
+---
+
+# 🧠 **Problem Understanding**
+
+👉 You are given an **n × n matrix**
+👉 You must rotate it **90° clockwise**
+👉 Must modify **in-place** (but your code uses extra space ⚠️ — we’ll discuss later)
+
+---
+
+# 🔁 **CORE IDEA**
+
+```
+Rotation (90° clockwise) =
+    1. Transpose
+    2. Reverse each row
+```
+
+---
+
+# 🔷 **STEP 1: Transpose Function**
+
+```python
+def get_transporse(matrix):
+```
+
+---
+
+## 🔍 What is Transpose?
+
+👉 Swap rows ↔ columns
+
+### Example:
+
+```
+Original:
+[1, 2, 3]
+[4, 5, 6]
+[7, 8, 9]
+
+Transpose:
+[1, 4, 7]
+[2, 5, 8]
+[3, 6, 9]
+```
+
+---
+
+## 🔄 Execution Trace
+
+```python
+arr = [[1,1,1],
+       [1,1,1],
+       [1,1,1]]
+```
+
+Now filling:
+
+```
+k=0, j=0 → arr[0][0] = matrix[0][0] = 1
+k=0, j=1 → arr[0][1] = matrix[1][0] = 4
+k=0, j=2 → arr[0][2] = matrix[2][0] = 7
+
+k=1, j=0 → arr[1][0] = matrix[0][1] = 2
+k=1, j=1 → arr[1][1] = matrix[1][1] = 5
+k=1, j=2 → arr[1][2] = matrix[2][1] = 8
+
+k=2, j=0 → arr[2][0] = matrix[0][2] = 3
+k=2, j=1 → arr[2][1] = matrix[1][2] = 6
+k=2, j=2 → arr[2][2] = matrix[2][2] = 9
+```
+
+✅ Final Transpose:
+
+```
+[1, 4, 7]
+[2, 5, 8]
+[3, 6, 9]
+```
+
+---
+
+# 🔷 **STEP 2: Reverse Each Row**
+
+```python
+for i in range(len(matrix)):
+    matrix[i] = final[i][::-1]
+```
+
+---
+
+## 🔍 What is happening?
+
+👉 `[::-1]` → reverses each row
+
+---
+
+## 🔄 Execution
+
+```
+Before reverse:
+[1, 4, 7]
+[2, 5, 8]
+[3, 6, 9]
+```
+
+```
+After reverse:
+[7, 4, 1]
+[8, 5, 2]
+[9, 6, 3]
+```
+
+---
+
+# ✅ **FINAL RESULT**
+
+```
+Original:
+[1, 2, 3]
+[4, 5, 6]
+[7, 8, 9]
+
+Rotated:
+[7, 4, 1]
+[8, 5, 2]
+[9, 6, 3]
+```
+
+---
+
+# 📊 **FULL TRACE TABLE**
+
+| Step         | Matrix                  |
+| ------------ | ----------------------- |
+| Original     | [1 2 3] [4 5 6] [7 8 9] |
+| Transpose    | [1 4 7] [2 5 8] [3 6 9] |
+| Reverse Rows | [7 4 1] [8 5 2] [9 6 3] |
+
+---
+
+# ⚠️ **IMPORTANT NOTE (VERY IMPORTANT FOR EXAM)**
+
+👉 Your code is **NOT truly in-place**
+
+Because:
+
+```python
+final = get_transporse(matrix)
+```
+
+👉 This creates **extra space O(n²)**
+
+---
+
+# 🚀 **OPTIMIZED IN-PLACE VERSION (Better Answer)**
+
+```python
+class Solution:
+    def rotate(self, matrix):
+        n = len(matrix)
+
+        # Step 1: Transpose (in-place)
+        for i in range(n):
+            for j in range(i, n):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+
+        # Step 2: Reverse each row
+        for row in matrix:
+            row.reverse()
+```
+
+---
+
+# ⚙️ **TIME & SPACE COMPLEXITY**
+
+| Type              | Value   |
+| ----------------- | ------- |
+| Time              | O(n²)   |
+| Space (your code) | O(n²) ❌ |
+| Space (optimized) | O(1) ✅  |
