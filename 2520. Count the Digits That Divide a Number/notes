@@ -1,0 +1,243 @@
+# ✅ **Code Explanation – Count Digits That Divide Number**
+
+---
+
+## 🔷 **CODE (Your Code)**
+
+```python
+class Solution:
+    def countDigits(self, num: int) -> int:
+        num  = str(num)
+        count = 0
+        for i in num:
+            if int(num) % int(i) == 0:
+                count += 1
+
+        return count
+```
+
+---
+
+# 🧠 **Problem Understanding**
+
+👉 Given a number `num`, count how many of its **digits divide the number exactly**.
+
+---
+
+### 🔍 Example
+
+```text
+num = 121
+
+Digits: 1, 2, 1
+
+121 % 1 = 0 ✅
+121 % 2 = 1 ❌
+121 % 1 = 0 ✅
+
+Answer = 2
+```
+
+---
+
+# 🔷 **STEP 1: Convert Number to String**
+
+```python
+num = str(num)
+```
+
+👉 Why?
+
+* To easily loop through each digit
+
+---
+
+# 🔷 **STEP 2: Initialize Counter**
+
+```python
+count = 0
+```
+
+👉 This will store how many digits divide the number
+
+---
+
+# 🔷 **STEP 3: Loop Through Each Digit**
+
+```python
+for i in num:
+```
+
+👉 `i` is each digit (as a character)
+
+---
+
+# 🔷 **STEP 4: Check Divisibility**
+
+```python
+if int(num) % int(i) == 0:
+```
+
+👉 Convert:
+
+* `num` → integer (whole number)
+* `i` → integer (digit)
+
+👉 Condition:
+
+* If number is divisible by digit → count it
+
+---
+
+# 🔷 **STEP 5: Increment Count**
+
+```python
+count += 1
+```
+
+👉 Increase count for valid digit
+
+---
+
+# 🔷 **STEP 6: Return Answer**
+
+```python
+return count
+```
+
+---
+
+# 📊 **FULL DRY RUN**
+
+---
+
+### Input:
+
+```text
+num = 1248
+```
+
+---
+
+### Step-by-step:
+
+---
+
+### Convert to string
+
+```text
+num = "1248"
+count = 0
+```
+
+---
+
+### Loop Iteration 1
+
+```text
+i = '1'
+
+1248 % 1 = 0 ✅
+
+count = 1
+```
+
+---
+
+### Loop Iteration 2
+
+```text
+i = '2'
+
+1248 % 2 = 0 ✅
+
+count = 2
+```
+
+---
+
+### Loop Iteration 3
+
+```text
+i = '4'
+
+1248 % 4 = 0 ✅
+
+count = 3
+```
+
+---
+
+### Loop Iteration 4
+
+```text
+i = '8'
+
+1248 % 8 = 0 ✅
+
+count = 4
+```
+
+---
+
+# ✅ **FINAL OUTPUT**
+
+```text
+4
+```
+
+---
+
+# 📊 **TRACE TABLE**
+
+| Digit | Operation | Result | Count |
+| ----- | --------- | ------ | ----- |
+| 1     | 1248 % 1  | 0 ✅    | 1     |
+| 2     | 1248 % 2  | 0 ✅    | 2     |
+| 4     | 1248 % 4  | 0 ✅    | 3     |
+| 8     | 1248 % 8  | 0 ✅    | 4     |
+
+---
+
+# ⚠️ **IMPORTANT EDGE CASE**
+
+### ❌ Problem: Digit = 0
+
+```text
+num = 120
+
+Digits: 1, 2, 0
+
+120 % 0 → ❌ ERROR (division by zero)
+```
+
+👉 Your code will crash here.
+
+---
+
+# ✅ **FIX (IMPORTANT)**
+
+```python
+class Solution:
+    def countDigits(self, num: int) -> int:
+        original = num
+        num = str(num)
+        count = 0
+
+        for i in num:
+            if i != '0' and original % int(i) == 0:
+                count += 1
+
+        return count
+```
+
+---
+
+# ⚙️ **TIME COMPLEXITY**
+
+| Part                | Complexity |
+| ------------------- | ---------- |
+| Loop through digits | O(d)       |
+| Total               | **O(d)**   |
+
+👉 d = number of digits (~10 max)
