@@ -1,0 +1,951 @@
+# LeetCode — Minimum Moves to Make Array Complementary
+
+## Problem Understanding
+
+We are given:
+
+* an array `nums`
+* a maximum allowed value `limit`
+
+We must make the array **complementary**.
+
+---
+
+# What is Complementary?
+
+For every mirrored pair:
+
+```text id="3m5g1j"
+(nums[i], nums[n-1-i])
+```
+
+their sum must become the SAME target value.
+
+---
+
+## Example
+
+```python id="ejr7lc"
+nums = [1,2,4,3]
+```
+
+Pairs:
+
+```text id="fj9rls"
+(1,3)
+(2,4)
+```
+
+Their sums:
+
+```text id="vjlwm6"
+1+3 = 4
+2+4 = 6
+```
+
+Not equal.
+
+We must modify elements so ALL pairs have same sum.
+
+---
+
+# Two Approaches
+
+## Approach 1 — Brute Force
+
+```text id="95s77v"
+Try every possible target sum
+Check every pair
+Calculate moves
+```
+
+Time:
+
+```text id="jlwmjs"
+O(n * limit)
+```
+
+---
+
+## Approach 2 — Difference Array Optimization
+
+```text id="kpjlwm"
+Smart range updates
+Prefix sum trick
+```
+
+Time:
+
+```text id="k0my91"
+O(n + limit)
+```
+
+This is the HARD part.
+
+We'll deeply understand this one.
+
+---
+
+# APPROACH 1 — BRUTE FORCE
+
+---
+
+# Code
+
+```python id="zrm15k"
+min_moves = float('inf')
+n = len(nums)
+
+for target in range(2, 2 * limit + 1):
+
+    count = 0
+
+    for i in range(n // 2):
+
+        first_ele = nums[i]
+        second_ele = nums[n - 1 - i]
+
+        pair_sum = first_ele + second_ele
+
+        if pair_sum == target:
+            continue
+
+        elif (
+            1 <= target - first_ele <= limit or
+            1 <= target - second_ele <= limit
+        ):
+            count += 1
+
+        else:
+            count += 2
+
+    min_moves = min(min_moves, count)
+
+return min_moves
+```
+
+---
+
+# Core Idea
+
+For every possible target sum:
+
+```text id="00pw5o"
+2 → 2*limit
+```
+
+check:
+
+```text id="o69rfu"
+How many moves needed?
+```
+
+Then take minimum.
+
+---
+
+# Working Example
+
+## Input
+
+```python id="ddrj5g"
+nums = [1,2,4,3]
+limit = 4
+```
+
+---
+
+# Step 1 — Create Pairs
+
+```text id="l53ebq"
+(1,3)
+(2,4)
+```
+
+---
+
+# Possible target sums
+
+Since:
+
+```text id="jlwmmi"
+limit = 4
+```
+
+minimum possible sum:
+
+```text id="spn98k"
+1 + 1 = 2
+```
+
+maximum possible sum:
+
+```text id="jlwmn8"
+4 + 4 = 8
+```
+
+So:
+
+```python id="jlwmor"
+for target in range(2, 9)
+```
+
+---
+
+# TARGET = 2
+
+---
+
+## Pair 1 → (1,3)
+
+Current sum:
+
+```text id="asb4gd"
+1+3 = 4
+```
+
+Need:
+
+```text id="tlfkn9"
+2
+```
+
+Can one change fix it?
+
+Check:
+
+```python id="jlwmrp"
+target - first_ele = 2 - 1 = 1
+```
+
+Is:
+
+```text id="hjlwmt"
+1 within limit?
+YES
+```
+
+We can change:
+
+```text id="jlwmw5"
+3 → 1
+```
+
+Moves:
+
+```text id="dohmg8"
+1 move
+```
+
+---
+
+## Pair 2 → (2,4)
+
+Current sum:
+
+```text id="z3r11y"
+6
+```
+
+Need:
+
+```text id="jlwmxw"
+2
+```
+
+Check:
+
+```python id="jlwmzv"
+2 - 2 = 0
+```
+
+Invalid.
+
+Check:
+
+```python id="jlwmo1"
+2 - 4 = -2
+```
+
+Invalid.
+
+Need:
+
+```text id="8i5k8n"
+2 moves
+```
+
+Total:
+
+```text id="m9x0xq"
+3 moves
+```
+
+---
+
+# TARGET = 4
+
+---
+
+## Pair 1 → (1,3)
+
+```text id="jlwmqu"
+1+3 = 4
+```
+
+Already good.
+
+Moves:
+
+```text id="jlwmqy"
+0
+```
+
+---
+
+## Pair 2 → (2,4)
+
+```text id="jlwmr8"
+2+4 = 6
+```
+
+Need 4.
+
+Can one move fix?
+
+Check:
+
+```python id="jlwms2"
+4 - 2 = 2
+```
+
+Valid.
+
+Change:
+
+```text id="jlwmsf"
+4 → 2
+```
+
+Moves:
+
+```text id="jlwmsm"
+1
+```
+
+Total:
+
+```text id="jlwmu2"
+1 move
+```
+
+---
+
+# TARGET = 5
+
+---
+
+## Pair 1 → (1,3)
+
+Need:
+
+```text id="jlwmud"
+5
+```
+
+Change:
+
+```text id="jlwmur"
+1 → 2
+```
+
+Moves:
+
+```text id="jlwmv4"
+1
+```
+
+---
+
+## Pair 2 → (2,4)
+
+Need:
+
+```text id="jlwmvk"
+5
+```
+
+Change:
+
+```text id="jlwmvx"
+4 → 3
+```
+
+Moves:
+
+```text id="jlwmwb"
+1
+```
+
+Total:
+
+```text id="jlwmwo"
+2
+```
+
+---
+
+# Final Minimum
+
+```text id="jlwmx8"
+min = 1
+```
+
+Answer:
+
+```text id="jlwmy0"
+1
+```
+
+---
+
+# Why Brute Force is Slow
+
+We try:
+
+```text id="jlwmyn"
+all targets
+```
+
+For each target:
+
+```text id="jlwmz5"
+all pairs
+```
+
+So:
+
+```text id="jlwmzp"
+O(limit * n)
+```
+
+Too slow for large constraints.
+
+---
+
+# APPROACH 2 — DIFFERENCE ARRAY OPTIMIZATION
+
+THIS is the genius solution.
+
+---
+
+# Main Idea
+
+Instead of:
+
+```text id="jlym06"
+checking every target separately
+```
+
+we calculate:
+
+```text id="jlym0r"
+How each pair affects ALL target sums at once
+```
+
+using:
+
+```text id="jlym1a"
+Difference Array + Prefix Sum
+```
+
+---
+
+# IMPORTANT OBSERVATION
+
+For a pair:
+
+```text id="jlym1v"
+(a,b)
+```
+
+there are ONLY 3 possibilities for any target sum.
+
+---
+
+# CASE 1 → 0 MOVES
+
+If:
+
+```text id="jlym2e"
+target = a+b
+```
+
+No changes needed.
+
+---
+
+# CASE 2 → 1 MOVE
+
+Possible target range:
+
+```text id="jlym2x"
+[min(a,b)+1 , max(a,b)+limit]
+```
+
+Why?
+
+Because changing ONE number can achieve any sum in this range.
+
+---
+
+# CASE 3 → 2 MOVES
+
+Outside that range.
+
+Need to change BOTH numbers.
+
+---
+
+# MOST IMPORTANT PART
+
+For ONE pair:
+
+```text id="jlym3h"
+Initially assume all targets need 2 moves
+```
+
+Then:
+
+* reduce by 1 for 1-move range
+* reduce by 1 again at exact pair_sum
+
+---
+
+# FULL WORKING EXAMPLE
+
+---
+
+# Input
+
+```python id="jlym42"
+nums = [1,2,4,3]
+limit = 4
+```
+
+Pairs:
+
+```text id="jlym4l"
+(1,3)
+(2,4)
+```
+
+---
+
+# Difference Array Size
+
+```python id="jlym53"
+diff = [0] * (2 * limit + 2)
+```
+
+Since:
+
+```text id="jlym5m"
+limit = 4
+```
+
+Size:
+
+```text id="jlym63"
+10
+```
+
+Indexes:
+
+```text id="jlym6k"
+0 to 9
+```
+
+We care about:
+
+```text id="jlym72"
+2 to 8
+```
+
+---
+
+# PROCESS PAIR 1 → (1,3)
+
+---
+
+## Step 1
+
+```python id="jlym7f"
+a = 1
+b = 3
+```
+
+---
+
+# Calculate Ranges
+
+## One move range
+
+```python id="jlym7u"
+low = min(a,b)+1
+```
+
+```text id="jlym8a"
+2
+```
+
+---
+
+```python id="jlym8n"
+high = max(a,b)+limit
+```
+
+```text id="jlym96"
+3 + 4 = 7
+```
+
+Range:
+
+```text id="jlym9l"
+[2,7]
+```
+
+Means:
+
+```text id="jlyma4"
+Any target from 2 to 7 can be done in ONE move
+```
+
+---
+
+# Exact Pair Sum
+
+```python id="jlymaj"
+pair_sum = a+b
+```
+
+```text id="jlymb2"
+4
+```
+
+Target 4 needs:
+
+```text id="jlymbg"
+0 moves
+```
+
+---
+
+# Initially Assume 2 Moves Everywhere
+
+```python id="jlymc0"
+diff[2] += 2
+```
+
+Meaning:
+
+```text id="jlymch"
+All targets starting from 2 need 2 moves
+```
+
+---
+
+# Reduce 1 Move Range
+
+```python id="jlymd0"
+diff[low] -= 1
+```
+
+```python id="jlymdg"
+diff[2] -= 1
+```
+
+---
+
+```python id="jlyme0"
+diff[high+1] += 1
+```
+
+```python id="jlymeh"
+diff[8] += 1
+```
+
+This means:
+
+```text id="jlymf2"
+Targets 2→7 now need 1 less move
+```
+
+So:
+
+```text id="jlymfg"
+2 moves → 1 move
+```
+
+---
+
+# Reduce Exact Sum Again
+
+```python id="jlymg0"
+diff[pair_sum] -= 1
+```
+
+```python id="jlymgg"
+diff[4] -= 1
+```
+
+---
+
+```python id="jlymh0"
+diff[pair_sum+1] += 1
+```
+
+```python id="jlymhh"
+diff[5] += 1
+```
+
+Meaning:
+
+```text id="jlymi1"
+Target 4 gets one more reduction
+```
+
+So:
+
+```text id="jlymih"
+1 move → 0 moves
+```
+
+---
+
+# Final Effect of Pair (1,3)
+
+| Target | Moves |
+| ------ | ----- |
+| 2      | 1     |
+| 3      | 1     |
+| 4      | 0     |
+| 5      | 1     |
+| 6      | 1     |
+| 7      | 1     |
+| 8      | 2     |
+
+---
+
+# PROCESS PAIR 2 → (2,4)
+
+---
+
+# One Move Range
+
+```python id="jlymjc"
+low = 3
+high = 8
+```
+
+---
+
+# Exact Sum
+
+```text id="jlymjr"
+6
+```
+
+---
+
+# Apply Updates Again
+
+```python id="jlymk9"
+diff[2] += 2
+
+diff[3] -= 1
+diff[9] += 1
+
+diff[6] -= 1
+diff[7] += 1
+```
+
+---
+
+# Final diff Array
+
+After BOTH pairs:
+
+| Index | Value |
+| ----- | ----- |
+| 2     | 2     |
+| 3     | -1    |
+| 4     | -1    |
+| 5     | 1     |
+| 6     | -1    |
+| 7     | 1     |
+| 8     | 1     |
+| 9     | 1     |
+
+---
+
+# Prefix Sum Phase
+
+Now:
+
+```python id="jlyml6"
+curr += diff[target]
+```
+
+builds actual moves needed.
+
+---
+
+# TARGET = 2
+
+```text id="jlymlm"
+curr = 2
+```
+
+Moves:
+
+```text id="jlymm4"
+2
+```
+
+---
+
+# TARGET = 3
+
+```text id="jlymmj"
+curr = 2 + (-1)
+```
+
+```text id="jlymn1"
+1
+```
+
+---
+
+# TARGET = 4
+
+```text id="jlymng"
+curr = 1 + (-1)
+```
+
+```text id="jlymo0"
+0
+```
+
+---
+
+# TARGET = 5
+
+```text id="jlymof"
+curr = 0 + 1
+```
+
+```text id="jlymow"
+1
+```
+
+---
+
+# TARGET = 6
+
+```text id="jlympd"
+curr = 1 + (-1)
+```
+
+```text id="jlympw"
+0
+```
+
+---
+
+# Final Minimum
+
+```text id="jlymqe"
+1
+```
+
+---
+
+# WHY DIFFERENCE ARRAY WORKS
+
+Instead of updating every target individually:
+
+```text id="jlymqx"
+2 3 4 5 6 7
+```
+
+we do:
+
+```text id="jlymrg"
+start update
+end update
+```
+
+and prefix sum automatically fills ranges.
+
+---
+
+# Complexity Comparison
+
+---
+
+# Brute Force
+
+## Time
+
+```text id="jlymrz"
+O(n * limit)
+```
+
+## Space
+
+```text id="jlymsi"
+O(1)
+```
+
+---
+
+# Optimized Difference Array
+
+## Time
+
+```text id="jlymt1"
+O(n + limit)
+```
+
+## Space
+
+```text id="jlymtl"
+O(limit)
+```
+
+---
+
+# MOST IMPORTANT INSIGHT
+
+The genius observation:
+
+For every pair:
+
+```text id="jlymu4"
+2 moves everywhere
+1 move in a range
+0 move at exact sum
+```
+
+That transforms the problem into:
+
+```text id="jlymun"
+Range update problem
+```
+
+And range updates are solved efficiently using:
+
+```text id="jlymv6"
+Difference Arrays + Prefix Sums
+```
