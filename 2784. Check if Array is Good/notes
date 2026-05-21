@@ -1,0 +1,503 @@
+# LeetCode — Find if Array is Good
+
+## **Problem Understanding**
+
+An array is called **good** if:
+
+* It contains all integers from `1` to `n-1`
+* And the number `n-1` appears **twice**
+
+So the expected pattern is:
+
+```text
+[1,2,3,4,4]
+[1,2,2]
+[1,2,3,3]
+```
+
+where:
+
+* maximum element = `n-1`
+* all smaller numbers appear exactly once
+* maximum appears exactly twice
+
+---
+
+# **Code**
+
+```python
+class Solution:
+    def isGood(self, nums: List[int]) -> bool:
+        max_ele = max(nums)
+        base = []
+
+        for i in range(1, max_ele + 1):
+            base.append(i)
+
+        base.append(max_ele)
+
+        return base == sorted(nums)
+```
+
+---
+
+# **Core Idea**
+
+We create the **ideal good array** using the maximum element.
+
+If:
+
+```text
+max element = 3
+```
+
+then valid array must be:
+
+```text
+[1,2,3,3]
+```
+
+So:
+
+1. Find maximum element
+2. Build expected array
+3. Sort input array
+4. Compare both
+
+If equal → Good array
+Else → Not good
+
+---
+
+# **Step-by-Step Dry Run**
+
+## Example Input
+
+```python
+nums = [2,1,3,3]
+```
+
+---
+
+# **STEP 1: Find Maximum Element**
+
+```python
+max_ele = max(nums)
+```
+
+```text
+max_ele = 3
+```
+
+---
+
+# **STEP 2: Create Empty Base Array**
+
+```python
+base = []
+```
+
+```text
+base = []
+```
+
+---
+
+# **STEP 3: Add Numbers from 1 to max_ele**
+
+```python
+for i in range(1, max_ele + 1):
+    base.append(i)
+```
+
+Since:
+
+```python
+range(1, 4)
+```
+
+the loop runs for:
+
+```text
+1, 2, 3
+```
+
+---
+
+## Iteration 1
+
+```python
+i = 1
+base.append(1)
+```
+
+```text
+base = [1]
+```
+
+---
+
+## Iteration 2
+
+```python
+i = 2
+base.append(2)
+```
+
+```text
+base = [1,2]
+```
+
+---
+
+## Iteration 3
+
+```python
+i = 3
+base.append(3)
+```
+
+```text
+base = [1,2,3]
+```
+
+---
+
+# **STEP 4: Add Maximum Again**
+
+```python
+base.append(max_ele)
+```
+
+```python
+base.append(3)
+```
+
+Now:
+
+```text
+base = [1,2,3,3]
+```
+
+This represents the expected good array.
+
+---
+
+# **STEP 5: Sort nums**
+
+```python
+sorted(nums)
+```
+
+Original:
+
+```text
+[2,1,3,3]
+```
+
+Sorted:
+
+```text
+[1,2,3,3]
+```
+
+---
+
+# **STEP 6: Compare**
+
+```python
+return base == sorted(nums)
+```
+
+Comparison:
+
+```text
+[1,2,3,3] == [1,2,3,3]
+```
+
+Result:
+
+```text
+True
+```
+
+---
+
+# **Visualization**
+
+## Input Array
+
+```text
+nums = [2,1,3,3]
+```
+
+## After Sorting
+
+```text
+[1,2,3,3]
+```
+
+---
+
+## Expected Good Array
+
+```text
+[1,2,3,3]
+```
+
+---
+
+## Comparison
+
+```text
+MATCHED ✓
+```
+
+Therefore:
+
+```text
+True
+```
+
+---
+
+# **Another Example (Invalid Case)**
+
+## Input
+
+```python
+nums = [1,2,4]
+```
+
+---
+
+## Maximum
+
+```text
+max_ele = 4
+```
+
+---
+
+## Expected Array
+
+```text
+[1,2,3,4,4]
+```
+
+---
+
+## Sorted nums
+
+```text
+[1,2,4]
+```
+
+---
+
+## Compare
+
+```text
+[1,2,3,4,4] != [1,2,4]
+```
+
+Result:
+
+```text
+False
+```
+
+---
+
+# **Why This Works**
+
+A valid good array must exactly look like:
+
+```text
+[1,2,3,...,n-1,n-1]
+```
+
+By constructing this ideal array and comparing:
+
+* missing numbers are detected
+* duplicates are detected
+* incorrect maximum is detected
+
+---
+
+# **Complexity Analysis**
+
+## Time Complexity
+
+### Finding maximum
+
+```text
+O(n)
+```
+
+### Building base array
+
+```text
+O(n)
+```
+
+### Sorting nums
+
+```text
+O(n log n)
+```
+
+### Total
+
+```text
+O(n log n)
+```
+
+---
+
+## Space Complexity
+
+`base` array stores `n` elements.
+
+```text
+O(n)
+```
+
+---
+
+# **Key Insights**
+
+## 1. Maximum element determines the pattern
+
+If:
+
+```text
+max = k
+```
+
+then valid array must be:
+
+```text
+[1,2,3,...,k,k]
+```
+
+---
+
+## 2. Sorting simplifies comparison
+
+Without sorting:
+
+```text
+[2,1,3,3]
+```
+
+would not directly match.
+
+After sorting:
+
+```text
+[1,2,3,3]
+```
+
+comparison becomes easy.
+
+---
+
+## 3. Duplicate must be ONLY the maximum
+
+Example:
+
+```text
+[1,1,2]
+```
+
+is invalid because:
+
+* duplicate is `1`
+* not maximum
+
+---
+
+# **Edge Cases**
+
+## Case 1
+
+```python
+nums = [1,1]
+```
+
+Expected:
+
+```text
+[1,1]
+```
+
+Result:
+
+```text
+True
+```
+
+---
+
+## Case 2
+
+```python
+nums = [1,2,2]
+```
+
+Expected:
+
+```text
+[1,2,2]
+```
+
+Result:
+
+```text
+True
+```
+
+---
+
+## Case 3
+
+```python
+nums = [1,2,3,4]
+```
+
+Expected:
+
+```text
+[1,2,3,4,4]
+```
+
+Missing duplicate maximum.
+
+Result:
+
+```text
+False
+```
+
+---
+
+# **Final Understanding**
+
+This solution works by:
+
+1. Finding the maximum number
+2. Constructing the ideal good array
+3. Comparing it with sorted input
+
+If both match exactly:
+
+```text
+Array is Good ✓
+```
+
+Otherwise:
+
+```text
+Not Good ✗
+```
