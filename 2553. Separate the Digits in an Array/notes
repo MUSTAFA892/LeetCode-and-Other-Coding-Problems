@@ -1,0 +1,595 @@
+# LeetCode — Separate the Digits in an Array
+
+## Problem Understanding
+
+We are given an array of integers.
+
+We must:
+
+* take every number
+* separate its digits
+* append all digits into one final array
+
+---
+
+# Example
+
+## Input
+
+```python id="k2v1ra"
+nums = [13,25,83,77]
+```
+
+---
+
+## Output
+
+```python id="q29gk2"
+[1,3,2,5,8,3,7,7]
+```
+
+---
+
+# Core Idea
+
+For every number:
+
+1. Convert number to string
+2. Extract each character
+3. Convert character back to integer
+4. Append into answer array
+
+---
+
+# Code
+
+```python id="z0pxan"
+class Solution:
+    def separateDigits(self, nums: List[int]) -> List[int]:
+        arr = []
+
+        for i in nums:
+            a = list(str(i))
+            
+            for j in a:
+                arr.append(int(j))
+                
+        return arr
+```
+
+---
+
+# Step-by-Step Dry Run
+
+# Input
+
+```python id="sqh9hz"
+nums = [13,25,83,77]
+```
+
+---
+
+# Initial State
+
+```python id="xwnfcb"
+arr = []
+```
+
+---
+
+# ITERATION 1
+
+## Current Number
+
+```python id="bz8ktn"
+i = 13
+```
+
+---
+
+# Convert to String
+
+```python id="r3p8j1"
+str(13)
+```
+
+Result:
+
+```text id="0n8w6z"
+"13"
+```
+
+---
+
+# Convert to List
+
+```python id="9owm1r"
+list("13")
+```
+
+Result:
+
+```python id="m7m7vy"
+['1', '3']
+```
+
+So:
+
+```python id="yjk6zd"
+a = ['1', '3']
+```
+
+---
+
+# Inner Loop
+
+```python id="ttw4rl"
+for j in a
+```
+
+---
+
+## Inner Iteration 1
+
+```python id="4h2q2p"
+j = '1'
+```
+
+Convert to integer:
+
+```python id="m0lmdj"
+int('1')
+```
+
+Result:
+
+```text id="t0zt8u"
+1
+```
+
+Append:
+
+```python id="exqk7g"
+arr.append(1)
+```
+
+Now:
+
+```python id="v80fjf"
+arr = [1]
+```
+
+---
+
+## Inner Iteration 2
+
+```python id="n7k3o8"
+j = '3'
+```
+
+Convert:
+
+```python id="x5l1k2"
+int('3')
+```
+
+Result:
+
+```text id="jj2m8z"
+3
+```
+
+Append:
+
+```python id="75thj5"
+arr.append(3)
+```
+
+Now:
+
+```python id="z4n4x7"
+arr = [1,3]
+```
+
+---
+
+# ITERATION 2
+
+## Current Number
+
+```python id="yzslh4"
+i = 25
+```
+
+---
+
+# Convert to String
+
+```python id="0f5k9w"
+str(25)
+```
+
+Result:
+
+```text id="4x4q7j"
+"25"
+```
+
+---
+
+# Convert to List
+
+```python id="7wtw8m"
+list("25")
+```
+
+Result:
+
+```python id="n5l0w8"
+['2', '5']
+```
+
+---
+
+# Inner Loop
+
+---
+
+## j = '2'
+
+Append:
+
+```python id="8d8r7h"
+arr.append(2)
+```
+
+Now:
+
+```python id="7m0p0f"
+arr = [1,3,2]
+```
+
+---
+
+## j = '5'
+
+Append:
+
+```python id="9g9t5x"
+arr.append(5)
+```
+
+Now:
+
+```python id="c3r3q4"
+arr = [1,3,2,5]
+```
+
+---
+
+# ITERATION 3
+
+## Current Number
+
+```python id="f7m8k9"
+i = 83
+```
+
+Digits:
+
+```python id="d5p6r8"
+['8','3']
+```
+
+---
+
+## Append 8
+
+```python id="m1m7q5"
+arr = [1,3,2,5,8]
+```
+
+---
+
+## Append 3
+
+```python id="u7w2c8"
+arr = [1,3,2,5,8,3]
+```
+
+---
+
+# ITERATION 4
+
+## Current Number
+
+```python id="6x5k2d"
+i = 77
+```
+
+Digits:
+
+```python id="h3y5m8"
+['7','7']
+```
+
+---
+
+## Append First 7
+
+```python id="4r4v8k"
+arr = [1,3,2,5,8,3,7]
+```
+
+---
+
+## Append Second 7
+
+```python id="v8p2d1"
+arr = [1,3,2,5,8,3,7,7]
+```
+
+---
+
+# Final Output
+
+```python id="q0l6z7"
+return arr
+```
+
+Result:
+
+```python id="l8f4s3"
+[1,3,2,5,8,3,7,7]
+```
+
+---
+
+# Full Visualization
+
+---
+
+# Original Array
+
+```text id="g1h8z2"
+[13,25,83,77]
+```
+
+---
+
+# Number 13
+
+```text id="s7d4f1"
+13 → "13" → ['1','3'] → 1,3
+```
+
+---
+
+# Number 25
+
+```text id="t5k2m8"
+25 → "25" → ['2','5'] → 2,5
+```
+
+---
+
+# Number 83
+
+```text id="j9v4p3"
+83 → "83" → ['8','3'] → 8,3
+```
+
+---
+
+# Number 77
+
+```text id="r2w8x5"
+77 → "77" → ['7','7'] → 7,7
+```
+
+---
+
+# Final Combined Array
+
+```text id="m7y2c1"
+[1,3,2,5,8,3,7,7]
+```
+
+---
+
+# Why This Works
+
+## Step 1
+
+Convert number into string:
+
+```python id="y3d7p8"
+str(13)
+```
+
+becomes:
+
+```text id="w6f9j2"
+"13"
+```
+
+---
+
+## Step 2
+
+Convert string into list:
+
+```python id="c8m2q4"
+list("13")
+```
+
+becomes:
+
+```python id="d1v5r7"
+['1','3']
+```
+
+---
+
+## Step 3
+
+Convert each character back to integer:
+
+```python id="u4x9n6"
+int('1') → 1
+```
+
+---
+
+# Complexity Analysis
+
+# Time Complexity
+
+Suppose:
+
+* `n` = number of elements
+* `d` = total digits
+
+We process every digit once.
+
+```text id="k8p3w5"
+O(d)
+```
+
+---
+
+# Space Complexity
+
+Output array stores all digits.
+
+```text id="x6v2m9"
+O(d)
+```
+
+---
+
+# Key Insights
+
+## 1. String Conversion Simplifies Digit Extraction
+
+Instead of using:
+
+```text id="a2m8k4"
+modulo (%)
+division (//)
+```
+
+we directly use:
+
+```python id="n5q7r2"
+str(number)
+```
+
+which is much easier.
+
+---
+
+# 2. list(str(i)) Splits Digits
+
+Example:
+
+```python id="j4m1x8"
+list(str(456))
+```
+
+Result:
+
+```python id="f7t3v9"
+['4','5','6']
+```
+
+---
+
+# 3. Digits are Initially Characters
+
+```python id="w9m2p6"
+'4'
+```
+
+is NOT integer `4`.
+
+So we use:
+
+```python id="e6k5d1"
+int(j)
+```
+
+---
+
+# Edge Cases
+
+---
+
+# Case 1
+
+## Input
+
+```python id="b2v8m4"
+nums = [7]
+```
+
+Output:
+
+```python id="q5x1r9"
+[7]
+```
+
+---
+
+# Case 2
+
+## Input
+
+```python id="u8m3k2"
+nums = [100]
+```
+
+Digits:
+
+```text id="r4p9v1"
+1,0,0
+```
+
+Output:
+
+```python id="x7w5n8"
+[1,0,0]
+```
+
+---
+
+# Case 3
+
+## Input
+
+```python id="k1t4m7"
+nums = [10,20]
+```
+
+Output:
+
+```python id="f9v2p5"
+[1,0,2,0]
+```
+
+---
+
+# Final Understanding
+
+This solution:
+
+1. Takes each number
+2. Converts it into digits
+3. Appends digits one-by-one
+4. Returns the final flattened digit array
+
+Simple and clean approach using:
+
+```text id="d5m7x9"
+String Conversion + Nested Loop
+```
