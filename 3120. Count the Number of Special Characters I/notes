@@ -1,0 +1,712 @@
+# LeetCode — Count the Number of Special Characters I
+
+This solution is for the EASIER version of the problem.
+
+---
+
+# Problem Understanding
+
+A character is called **special** if:
+
+* both lowercase and uppercase versions exist in the string
+
+---
+
+# Example
+
+## Input
+
+```python id="p4m8q2"
+word = "aaAbBc"
+```
+
+Characters present:
+
+```text id="u7r2m5"
+a and A
+b and B
+```
+
+So:
+
+```text id="n1x6p9"
+special characters = 2
+```
+
+Character:
+
+```text id="v5m2q8"
+c
+```
+
+does NOT have uppercase `C`.
+
+So not counted.
+
+---
+
+# Your Code
+
+```python id="k8m3r1"
+class Solution:
+    def numberOfSpecialChars(self, word: str) -> int:
+        word = list(set(word))
+        count  = 0
+        map_ = {}
+
+        for i in range (len(word)):
+            if word[i].lower() not in map_:
+                map_[word[i].lower()] = 1                
+            else:
+                map_[word[i].lower()] += 1
+
+        for i in map_.values():
+            if i == 2:
+                count += 1
+            
+        return count
+```
+
+---
+
+# Core Idea
+
+The genius trick is:
+
+```python id="c2m7x4"
+word = list(set(word))
+```
+
+This removes duplicates.
+
+So:
+
+```text id="y9p3r6"
+"aAaBB"
+```
+
+becomes:
+
+```text id="u4m8q1"
+['a','A','B']
+```
+
+Now we only care whether:
+
+```text id="j6x2p5"
+both lowercase and uppercase exist
+```
+
+NOT frequency.
+
+---
+
+# Main Logic
+
+You use:
+
+```python id="r1m9v3"
+.lower()
+```
+
+to make:
+
+```text id="f8q4p2"
+'a' and 'A'
+```
+
+map to SAME key.
+
+Then:
+
+* first occurrence → count = 1
+* second occurrence → count = 2
+
+If count becomes `2`:
+
+```text id="w3m7x8"
+both uppercase and lowercase exist
+```
+
+---
+
+# FULL DRY RUN
+
+# Input
+
+```python id="n5p2r7"
+word = "aaAbBc"
+```
+
+---
+
+# STEP 1 — Remove Duplicates
+
+```python id="t8m4q1"
+word = list(set(word))
+```
+
+Suppose:
+
+```python id="v2x7m5"
+word = ['a','A','b','B','c']
+```
+
+IMPORTANT:
+
+```text id="k1r8p4"
+set() does NOT preserve order
+```
+
+But order does not matter here.
+
+---
+
+# Initial State
+
+```python id="m9q3v2"
+count = 0
+map_ = {}
+```
+
+---
+
+# ITERATION 1
+
+## Character
+
+```python id="u5m1x8"
+'a'
+```
+
+---
+
+# Convert to lowercase
+
+```python id="q7p4r2"
+'a'.lower()
+```
+
+Result:
+
+```text id="y2m8v6"
+'a'
+```
+
+---
+
+# Check
+
+```python id="c4x9m1"
+'a' not in map_
+```
+
+YES.
+
+Store:
+
+```python id="n8q5p3"
+map_['a'] = 1
+```
+
+---
+
+# Current Map
+
+| Key | Value |
+| --- | ----- |
+| a   | 1     |
+
+---
+
+# ITERATION 2
+
+## Character
+
+```python id="f1m7r4"
+'A'
+```
+
+---
+
+# Convert to lowercase
+
+```python id="t3q8x2"
+'A'.lower()
+```
+
+Result:
+
+```text id="v6m2p9"
+'a'
+```
+
+---
+
+# Check
+
+```python id="x4r1m5"
+'a' already exists
+```
+
+So:
+
+```python id="k7p3q8"
+map_['a'] += 1
+```
+
+Now:
+
+```python id="u2m9x4"
+map_['a'] = 2
+```
+
+---
+
+# Current Map
+
+| Key | Value |
+| --- | ----- |
+| a   | 2     |
+
+Meaning:
+
+```text id="r5m8q1"
+Both a and A exist
+```
+
+---
+
+# ITERATION 3
+
+## Character
+
+```python id="y7p2m6"
+'b'
+```
+
+Store:
+
+```python id="n1x4q9"
+map_['b'] = 1
+```
+
+---
+
+# Current Map
+
+| Key | Value |
+| --- | ----- |
+| a   | 2     |
+| b   | 1     |
+
+---
+
+# ITERATION 4
+
+## Character
+
+```python id="v3m8r2"
+'B'
+```
+
+Convert:
+
+```text id="u8q5p1"
+'b'
+```
+
+Update:
+
+```python id="k2m7x5"
+map_['b'] += 1
+```
+
+Now:
+
+```python id="q9r4m1"
+map_['b'] = 2
+```
+
+---
+
+# Current Map
+
+| Key | Value |
+| --- | ----- |
+| a   | 2     |
+| b   | 2     |
+
+---
+
+# ITERATION 5
+
+## Character
+
+```python id="t6m1p8"
+'c'
+```
+
+Store:
+
+```python id="w4q9x2"
+map_['c'] = 1
+```
+
+---
+
+# Final Map
+
+| Key | Value |
+| --- | ----- |
+| a   | 2     |
+| b   | 2     |
+| c   | 1     |
+
+---
+
+# Counting Phase
+
+```python id="p8m3r7"
+for i in map_.values():
+```
+
+Values:
+
+```text id="n2x5q8"
+2,2,1
+```
+
+---
+
+# Check Value 2
+
+## First 2
+
+```python id="v7m4p1"
+count += 1
+```
+
+```text id="q1r8m5"
+count = 1
+```
+
+---
+
+## Second 2
+
+```python id="u3x9q2"
+count += 1
+```
+
+```text id="m6p2r4"
+count = 2
+```
+
+---
+
+# Final Answer
+
+```python id="k5m8x1"
+return 2
+```
+
+---
+
+# Visualization
+
+---
+
+# Original String
+
+```text id="t1q7m4"
+"aaAbBc"
+```
+
+---
+
+# After Removing Duplicates
+
+```text id="v8m2p5"
+['a','A','b','B','c']
+```
+
+---
+
+# Lowercase Mapping
+
+| Character | lower() |
+| --------- | ------- |
+| a         | a       |
+| A         | a       |
+| b         | b       |
+| B         | b       |
+| c         | c       |
+
+---
+
+# Frequency Map
+
+| Key | Count |
+| --- | ----- |
+| a   | 2     |
+| b   | 2     |
+| c   | 1     |
+
+---
+
+# Characters with Count 2
+
+```text id="r4m9q1"
+a
+b
+```
+
+Total:
+
+```text id="x7p3m6"
+2
+```
+
+---
+
+# Why This Works
+
+The trick:
+
+```python id="u1m5r8"
+.lower()
+```
+
+makes:
+
+```text id="q8x2p4"
+uppercase and lowercase
+```
+
+share SAME hashmap key.
+
+---
+
+# Example
+
+```python id="m3q7v1"
+'A'.lower()
+```
+
+becomes:
+
+```text id="y6p1r5"
+'a'
+```
+
+So:
+
+```text id="t9m4x2"
+'a' and 'A'
+```
+
+both contribute to:
+
+```python id="n5q8m3"
+map_['a']
+```
+
+---
+
+# Why set() is Important
+
+Without:
+
+```python id="u7m2p9"
+set(word)
+```
+
+duplicates would incorrectly increase count.
+
+---
+
+# Example Without set()
+
+```text id="k4r8m1"
+"aaaA"
+```
+
+Map would become:
+
+```text id="v2p5q7"
+a = 4
+```
+
+But we only care whether:
+
+```text id="m8x1r4"
+both forms exist
+```
+
+NOT frequency.
+
+So:
+
+```python id="q3m7p2"
+set()
+```
+
+removes duplicates first.
+
+---
+
+# Complexity Analysis
+
+# Time Complexity
+
+## set(word)
+
+```text id="n6q2m8"
+O(n)
+```
+
+## Traversal
+
+```text id="y1p7r4"
+O(n)
+```
+
+Total:
+
+```text id="u5m9x3"
+O(n)
+```
+
+---
+
+# Space Complexity
+
+Hashmap + set storage.
+
+```text id="v4q8m1"
+O(1)
+```
+
+Because max characters:
+
+```text id="t2p6r9"
+52 letters
+```
+
+---
+
+# Key Insights
+
+---
+
+# 1. lower() Unifies Cases
+
+```text id="x8m3q5"
+A → a
+B → b
+```
+
+Very important trick.
+
+---
+
+# 2. set() Removes Duplicate Noise
+
+We only check:
+
+```text id="p1r7m4"
+existence
+```
+
+not frequency.
+
+---
+
+# 3. Count == 2 Means Special
+
+Example:
+
+```text id="m5x2q8"
+a + A
+```
+
+both present.
+
+---
+
+# Edge Cases
+
+---
+
+# Case 1
+
+## Input
+
+```python id="v9m4r1"
+word = "abc"
+```
+
+Map:
+
+```text id="q7p2m6"
+a=1,b=1,c=1
+```
+
+No value = 2.
+
+Result:
+
+```text id="u3x8q5"
+0
+```
+
+---
+
+# Case 2
+
+## Input
+
+```python id="k1m7p4"
+word = "aA"
+```
+
+Map:
+
+```text id="r8q2m5"
+a=2
+```
+
+Result:
+
+```text id="y4p9x1"
+1
+```
+
+---
+
+# Case 3
+
+## Input
+
+```python id="t6m3q8"
+word = "aaAA"
+```
+
+After set:
+
+```text id="v2p7m1"
+['a','A']
+```
+
+Map:
+
+```text id="x5r1q4"
+a=2
+```
+
+Result:
+
+```text id="m9p4x7"
+1
+```
