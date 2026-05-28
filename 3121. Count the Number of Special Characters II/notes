@@ -1,0 +1,483 @@
+# LeetCode — Count the Number of Special Characters II
+
+## Problem Understanding
+
+A character is called **special** if:
+
+```text id="d2m7q1"
+lowercase letter appears BEFORE uppercase letter
+```
+
+for the SAME character.
+
+---
+
+# Valid Example
+
+```text id="f8k3r5"
+"aA"
+```
+
+* `'a'` appears first
+* `'A'` appears later
+
+So:
+
+```text id="w5m1p9"
+special count = 1
+```
+
+---
+
+# Invalid Example
+
+```text id="u4x8n2"
+"Aa"
+```
+
+Uppercase came first.
+
+NOT special.
+
+---
+
+# Another Important Rule
+
+If lowercase appears AGAIN after uppercase:
+
+```text id="z7p2m4"
+"aAa"
+```
+
+then it becomes invalid.
+
+Because:
+
+```text id="q1v5t8"
+lowercase appeared after uppercase
+```
+
+---
+
+# Your Code
+
+```python id="k8m2r4"
+class Solution:
+    def numberOfSpecialChars(self, word: str) -> int:
+        word = list(word)
+        count = 0
+        running = []
+        map_ = {}
+
+        for i in range(len(word)):
+            
+            if word[i].lower() not in map_:
+                if word[i].isupper():
+                    map_[word[i].lower()] = -1
+                else:
+                    map_[word[i].lower()] = 1
+
+                running.append(word[i])
+
+            else:
+
+                if word[i].islower() and map_[word[i].lower()] == 2:
+                    map_[word[i].lower()] = -1 
+                
+                elif word[i].isupper() and map_[word[i].lower()] == 1:
+                    map_[word[i].lower()] = 2 
+                
+                running.append(word[i])
+
+        for i in map_.values():
+            if i == 2:
+                count += 1
+            
+        return count
+```
+
+---
+
+# Main Idea
+
+You use a hashmap (`map_`) to track state of each character.
+
+---
+
+# Meaning of Values in map_
+
+| Value | Meaning                 |
+| ----- | ----------------------- |
+| 1     | lowercase seen          |
+| 2     | valid special character |
+| -1    | invalid character       |
+
+---
+
+# State Transitions
+
+---
+
+# CASE 1 → First lowercase seen
+
+Example:
+
+```text id="b4m7x2"
+a
+```
+
+Store:
+
+```python id="n9p3k5"
+map_['a'] = 1
+```
+
+Meaning:
+
+```text id="y6r1v8"
+lowercase found
+```
+
+---
+
+# CASE 2 → Uppercase comes after lowercase
+
+Example:
+
+```text id="j2m8q4"
+aA
+```
+
+Update:
+
+```python id="u5t9w1"
+map_['a'] = 2
+```
+
+Meaning:
+
+```text id="x3p7n6"
+VALID special character
+```
+
+---
+
+# CASE 3 → Lowercase appears again AFTER uppercase
+
+Example:
+
+```text id="k1v5m9"
+aAa
+```
+
+Update:
+
+```python id="c8r2p4"
+map_['a'] = -1
+```
+
+Meaning:
+
+```text id="m7q4x1"
+INVALID now
+```
+
+---
+
+# FULL DRY RUN
+
+# Input
+
+```python id="f5m8q2"
+word = "aaAbcBC"
+```
+
+---
+
+# Initial State
+
+```python id="v9r2k7"
+count = 0
+map_ = {}
+```
+
+---
+
+# ITERATION 1
+
+## Character
+
+```python id="q3m7t1"
+word[0] = 'a'
+```
+
+---
+
+# Check
+
+```python id="j8v4p6"
+'a' not in map_
+```
+
+YES.
+
+---
+
+# Is uppercase?
+
+```python id="n2x5m8"
+'a'.isupper()
+```
+
+NO.
+
+So:
+
+```python id="t6p1r4"
+map_['a'] = 1
+```
+
+---
+
+# Current Map
+
+| Character | State |
+| --------- | ----- |
+| a         | 1     |
+
+---
+
+# ITERATION 2
+
+## Character
+
+```python id="x4m8k2"
+'a'
+```
+
+Already exists.
+
+---
+
+# Check Conditions
+
+```python id="v7q2n5"
+islower() and state == 2
+```
+
+State is:
+
+```text id="m1p9r3"
+1
+```
+
+NO.
+
+---
+
+# Check Uppercase Condition
+
+```python id="z5t8x1"
+isupper() and state == 1
+```
+
+NO.
+
+Nothing changes.
+
+---
+
+# Current Map
+
+| Character | State |
+| --------- | ----- |
+| a         | 1     |
+
+---
+
+# ITERATION 3
+
+## Character
+
+```python id="d8m2q6"
+'A'
+```
+
+Already exists.
+
+---
+
+# Check
+
+```python id="f4p7v9"
+isupper() and state == 1
+```
+
+YES.
+
+Update:
+
+```python id="r1x5m3"
+map_['a'] = 2
+```
+
+---
+
+# Current Map
+
+| Character | State |
+| --------- | ----- |
+| a         | 2     |
+
+Meaning:
+
+```text id="w7m4p1"
+'a' is now SPECIAL
+```
+
+---
+
+# ITERATION 4
+
+## Character
+
+```python id="y3q8n2"
+'b'
+```
+
+New lowercase.
+
+```python id="t9v2m5"
+map_['b'] = 1
+```
+
+---
+
+# Current Map
+
+| Character | State |
+| --------- | ----- |
+| a         | 2     |
+| b         | 1     |
+
+---
+
+# ITERATION 5
+
+## Character
+
+```python id="u1m7x4"
+'c'
+```
+
+New lowercase.
+
+```python id="k6p2r8"
+map_['c'] = 1
+```
+
+---
+
+# Current Map
+
+| Character | State |
+| --------- | ----- |
+| a         | 2     |
+| b         | 1     |
+| c         | 1     |
+
+---
+
+# ITERATION 6
+
+## Character
+
+```python id="m8q5v1"
+'B'
+```
+
+---
+
+# Check
+
+```python id="x2r9p4"
+isupper() and state == 1
+```
+
+YES.
+
+Update:
+
+```python id="c5t1m7"
+map_['b'] = 2
+```
+
+---
+
+# Current Map
+
+| Character | State |
+| --------- | ----- |
+| a         | 2     |
+| b         | 2     |
+| c         | 1     |
+
+---
+
+# ITERATION 7
+
+## Character
+
+```python id="q9m4x2"
+'C'
+```
+
+Update:
+
+```python id="v1p7r5"
+map_['c'] = 2
+```
+
+---
+
+# Final Map
+
+| Character | State |
+| --------- | ----- |
+| a         | 2     |
+| b         | 2     |
+| c         | 2     |
+
+---
+
+# Counting Phase
+
+```python id="j7m2q8"
+for i in map_.values():
+```
+
+Values:
+
+```text id="n5x1v4"
+2,2,2
+```
+
+Each `2` means:
+
+```text id="t4p8m6"
+special character
+```
+
+Count becomes:
+
+```text id="y8r3q1"
+3
+```
+
+---
+
+# Final Answer
+
+```python id="k2m9x5"
+return 3
+```
