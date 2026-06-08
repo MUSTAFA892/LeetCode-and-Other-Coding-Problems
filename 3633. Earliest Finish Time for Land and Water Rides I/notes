@@ -1,0 +1,714 @@
+# LeetCode — Earliest Possible Finish Time
+
+## Problem Understanding
+
+You are given:
+
+### Land Rides
+
+```python
+landStartTime[i]
+landDuration[i]
+```
+
+A land ride:
+
+* cannot start before `landStartTime[i]`
+* takes `landDuration[i]` time
+
+---
+
+### Water Rides
+
+```python
+waterStartTime[j]
+waterDuration[j]
+```
+
+A water ride:
+
+* cannot start before `waterStartTime[j]`
+* takes `waterDuration[j]` time
+
+---
+
+## Goal
+
+Complete:
+
+```text
+1 Land Ride
++
+1 Water Ride
+```
+
+in **any order**:
+
+```text
+Land → Water
+OR
+Water → Land
+```
+
+and find the **earliest possible finish time**.
+
+---
+
+# Your Code
+
+```python
+class Solution:
+    def earliestFinishTime(self, landStartTime: List[int], landDuration: List[int], waterStartTime: List[int], waterDuration: List[int]) -> int:
+        early_finish = float('inf')
+
+        for i in range(len(landStartTime)):
+            for j in range(len(waterStartTime)):
+
+                land_finish = max(landStartTime[i], 0) + landDuration[i]
+                water_start = max(land_finish, waterStartTime[j])
+                water_finish = water_start + waterDuration[j]
+
+                early_finish = min(early_finish, water_finish)
+
+                water_finish2 = max(waterStartTime[j], 0) + waterDuration[j]
+                land_start = max(water_finish2, landStartTime[i])
+                land_finish2 = land_start + landDuration[i]
+
+                early_finish = min(early_finish, land_finish2)
+
+        return early_finish
+```
+
+---
+
+# Core Idea
+
+For every:
+
+```text
+Land Ride i
+```
+
+and every:
+
+```text
+Water Ride j
+```
+
+check BOTH possibilities:
+
+```text
+1. Land → Water
+2. Water → Land
+```
+
+Take the minimum finish time among all combinations.
+
+---
+
+# Example
+
+## Input
+
+```python
+landStartTime = [2]
+landDuration  = [3]
+
+waterStartTime = [5]
+waterDuration  = [4]
+```
+
+---
+
+# Visualization
+
+## Land Ride
+
+```text
+Starts at : 2
+Duration  : 3
+```
+
+Timeline:
+
+```text
+0----1----2----3----4----5
+          L=========L
+
+Land finishes at 5
+```
+
+---
+
+## Water Ride
+
+```text
+Starts at : 5
+Duration  : 4
+```
+
+Timeline:
+
+```text
+5----6----7----8----9
+W===================W
+
+Water finishes at 9
+```
+
+---
+
+# DRY RUN
+
+---
+
+# Initial State
+
+```python
+early_finish = inf
+```
+
+---
+
+# Outer Loop
+
+```python
+i = 0
+```
+
+Land Ride:
+
+```python
+start = 2
+duration = 3
+```
+
+---
+
+# Inner Loop
+
+```python
+j = 0
+```
+
+Water Ride:
+
+```python
+start = 5
+duration = 4
+```
+
+---
+
+# CASE 1 : LAND → WATER
+
+---
+
+## Step 1
+
+Calculate land finish
+
+```python
+land_finish = max(landStartTime[i], 0) + landDuration[i]
+```
+
+Substitute:
+
+```python
+land_finish = max(2,0) + 3
+```
+
+```python
+land_finish = 5
+```
+
+---
+
+# Visualization
+
+```text
+Time
+
+0----1----2----3----4----5
+          LAND
+```
+
+Finished at:
+
+```text
+5
+```
+
+---
+
+## Step 2
+
+When can water start?
+
+```python
+water_start = max(land_finish, waterStartTime[j])
+```
+
+Substitute:
+
+```python
+water_start = max(5,5)
+```
+
+```python
+water_start = 5
+```
+
+Reason:
+
+```text
+Water ride available at 5
+Land finishes at 5
+```
+
+So:
+
+```text
+Start Water at 5
+```
+
+---
+
+## Step 3
+
+Calculate water finish
+
+```python
+water_finish = water_start + waterDuration[j]
+```
+
+Substitute:
+
+```python
+water_finish = 5 + 4
+```
+
+```python
+water_finish = 9
+```
+
+---
+
+# Timeline
+
+```text
+0----1----2----3----4----5----6----7----8----9
+
+          LAND
+                        WATER
+```
+
+Finish:
+
+```text
+9
+```
+
+---
+
+## Update Answer
+
+```python
+early_finish = min(inf, 9)
+```
+
+```python
+early_finish = 9
+```
+
+---
+
+# CASE 2 : WATER → LAND
+
+---
+
+## Step 1
+
+Finish Water First
+
+```python
+water_finish2 = max(waterStartTime[j],0) + waterDuration[j]
+```
+
+Substitute:
+
+```python
+water_finish2 = max(5,0) + 4
+```
+
+```python
+water_finish2 = 9
+```
+
+---
+
+# Timeline
+
+```text
+0----1----2----3----4----5----6----7----8----9
+
+                    WATER
+```
+
+Finish:
+
+```text
+9
+```
+
+---
+
+## Step 2
+
+When can land start?
+
+```python
+land_start = max(water_finish2, landStartTime[i])
+```
+
+Substitute:
+
+```python
+land_start = max(9,2)
+```
+
+```python
+land_start = 9
+```
+
+Reason:
+
+```text
+Land available at 2
+But we are still on Water ride until 9
+```
+
+So:
+
+```text
+Land starts at 9
+```
+
+---
+
+## Step 3
+
+Finish Land
+
+```python
+land_finish2 = land_start + landDuration[i]
+```
+
+Substitute:
+
+```python
+land_finish2 = 9 + 3
+```
+
+```python
+land_finish2 = 12
+```
+
+---
+
+# Timeline
+
+```text
+0----1----2----3----4----5----6----7----8----9----10----11----12
+
+                    WATER
+
+                                             LAND
+```
+
+Finish:
+
+```text
+12
+```
+
+---
+
+## Update Answer
+
+```python
+early_finish = min(9,12)
+```
+
+```python
+early_finish = 9
+```
+
+---
+
+# End of Loops
+
+Return:
+
+```python
+9
+```
+
+---
+
+# More Interesting Example
+
+## Input
+
+```python
+landStartTime = [2]
+landDuration  = [3]
+
+waterStartTime = [1]
+waterDuration  = [2]
+```
+
+---
+
+# Land → Water
+
+---
+
+## Land Finish
+
+```python
+2 + 3 = 5
+```
+
+---
+
+## Water Start
+
+```python
+max(5,1)
+```
+
+```python
+5
+```
+
+Water ride was available at:
+
+```text
+1
+```
+
+But land finished only at:
+
+```text
+5
+```
+
+So wait until:
+
+```text
+5
+```
+
+---
+
+## Water Finish
+
+```python
+5 + 2 = 7
+```
+
+---
+
+# Water → Land
+
+---
+
+## Water Finish
+
+```python
+1 + 2 = 3
+```
+
+---
+
+## Land Start
+
+```python
+max(3,2)
+```
+
+```python
+3
+```
+
+---
+
+## Land Finish
+
+```python
+3 + 3 = 6
+```
+
+---
+
+# Comparison
+
+| Order        | Finish |
+| ------------ | ------ |
+| Land → Water | 7      |
+| Water → Land | 6      |
+
+Answer:
+
+```text
+6
+```
+
+---
+
+# Why max() is Used
+
+Suppose:
+
+```python
+land_finish = 8
+waterStartTime = 5
+```
+
+Can water start at 5?
+
+```text
+NO
+```
+
+Because we are still on land ride.
+
+So:
+
+```python
+water_start = max(8,5)
+```
+
+```python
+water_start = 8
+```
+
+Meaning:
+
+```text
+Start when BOTH conditions are satisfied.
+```
+
+---
+
+# Complexity Analysis
+
+Let:
+
+```text
+n = number of land rides
+m = number of water rides
+```
+
+---
+
+## Time Complexity
+
+Nested loops:
+
+```python
+for i in land rides
+    for j in water rides
+```
+
+Therefore:
+
+```text
+O(n × m)
+```
+
+---
+
+## Space Complexity
+
+Only variables used:
+
+```text
+early_finish
+land_finish
+water_start
+...
+```
+
+No extra arrays.
+
+```text
+O(1)
+```
+
+---
+
+# Key Insight
+
+For every pair:
+
+```text
+(Land i, Water j)
+```
+
+you must check:
+
+```text
+Land → Water
+```
+
+and
+
+```text
+Water → Land
+```
+
+because the faster answer may come from either order.
+
+The formula:
+
+```python
+max(previous_finish, ride_start_time)
+```
+
+means:
+
+```text
+Start the next ride only when:
+1. The ride is available
+2. The previous ride is completed
+```
+
+and that is the heart of the solution.
+
+---
+
+# Final Algorithm
+
+```text
+For every land ride:
+    For every water ride:
+
+        Compute:
+            Land → Water finish time
+
+        Compute:
+            Water → Land finish time
+
+        Keep minimum answer
+
+Return minimum finish time
+```
+
+### Complexity
+
+```text
+Time  : O(n × m)
+Space : O(1)
+```
