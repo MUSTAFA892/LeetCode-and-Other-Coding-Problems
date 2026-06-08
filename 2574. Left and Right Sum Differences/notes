@@ -1,0 +1,861 @@
+# LeetCode 2574 — Left and Right Sum Differences
+
+## Problem Understanding
+
+For every index `i`:
+
+We need:
+
+```text
+answer[i] = |leftSum[i] - rightSum[i]|
+```
+
+Where:
+
+### leftSum[i]
+
+Sum of all elements to the LEFT of index `i`.
+
+### rightSum[i]
+
+Sum of all elements to the RIGHT of index `i`.
+
+---
+
+# Example
+
+## Input
+
+```python
+nums = [10,4,8,3]
+```
+
+---
+
+## Index 0
+
+Left side:
+
+```text
+[]
+```
+
+Sum:
+
+```text
+0
+```
+
+Right side:
+
+```text
+[4,8,3]
+```
+
+Sum:
+
+```text
+15
+```
+
+Difference:
+
+```text
+|0 - 15| = 15
+```
+
+---
+
+## Index 1
+
+Left:
+
+```text
+[10]
+```
+
+Sum:
+
+```text
+10
+```
+
+Right:
+
+```text
+[8,3]
+```
+
+Sum:
+
+```text
+11
+```
+
+Difference:
+
+```text
+|10 - 11| = 1
+```
+
+---
+
+## Index 2
+
+Left:
+
+```text
+[10,4]
+```
+
+Sum:
+
+```text
+14
+```
+
+Right:
+
+```text
+[3]
+```
+
+Sum:
+
+```text
+3
+```
+
+Difference:
+
+```text
+|14 - 3| = 11
+```
+
+---
+
+## Index 3
+
+Left:
+
+```text
+[10,4,8]
+```
+
+Sum:
+
+```text
+22
+```
+
+Right:
+
+```text
+[]
+```
+
+Sum:
+
+```text
+0
+```
+
+Difference:
+
+```text
+|22 - 0| = 22
+```
+
+---
+
+# Final Output
+
+```python
+[15,1,11,22]
+```
+
+---
+
+# Your Code
+
+```python
+class Solution:
+    def leftRightDifference(self, nums: List[int]) -> List[int]:
+        arr = []
+        left_sum = []
+        right_sum = []
+        total_sum = sum(nums)
+        left , right = total_sum, total_sum
+        n = len(nums)
+
+        for i in range(len(nums)):
+
+            left -= nums[n-1-i]
+            right -= nums[i]
+
+            left_sum.append(left)
+            right_sum.append(right)
+
+        for i in range(len(nums)):
+            arr.append(abs(right_sum[i] - left_sum[n-1-i]))
+
+        return arr
+```
+
+---
+
+# Core Idea
+
+Instead of computing:
+
+```text
+left sum for every index
+right sum for every index
+```
+
+separately,
+
+you cleverly build:
+
+```text
+right_sum from left to right
+left_sum from right to left
+```
+
+and then reverse-match them.
+
+---
+
+# Working Example
+
+## Input
+
+```python
+nums = [10,4,8,3]
+```
+
+---
+
+# Initial State
+
+```python
+total_sum = 25
+```
+
+because:
+
+```text
+10 + 4 + 8 + 3 = 25
+```
+
+---
+
+```python
+left = 25
+right = 25
+```
+
+---
+
+```python
+left_sum = []
+right_sum = []
+```
+
+---
+
+# First Loop
+
+---
+
+## ITERATION 1
+
+```python
+i = 0
+```
+
+---
+
+### Update Left
+
+```python
+left -= nums[n-1-i]
+```
+
+Substitute:
+
+```python
+left -= nums[3]
+```
+
+```python
+left = 25 - 3
+```
+
+```python
+left = 22
+```
+
+---
+
+### Update Right
+
+```python
+right -= nums[0]
+```
+
+```python
+right = 25 - 10
+```
+
+```python
+right = 15
+```
+
+---
+
+### Store
+
+```python
+left_sum.append(22)
+right_sum.append(15)
+```
+
+Current:
+
+```python
+left_sum  = [22]
+right_sum = [15]
+```
+
+---
+
+# ITERATION 2
+
+```python
+i = 1
+```
+
+---
+
+### Update Left
+
+```python
+left -= nums[2]
+```
+
+```python
+left = 22 - 8
+```
+
+```python
+left = 14
+```
+
+---
+
+### Update Right
+
+```python
+right -= nums[1]
+```
+
+```python
+right = 15 - 4
+```
+
+```python
+right = 11
+```
+
+---
+
+### Store
+
+```python
+left_sum  = [22,14]
+right_sum = [15,11]
+```
+
+---
+
+# ITERATION 3
+
+```python
+i = 2
+```
+
+---
+
+### Left
+
+```python
+left -= nums[1]
+```
+
+```python
+left = 14 - 4
+```
+
+```python
+left = 10
+```
+
+---
+
+### Right
+
+```python
+right -= nums[2]
+```
+
+```python
+right = 11 - 8
+```
+
+```python
+right = 3
+```
+
+---
+
+### Store
+
+```python
+left_sum  = [22,14,10]
+right_sum = [15,11,3]
+```
+
+---
+
+# ITERATION 4
+
+```python
+i = 3
+```
+
+---
+
+### Left
+
+```python
+left -= nums[0]
+```
+
+```python
+left = 10 - 10
+```
+
+```python
+left = 0
+```
+
+---
+
+### Right
+
+```python
+right -= nums[3]
+```
+
+```python
+right = 3 - 3
+```
+
+```python
+right = 0
+```
+
+---
+
+### Store
+
+```python
+left_sum  = [22,14,10,0]
+right_sum = [15,11,3,0]
+```
+
+---
+
+# Meaning of Arrays
+
+---
+
+## right_sum
+
+```python
+[15,11,3,0]
+```
+
+These are exactly:
+
+```text
+right sums
+```
+
+for each index.
+
+---
+
+| Index | Right Sum |
+| ----- | --------- |
+| 0     | 15        |
+| 1     | 11        |
+| 2     | 3         |
+| 3     | 0         |
+
+---
+
+## left_sum
+
+```python
+[22,14,10,0]
+```
+
+These are left sums but generated in reverse order.
+
+---
+
+| Value | Actual Index |
+| ----- | ------------ |
+| 22    | index 3      |
+| 14    | index 2      |
+| 10    | index 1      |
+| 0     | index 0      |
+
+---
+
+# Visualization
+
+```text
+nums
+
+Index : 0   1   2   3
+Value : 10  4   8   3
+
+left_sum
+
+Index : 0   1   2   3
+Value : 22 14 10 0
+
+Actually represents
+
+Index : 3   2   1   0
+Value : 22 14 10 0
+```
+
+---
+
+# Second Loop
+
+---
+
+## i = 0
+
+```python
+right_sum[0]
+```
+
+```text
+15
+```
+
+---
+
+```python
+left_sum[n-1-0]
+```
+
+```python
+left_sum[3]
+```
+
+```text
+0
+```
+
+---
+
+Difference
+
+```python
+abs(15-0)
+```
+
+```text
+15
+```
+
+---
+
+## i = 1
+
+```python
+abs(11 - 10)
+```
+
+```text
+1
+```
+
+---
+
+## i = 2
+
+```python
+abs(3 - 14)
+```
+
+```text
+11
+```
+
+---
+
+## i = 3
+
+```python
+abs(0 - 22)
+```
+
+```text
+22
+```
+
+---
+
+# Final Array
+
+```python
+[15,1,11,22]
+```
+
+---
+
+# Why `left_sum[n-1-i]` ?
+
+Because:
+
+```python
+left_sum
+```
+
+was built from:
+
+```text
+RIGHT → LEFT
+```
+
+So its indices are reversed.
+
+---
+
+Example:
+
+```python
+left_sum = [22,14,10,0]
+```
+
+Actually means:
+
+```text
+index 3 -> 22
+index 2 -> 14
+index 1 -> 10
+index 0 -> 0
+```
+
+Therefore:
+
+```python
+left_sum[n-1-i]
+```
+
+retrieves the correct left sum for index `i`.
+
+---
+
+# Visual Mapping
+
+```text
+left_sum
+
+Stored Index    Actual Index
+
+0       ->      3
+1       ->      2
+2       ->      1
+3       ->      0
+```
+
+Hence:
+
+```python
+left_sum[n-1-i]
+```
+
+reverses it back.
+
+---
+
+# Complexity Analysis
+
+## Time Complexity
+
+First loop:
+
+```text
+O(n)
+```
+
+Second loop:
+
+```text
+O(n)
+```
+
+Total:
+
+```text
+O(n)
+```
+
+---
+
+## Space Complexity
+
+Arrays:
+
+```python
+left_sum
+right_sum
+arr
+```
+
+Each size:
+
+```text
+n
+```
+
+Total:
+
+```text
+O(n)
+```
+
+---
+
+# Cleaner Solution (Most Common)
+
+```python
+class Solution:
+    def leftRightDifference(self, nums: List[int]) -> List[int]:
+
+        left = 0
+        right = sum(nums)
+
+        ans = []
+
+        for num in nums:
+
+            right -= num
+
+            ans.append(abs(left - right))
+
+            left += num
+
+        return ans
+```
+
+---
+
+# Dry Run of Cleaner Approach
+
+For:
+
+```python
+nums = [10,4,8,3]
+```
+
+### Index 0
+
+```text
+left = 0
+right = 15
+```
+
+```text
+|0-15| = 15
+```
+
+---
+
+### Index 1
+
+```text
+left = 10
+right = 11
+```
+
+```text
+|10-11| = 1
+```
+
+---
+
+### Index 2
+
+```text
+left = 14
+right = 3
+```
+
+```text
+|14-3| = 11
+```
+
+---
+
+### Index 3
+
+```text
+left = 22
+right = 0
+```
+
+```text
+|22-0| = 22
+```
+
+Result:
+
+```python
+[15,1,11,22]
+```
+
+---
+
+# Key Insight
+
+Your solution cleverly builds:
+
+```text
+right sums directly
+left sums in reverse order
+```
+
+and then uses:
+
+```python
+left_sum[n-1-i]
+```
+
+to align them correctly.
+
+The heart of the solution is:
+
+```text
+Subtract elements progressively from total sum
+to generate prefix/suffix sums in O(n)
+```
