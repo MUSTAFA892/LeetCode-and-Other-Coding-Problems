@@ -1,0 +1,592 @@
+# LeetCode 2144 — Minimum Cost of Buying Candies With Discount
+
+## Problem Understanding
+
+There is a special offer:
+
+```text
+Buy 2 candies
+Get 1 candy FREE
+```
+
+Condition:
+
+```text
+The free candy must have cost less than or equal to
+the cheapest candy among the two purchased candies.
+```
+
+---
+
+## Example
+
+```python
+cost = [6,5,7,9,2,2]
+```
+
+After sorting descending:
+
+```text
+[9,7,6,5,2,2]
+```
+
+Take candies in groups of 3:
+
+```text
+Buy 9
+Buy 7
+Free 6
+
+Buy 5
+Buy 2
+Free 2
+```
+
+Total:
+
+```text
+9 + 7 + 5 + 2 = 23
+```
+
+---
+
+# Your Code
+
+```python
+class Solution:
+    def minimumCost(self, cost: List[int]) -> int:
+        min_cost = 0
+        pointer = 0 
+        cost = sorted(cost, reverse=True)
+
+        while pointer < len(cost):
+            if len(cost) > 2:
+                for i in range(2):
+                    if pointer < len(cost):
+                        min_cost += cost[pointer]
+                        pointer += 1
+            else:
+                return sum(cost)
+
+            pointer += 1
+            
+        return min_cost
+```
+
+---
+
+# Core Idea
+
+The greedy strategy is:
+
+```text
+Sort descending
+Every 3rd candy becomes free
+```
+
+Why?
+
+Because we want the FREE candy to be as expensive as possible.
+
+So we always group:
+
+```text
+Most expensive
+Second most expensive
+Third most expensive → FREE
+```
+
+---
+
+# Working Example
+
+## Input
+
+```python
+cost = [6,5,7,9,2,2]
+```
+
+---
+
+# Step 1: Sort Descending
+
+```python
+cost = sorted(cost, reverse=True)
+```
+
+Result:
+
+```python
+cost = [9,7,6,5,2,2]
+```
+
+Visualization:
+
+```text
+Index:  0  1  2  3  4  5
+Cost : [9, 7, 6, 5, 2, 2]
+```
+
+---
+
+# Initial State
+
+```python
+min_cost = 0
+pointer = 0
+```
+
+---
+
+# ITERATION 1
+
+Current pointer:
+
+```python
+pointer = 0
+```
+
+---
+
+## Enter for loop
+
+```python
+for i in range(2)
+```
+
+Runs twice.
+
+---
+
+## First Purchase
+
+```python
+min_cost += cost[0]
+```
+
+```python
+min_cost = 9
+pointer = 1
+```
+
+---
+
+## Second Purchase
+
+```python
+min_cost += cost[1]
+```
+
+```python
+min_cost = 16
+pointer = 2
+```
+
+---
+
+# Free Candy
+
+After loop:
+
+```python
+pointer += 1
+```
+
+```python
+pointer = 3
+```
+
+Candy skipped:
+
+```text
+cost[2] = 6
+```
+
+This is the FREE candy.
+
+---
+
+# State
+
+```text
+Paid : 9 + 7
+Free : 6
+```
+
+Total:
+
+```python
+min_cost = 16
+```
+
+---
+
+# ITERATION 2
+
+Current:
+
+```python
+pointer = 3
+```
+
+---
+
+## First Purchase
+
+```python
+min_cost += cost[3]
+```
+
+```python
+16 + 5 = 21
+```
+
+```python
+pointer = 4
+```
+
+---
+
+## Second Purchase
+
+```python
+min_cost += cost[4]
+```
+
+```python
+21 + 2 = 23
+```
+
+```python
+pointer = 5
+```
+
+---
+
+# Free Candy
+
+```python
+pointer += 1
+```
+
+```python
+pointer = 6
+```
+
+Skipped:
+
+```text
+cost[5] = 2
+```
+
+Free candy.
+
+---
+
+# Final State
+
+Paid:
+
+```text
+9 + 7 + 5 + 2
+```
+
+Free:
+
+```text
+6 + 2
+```
+
+Total:
+
+```python
+23
+```
+
+---
+
+# Return
+
+```python
+return 23
+```
+
+---
+
+# Visual Representation
+
+```text
+Sorted Cost
+
+[9,7,6,5,2,2]
+
+Group 1
+--------
+Buy 9
+Buy 7
+Free 6
+
+Group 2
+--------
+Buy 5
+Buy 2
+Free 2
+```
+
+---
+
+# Why Sorting Descending Works
+
+Suppose:
+
+```python
+[1,2,3,4,5,6]
+```
+
+Sorted descending:
+
+```python
+[6,5,4,3,2,1]
+```
+
+Groups:
+
+```text
+Buy 6
+Buy 5
+Free 4
+
+Buy 3
+Buy 2
+Free 1
+```
+
+We get:
+
+```text
+Free candies = 4 + 1 = 5
+```
+
+Maximum possible discount.
+
+---
+
+# Important Issue in Your Code
+
+Consider:
+
+```python
+cost = [5,4]
+```
+
+---
+
+### Step
+
+```python
+len(cost) > 2
+```
+
+is:
+
+```python
+False
+```
+
+So:
+
+```python
+return sum(cost)
+```
+
+returns:
+
+```python
+9
+```
+
+Correct.
+
+---
+
+But the condition:
+
+```python
+if len(cost) > 2:
+```
+
+checks the ENTIRE array length.
+
+Not the remaining candies.
+
+A cleaner solution avoids this.
+
+---
+
+# Cleaner Version
+
+```python
+class Solution:
+    def minimumCost(self, cost: List[int]) -> int:
+        cost.sort(reverse=True)
+
+        ans = 0
+
+        for i in range(len(cost)):
+            if (i + 1) % 3 != 0:
+                ans += cost[i]
+
+        return ans
+```
+
+---
+
+# Dry Run of Cleaner Approach
+
+```python
+cost = [9,7,6,5,2,2]
+```
+
+---
+
+## i = 0
+
+```python
+(0+1)%3 = 1
+```
+
+Pay:
+
+```python
+ans = 9
+```
+
+---
+
+## i = 1
+
+```python
+(1+1)%3 = 2
+```
+
+Pay:
+
+```python
+ans = 16
+```
+
+---
+
+## i = 2
+
+```python
+(2+1)%3 = 0
+```
+
+FREE
+
+Skip.
+
+---
+
+## i = 3
+
+Pay:
+
+```python
+ans = 21
+```
+
+---
+
+## i = 4
+
+Pay:
+
+```python
+ans = 23
+```
+
+---
+
+## i = 5
+
+FREE
+
+Skip.
+
+---
+
+Answer:
+
+```python
+23
+```
+
+---
+
+# Complexity Analysis
+
+### Sorting
+
+```text
+O(n log n)
+```
+
+---
+
+### Traversal
+
+```text
+O(n)
+```
+
+---
+
+### Total
+
+```text
+O(n log n)
+```
+
+---
+
+### Space
+
+Ignoring sort:
+
+```text
+O(1)
+```
+
+---
+
+# Key Insight
+
+The entire problem depends on one greedy observation:
+
+```text
+To maximize discount,
+make the most expensive possible candy free.
+```
+
+Therefore:
+
+```text
+Sort descending
+Take every third candy as free
+```
+
+That's why the optimal pattern is:
+
+```text
+Pay
+Pay
+Free
+
+Pay
+Pay
+Free
+
+...
+```
