@@ -1,0 +1,515 @@
+# LeetCode 3689 — Maximum Total Subarray Value I
+
+## Problem Understanding
+
+You are given:
+
+```python
+nums = [...]
+k = ...
+```
+
+You must choose exactly:
+
+```text
+k subarrays
+```
+
+A subarray value is:
+
+```text
+max(subarray) - min(subarray)
+```
+
+The total value is:
+
+```text
+sum of values of all chosen subarrays
+```
+
+---
+
+# VERY IMPORTANT OBSERVATION
+
+The problem says:
+
+```text
+Subarrays may overlap
+```
+
+and
+
+```text
+The exact same subarray can be chosen more than once
+```
+
+This changes everything.
+
+---
+
+# What Does This Mean?
+
+Suppose:
+
+```python
+nums = [1,5,3]
+k = 4
+```
+
+If the best subarray is:
+
+```text
+[1,5]
+```
+
+Value:
+
+```text
+5 - 1 = 4
+```
+
+We can choose:
+
+```text
+[1,5]
+[1,5]
+[1,5]
+[1,5]
+```
+
+again and again.
+
+Therefore:
+
+```text
+We only need ONE best subarray.
+```
+
+---
+
+# Key Insight
+
+To maximize total value:
+
+```text
+Find subarray with maximum value.
+```
+
+Then choose it:
+
+```text
+k times
+```
+
+---
+
+# What's the Maximum Possible Subarray Value?
+
+Subarray value:
+
+```text
+max(subarray) - min(subarray)
+```
+
+To maximize this:
+
+We want:
+
+```text
+largest element in nums
+-
+smallest element in nums
+```
+
+---
+
+# Why Entire Array Works
+
+Consider:
+
+```python
+nums = [4,8,2,10]
+```
+
+Entire array:
+
+```text
+[4,8,2,10]
+```
+
+Maximum:
+
+```text
+10
+```
+
+Minimum:
+
+```text
+2
+```
+
+Value:
+
+```text
+10 - 2 = 8
+```
+
+Can any subarray exceed this?
+
+```text
+NO
+```
+
+Because:
+
+10 is the largest number in the whole array.
+
+2 is the smallest number in the whole array.
+
+No subarray can produce:
+
+```text
+max > 10
+or
+min < 2
+```
+
+Impossible.
+
+---
+
+# Therefore
+
+Maximum subarray value is always:
+
+```python
+max(nums) - min(nums)
+```
+
+---
+
+# Since We Can Reuse Same Subarray
+
+Choose that optimal subarray:
+
+```text
+k times
+```
+
+Total:
+
+```python
+k * (max(nums) - min(nums))
+```
+
+---
+
+# Code
+
+```python
+class Solution:
+    def maxTotalValue(self, nums: List[int], k: int) -> int:
+        return k * (max(nums) - min(nums))
+```
+
+---
+
+# Dry Run
+
+## Input
+
+```python
+nums = [1,3,7]
+k = 3
+```
+
+---
+
+# Step 1
+
+Find maximum
+
+```python
+max(nums)
+```
+
+```text
+7
+```
+
+---
+
+# Step 2
+
+Find minimum
+
+```python
+min(nums)
+```
+
+```text
+1
+```
+
+---
+
+# Step 3
+
+Maximum subarray value
+
+```text
+7 - 1 = 6
+```
+
+---
+
+# Step 4
+
+Choose same subarray 3 times
+
+```text
+6 + 6 + 6
+```
+
+or
+
+```python
+3 * 6
+```
+
+---
+
+# Answer
+
+```text
+18
+```
+
+---
+
+# Visualization
+
+```text
+nums = [1,3,7]
+
+Min = 1
+Max = 7
+
+Maximum Possible Value
+
+7 - 1 = 6
+```
+
+Since repetitions allowed:
+
+```text
+Choice 1 : value = 6
+Choice 2 : value = 6
+Choice 3 : value = 6
+```
+
+Total:
+
+```text
+18
+```
+
+---
+
+# Another Example
+
+## Input
+
+```python
+nums = [4,8,2,10]
+k = 2
+```
+
+---
+
+# Entire Array
+
+```text
+[4,8,2,10]
+```
+
+Maximum:
+
+```text
+10
+```
+
+Minimum:
+
+```text
+2
+```
+
+Value:
+
+```text
+8
+```
+
+---
+
+# Choose Twice
+
+```text
+8 + 8
+```
+
+Answer:
+
+```text
+16
+```
+
+---
+
+# Why This Works (Proof)
+
+Let:
+
+```text
+G = max(nums)
+S = min(nums)
+```
+
+For any subarray:
+
+```text
+max(subarray) ≤ G
+min(subarray) ≥ S
+```
+
+Therefore:
+
+```text
+max(subarray) - min(subarray)
+≤ G - S
+```
+
+So:
+
+```text
+No subarray can have value greater than:
+
+max(nums) - min(nums)
+```
+
+Hence this is the absolute best value possible.
+
+---
+
+# Why k Doesn't Matter Much
+
+Normally:
+
+```text
+Choose k subarrays
+```
+
+sounds like DP.
+
+But because:
+
+```text
+Same subarray can be chosen multiple times
+```
+
+we simply choose the best one repeatedly.
+
+---
+
+# Complexity Analysis
+
+## Time Complexity
+
+Finding max:
+
+```text
+O(n)
+```
+
+Finding min:
+
+```text
+O(n)
+```
+
+Total:
+
+```text
+O(n)
+```
+
+---
+
+## Space Complexity
+
+Only a few variables:
+
+```text
+O(1)
+```
+
+---
+
+# Key Interview Insight
+
+The entire problem is a trap.
+
+Most people think:
+
+```text
+Subarray problem
+→ Sliding Window
+→ DP
+→ Greedy
+```
+
+But the crucial sentence is:
+
+```text
+"The exact same subarray can be chosen more than once."
+```
+
+Once you notice that:
+
+```text
+Find best subarray value once
+Multiply by k
+```
+
+and the solution becomes:
+
+```python
+return k * (max(nums) - min(nums))
+```
+
+---
+
+# Final Understanding
+
+```text
+Best subarray value
+=
+max(nums) - min(nums)
+
+Because no subarray can exceed the global max-min difference.
+
+Since the same subarray may be selected repeatedly,
+
+Answer
+=
+k × (max(nums) - min(nums))
+```
+
+### Complexity
+
+```text
+Time  : O(n)
+Space : O(1)
+```
