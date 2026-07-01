@@ -1,0 +1,589 @@
+# LeetCode 1967 — Number of Strings That Appear as Substrings in Word
+
+## Problem Understanding
+
+You are given:
+
+* A list of strings called `patterns`
+* A string called `word`
+
+Your task is to count **how many strings in `patterns` appear as a substring of `word`**.
+
+A substring means the characters appear **continuously** inside the string.
+
+---
+
+# Example
+
+## Input
+
+```python
+patterns = ["a","abc","bc","d"]
+word = "abc"
+```
+
+Check each pattern:
+
+```text
+"a"   → Yes
+"abc" → Yes
+"bc"  → Yes
+"d"   → No
+```
+
+Output:
+
+```python
+3
+```
+
+---
+
+# Your Code
+
+```python
+class Solution:
+    def numOfStrings(self, patterns: List[str], word: str) -> int:
+        count = 0
+
+        for i in patterns:
+            if i in word:
+                count += 1
+
+        return count
+```
+
+---
+
+# Core Idea
+
+For every pattern:
+
+1. Check whether it exists inside `word`.
+2. If yes, increase the count.
+3. Return the final count.
+
+Python's **`in` operator** performs the substring search for us.
+
+---
+
+# Dry Run
+
+## Input
+
+```python
+patterns = ["a","abc","bc","d"]
+word = "abc"
+```
+
+---
+
+# Initial State
+
+```python
+count = 0
+```
+
+---
+
+# ITERATION 1
+
+Current Pattern
+
+```python
+i = "a"
+```
+
+Check
+
+```python
+"a" in "abc"
+```
+
+Result
+
+```text
+True
+```
+
+Update
+
+```python
+count += 1
+```
+
+Current Count
+
+```text
+count = 1
+```
+
+---
+
+# ITERATION 2
+
+Current Pattern
+
+```python
+i = "abc"
+```
+
+Check
+
+```python
+"abc" in "abc"
+```
+
+Result
+
+```text
+True
+```
+
+Update
+
+```python
+count = 2
+```
+
+---
+
+# ITERATION 3
+
+Current Pattern
+
+```python
+i = "bc"
+```
+
+Check
+
+```python
+"bc" in "abc"
+```
+
+Visualization
+
+```text
+abc
+ ||
+ bc
+```
+
+Result
+
+```text
+True
+```
+
+Update
+
+```python
+count = 3
+```
+
+---
+
+# ITERATION 4
+
+Current Pattern
+
+```python
+i = "d"
+```
+
+Check
+
+```python
+"d" in "abc"
+```
+
+Result
+
+```text
+False
+```
+
+Count remains
+
+```python
+count = 3
+```
+
+---
+
+# Final Answer
+
+```python
+return count
+```
+
+Output
+
+```python
+3
+```
+
+---
+
+# Visualization
+
+```
+Word
+
+a b c
+0 1 2
+```
+
+Pattern `"a"`
+
+```
+a b c
+|
+a
+```
+
+Found ✅
+
+---
+
+Pattern `"abc"`
+
+```
+a b c
+| | |
+a b c
+```
+
+Found ✅
+
+---
+
+Pattern `"bc"`
+
+```
+a b c
+  | |
+  b c
+```
+
+Found ✅
+
+---
+
+Pattern `"d"`
+
+```
+a b c
+
+No match
+```
+
+Not Found ❌
+
+---
+
+# Another Example
+
+## Input
+
+```python
+patterns = ["ab","ba","cd"]
+word = "abcd"
+```
+
+---
+
+Pattern `"ab"`
+
+```
+a b c d
+| |
+a b
+```
+
+Found ✅
+
+---
+
+Pattern `"ba"`
+
+```
+a b c d
+
+No continuous match
+```
+
+Not Found ❌
+
+---
+
+Pattern `"cd"`
+
+```
+a b c d
+    | |
+    c d
+```
+
+Found ✅
+
+---
+
+Answer
+
+```python
+2
+```
+
+---
+
+# How the `in` Operator Works
+
+When you write:
+
+```python
+"bc" in "abc"
+```
+
+Python searches the string to see if `"bc"` appears **continuously**.
+
+Result
+
+```text
+True
+```
+
+Another example:
+
+```python
+"ac" in "abc"
+```
+
+Result
+
+```text
+False
+```
+
+Because:
+
+```
+a b c
+```
+
+`a` and `c` are **not adjacent**, so `"ac"` is **not** a substring.
+
+---
+
+# Difference Between Substring and Subsequence
+
+## Substring (Continuous)
+
+```
+word = "abcdef"
+
+"bcd" ✅
+```
+
+Characters are together.
+
+---
+
+## Subsequence (Not Continuous)
+
+```
+word = "abcdef"
+
+"ace" ✅ (subsequence)
+```
+
+Characters are in order but **not adjacent**.
+
+Your problem asks for **substring**, not subsequence.
+
+---
+
+# Complexity Analysis
+
+Let:
+
+* `n` = number of patterns
+* `m` = length of `word`
+* `k` = average length of each pattern
+
+### Time Complexity
+
+Outer loop:
+
+```text
+O(n)
+```
+
+Each substring search (`pattern in word`) takes up to:
+
+```text
+O(m × k)
+```
+
+in the worst case.
+
+Overall:
+
+```text
+O(n × m × k)
+```
+
+For this problem's constraints, this is efficient enough.
+
+---
+
+### Space Complexity
+
+Only one variable is used:
+
+```python
+count
+```
+
+So:
+
+```text
+O(1)
+```
+
+---
+
+# Key Insights
+
+### 1. Python's `in` Operator Checks Substrings
+
+```python
+"abc" in "xyzabcdef"
+```
+
+returns
+
+```text
+True
+```
+
+No manual searching is needed.
+
+---
+
+### 2. Check Every Pattern Independently
+
+For each pattern:
+
+```text
+Exists?
+```
+
+Yes → increment count.
+
+No → ignore.
+
+---
+
+### 3. Duplicate Patterns Are Counted Separately
+
+Example:
+
+```python
+patterns = ["a","a","b"]
+word = "abc"
+```
+
+Checks:
+
+```
+"a" → Yes
+"a" → Yes
+"b" → Yes
+```
+
+Answer:
+
+```python
+3
+```
+
+Because the problem asks to count **each pattern in the list**, even if they are identical.
+
+---
+
+# Edge Cases
+
+### Case 1
+
+```python
+patterns = ["x"]
+word = "abc"
+```
+
+Output
+
+```python
+0
+```
+
+---
+
+### Case 2
+
+```python
+patterns = ["abc"]
+word = "abc"
+```
+
+Output
+
+```python
+1
+```
+
+---
+
+### Case 3
+
+```python
+patterns = ["a","a","a"]
+word = "a"
+```
+
+Output
+
+```python
+3
+```
+
+---
+
+# Final Understanding
+
+The algorithm follows this process:
+
+```text
+For every pattern
+        │
+        ▼
+Check if pattern is a substring of word
+        │
+   ┌────┴────┐
+   │         │
+  Yes        No
+   │         │
+count++    Ignore
+        │
+        ▼
+Return count
+```
+
+### Complexity
+
+```text
+Time  : O(n × m × k)  (worst case)
+Space : O(1)
+```
+
