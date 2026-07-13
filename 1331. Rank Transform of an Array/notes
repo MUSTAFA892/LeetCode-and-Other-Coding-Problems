@@ -1,0 +1,919 @@
+# LeetCode 1331 — Rank Transform of an Array
+
+## Problem Understanding
+
+You are given an integer array `arr`.
+
+Your task is to replace every element with its **rank**.
+
+The ranking rules are:
+
+* The **smallest** number gets rank **1**.
+* Larger numbers get larger ranks.
+* **Equal numbers receive the same rank.**
+* Ranks should be as small as possible (no gaps).
+
+---
+
+# Example
+
+## Input
+
+```python
+arr = [40,10,20,30]
+```
+
+Sorted unique values:
+
+```text
+10 20 30 40
+```
+
+Assign ranks:
+
+```text
+10 → 1
+20 → 2
+30 → 3
+40 → 4
+```
+
+Replace every element:
+
+```text
+40 → 4
+10 → 1
+20 → 2
+30 → 3
+```
+
+Output
+
+```python
+[4,1,2,3]
+```
+
+---
+
+# Your Code
+
+```python
+class Solution:
+    def arrayRankTransform(self, arr: List[int]) -> List[int]:
+        rank_map = {}
+
+        for i, num in enumerate(sorted(set(arr)), start=1):
+            rank_map[num] = i
+
+        rank = [rank_map[num] for num in arr]
+
+        return rank
+```
+
+---
+
+# Core Idea
+
+The algorithm works in three simple steps:
+
+1. Remove duplicate numbers.
+2. Sort the unique numbers.
+3. Assign a rank to each unique number.
+4. Replace every original number with its assigned rank.
+
+Instead of searching for the rank every time, we store the mapping inside a dictionary for **O(1)** lookup.
+
+---
+
+# Step-by-Step Explanation
+
+## Step 1
+
+Create an empty dictionary.
+
+```python
+rank_map = {}
+```
+
+Initially
+
+```python
+rank_map = {}
+```
+
+This dictionary will store
+
+```text
+Number → Rank
+```
+
+Example
+
+```text
+10 → 1
+20 → 2
+30 → 3
+40 → 4
+```
+
+---
+
+## Step 2
+
+```python
+sorted(set(arr))
+```
+
+Suppose
+
+```python
+arr = [40,10,20,30,20]
+```
+
+### First `set(arr)`
+
+Removes duplicates.
+
+```
+Original
+
+40 10 20 30 20
+```
+
+↓
+
+```
+{40,10,20,30}
+```
+
+---
+
+### Then `sorted(...)`
+
+Sorts the unique numbers.
+
+```
+10 20 30 40
+```
+
+Now we have every distinct number in increasing order.
+
+---
+
+## Step 3
+
+```python
+enumerate(sorted(set(arr)), start=1)
+```
+
+Normally,
+
+```python
+enumerate([10,20,30,40])
+```
+
+gives
+
+```text
+(0,10)
+(1,20)
+(2,30)
+(3,40)
+```
+
+But we use
+
+```python
+start=1
+```
+
+So it becomes
+
+```text
+(1,10)
+(2,20)
+(3,30)
+(4,40)
+```
+
+These indices become the ranks.
+
+---
+
+## Step 4
+
+Loop through each unique number.
+
+```python
+for i, num in enumerate(sorted(set(arr)), start=1):
+```
+
+Iteration by iteration:
+
+### Iteration 1
+
+```text
+i = 1
+num = 10
+```
+
+Store
+
+```python
+rank_map[10] = 1
+```
+
+Dictionary
+
+```text
+{
+10 : 1
+}
+```
+
+---
+
+### Iteration 2
+
+```text
+i = 2
+num = 20
+```
+
+Store
+
+```python
+rank_map[20] = 2
+```
+
+Dictionary
+
+```text
+{
+10 : 1,
+20 : 2
+}
+```
+
+---
+
+### Iteration 3
+
+```text
+i = 3
+num = 30
+```
+
+Dictionary
+
+```text
+{
+10 : 1,
+20 : 2,
+30 : 3
+}
+```
+
+---
+
+### Iteration 4
+
+```text
+i = 4
+num = 40
+```
+
+Dictionary
+
+```text
+{
+10 : 1,
+20 : 2,
+30 : 3,
+40 : 4
+}
+```
+
+Now every unique number has its rank.
+
+---
+
+## Step 5
+
+Create the answer.
+
+```python
+rank = [rank_map[num] for num in arr]
+```
+
+This is called a **List Comprehension**.
+
+It means:
+
+```python
+rank = []
+
+for num in arr:
+    rank.append(rank_map[num])
+```
+
+Both produce exactly the same result.
+
+---
+
+# Dry Run
+
+## Input
+
+```python
+arr = [40,10,20,30]
+```
+
+---
+
+### Initial State
+
+```python
+rank_map = {}
+```
+
+---
+
+### Build the Dictionary
+
+Sorted unique values
+
+```text
+10 20 30 40
+```
+
+Dictionary becomes
+
+```text
+{
+10 : 1,
+20 : 2,
+30 : 3,
+40 : 4
+}
+```
+
+---
+
+### Build Answer
+
+Original array
+
+```text
+40 10 20 30
+```
+
+Replace one by one.
+
+---
+
+#### Element 1
+
+```text
+40
+```
+
+Lookup
+
+```python
+rank_map[40]
+```
+
+Result
+
+```text
+4
+```
+
+Answer
+
+```text
+[4]
+```
+
+---
+
+#### Element 2
+
+```text
+10
+```
+
+Lookup
+
+```python
+rank_map[10]
+```
+
+Result
+
+```text
+1
+```
+
+Answer
+
+```text
+[4,1]
+```
+
+---
+
+#### Element 3
+
+```text
+20
+```
+
+Lookup
+
+```python
+rank_map[20]
+```
+
+Result
+
+```text
+2
+```
+
+Answer
+
+```text
+[4,1,2]
+```
+
+---
+
+#### Element 4
+
+```text
+30
+```
+
+Lookup
+
+```python
+rank_map[30]
+```
+
+Result
+
+```text
+3
+```
+
+Final Answer
+
+```text
+[4,1,2,3]
+```
+
+---
+
+# Visualization
+
+Original Array
+
+```
+40   10   20   30
+```
+
+↓
+
+Remove duplicates
+
+```
+40 10 20 30
+```
+
+↓
+
+Sort
+
+```
+10 20 30 40
+```
+
+↓
+
+Assign Rank
+
+```
+10 → 1
+20 → 2
+30 → 3
+40 → 4
+```
+
+↓
+
+Replace Original Values
+
+```
+40 → 4
+10 → 1
+20 → 2
+30 → 3
+```
+
+↓
+
+```
+[4,1,2,3]
+```
+
+---
+
+# Another Example
+
+## Input
+
+```python
+arr = [100,100,50,200]
+```
+
+Unique values
+
+```text
+50 100 200
+```
+
+Assign ranks
+
+```text
+50  → 1
+100 → 2
+200 → 3
+```
+
+Transform
+
+```text
+100 → 2
+100 → 2
+50  → 1
+200 → 3
+```
+
+Output
+
+```python
+[2,2,1,3]
+```
+
+Notice that duplicate values receive the **same rank**.
+
+---
+
+# How `set()` Works
+
+```python
+arr = [5,3,5,2]
+```
+
+Using
+
+```python
+set(arr)
+```
+
+Result
+
+```text
+{2,3,5}
+```
+
+Duplicates are automatically removed.
+
+---
+
+# How `sorted()` Works
+
+```python
+sorted({5,3,2})
+```
+
+Output
+
+```text
+[2,3,5]
+```
+
+It returns a sorted list.
+
+---
+
+# How Dictionary Lookup Works
+
+Dictionary
+
+```python
+rank_map = {
+10:1,
+20:2,
+30:3,
+40:4
+}
+```
+
+Lookup
+
+```python
+rank_map[30]
+```
+
+Output
+
+```text
+3
+```
+
+Dictionary lookup takes approximately **O(1)** time.
+
+---
+
+# Difference Between `set()` and `sorted()`
+
+### `set()`
+
+```
+40 10 20 20 30
+```
+
+↓
+
+```
+40 10 20 30
+```
+
+Removes duplicates.
+
+---
+
+### `sorted()`
+
+```
+40 10 20 30
+```
+
+↓
+
+```
+10 20 30 40
+```
+
+Sorts the values.
+
+---
+
+# Complexity Analysis
+
+Let:
+
+* `n` = length of the array
+* `u` = number of unique elements
+
+### Time Complexity
+
+Creating the set:
+
+```text
+O(n)
+```
+
+Sorting unique values:
+
+```text
+O(u log u)
+```
+
+Building the dictionary:
+
+```text
+O(u)
+```
+
+Building the final answer:
+
+```text
+O(n)
+```
+
+Overall:
+
+```text
+O(n + u log u)
+```
+
+In the worst case, when all elements are unique (`u = n`):
+
+```text
+O(n log n)
+```
+
+---
+
+### Space Complexity
+
+Set of unique elements:
+
+```text
+O(u)
+```
+
+Dictionary:
+
+```text
+O(u)
+```
+
+Output array:
+
+```text
+O(n)
+```
+
+Ignoring the required output array (as is common in complexity analysis):
+
+```text
+O(u)
+```
+
+Worst case:
+
+```text
+O(n)
+```
+
+---
+
+# Key Insights
+
+### 1. Duplicate Numbers Get the Same Rank
+
+```python
+arr = [7,7,7]
+```
+
+Unique values
+
+```text
+7
+```
+
+Rank
+
+```text
+7 → 1
+```
+
+Answer
+
+```python
+[1,1,1]
+```
+
+---
+
+### 2. Use a Dictionary for Fast Lookup
+
+Instead of searching for each number's rank repeatedly, store:
+
+```text
+Number → Rank
+```
+
+This allows each lookup to be done in **O(1)** time.
+
+---
+
+### 3. `set()` Removes Duplicates Before Ranking
+
+If duplicates weren't removed, identical numbers would receive different ranks, which would violate the problem's rules.
+
+---
+
+### 4. List Comprehension Makes the Code Concise
+
+Instead of
+
+```python
+rank = []
+
+for num in arr:
+    rank.append(rank_map[num])
+```
+
+We can write
+
+```python
+rank = [rank_map[num] for num in arr]
+```
+
+Both produce the same result.
+
+---
+
+# Edge Cases
+
+### Case 1
+
+```python
+arr = []
+```
+
+Output
+
+```python
+[]
+```
+
+---
+
+### Case 2
+
+```python
+arr = [5]
+```
+
+Output
+
+```python
+[1]
+```
+
+---
+
+### Case 3
+
+```python
+arr = [7,7,7]
+```
+
+Output
+
+```python
+[1,1,1]
+```
+
+---
+
+### Case 4
+
+```python
+arr = [-5,-10,0]
+```
+
+Sorted unique values
+
+```text
+-10 -5 0
+```
+
+Ranks
+
+```text
+-10 → 1
+-5  → 2
+0   → 3
+```
+
+Output
+
+```python
+[2,1,3]
+```
+
+---
+
+# Final Understanding
+
+The algorithm follows this process:
+
+```text
+Original Array
+      │
+      ▼
+Remove Duplicate Values using set()
+      │
+      ▼
+Sort Unique Values
+      │
+      ▼
+Assign Ranks (1, 2, 3, ...)
+      │
+      ▼
+Store in Dictionary (Number → Rank)
+      │
+      ▼
+Replace Every Original Number with Its Rank
+      │
+      ▼
+Return Ranked Array
+```
