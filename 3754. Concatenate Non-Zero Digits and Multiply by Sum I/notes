@@ -1,0 +1,725 @@
+# Sum and Multiply
+
+## Problem Understanding
+
+You are given an integer `n`.
+
+Your task is to:
+
+1. Extract all **non-zero digits** from `n`.
+2. Calculate the **sum** of those non-zero digits.
+3. Form a new number using only the non-zero digits (keeping their original order).
+4. Return:
+
+```text
+(new number) × (sum of non-zero digits)
+```
+
+If the number contains **only zeros**, return:
+
+```python
+0
+```
+
+---
+
+# Example
+
+## Input
+
+```python
+n = 10203
+```
+
+Non-zero digits:
+
+```text
+1, 2, 3
+```
+
+Sum:
+
+```text
+1 + 2 + 3 = 6
+```
+
+New number:
+
+```text
+123
+```
+
+Result:
+
+```text
+123 × 6 = 738
+```
+
+Output
+
+```python
+738
+```
+
+---
+
+# Your Code
+
+```python
+class Solution:
+    def sumAndMultiply(self, n: int) -> int:
+        count = 0
+        dum_n = ''
+
+        for i in str(n):
+            if int(i) > 0:
+                count += int(i)
+                dum_n += i
+
+        if count > 0:
+            return int(dum_n) * count
+
+        return 0
+```
+
+---
+
+# Core Idea
+
+The algorithm follows these steps:
+
+1. Convert the number into a string so each digit can be processed.
+2. Ignore every `0`.
+3. Add every non-zero digit to the running sum.
+4. Build another string containing only the non-zero digits.
+5. Convert that string back into an integer.
+6. Multiply it by the sum.
+
+---
+
+# Step-by-Step Explanation
+
+## Step 1
+
+Initialize variables.
+
+```python
+count = 0
+dum_n = ''
+```
+
+Initially
+
+```python
+count = 0
+dum_n = ""
+```
+
+* `count` stores the sum of non-zero digits.
+* `dum_n` stores the digits that are not zero.
+
+---
+
+## Step 2
+
+Convert the number into a string.
+
+```python
+str(n)
+```
+
+Suppose
+
+```python
+n = 10203
+```
+
+Then
+
+```text
+"10203"
+```
+
+Now we can iterate digit by digit.
+
+---
+
+## Step 3
+
+Loop through every digit.
+
+```python
+for i in str(n):
+```
+
+Each iteration gives
+
+```text
+i = "1"
+i = "0"
+i = "2"
+i = "0"
+i = "3"
+```
+
+---
+
+## Step 4
+
+Ignore zeros.
+
+```python
+if int(i) > 0:
+```
+
+If the digit is
+
+```text
+0
+```
+
+it is skipped.
+
+Otherwise
+
+* Add it to the sum.
+* Append it to the new number.
+
+---
+
+## Step 5
+
+Update the sum.
+
+```python
+count += int(i)
+```
+
+Example
+
+```text
+Digit = 2
+```
+
+Current
+
+```text
+count = 1
+```
+
+After
+
+```text
+count = 3
+```
+
+---
+
+## Step 6
+
+Build the new number.
+
+```python
+dum_n += i
+```
+
+Example
+
+```text
+Before
+
+dum_n = "12"
+```
+
+Append `"3"`.
+
+```text
+After
+
+dum_n = "123"
+```
+
+---
+
+## Step 7
+
+Return the result.
+
+```python
+return int(dum_n) * count
+```
+
+If
+
+```text
+dum_n = "123"
+count = 6
+```
+
+Then
+
+```text
+123 × 6 = 738
+```
+
+---
+
+# Dry Run
+
+## Input
+
+```python
+n = 10203
+```
+
+---
+
+### Initial State
+
+```python
+count = 0
+dum_n = ""
+```
+
+---
+
+### Iteration 1
+
+Current digit
+
+```text
+1
+```
+
+Update
+
+```text
+count = 1
+dum_n = "1"
+```
+
+---
+
+### Iteration 2
+
+Current digit
+
+```text
+0
+```
+
+Ignored.
+
+```text
+count = 1
+dum_n = "1"
+```
+
+---
+
+### Iteration 3
+
+Current digit
+
+```text
+2
+```
+
+Update
+
+```text
+count = 3
+dum_n = "12"
+```
+
+---
+
+### Iteration 4
+
+Current digit
+
+```text
+0
+```
+
+Ignored.
+
+```text
+count = 3
+dum_n = "12"
+```
+
+---
+
+### Iteration 5
+
+Current digit
+
+```text
+3
+```
+
+Update
+
+```text
+count = 6
+dum_n = "123"
+```
+
+---
+
+### Final Calculation
+
+```text
+int("123") × 6
+```
+
+Result
+
+```text
+738
+```
+
+---
+
+# Visualization
+
+Original Number
+
+```text
+1 0 2 0 3
+```
+
+↓
+
+Ignore zeros
+
+```text
+1   2   3
+```
+
+↓
+
+Form new number
+
+```text
+123
+```
+
+↓
+
+Find sum
+
+```text
+1 + 2 + 3 = 6
+```
+
+↓
+
+Multiply
+
+```text
+123 × 6 = 738
+```
+
+---
+
+# Another Example
+
+## Input
+
+```python
+n = 40506
+```
+
+Non-zero digits
+
+```text
+4, 5, 6
+```
+
+New number
+
+```text
+456
+```
+
+Sum
+
+```text
+4 + 5 + 6 = 15
+```
+
+Result
+
+```text
+456 × 15 = 6840
+```
+
+---
+
+# How `str()` Works
+
+```python
+str(10203)
+```
+
+Output
+
+```text
+"10203"
+```
+
+This allows us to process each digit individually.
+
+---
+
+# How String Concatenation Works
+
+```python
+dum_n = ""
+```
+
+Append digits
+
+```python
+dum_n += "1"
+dum_n += "2"
+dum_n += "3"
+```
+
+Result
+
+```text
+"123"
+```
+
+---
+
+# Complexity Analysis
+
+Let:
+
+* `d` = number of digits in `n`
+
+### Time Complexity
+
+Converting to string
+
+```text
+O(d)
+```
+
+Loop through each digit
+
+```text
+O(d)
+```
+
+Overall
+
+```text
+O(d)
+```
+
+---
+
+### Space Complexity
+
+The string `dum_n` may store all digits.
+
+```text
+O(d)
+```
+
+---
+
+# Key Insights
+
+### 1. Convert Number to String
+
+Instead of repeatedly using `% 10` and `// 10`, converting to a string makes digit traversal simple.
+
+---
+
+### 2. Ignore Zero Digits
+
+Only digits greater than zero contribute to:
+
+* the sum
+* the new number
+
+---
+
+### 3. Preserve the Original Order
+
+Appending digits to `dum_n` keeps the same order as they appear in `n`.
+
+Example
+
+```text
+40506
+```
+
+becomes
+
+```text
+456
+```
+
+not
+
+```text
+654
+```
+
+---
+
+### 4. Return 0 When No Non-Zero Digits Exist
+
+If
+
+```python
+n = 0
+```
+
+or
+
+```python
+n = 0000
+```
+
+there is no valid number to construct, so the function returns
+
+```python
+0
+```
+
+---
+
+# Edge Cases
+
+### Case 1
+
+```python
+n = 0
+```
+
+Output
+
+```python
+0
+```
+
+---
+
+### Case 2
+
+```python
+n = 1000
+```
+
+Non-zero digits
+
+```text
+1
+```
+
+Result
+
+```text
+1 × 1 = 1
+```
+
+Output
+
+```python
+1
+```
+
+---
+
+### Case 3
+
+```python
+n = 999
+```
+
+New number
+
+```text
+999
+```
+
+Sum
+
+```text
+27
+```
+
+Result
+
+```text
+999 × 27 = 26973
+```
+
+---
+
+### Case 4
+
+```python
+n = 50005
+```
+
+New number
+
+```text
+55
+```
+
+Sum
+
+```text
+10
+```
+
+Result
+
+```text
+550
+```
+
+---
+
+# Final Understanding
+
+The algorithm follows this process:
+
+```text
+Number
+   │
+   ▼
+Convert to String
+   │
+   ▼
+Visit Every Digit
+   │
+   ▼
+Is Digit Non-Zero?
+   │
+ ┌─┴─────────┐
+ │           │
+Yes          No
+ │           │
+Add to Sum   Ignore
+Append Digit
+ │
+ ▼
+Create New Number
+ │
+ ▼
+Multiply New Number × Sum
+ │
+ ▼
+Return Result
+```
