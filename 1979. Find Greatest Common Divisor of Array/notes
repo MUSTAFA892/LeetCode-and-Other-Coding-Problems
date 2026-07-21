@@ -1,0 +1,592 @@
+# LeetCode 1979 — Find Greatest Common Divisor of Array
+
+## Problem Understanding
+
+You are given an integer array `nums`.
+
+Your task is to find the **Greatest Common Divisor (GCD)** of:
+
+* the **smallest** element in the array.
+* the **largest** element in the array.
+
+The **Greatest Common Divisor (GCD)** is the largest positive integer that divides both numbers without leaving a remainder.
+
+---
+
+# Example
+
+## Input
+
+```python
+nums = [2,5,6,9,10]
+```
+
+Smallest element:
+
+```text
+2
+```
+
+Largest element:
+
+```text
+10
+```
+
+Find GCD
+
+```text
+GCD(2,10) = 2
+```
+
+Output
+
+```python
+2
+```
+
+---
+
+# Your Code
+
+```python
+class Solution:
+    def findGCD(self, nums: List[int]) -> int:
+        return math.gcd(max(nums), min(nums))
+```
+
+---
+
+# Core Idea
+
+The algorithm follows these simple steps:
+
+1. Find the **largest** number in the array.
+2. Find the **smallest** number in the array.
+3. Use Python's built-in `math.gcd()` function to calculate their Greatest Common Divisor.
+4. Return the result.
+
+---
+
+# Step-by-Step Explanation
+
+## Step 1
+
+Find the maximum element.
+
+```python
+max(nums)
+```
+
+Suppose
+
+```python
+nums = [2,5,6,9,10]
+```
+
+Then
+
+```python
+max(nums)
+```
+
+returns
+
+```text
+10
+```
+
+---
+
+## Step 2
+
+Find the minimum element.
+
+```python
+min(nums)
+```
+
+For the same array,
+
+```python
+min(nums)
+```
+
+returns
+
+```text
+2
+```
+
+---
+
+## Step 3
+
+Compute the Greatest Common Divisor.
+
+```python
+math.gcd(max(nums), min(nums))
+```
+
+Substituting the values,
+
+```python
+math.gcd(10, 2)
+```
+
+Result
+
+```text
+2
+```
+
+---
+
+## Step 4
+
+Return the answer.
+
+```python
+return math.gcd(max(nums), min(nums))
+```
+
+Output
+
+```python
+2
+```
+
+---
+
+# Dry Run
+
+## Input
+
+```python
+nums = [2,5,6,9,10]
+```
+
+---
+
+### Initial Array
+
+```text
+2 5 6 9 10
+```
+
+---
+
+### Find Maximum
+
+```python
+max(nums)
+```
+
+Result
+
+```text
+10
+```
+
+---
+
+### Find Minimum
+
+```python
+min(nums)
+```
+
+Result
+
+```text
+2
+```
+
+---
+
+### Compute GCD
+
+```python
+math.gcd(10,2)
+```
+
+Factors of `10`
+
+```text
+1 2 5 10
+```
+
+Factors of `2`
+
+```text
+1 2
+```
+
+Largest common factor
+
+```text
+2
+```
+
+---
+
+### Final Answer
+
+```python
+return 2
+```
+
+---
+
+# Visualization
+
+Original Array
+
+```text
+2   5   6   9   10
+```
+
+↓
+
+Find Smallest
+
+```text
+2
+```
+
+↓
+
+Find Largest
+
+```text
+10
+```
+
+↓
+
+Compute GCD
+
+```text
+GCD(2,10)
+```
+
+↓
+
+```text
+2
+```
+
+---
+
+# Another Example
+
+## Input
+
+```python
+nums = [7,5,6,8,3]
+```
+
+Smallest
+
+```text
+3
+```
+
+Largest
+
+```text
+8
+```
+
+GCD
+
+```text
+GCD(3,8) = 1
+```
+
+Output
+
+```python
+1
+```
+
+---
+
+# How `max()` Works
+
+```python
+nums = [4,9,2,7]
+```
+
+Using
+
+```python
+max(nums)
+```
+
+returns
+
+```text
+9
+```
+
+---
+
+# How `min()` Works
+
+```python
+nums = [4,9,2,7]
+```
+
+Using
+
+```python
+min(nums)
+```
+
+returns
+
+```text
+2
+```
+
+---
+
+# How `math.gcd()` Works
+
+Example
+
+```python
+math.gcd(18,24)
+```
+
+Factors of `18`
+
+```text
+1 2 3 6 9 18
+```
+
+Factors of `24`
+
+```text
+1 2 3 4 6 8 12 24
+```
+
+Largest common factor
+
+```text
+6
+```
+
+Therefore,
+
+```python
+math.gcd(18,24)
+```
+
+returns
+
+```text
+6
+```
+
+---
+
+# Why Only the Minimum and Maximum?
+
+The problem specifically asks for the GCD of:
+
+* the **smallest** element
+* the **largest** element
+
+It **does not** ask for the GCD of all elements.
+
+So we only need these two values.
+
+---
+
+# Complexity Analysis
+
+Let:
+
+* `n` = number of elements in the array
+
+### Time Complexity
+
+Finding the maximum:
+
+```text
+O(n)
+```
+
+Finding the minimum:
+
+```text
+O(n)
+```
+
+Computing GCD:
+
+```text
+O(log(min(maxValue, minValue)))
+```
+
+Overall,
+
+```text
+O(n)
+```
+
+since finding the minimum and maximum dominates the runtime.
+
+---
+
+### Space Complexity
+
+No extra data structures are used.
+
+```text
+O(1)
+```
+
+---
+
+# Key Insights
+
+### 1. `max()` Finds the Largest Element
+
+```python
+max([2,5,8])
+```
+
+returns
+
+```text
+8
+```
+
+---
+
+### 2. `min()` Finds the Smallest Element
+
+```python
+min([2,5,8])
+```
+
+returns
+
+```text
+2
+```
+
+---
+
+### 3. `math.gcd()` Computes the Greatest Common Divisor
+
+```python
+math.gcd(8,2)
+```
+
+returns
+
+```text
+2
+```
+
+No manual implementation of the Euclidean Algorithm is needed.
+
+---
+
+### 4. Very Concise Solution
+
+The entire solution is written in one line because Python provides built-in functions for all required operations.
+
+---
+
+# Edge Cases
+
+### Case 1
+
+```python
+nums = [5]
+```
+
+Smallest = Largest = `5`
+
+Output
+
+```python
+5
+```
+
+---
+
+### Case 2
+
+```python
+nums = [7,7,7]
+```
+
+Smallest
+
+```text
+7
+```
+
+Largest
+
+```text
+7
+```
+
+Output
+
+```python
+7
+```
+
+---
+
+### Case 3
+
+```python
+nums = [1,100]
+```
+
+GCD
+
+```text
+GCD(1,100) = 1
+```
+
+Output
+
+```python
+1
+```
+
+---
+
+### Case 4
+
+```python
+nums = [12,18,24]
+```
+
+Smallest
+
+```text
+12
+```
+
+Largest
+
+```text
+24
+```
+
+Output
+
+```text
+GCD(12,24) = 12
+```
