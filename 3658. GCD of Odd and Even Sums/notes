@@ -1,0 +1,754 @@
+# GCD of Odd and Even Sums
+
+## Problem Understanding
+
+You are given an integer `n`.
+
+Your task is to:
+
+1. Find the first `n` **even numbers**.
+2. Find the first `n` **odd numbers**.
+3. Calculate the sum of both groups.
+4. Return the **Greatest Common Divisor (GCD)** of the two sums.
+
+The GCD is the **largest positive number that divides both sums without leaving a remainder**.
+
+---
+
+# Example
+
+## Input
+
+```python
+n = 3
+```
+
+First `3` odd numbers:
+
+```text
+1, 3, 5
+```
+
+Sum:
+
+```text
+1 + 3 + 5 = 9
+```
+
+First `3` even numbers:
+
+```text
+2, 4, 6
+```
+
+Sum:
+
+```text
+2 + 4 + 6 = 12
+```
+
+GCD:
+
+```text
+GCD(9,12) = 3
+```
+
+Output
+
+```python
+3
+```
+
+---
+
+# Your Code
+
+```python
+class Solution:
+    def gcdOfOddEvenSums(self, n: int) -> int:
+        even = 0
+        odd = 0
+
+        for i in range((n*2)+1):
+            if i % 2 == 0:
+                even += i
+            else:
+                odd += i
+
+        return math.gcd(even,odd)
+```
+
+---
+
+# Core Idea
+
+The algorithm works as follows:
+
+1. Iterate through numbers from `0` to `2n`.
+2. If a number is even, add it to the even sum.
+3. Otherwise, add it to the odd sum.
+4. After computing both sums, use Python's `math.gcd()` function to find their Greatest Common Divisor.
+
+---
+
+# Step-by-Step Explanation
+
+## Step 1
+
+Initialize two variables.
+
+```python
+even = 0
+odd = 0
+```
+
+Initially
+
+```python
+even = 0
+odd = 0
+```
+
+* `even` stores the sum of even numbers.
+* `odd` stores the sum of odd numbers.
+
+---
+
+## Step 2
+
+Loop through numbers.
+
+```python
+for i in range((n * 2) + 1):
+```
+
+Suppose
+
+```python
+n = 3
+```
+
+Then
+
+```python
+range((3 * 2) + 1)
+```
+
+becomes
+
+```python
+range(7)
+```
+
+Numbers generated are
+
+```text
+0 1 2 3 4 5 6
+```
+
+Notice:
+
+* Even numbers → `0, 2, 4, 6`
+* Odd numbers → `1, 3, 5`
+
+Although `0` is included, adding it does not change the sum.
+
+---
+
+## Step 3
+
+Check whether the number is even.
+
+```python
+if i % 2 == 0:
+```
+
+If the remainder after dividing by `2` is `0`, the number is even.
+
+Example
+
+```text
+4 % 2 = 0
+```
+
+So
+
+```python
+even += i
+```
+
+Otherwise
+
+```python
+odd += i
+```
+
+---
+
+## Step 4
+
+Continue updating the sums.
+
+For every even number:
+
+```python
+even += i
+```
+
+For every odd number:
+
+```python
+odd += i
+```
+
+---
+
+## Step 5
+
+Find the Greatest Common Divisor.
+
+```python
+return math.gcd(even, odd)
+```
+
+Python's `math.gcd(a, b)` returns the largest integer that divides both numbers.
+
+Example
+
+```python
+math.gcd(12, 9)
+```
+
+returns
+
+```text
+3
+```
+
+---
+
+# Dry Run
+
+## Input
+
+```python
+n = 3
+```
+
+---
+
+### Initial State
+
+```python
+even = 0
+odd = 0
+```
+
+---
+
+### Iteration 1
+
+```text
+i = 0
+```
+
+Even
+
+```text
+even = 0
+odd = 0
+```
+
+---
+
+### Iteration 2
+
+```text
+i = 1
+```
+
+Odd
+
+```text
+even = 0
+odd = 1
+```
+
+---
+
+### Iteration 3
+
+```text
+i = 2
+```
+
+Even
+
+```text
+even = 2
+odd = 1
+```
+
+---
+
+### Iteration 4
+
+```text
+i = 3
+```
+
+Odd
+
+```text
+even = 2
+odd = 4
+```
+
+---
+
+### Iteration 5
+
+```text
+i = 4
+```
+
+Even
+
+```text
+even = 6
+odd = 4
+```
+
+---
+
+### Iteration 6
+
+```text
+i = 5
+```
+
+Odd
+
+```text
+even = 6
+odd = 9
+```
+
+---
+
+### Iteration 7
+
+```text
+i = 6
+```
+
+Even
+
+```text
+even = 12
+odd = 9
+```
+
+---
+
+### Final Calculation
+
+```python
+math.gcd(12, 9)
+```
+
+Result
+
+```text
+3
+```
+
+---
+
+# Visualization
+
+Numbers Generated
+
+```text
+0 1 2 3 4 5 6
+```
+
+↓
+
+Separate
+
+```text
+Even : 0 2 4 6
+Odd  : 1 3 5
+```
+
+↓
+
+Find Sums
+
+```text
+Even Sum = 12
+Odd Sum  = 9
+```
+
+↓
+
+Compute GCD
+
+```text
+GCD(12, 9) = 3
+```
+
+---
+
+# Another Example
+
+## Input
+
+```python
+n = 2
+```
+
+Numbers
+
+```text
+0 1 2 3 4
+```
+
+Even
+
+```text
+0 + 2 + 4 = 6
+```
+
+Odd
+
+```text
+1 + 3 = 4
+```
+
+GCD
+
+```text
+GCD(6,4) = 2
+```
+
+Output
+
+```python
+2
+```
+
+---
+
+# How `range()` Works
+
+```python
+range(7)
+```
+
+Produces
+
+```text
+0 1 2 3 4 5 6
+```
+
+The ending value (`7`) is **not included**.
+
+---
+
+# How `%` (Modulo) Works
+
+The modulo operator returns the remainder.
+
+Example
+
+```python
+6 % 2
+```
+
+Output
+
+```text
+0
+```
+
+Example
+
+```python
+5 % 2
+```
+
+Output
+
+```text
+1
+```
+
+So
+
+```python
+i % 2 == 0
+```
+
+means
+
+```text
+The number is even.
+```
+
+---
+
+# How `math.gcd()` Works
+
+Example
+
+```python
+math.gcd(18, 24)
+```
+
+Factors of `18`
+
+```text
+1 2 3 6 9 18
+```
+
+Factors of `24`
+
+```text
+1 2 3 4 6 8 12 24
+```
+
+Largest common factor
+
+```text
+6
+```
+
+So
+
+```python
+math.gcd(18,24)
+```
+
+returns
+
+```text
+6
+```
+
+---
+
+# Mathematical Observation (Optimization)
+
+The sum of the first `n` odd numbers is
+
+```text
+n²
+```
+
+The sum of the first `n` even numbers is
+
+```text
+n(n + 1)
+```
+
+Therefore,
+
+```text
+GCD(n², n(n + 1))
+= n × GCD(n, n + 1)
+```
+
+Since consecutive numbers are always coprime,
+
+```text
+GCD(n, n + 1) = 1
+```
+
+So,
+
+```text
+Answer = n
+```
+
+This means the entire problem can be solved simply as:
+
+```python
+class Solution:
+    def gcdOfOddEvenSums(self, n: int) -> int:
+        return n
+```
+
+This optimized solution runs in **O(1)** time.
+
+---
+
+# Complexity Analysis
+
+Let:
+
+* `n` = input value
+
+### Time Complexity
+
+The loop runs from `0` to `2n`.
+
+```text
+O(2n)
+```
+
+Ignoring constants,
+
+```text
+O(n)
+```
+
+The `math.gcd()` operation is very fast (`O(log(min(a,b)))`), so the loop dominates the runtime.
+
+---
+
+### Space Complexity
+
+Only two variables are used.
+
+```text
+even
+odd
+```
+
+So,
+
+```text
+O(1)
+```
+
+---
+
+# Key Insights
+
+### 1. Separate Even and Odd Numbers
+
+Using
+
+```python
+i % 2 == 0
+```
+
+lets us classify each number as even or odd.
+
+---
+
+### 2. Compute Both Sums in One Loop
+
+Instead of two separate loops, both sums are calculated together.
+
+---
+
+### 3. Use Python's Built-in GCD Function
+
+`math.gcd()` efficiently computes the Greatest Common Divisor.
+
+---
+
+### 4. There Is a Mathematical Shortcut
+
+The first `n` odd numbers sum to `n²`, and the first `n` even numbers sum to `n(n+1)`. Using the properties of GCD, the final answer is always:
+
+```text
+n
+```
+
+So an **O(1)** solution exists.
+
+---
+
+# Edge Cases
+
+### Case 1
+
+```python
+n = 1
+```
+
+Even sum
+
+```text
+2
+```
+
+Odd sum
+
+```text
+1
+```
+
+Output
+
+```python
+1
+```
+
+---
+
+### Case 2
+
+```python
+n = 2
+```
+
+Even sum
+
+```text
+6
+```
+
+Odd sum
+
+```text
+4
+```
+
+Output
+
+```python
+2
+```
+
+---
+
+### Case 3
+
+```python
+n = 5
+```
+
+Even numbers
+
+```text
+2 4 6 8 10
+```
+
+Even sum
+
+```text
+30
+```
+
+Odd numbers
+
+```text
+1 3 5 7 9
+```
+
+Odd sum
+
+```text
+25
+```
+
+Output
+
+```python
+5
+```
