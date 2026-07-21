@@ -1,0 +1,683 @@
+# LeetCode 1260 — Shift 2D Grid
+
+## Problem Understanding
+
+You are given:
+
+* A 2D matrix `grid`
+* An integer `k`
+
+Your task is to **shift the grid to the right `k` times**.
+
+For **one shift**:
+
+1. Every element moves **one position to the right**.
+2. The last element of a row becomes the **first element of the next row**.
+3. The last element of the entire grid becomes the **first element of the first row**.
+
+---
+
+# Example
+
+## Input
+
+```python
+grid = [
+    [1,2,3],
+    [4,5,6],
+    [7,8,9]
+]
+
+k = 1
+```
+
+One right shift:
+
+```text
+1 2 3
+4 5 6
+7 8 9
+```
+
+↓
+
+```text
+9 1 2
+3 4 5
+6 7 8
+```
+
+Output
+
+```python
+[
+    [9,1,2],
+    [3,4,5],
+    [6,7,8]
+]
+```
+
+---
+
+# Your Code
+
+```python
+class Solution:
+    def shiftGrid(self, grid: List[List[int]], k: int) -> List[List[int]]:
+        if k == 0:
+            return grid
+
+        m, n = len(grid), len(grid[0])
+
+        arr = [[1 for _ in range(n)] for _ in range(m)]
+        
+        for _ in range(k):
+            for i in range(m):
+                for j in range(n-1):
+                    arr[i][j+1] = grid[i][j]
+                if i+1 < m:
+                    arr[i+1][0] = grid[i][n-1]
+                
+            arr[0][0] = grid[m-1][n-1]
+            grid = [row[:] for row in arr]
+
+        return arr
+```
+
+---
+
+# Core Idea
+
+The algorithm performs **one grid shift at a time**, repeating it `k` times.
+
+For every shift:
+
+1. Move each element one position to the right within its row.
+2. Move the last element of each row to the beginning of the next row.
+3. Move the last element of the last row to the first position of the first row.
+4. Copy the shifted grid back to `grid` for the next iteration.
+
+---
+
+# Step-by-Step Explanation
+
+## Step 1
+
+If no shifts are required:
+
+```python
+if k == 0:
+    return grid
+```
+
+Example
+
+```python
+k = 0
+```
+
+Nothing changes.
+
+---
+
+## Step 2
+
+Find the dimensions.
+
+```python
+m, n = len(grid), len(grid[0])
+```
+
+Suppose
+
+```python
+grid = [
+    [1,2,3],
+    [4,5,6],
+    [7,8,9]
+]
+```
+
+Then
+
+```text
+m = 3 rows
+n = 3 columns
+```
+
+---
+
+## Step 3
+
+Create another matrix.
+
+```python
+arr = [[1 for _ in range(n)] for _ in range(m)]
+```
+
+Initially
+
+```text
+1 1 1
+1 1 1
+1 1 1
+```
+
+This matrix stores the shifted values.
+
+---
+
+## Step 4
+
+Repeat the shift `k` times.
+
+```python
+for _ in range(k):
+```
+
+If
+
+```python
+k = 2
+```
+
+the shifting process is repeated twice.
+
+---
+
+## Step 5
+
+Move elements inside each row.
+
+```python
+for j in range(n-1):
+    arr[i][j+1] = grid[i][j]
+```
+
+Example
+
+Current row
+
+```text
+1 2 3
+```
+
+After shifting
+
+```text
+_ 1 2
+```
+
+Notice:
+
+* `1` moves to index `1`
+* `2` moves to index `2`
+* Last element (`3`) is handled separately.
+
+---
+
+## Step 6
+
+Move the last element of a row.
+
+```python
+if i + 1 < m:
+    arr[i+1][0] = grid[i][n-1]
+```
+
+Example
+
+Current grid
+
+```text
+1 2 3
+4 5 6
+7 8 9
+```
+
+Last element of first row
+
+```text
+3
+```
+
+moves to
+
+```text
+4 5 6
+↑
+3
+```
+
+Result
+
+```text
+3 4 5
+```
+
+---
+
+## Step 7
+
+Handle the last element of the entire grid.
+
+```python
+arr[0][0] = grid[m-1][n-1]
+```
+
+The last element
+
+```text
+9
+```
+
+moves to
+
+```text
+9 1 2
+```
+
+This completes one full circular shift.
+
+---
+
+## Step 8
+
+Copy the shifted grid.
+
+```python
+grid = [row[:] for row in arr]
+```
+
+Why?
+
+Because the next shift should use the **new grid**, not the old one.
+
+`row[:]` creates a **copy** of each row, preventing aliasing.
+
+---
+
+# Dry Run
+
+## Input
+
+```python
+grid =
+[
+ [1,2,3],
+ [4,5,6],
+ [7,8,9]
+]
+
+k = 1
+```
+
+---
+
+### Initial Grid
+
+```text
+1 2 3
+4 5 6
+7 8 9
+```
+
+---
+
+### Shift Row 1
+
+```text
+_ 1 2
+```
+
+Store last element
+
+```text
+3
+```
+
+↓
+
+Next row
+
+```text
+3 _ _
+```
+
+---
+
+### Shift Row 2
+
+```text
+3 4 5
+```
+
+Store last element
+
+```text
+6
+```
+
+↓
+
+Next row
+
+```text
+6 _ _
+```
+
+---
+
+### Shift Row 3
+
+```text
+6 7 8
+```
+
+Store last element
+
+```text
+9
+```
+
+---
+
+### Move Last Element to Front
+
+```text
+9 1 2
+3 4 5
+6 7 8
+```
+
+Final Answer
+
+```python
+[
+ [9,1,2],
+ [3,4,5],
+ [6,7,8]
+]
+```
+
+---
+
+# Visualization
+
+Original Grid
+
+```text
+1 2 3
+4 5 6
+7 8 9
+```
+
+↓
+
+Shift Right
+
+```text
+_ 1 2
+3 4 5
+6 7 8
+```
+
+↓
+
+Move Last Element
+
+```text
+9 1 2
+3 4 5
+6 7 8
+```
+
+---
+
+# Another Example
+
+## Input
+
+```python
+grid = [
+    [1,2],
+    [3,4]
+]
+
+k = 1
+```
+
+Original
+
+```text
+1 2
+3 4
+```
+
+Shift
+
+```text
+4 1
+2 3
+```
+
+Output
+
+```python
+[
+ [4,1],
+ [2,3]
+]
+```
+
+---
+
+# How List Comprehension Works
+
+```python
+arr = [[1 for _ in range(n)] for _ in range(m)]
+```
+
+If
+
+```python
+m = 2
+n = 3
+```
+
+Result
+
+```text
+1 1 1
+1 1 1
+```
+
+A new 2D matrix is created.
+
+---
+
+# How `row[:]` Works
+
+```python
+grid = [row[:] for row in arr]
+```
+
+Without slicing
+
+```python
+grid = arr
+```
+
+Both variables point to the **same matrix**.
+
+Changing one changes the other.
+
+Using
+
+```python
+row[:]
+```
+
+creates a copy of every row.
+
+---
+
+# Complexity Analysis
+
+Let:
+
+* `m` = number of rows
+* `n` = number of columns
+* `k` = number of shifts
+
+### Time Complexity
+
+Each shift visits every cell.
+
+```text
+O(m × n)
+```
+
+Since this is repeated `k` times,
+
+```text
+O(k × m × n)
+```
+
+---
+
+### Space Complexity
+
+An extra matrix of size
+
+```text
+m × n
+```
+
+is created.
+
+So,
+
+```text
+O(m × n)
+```
+
+---
+
+# Key Insights
+
+### 1. Perform One Shift at a Time
+
+Instead of trying to calculate the final position directly, this solution repeatedly performs one valid shift.
+
+---
+
+### 2. Handle the Last Column Separately
+
+The loop
+
+```python
+for j in range(n-1):
+```
+
+moves all elements except the last one.
+
+The last element must wrap to the next row.
+
+---
+
+### 3. Handle the Last Grid Element Separately
+
+The bottom-right element cannot move to another row.
+
+It wraps around to
+
+```python
+arr[0][0]
+```
+
+making the shift circular.
+
+---
+
+### 4. Copy the Grid After Every Shift
+
+```python
+grid = [row[:] for row in arr]
+```
+
+ensures the next iteration starts with the newly shifted grid.
+
+---
+
+# Edge Cases
+
+### Case 1
+
+```python
+grid = [[1]]
+k = 5
+```
+
+Output
+
+```python
+[[1]]
+```
+
+Only one element exists.
+
+---
+
+### Case 2
+
+```python
+grid = [[1,2,3]]
+k = 1
+```
+
+Output
+
+```python
+[[3,1,2]]
+```
+
+---
+
+### Case 3
+
+```python
+grid = [
+ [1],
+ [2],
+ [3]
+]
+
+k = 1
+```
+
+Output
+
+```python
+[
+ [3],
+ [1],
+ [2]
+]
+```
+
+---
+
+### Case 4
+
+```python
+k = 0
+```
+
+Output
+
+```python
+grid
+```
+
+No shifting is required.
