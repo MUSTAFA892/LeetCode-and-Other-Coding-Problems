@@ -1,0 +1,235 @@
+# Smallest Palindrome
+
+## Problem Understanding
+
+You are given a **palindromic string** `s`.
+
+Your task is to rearrange its characters to form the **lexicographically smallest palindrome**.
+
+---
+
+## Example
+
+**Input**
+
+```python
+s = "daccad"
+```
+
+Character counts:
+
+```text
+a → 2
+c → 2
+d → 2
+```
+
+Smallest palindrome:
+
+```text
+acddca
+```
+
+---
+
+## Your Code
+
+```python
+class Solution:
+    def smallestPalindrome(self, s: str) -> str:
+        new_s = ""
+
+        n = len(s)
+
+        map_ = {}
+
+        for i in s:
+            if i not in map_:
+                map_[i] = 1
+            else:
+                map_[i] += 1
+
+        if n % 2 == 0: 
+            left_half = s[0:(n//2)]
+            left_half_vals = ''.join(sorted(left_half))
+            new_s += left_half_vals
+            new_s += left_half_vals[::-1]
+            
+        else:
+            sample_s = ""
+            odd_val = ''
+            for i, j in map_.items():
+                sample_s += i * (j//2)
+                if j % 2 != 0:
+                    odd_val += i
+            left_half_sorted = ''.join(sorted(sample_s))
+            new_s += left_half_sorted + odd_val + left_half_sorted[::-1]
+
+        return new_s
+```
+
+---
+
+# Main Working
+
+### Step 1: Count Frequency of Each Character
+
+```python
+for i in s:
+    if i not in map_:
+        map_[i] = 1
+    else:
+        map_[i] += 1
+```
+
+Example
+
+```text
+s = "aabbc"
+```
+
+Frequency map
+
+```text
+a → 2
+b → 2
+c → 1
+```
+
+---
+
+### Step 2: Check String Length
+
+```python
+if n % 2 == 0:
+```
+
+* Even length → no middle character.
+* Odd length → one character appears an odd number of times and becomes the middle character.
+
+---
+
+### Step 3: Build the Left Half
+
+For odd length:
+
+```python
+sample_s += i * (j // 2)
+```
+
+Example
+
+```text
+a → 2 → "a"
+b → 2 → "b"
+c → 1 → ""
+```
+
+Result
+
+```text
+sample_s = "ab"
+```
+
+Sort it:
+
+```python
+left_half_sorted = ''.join(sorted(sample_s))
+```
+
+↓
+
+```text
+ab
+```
+
+---
+
+### Step 4: Find the Middle Character
+
+```python
+if j % 2 != 0:
+    odd_val += i
+```
+
+Example
+
+```text
+c → 1
+```
+
+Middle character
+
+```text
+c
+```
+
+---
+
+### Step 5: Form the Palindrome
+
+```python
+new_s = left_half_sorted + odd_val + left_half_sorted[::-1]
+```
+
+Example
+
+```text
+Left  = ab
+Middle = c
+Right = ba
+```
+
+Result
+
+```text
+abcba
+```
+
+---
+
+# Dry Run
+
+### Input
+
+```python
+s = "babab"
+```
+
+Frequency
+
+```text
+a → 2
+b → 3
+```
+
+Left half
+
+```text
+ab
+```
+
+Middle
+
+```text
+b
+```
+
+Right half
+
+```text
+ba
+```
+
+Answer
+
+```text
+abbba
+```
+
+---
+
+# Complexity
+
+* **Time:** `O(n log n)` (sorting the left half)
+* **Space:** `O(n)`
