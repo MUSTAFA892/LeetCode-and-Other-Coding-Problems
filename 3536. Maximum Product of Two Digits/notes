@@ -1,0 +1,156 @@
+Got it. I'll keep the notes **short and focused** from now on.
+
+---
+
+# Maximum Product of Two Digits
+
+## Problem Understanding
+
+Given an integer `n`, find the **maximum product** that can be obtained by multiplying **any two digits** of the number.
+
+---
+
+## Example
+
+**Input**
+
+```python
+n = 4315
+```
+
+Possible products:
+
+```text
+4 × 3 = 12
+4 × 1 = 4
+4 × 5 = 20
+3 × 1 = 3
+3 × 5 = 15
+1 × 5 = 5
+```
+
+Output
+
+```python
+20
+```
+
+---
+
+## Your Code
+
+```python
+class Solution:
+    def maxProduct(self, n: int) -> int:
+        max_pro = 0
+        str_n = str(n)
+
+        for i in range(len(str_n)):
+            for j in range(i+1, len(str_n)):
+                pro = int(str_n[i]) * int(str_n[j])
+                max_pro = max(max_pro, pro)
+
+        return max_pro
+```
+
+---
+
+# Main Working
+
+### Step 1: Convert Number to String
+
+```python
+str_n = str(n)
+```
+
+This allows us to access each digit individually.
+
+Example:
+
+```python
+n = 4315
+```
+
+↓
+
+```text
+"4315"
+```
+
+---
+
+### Step 2: Check Every Pair of Digits
+
+```python
+for i in range(len(str_n)):
+    for j in range(i+1, len(str_n)):
+```
+
+The nested loops generate all unique pairs.
+
+For `"4315"`:
+
+```text
+(4,3)
+(4,1)
+(4,5)
+(3,1)
+(3,5)
+(1,5)
+```
+
+---
+
+### Step 3: Calculate Product
+
+```python
+pro = int(str_n[i]) * int(str_n[j])
+```
+
+Example:
+
+```text
+4 × 5 = 20
+```
+
+---
+
+### Step 4: Update Maximum Product
+
+```python
+max_pro = max(max_pro, pro)
+```
+
+Keeps track of the largest product found so far.
+
+---
+
+# Dry Run
+
+```python
+n = 4315
+```
+
+| Pair  | Product | Max Product |
+| ----- | ------: | ----------: |
+| 4 × 3 |      12 |          12 |
+| 4 × 1 |       4 |          12 |
+| 4 × 5 |      20 |          20 |
+| 3 × 1 |       3 |          20 |
+| 3 × 5 |      15 |          20 |
+| 1 × 5 |       5 |          20 |
+
+Return:
+
+```python
+20
+```
+
+---
+
+# Complexity
+
+**Time:** `O(d²)`
+**Space:** `O(d)`
+
+where `d` is the number of digits in `n`.
