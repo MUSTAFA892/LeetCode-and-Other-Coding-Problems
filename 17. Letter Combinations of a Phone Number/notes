@@ -1,0 +1,543 @@
+# 📝 LeetCode 17: Letter Combinations of a Phone Number
+
+---
+
+# 📖 Code
+
+```python
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        map_ = {
+            '2': ['a', 'b', 'c'],
+            '3': ['d', 'e', 'f'],
+            '4': ['g', 'h', 'i'],
+            '5': ['j', 'k', 'l'],
+            '6': ['m', 'n', 'o'],
+            '7': ['p', 'q', 'r', 's'],
+            '8': ['t', 'u', 'v'],
+            '9': ['w', 'x', 'y', 'z'],
+        }
+
+        arr = []
+
+        for i in digits:
+            arr.append(map_[i])
+
+        result = [''.join(t) for t in list(itertools.product(*arr))]
+
+        return result
+```
+
+---
+
+# 💡 Core Idea
+
+Each digit on a phone keypad represents multiple letters.
+
+Example:
+
+```text
+2 → abc
+3 → def
+```
+
+If the input is
+
+```text
+23
+```
+
+Then we need every possible combination by choosing:
+
+* one letter from **2**
+* one letter from **3**
+
+which gives
+
+```text
+ad
+ae
+af
+bd
+be
+bf
+cd
+ce
+cf
+```
+
+Instead of writing nested loops manually, Python provides
+
+```python
+itertools.product()
+```
+
+which generates the **Cartesian Product** of multiple lists.
+
+---
+
+# Step 1: Create Phone Mapping
+
+```python
+map_ = {
+    '2': ['a', 'b', 'c'],
+    '3': ['d', 'e', 'f'],
+    '4': ['g', 'h', 'i'],
+    '5': ['j', 'k', 'l'],
+    '6': ['m', 'n', 'o'],
+    '7': ['p', 'q', 'r', 's'],
+    '8': ['t', 'u', 'v'],
+    '9': ['w', 'x', 'y', 'z'],
+}
+```
+
+This dictionary stores the letters corresponding to every digit.
+
+Example:
+
+```python
+map_['2']
+```
+
+returns
+
+```python
+['a', 'b', 'c']
+```
+
+and
+
+```python
+map_['7']
+```
+
+returns
+
+```python
+['p', 'q', 'r', 's']
+```
+
+---
+
+# Step 2: Create an Empty List
+
+```python
+arr = []
+```
+
+This list will store the letter lists corresponding to each input digit.
+
+Initially
+
+```python
+arr = []
+```
+
+---
+
+# Step 3: Convert Digits into Letter Lists
+
+```python
+for i in digits:
+    arr.append(map_[i])
+```
+
+For every digit,
+
+we append its corresponding list of letters.
+
+### Example
+
+Input
+
+```text
+digits = "23"
+```
+
+### First Iteration
+
+```python
+i = '2'
+```
+
+Append
+
+```python
+map_['2']
+```
+
+which is
+
+```python
+['a', 'b', 'c']
+```
+
+Now
+
+```python
+arr = [
+    ['a', 'b', 'c']
+]
+```
+
+---
+
+### Second Iteration
+
+```python
+i = '3'
+```
+
+Append
+
+```python
+['d', 'e', 'f']
+```
+
+Now
+
+```python
+arr = [
+    ['a', 'b', 'c'],
+    ['d', 'e', 'f']
+]
+```
+
+This means:
+
+* First position can be **a, b, c**
+* Second position can be **d, e, f**
+
+---
+
+# Step 4: Generate Every Combination
+
+```python
+itertools.product(*arr)
+```
+
+This is the most important line in the solution.
+
+## What is Cartesian Product?
+
+The Cartesian Product means:
+
+> Pick one element from each list and generate every possible combination.
+
+Example
+
+```python
+arr = [
+    ['a','b'],
+    ['x','y']
+]
+```
+
+The Cartesian Product is
+
+```text
+(a,x)
+(a,y)
+(b,x)
+(b,y)
+```
+
+Every element of the first list is paired with every element of the second list.
+
+---
+
+## Why do we use `*arr`?
+
+Suppose
+
+```python
+arr = [
+    ['a','b','c'],
+    ['d','e','f']
+]
+```
+
+The `*` operator **unpacks** the list.
+
+So
+
+```python
+itertools.product(*arr)
+```
+
+becomes
+
+```python
+itertools.product(
+    ['a','b','c'],
+    ['d','e','f']
+)
+```
+
+Without `*`, it would pass the entire list as a single argument, which is **not** what we want.
+
+---
+
+## Output of `product()`
+
+For
+
+```python
+arr = [
+    ['a','b','c'],
+    ['d','e','f']
+]
+```
+
+`product()` returns
+
+```python
+[
+ ('a','d'),
+ ('a','e'),
+ ('a','f'),
+ ('b','d'),
+ ('b','e'),
+ ('b','f'),
+ ('c','d'),
+ ('c','e'),
+ ('c','f')
+]
+```
+
+Notice that each combination is returned as a **tuple**.
+
+---
+
+# Step 5: Convert Tuples into Strings
+
+```python
+result = [''.join(t) for t in list(itertools.product(*arr))]
+```
+
+Let's break this into smaller parts.
+
+### Part 1
+
+```python
+list(itertools.product(*arr))
+```
+
+returns
+
+```python
+[
+ ('a','d'),
+ ('a','e'),
+ ('a','f'),
+ ('b','d'),
+ ('b','e'),
+ ('b','f'),
+ ('c','d'),
+ ('c','e'),
+ ('c','f')
+]
+```
+
+---
+
+### Part 2
+
+The loop
+
+```python
+for t in ...
+```
+
+takes one tuple at a time.
+
+Example
+
+```python
+t = ('a','d')
+```
+
+---
+
+### Part 3
+
+```python
+''.join(t)
+```
+
+joins the tuple into a string.
+
+Example
+
+```python
+''.join(('a','d'))
+```
+
+becomes
+
+```text
+"ad"
+```
+
+Similarly
+
+```python
+('c','f')
+```
+
+becomes
+
+```text
+"cf"
+```
+
+---
+
+### Final Result
+
+```python
+[
+"ad",
+"ae",
+"af",
+"bd",
+"be",
+"bf",
+"cd",
+"ce",
+"cf"
+]
+```
+
+---
+
+# Complete Dry Run
+
+## Example
+
+```python
+digits = "23"
+```
+
+---
+
+### Step 1
+
+Create mapping.
+
+(No change during execution.)
+
+---
+
+### Step 2
+
+```python
+arr = []
+```
+
+---
+
+### Step 3
+
+Read digit
+
+```python
+'2'
+```
+
+Append
+
+```python
+['a','b','c']
+```
+
+Now
+
+```python
+arr = [
+    ['a','b','c']
+]
+```
+
+---
+
+Read digit
+
+```python
+'3'
+```
+
+Append
+
+```python
+['d','e','f']
+```
+
+Now
+
+```python
+arr = [
+    ['a','b','c'],
+    ['d','e','f']
+]
+```
+
+---
+
+### Step 4
+
+Compute
+
+```python
+itertools.product(*arr)
+```
+
+Result
+
+```python
+[
+('a','d'),
+('a','e'),
+('a','f'),
+('b','d'),
+('b','e'),
+('b','f'),
+('c','d'),
+('c','e'),
+('c','f')
+]
+```
+
+---
+
+### Step 5
+
+Join every tuple.
+
+| Tuple     | After `join()` |
+| --------- | -------------- |
+| ('a','d') | "ad"           |
+| ('a','e') | "ae"           |
+| ('a','f') | "af"           |
+| ('b','d') | "bd"           |
+| ('b','e') | "be"           |
+| ('b','f') | "bf"           |
+| ('c','d') | "cd"           |
+| ('c','e') | "ce"           |
+| ('c','f') | "cf"           |
+
+Final answer
+
+```python
+[
+"ad",
+"ae",
+"af",
+"bd",
+"be",
+"bf",
+"cd",
+"ce",
+"cf"
+]
+```
