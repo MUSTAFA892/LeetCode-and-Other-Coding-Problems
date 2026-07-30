@@ -1,0 +1,522 @@
+# 📝 LeetCode 229: Majority Element II (Boyer-Moore Voting Algorithm) - Complete Notes
+
+---
+
+# 📌 Problem Statement
+
+Given an integer array `nums`, return **all elements** that appear **more than ⌊n/3⌋ times**.
+
+### Example
+
+```python
+Input: nums = [3,2,3]
+
+Output: [3]
+```
+
+Another example:
+
+```python
+Input: nums = [1,1,1,3,3,2,2,2]
+
+Output: [1,2]
+```
+
+---
+
+# 🤔 First Observation
+
+Normally, for majority element (> n/2), there can be only **one** majority element.
+
+But here the condition is:
+
+> Frequency > n/3
+
+So the question is...
+
+## ❓How many majority elements can exist?
+
+Let's prove it.
+
+Suppose there are 3 different majority elements.
+
+Each appears more than n/3 times.
+
+That means
+
+```
+Element A > n/3
+Element B > n/3
+Element C > n/3
+```
+
+Total would become
+
+```
+> n/3 + n/3 + n/3
+
+> n
+```
+
+But an array only contains **n** elements.
+
+Impossible.
+
+Therefore,
+
+> **There can be at most TWO majority elements.**
+
+This is the key observation behind this problem.
+
+---
+
+# 🚀 Why Boyer-Moore Voting Algorithm?
+
+A brute force solution would count every element.
+
+```
+Time : O(n²)
+```
+
+Using HashMap:
+
+```
+Time : O(n)
+Space : O(n)
+```
+
+But the interview expects
+
+```
+Time : O(n)
+Space : O(1)
+```
+
+This is where **Boyer-Moore Voting Algorithm** comes in.
+
+---
+
+# 📖 What is Boyer-Moore Voting Algorithm?
+
+The Boyer-Moore Voting Algorithm is a clever algorithm that finds potential majority elements **without storing frequencies**.
+
+Instead of counting every element,
+
+it performs a process called **vote cancellation**.
+
+Imagine every number gets one vote.
+
+Whenever two different numbers meet,
+
+they cancel each other's vote.
+
+Eventually,
+
+only the majority element survives because it appears much more frequently than others.
+
+---
+
+## Example
+
+```
+1 2
+```
+
+Different numbers.
+
+They cancel.
+
+Remaining:
+
+```
+Nothing
+```
+
+---
+
+Another example
+
+```
+1 1 2
+```
+
+Process
+
+```
+1 -> vote = 1
+
+1 -> vote = 2
+
+2 -> cancels one vote
+
+Remaining vote = 1
+```
+
+Candidate = 1
+
+---
+
+Another
+
+```
+2 2 1 1 1
+```
+
+Process
+
+```
+2 +1
+
+2 +1
+
+1 cancels
+
+1 cancels
+
+1 survives
+```
+
+Final candidate
+
+```
+1
+```
+
+Because it appeared more times.
+
+---
+
+# 📌 Why do we need TWO candidates?
+
+Since this problem asks for elements appearing more than n/3,
+
+there can be at most
+
+```
+2
+```
+
+majority elements.
+
+So we maintain
+
+```
+candidate1
+candidate2
+```
+
+and their votes.
+
+```
+vote1
+vote2
+```
+
+---
+
+# 🧠 Code
+
+```python
+class Solution:
+    def majorityElement(self, nums: List[int]) -> List[int]:
+        candidate1, candidate2 = None, None
+        vote1, vote2 = 0, 0
+
+        for num in nums:
+            if candidate1 == num:
+                vote1 += 1
+            elif candidate2 == num:
+                vote2 += 1
+            elif vote1 == 0:
+                candidate1 = num
+                vote1 = 1
+            elif vote2 == 0:
+                candidate2 = num
+                vote2 = 1
+            else:
+                vote1 -= 1
+                vote2 -= 1
+
+        result = []
+
+        if nums.count(candidate1) > len(nums) // 3:
+            result.append(candidate1)
+
+        if candidate2 != candidate1 and nums.count(candidate2) > len(nums) // 3:
+            result.append(candidate2)
+
+        return result
+```
+
+---
+
+# 🔍 Understanding Every Variable
+
+```python
+candidate1
+```
+
+Stores the first possible majority element.
+
+---
+
+```python
+candidate2
+```
+
+Stores the second possible majority element.
+
+---
+
+```python
+vote1
+```
+
+Current vote count for candidate1.
+
+---
+
+```python
+vote2
+```
+
+Current vote count for candidate2.
+
+---
+
+Initially
+
+```python
+candidate1 = None
+candidate2 = None
+
+vote1 = 0
+vote2 = 0
+```
+
+No candidates yet.
+
+---
+
+# 📖 First Pass (Finding Candidates)
+
+The first loop **does not guarantee** that the candidates are actual majority elements.
+
+It only finds the **most likely** candidates after all vote cancellations.
+
+---
+
+## Step 1
+
+```python
+if candidate1 == num:
+    vote1 += 1
+```
+
+If current number is already candidate1,
+
+increase its vote.
+
+Example
+
+```
+candidate1 = 5
+
+Current number = 5
+
+vote1++
+```
+
+---
+
+## Step 2
+
+```python
+elif candidate2 == num:
+    vote2 += 1
+```
+
+Same for candidate2.
+
+---
+
+## Step 3
+
+```python
+elif vote1 == 0:
+    candidate1 = num
+    vote1 = 1
+```
+
+If candidate1 has no votes left,
+
+replace it with the current number.
+
+Example
+
+```
+vote1 = 0
+
+Current number = 8
+
+candidate1 = 8
+vote1 = 1
+```
+
+Think of it as:
+
+> "The old candidate lost all support, so this new number takes its place."
+
+---
+
+## Step 4
+
+```python
+elif vote2 == 0:
+    candidate2 = num
+    vote2 = 1
+```
+
+Same logic for candidate2.
+
+---
+
+## Step 5
+
+```python
+else:
+    vote1 -= 1
+    vote2 -= 1
+```
+
+This is the **heart of Boyer-Moore Voting Algorithm**.
+
+Suppose
+
+```
+candidate1 = 2
+
+candidate2 = 5
+
+Current number = 7
+```
+
+The current number matches neither candidate.
+
+That means
+
+```
+2 loses one vote
+
+5 loses one vote
+
+7 also effectively loses its own chance
+```
+
+We simulate this by decrementing both vote counters.
+
+This represents **cancelling out three different values**:
+
+```
+candidate1
+candidate2
+current number
+```
+
+If a candidate's vote eventually reaches `0`, it gets replaced later by a new contender.
+
+This cancellation ensures that **only elements with very high frequency can survive until the end**.
+
+---
+
+# 📝 Complete Dry Run
+
+Let's use
+
+```python
+nums = [1,1,1,3,3,2,2,2]
+```
+
+Threshold
+
+```
+n = 8
+
+n//3 = 2
+
+Need frequency > 2
+```
+
+| Step  | Current Number | Candidate1 | Vote1 | Candidate2 | Vote2 | Explanation                                  |
+| ----- | -------------- | ---------- | ----- | ---------- | ----- | -------------------------------------------- |
+| Start | -              | None       | 0     | None       | 0     | Initial state                                |
+| 1     | 1              | 1          | 1     | None       | 0     | vote1 was 0 → assign candidate1 = 1          |
+| 2     | 1              | 1          | 2     | None       | 0     | Matches candidate1 → vote1++                 |
+| 3     | 1              | 1          | 3     | None       | 0     | Matches candidate1 → vote1++                 |
+| 4     | 3              | 1          | 3     | 3          | 1     | vote2 was 0 → assign candidate2 = 3          |
+| 5     | 3              | 1          | 3     | 3          | 2     | Matches candidate2 → vote2++                 |
+| 6     | 2              | 1          | 2     | 3          | 1     | Matches neither → decrement both votes       |
+| 7     | 2              | 1          | 1     | 3          | 0     | Matches neither → decrement both votes again |
+| 8     | 2              | 1          | 1     | 2          | 1     | vote2 is 0 → replace candidate2 with 2       |
+
+After the first pass:
+
+```
+candidate1 = 1
+
+candidate2 = 2
+```
+
+Notice that `3` disappeared because its votes were cancelled out.
+
+---
+
+# 📖 Second Pass (Verification)
+
+The Boyer-Moore algorithm only gives **possible** majority elements.
+
+They are **not guaranteed** to satisfy the frequency condition.
+
+So we verify them.
+
+```python
+if nums.count(candidate1) > len(nums)//3:
+```
+
+Count occurrences of candidate1.
+
+```
+1 appears 3 times
+
+3 > 2
+
+Add it.
+```
+
+---
+
+Then
+
+```python
+if candidate2 != candidate1 and nums.count(candidate2) > len(nums)//3:
+```
+
+Why `candidate2 != candidate1`?
+
+Because during some executions, both candidates can end up pointing to the same value. This check prevents adding the same element twice.
+
+Count candidate2.
+
+```
+2 appears 3 times
+
+3 > 2
+
+Add it.
+```
+
+Final answer
+
+```
+[1,2]
+```
