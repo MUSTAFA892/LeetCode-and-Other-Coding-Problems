@@ -1,0 +1,367 @@
+# 📝 LeetCode 3014: Minimum Number of Pushes to Type Word I
+
+---
+
+# 📖 Code
+
+```python
+class Solution:
+    def minimumPushes(self, word: str) -> int:
+        count = 0
+
+        for i in range(len(word)):
+            count += ((i // 8) + 1)
+
+        return count
+```
+
+---
+
+# 💡 Core Idea
+
+In this problem, **we can arrange the letters on the keyboard in any order**.
+
+Since there are **8 keys**, we assign the letters as follows:
+
+* First **8 letters** → **1 push**
+* Next **8 letters** → **2 pushes**
+* Next **8 letters** → **3 pushes**
+* Next **8 letters** → **4 pushes**
+
+Since every character in `word` is **unique**, we only need to count how many positions fall into each push group.
+
+The formula
+
+```python
+(i // 8) + 1
+```
+
+automatically calculates how many pushes the current character needs.
+
+---
+
+# Step 1: Initialize Answer
+
+```python
+count = 0
+```
+
+This variable stores the total number of button presses.
+
+Initially,
+
+```python
+count = 0
+```
+
+---
+
+# Step 2: Iterate Through Every Character Position
+
+```python
+for i in range(len(word)):
+```
+
+Instead of looping through the characters, we loop through their **indices**.
+
+For example,
+
+```python
+word = "abcdefghij"
+```
+
+The loop generates
+
+| Iteration | i |
+| --------- | - |
+| 1         | 0 |
+| 2         | 1 |
+| 3         | 2 |
+| 4         | 3 |
+| 5         | 4 |
+| 6         | 5 |
+| 7         | 6 |
+| 8         | 7 |
+| 9         | 8 |
+| 10        | 9 |
+
+The index determines which push group the character belongs to.
+
+---
+
+# Step 3: Calculate Required Pushes
+
+```python
+(i // 8) + 1
+```
+
+This formula calculates the push count for the current position.
+
+### Why divide by 8?
+
+Each push level can contain **8 letters**.
+
+So:
+
+| Index (`i`) | `i // 8` | Pushes |
+| ----------- | -------- | ------ |
+| 0           | 0        | 1      |
+| 1           | 0        | 1      |
+| 2           | 0        | 1      |
+| 3           | 0        | 1      |
+| 4           | 0        | 1      |
+| 5           | 0        | 1      |
+| 6           | 0        | 1      |
+| 7           | 0        | 1      |
+| 8           | 1        | 2      |
+| 9           | 1        | 2      |
+| 10          | 1        | 2      |
+| 15          | 1        | 2      |
+| 16          | 2        | 3      |
+
+This means:
+
+* Indices **0–7** → **1 push**
+* Indices **8–15** → **2 pushes**
+* Indices **16–23** → **3 pushes**
+* Indices **24–31** → **4 pushes**
+
+---
+
+# Step 4: Add Pushes to the Answer
+
+```python
+count += ((i // 8) + 1)
+```
+
+For every character position,
+
+1. Calculate its push count.
+2. Add it to the total.
+
+---
+
+# Complete Dry Run
+
+## Example
+
+```python
+word = "abcdefghij"
+```
+
+Length = **10**
+
+Initially
+
+```python
+count = 0
+```
+
+---
+
+### Iteration 1
+
+```python
+i = 0
+```
+
+Pushes
+
+```python
+(0 // 8) + 1 = 1
+```
+
+Total
+
+```python
+count = 1
+```
+
+---
+
+### Iteration 2
+
+```python
+i = 1
+```
+
+Pushes
+
+```python
+(1 // 8) + 1 = 1
+```
+
+Total
+
+```python
+count = 2
+```
+
+---
+
+### Iteration 3
+
+```python
+i = 2
+```
+
+Pushes = **1**
+
+Total
+
+```python
+count = 3
+```
+
+---
+
+### Iteration 4
+
+```python
+i = 3
+```
+
+Pushes = **1**
+
+Total
+
+```python
+count = 4
+```
+
+---
+
+### Iteration 5
+
+```python
+i = 4
+```
+
+Pushes = **1**
+
+Total
+
+```python
+count = 5
+```
+
+---
+
+### Iteration 6
+
+```python
+i = 5
+```
+
+Pushes = **1**
+
+Total
+
+```python
+count = 6
+```
+
+---
+
+### Iteration 7
+
+```python
+i = 6
+```
+
+Pushes = **1**
+
+Total
+
+```python
+count = 7
+```
+
+---
+
+### Iteration 8
+
+```python
+i = 7
+```
+
+Pushes = **1**
+
+Total
+
+```python
+count = 8
+```
+
+The first **8 characters** each require only **1 push**.
+
+---
+
+### Iteration 9
+
+```python
+i = 8
+```
+
+Pushes
+
+```python
+(8 // 8) + 1 = 2
+```
+
+Total
+
+```python
+count = 10
+```
+
+---
+
+### Iteration 10
+
+```python
+i = 9
+```
+
+Pushes
+
+```python
+(9 // 8) + 1 = 2
+```
+
+Total
+
+```python
+count = 12
+```
+
+Loop ends.
+
+Return
+
+```python
+12
+```
+
+---
+
+# Dry Run Table
+
+| Index (`i`) | Character | Pushes | Running Total |
+| ----------- | --------- | ------ | ------------- |
+| 0           | a         | 1      | 1             |
+| 1           | b         | 1      | 2             |
+| 2           | c         | 1      | 3             |
+| 3           | d         | 1      | 4             |
+| 4           | e         | 1      | 5             |
+| 5           | f         | 1      | 6             |
+| 6           | g         | 1      | 7             |
+| 7           | h         | 1      | 8             |
+| 8           | i         | 2      | 10            |
+| 9           | j         | 2      | 12            |
+
+Final Answer:
+
+```python
+12
+```
