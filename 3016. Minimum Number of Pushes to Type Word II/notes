@@ -1,0 +1,476 @@
+# 📝 LeetCode 3016: Minimum Number of Pushes to Type Word II
+
+---
+
+# 📖 Code
+
+```python
+from collections import Counter
+
+class Solution:
+    def minimumPushes(self, word: str) -> int:
+        map_ = Counter(word)
+        word_counter = 0
+
+        for i, (key, val) in enumerate(map_.most_common()):
+            v = (i // 8) + 1
+            word_counter += (v * val)
+
+        return word_counter
+```
+
+---
+
+# 💡 Core Idea
+
+The keyboard has **8 keys** available for assigning letters.
+
+* The **first 8 most frequent characters** should require **1 push**.
+* The **next 8 characters** should require **2 pushes**.
+* The next 8 require **3 pushes**, and so on.
+
+Since frequently used letters are typed more often, assigning them fewer pushes minimizes the total number of button presses.
+
+The algorithm:
+
+1. Count the frequency of every character.
+2. Sort characters by decreasing frequency.
+3. Assign push costs based on their position.
+4. Multiply the frequency of each character by its assigned push cost.
+5. Sum everything.
+
+---
+
+# Step 1: Count Frequency
+
+```python
+map_ = Counter(word)
+```
+
+`Counter` counts how many times each character appears.
+
+Example:
+
+```python
+word = "aabbcccddd"
+```
+
+Counter becomes:
+
+```python
+{
+    'c': 3,
+    'd': 3,
+    'a': 2,
+    'b': 2
+}
+```
+
+This tells us how many times each character will be typed.
+
+---
+
+# Step 2: Initialize Answer
+
+```python
+word_counter = 0
+```
+
+This stores the total number of pushes required.
+
+Initially:
+
+```python
+word_counter = 0
+```
+
+---
+
+# Step 3: Sort by Frequency
+
+```python
+map_.most_common()
+```
+
+`most_common()` returns the characters sorted in decreasing order of frequency.
+
+Example:
+
+```python
+Counter({
+    'c':3,
+    'd':3,
+    'a':2,
+    'b':2
+})
+```
+
+returns
+
+```python
+[
+    ('c',3),
+    ('d',3),
+    ('a',2),
+    ('b',2)
+]
+```
+
+The most frequently used characters come first.
+
+---
+
+# Step 4: Loop Through Every Character
+
+```python
+for i, (key, val) in enumerate(map_.most_common()):
+```
+
+### What does `enumerate()` do?
+
+It gives both:
+
+* the index
+* the value
+
+Example:
+
+```python
+[
+ ('c',3),
+ ('d',3),
+ ('a',2),
+ ('b',2)
+]
+```
+
+becomes
+
+| i | key | val |
+| - | --- | --- |
+| 0 | c   | 3   |
+| 1 | d   | 3   |
+| 2 | a   | 2   |
+| 3 | b   | 2   |
+
+where
+
+* `key` → character
+* `val` → frequency
+* `i` → position after sorting
+
+---
+
+# Step 5: Calculate Push Cost
+
+```python
+v = (i // 8) + 1
+```
+
+This determines how many pushes are needed for the current character.
+
+### Why divide by 8?
+
+Only **8 characters** can have the same push count.
+
+So:
+
+| Index (`i`) | `i // 8` | Pushes (`v`) |
+| ----------- | -------- | ------------ |
+| 0           | 0        | 1            |
+| 1           | 0        | 1            |
+| 2           | 0        | 1            |
+| 3           | 0        | 1            |
+| 4           | 0        | 1            |
+| 5           | 0        | 1            |
+| 6           | 0        | 1            |
+| 7           | 0        | 1            |
+| 8           | 1        | 2            |
+| 9           | 1        | 2            |
+| 10          | 1        | 2            |
+| 15          | 1        | 2            |
+| 16          | 2        | 3            |
+
+Formula:
+
+```python
+v = (i // 8) + 1
+```
+
+means:
+
+* First 8 characters → 1 push
+* Next 8 characters → 2 pushes
+* Next 8 characters → 3 pushes
+
+---
+
+# Step 6: Add Contribution
+
+```python
+word_counter += (v * val)
+```
+
+Each character contributes:
+
+```text
+(Number of Pushes) × (Frequency)
+```
+
+Example:
+
+Character:
+
+```text
+c
+```
+
+Frequency:
+
+```text
+3
+```
+
+Pushes:
+
+```text
+1
+```
+
+Contribution:
+
+```text
+1 × 3 = 3
+```
+
+If another character has
+
+Frequency:
+
+```text
+5
+```
+
+Pushes:
+
+```text
+2
+```
+
+Contribution:
+
+```text
+2 × 5 = 10
+```
+
+This value is added to the total answer.
+
+---
+
+# Complete Dry Run
+
+## Example
+
+```python
+word = "aabbcccddd"
+```
+
+---
+
+### Step 1
+
+Frequency
+
+```python
+Counter({
+    'c':3,
+    'd':3,
+    'a':2,
+    'b':2
+})
+```
+
+---
+
+### Step 2
+
+Sorted
+
+```python
+[
+ ('c',3),
+ ('d',3),
+ ('a',2),
+ ('b',2)
+]
+```
+
+---
+
+### Step 3
+
+Initialize
+
+```python
+word_counter = 0
+```
+
+---
+
+### Iteration 1
+
+```python
+i = 0
+
+key = 'c'
+
+val = 3
+```
+
+Pushes
+
+```python
+v = (0//8)+1 = 1
+```
+
+Contribution
+
+```text
+1 × 3 = 3
+```
+
+Total
+
+```text
+word_counter = 3
+```
+
+---
+
+### Iteration 2
+
+```python
+i = 1
+
+key = 'd'
+
+val = 3
+```
+
+Pushes
+
+```python
+v = (1//8)+1 = 1
+```
+
+Contribution
+
+```text
+1 × 3 = 3
+```
+
+Total
+
+```text
+word_counter = 6
+```
+
+---
+
+### Iteration 3
+
+```python
+i = 2
+
+key = 'a'
+
+val = 2
+```
+
+Pushes
+
+```python
+v = (2//8)+1 = 1
+```
+
+Contribution
+
+```text
+1 × 2 = 2
+```
+
+Total
+
+```text
+word_counter = 8
+```
+
+---
+
+### Iteration 4
+
+```python
+i = 3
+
+key = 'b'
+
+val = 2
+```
+
+Pushes
+
+```python
+v = (3//8)+1 = 1
+```
+
+Contribution
+
+```text
+1 × 2 = 2
+```
+
+Total
+
+```text
+word_counter = 10
+```
+
+Loop ends.
+
+Return
+
+```python
+10
+```
+
+---
+
+# Example Showing Multiple Push Levels
+
+Suppose the frequencies after sorting are:
+
+| Index | Character | Frequency | Pushes | Contribution |
+| ----- | --------- | --------- | ------ | ------------ |
+| 0     | a         | 10        | 1      | 10           |
+| 1     | b         | 9         | 1      | 9            |
+| 2     | c         | 8         | 1      | 8            |
+| 3     | d         | 7         | 1      | 7            |
+| 4     | e         | 6         | 1      | 6            |
+| 5     | f         | 5         | 1      | 5            |
+| 6     | g         | 4         | 1      | 4            |
+| 7     | h         | 3         | 1      | 3            |
+| 8     | i         | 9         | 2      | 18           |
+| 9     | j         | 5         | 2      | 10           |
+
+Notice:
+
+* Characters from index **0 to 7** need **1 push**.
+* Starting from **index 8**, each character requires **2 pushes**.
+
+This is exactly what the formula
+
+```python
+v = (i // 8) + 1
+```
+
+computes.
