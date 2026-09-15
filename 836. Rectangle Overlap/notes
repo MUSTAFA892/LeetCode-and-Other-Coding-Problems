@@ -1,0 +1,581 @@
+
+# 1. First understand the rectangle format
+
+Each rectangle is represented as:
+
+```python
+[x1, y1, x2, y2]
+```
+
+where:
+
+- `x1` → left
+- `y1` → bottom
+- `x2` → right
+- `y2` → top
+
+So:
+
+```python
+rec1 = [0, 0, 4, 4]
+```
+
+means:
+
+```text
+        y
+        ↑
+    4   ┌────────┐
+        │        │
+        │ rec1   │
+        │        │
+    0   └────────┘
+        0        4  → x
+```
+
+The rectangle goes from:
+
+```text
+left   = 0
+bottom = 0
+right  = 4
+top    = 4
+```
+
+---
+
+# 2. Your code
+
+```python
+class Solution:
+    def isRectangleOverlap(self, rec1: List[int], rec2: List[int]) -> bool:
+
+        if (
+            rec2[2] <= rec1[0] or
+            rec2[0] >= rec1[2] or
+            rec2[3] <= rec1[1] or
+            rec2[1] >= rec1[3]
+        ):
+            return False
+
+        return True
+```
+
+The important thing is:
+
+> **We are checking whether there is a reason that the rectangles DON'T overlap.**
+
+If we find even **one** such reason → `False`.
+
+If none of the four conditions is true → they overlap → `True`.
+
+---
+
+# 3. What do the indexes mean?
+
+Suppose:
+
+```python
+rec1 = [0, 0, 4, 4]
+rec2 = [2, 2, 6, 6]
+```
+
+Then:
+
+### rec1
+
+```text
+rec1[0] = 0  → x1 → left
+rec1[1] = 0  → y1 → bottom
+rec1[2] = 4  → x2 → right
+rec1[3] = 4  → y2 → top
+```
+
+### rec2
+
+```text
+rec2[0] = 2  → left
+rec2[1] = 2  → bottom
+rec2[2] = 6  → right
+rec2[3] = 6  → top
+```
+
+---
+
+# 4. The BIG idea
+
+Two rectangles **do not overlap** if one of these happens:
+
+### Case 1
+
+Rectangle 2 is completely **to the left** of Rectangle 1.
+
+```text
+┌────────┐
+│  rec2  │    ┌────────┐
+│        │    │  rec1  │
+└────────┘    └────────┘
+```
+
+### Case 2
+
+Rectangle 2 is completely **to the right** of Rectangle 1.
+
+```text
+┌────────┐    ┌────────┐
+│  rec1  │    │  rec2  │
+│        │    │        │
+└────────┘    └────────┘
+```
+
+### Case 3
+
+Rectangle 2 is completely **below** Rectangle 1.
+
+```text
+┌────────┐
+│  rec1  │
+└────────┘
+
+┌────────┐
+│  rec2  │
+└────────┘
+```
+
+### Case 4
+
+Rectangle 2 is completely **above** Rectangle 1.
+
+```text
+┌────────┐
+│  rec2  │
+└────────┘
+
+┌────────┐
+│  rec1  │
+└────────┘
+```
+
+These four situations are exactly what your `if` statement checks.
+
+---
+
+# 5. Condition 1
+
+```python
+rec2[2] <= rec1[0]
+```
+
+Translate the indexes:
+
+```python
+rec2[right] <= rec1[left]
+```
+
+Meaning:
+
+> The right side of Rectangle 2 is before or exactly at the left side of Rectangle 1.
+
+Diagram:
+
+```text
+        rec2                 rec1
+
+    ┌────────┐           ┌────────┐
+    │        │           │        │
+    │        │           │        │
+    └────────┘           └────────┘
+         ↑                    ↑
+      rec2[2]              rec1[0]
+```
+
+Example:
+
+```python
+rec1 = [4, 0, 8, 4]
+rec2 = [0, 0, 3, 4]
+```
+
+Check:
+
+```python
+rec2[2] <= rec1[0]
+
+3 <= 4
+
+True
+```
+
+Therefore:
+
+```python
+return False
+```
+
+They don't overlap.
+
+---
+
+# 6. Condition 2
+
+```python
+rec2[0] >= rec1[2]
+```
+
+Translate:
+
+```python
+rec2[left] >= rec1[right]
+```
+
+Meaning:
+
+> Rectangle 2 is completely to the RIGHT of Rectangle 1.
+
+Diagram:
+
+```text
+       rec1                    rec2
+
+    ┌────────┐             ┌────────┐
+    │        │             │        │
+    │        │             │        │
+    └────────┘             └────────┘
+          ↑                     ↑
+       rec1[2]               rec2[0]
+```
+
+Example:
+
+```python
+rec1 = [0, 0, 4, 4]
+rec2 = [5, 0, 8, 4]
+```
+
+Check:
+
+```python
+rec2[0] >= rec1[2]
+
+5 >= 4
+
+True
+```
+
+Therefore:
+
+```python
+return False
+```
+
+---
+
+# 7. Condition 3
+
+```python
+rec2[3] <= rec1[1]
+```
+
+Translate:
+
+```python
+rec2[top] <= rec1[bottom]
+```
+
+Meaning:
+
+> Rectangle 2 is completely BELOW Rectangle 1.
+
+Diagram:
+
+```text
+        rec1
+    ┌────────┐
+    │        │
+    │        │
+    └────────┘
+        ↑
+     rec1[1]
+
+    ┌────────┐
+    │        │
+    │  rec2  │
+    └────────┘
+        ↑
+     rec2[3]
+```
+
+Example:
+
+```python
+rec1 = [0, 4, 4, 8]
+rec2 = [0, 0, 4, 3]
+```
+
+Check:
+
+```python
+rec2[3] <= rec1[1]
+
+3 <= 4
+
+True
+```
+
+So:
+
+```python
+return False
+```
+
+---
+
+# 8. Condition 4
+
+```python
+rec2[1] >= rec1[3]
+```
+
+Translate:
+
+```python
+rec2[bottom] >= rec1[top]
+```
+
+Meaning:
+
+> Rectangle 2 is completely ABOVE Rectangle 1.
+
+Diagram:
+
+```text
+    ┌────────┐
+    │  rec2  │
+    │        │
+    └────────┘
+        ↑
+     rec2[1]
+
+    ┌────────┐
+    │  rec1  │
+    │        │
+    └────────┘
+        ↑
+     rec1[3]
+```
+
+Example:
+
+```python
+rec1 = [0, 0, 4, 4]
+rec2 = [0, 5, 4, 8]
+```
+
+Check:
+
+```python
+rec2[1] >= rec1[3]
+
+5 >= 4
+
+True
+```
+
+Therefore:
+
+```python
+return False
+```
+
+---
+
+# 9. Now let's do a complete example
+
+Take:
+
+```python
+rec1 = [0, 0, 4, 4]
+rec2 = [2, 2, 6, 6]
+```
+
+Draw them:
+
+```text
+             6
+             ┌────────────┐
+             │            │
+             │    REC2    │
+         4   │    ┌───────┼───┐
+             │    │       │   │
+             │    │  BOTH │   │
+         2   └────┼───────┘   │
+             │    │           │
+         0   └────┴───────────┘
+             0    2    4     6
+```
+
+More conceptually:
+
+```text
+             REC2
+          ┌──────────┐
+          │          │
+          │   ┌──────┼───┐
+          │   │ BOTH │   │
+          └───┼──────┘   │
+              │ REC1     │
+              └──────────┘
+```
+
+Now Python checks each condition.
+
+---
+
+### Condition 1
+
+```python
+rec2[2] <= rec1[0]
+```
+
+Values:
+
+```python
+6 <= 0
+```
+
+False ❌
+
+---
+
+### Condition 2
+
+```python
+rec2[0] >= rec1[2]
+```
+
+Values:
+
+```python
+2 >= 4
+```
+
+False ❌
+
+---
+
+### Condition 3
+
+```python
+rec2[3] <= rec1[1]
+```
+
+Values:
+
+```python
+6 <= 0
+```
+
+False ❌
+
+---
+
+### Condition 4
+
+```python
+rec2[1] >= rec1[3]
+```
+
+Values:
+
+```python
+2 >= 4
+```
+
+False ❌
+
+---
+
+All four are false.
+
+Therefore:
+
+```python
+if (False or False or False or False):
+```
+
+becomes:
+
+```python
+if False:
+```
+
+So Python skips:
+
+```python
+return False
+```
+
+and reaches:
+
+```python
+return True
+```
+
+### Final answer:
+
+```text
+True
+```
+
+The rectangles overlap. ✅
+
+---
+
+# 10. Another example — NO overlap
+
+Let's take:
+
+```python
+rec1 = [0, 0, 4, 4]
+rec2 = [5, 0, 8, 4]
+```
+
+Diagram:
+
+```text
+REC1                    REC2
+
+┌────────┐              ┌────────┐
+│        │              │        │
+│        │              │        │
+│        │              │        │
+└────────┘              └────────┘
+0        4              5        8
+```
+
+Now check:
+
+```python
+rec2[0] >= rec1[2]
+```
+
+Substitute:
+
+```python
+5 >= 4
+```
+
+True ✅
+
+Therefore the entire condition becomes true:
+
+```python
+if True:
+    return False
+```
+
+Final result:
+
+```text
+False
+```
