@@ -1,0 +1,97 @@
+# `createGrid()` – Short Notes
+
+## 1. Objective
+The function creates an `m × n` grid filled with `#` and marks visited cells with `.`. Traversal starts at `(0,0)` and alternates between moving right and down until reaching `(m-1,n-1)`.
+
+## 2. Important Variables
+
+| Variable | Purpose |
+|---|---|
+| `arr` | Stores visited cell coordinates. |
+| `final_arr` | Stores the grid as strings. |
+| `stop` | Controls the `while` loop. |
+| `change` | Controls the movement direction. |
+| `level` | Unused variable; can be removed. |
+
+**`change` values:**
+- `0` → Move right first.
+- `1` → Move down first.
+
+## 3. Working Logic
+
+**Step 1: Initialize the grid**
+```python
+arr = [[0, 0]]
+final_arr = ["".join(["#" for _ in range(n)]) for _ in range(m)]
+```
+The grid is initially filled with `#`.
+
+**Step 2: Traverse the grid**
+```python
+while not stop:
+```
+- If `change == 0`, attempt to move right.
+- If `change == 1`, attempt to move down.
+- If the preferred movement is impossible, attempt the other direction.
+- Store each new coordinate using `arr.append(val)`.
+- Stop when the destination `(m-1, n-1)` is reached.
+
+**Step 3: Mark visited cells**
+```python
+for i in arr:
+    row = i[0]
+    col = i[1]
+    final_arr[row] = final_arr[row][:col] + "." + final_arr[row][col+1:]
+```
+String slicing replaces `#` with `.` at every visited position.
+
+**Step 4: Return the grid**
+```python
+return final_arr
+```
+
+## 4. Working Example
+
+**Input:**
+```python
+m = 3
+n = 4
+```
+
+**Initial grid:**
+```text
+####
+####
+####
+```
+
+**Traversal path:**
+```text
+(0,0) → (0,1) → (1,1) → (1,2) → (2,2) → (2,3)
+```
+
+**Visited coordinates:**
+```python
+arr = [[0,0], [0,1], [1,1], [1,2], [2,2], [2,3]]
+```
+
+**Final output:**
+```text
+..##
+#..#
+##..
+```
+
+## 5. Complexity Analysis
+
+- **Time Complexity:** `O(n(m+n))` — creating the grid and updating visited cells.
+- **Space Complexity:** `O(mn)` — storing the grid and visited coordinates.
+
+## 6. Key Points to Remember
+
+1. Python uses zero-based indexing.
+2. `arr[-1]` returns the last visited coordinate.
+3. `arr.append(val)` stores the next coordinate.
+4. `change` alternates the preferred movement direction.
+5. String slicing replaces a character without modifying the original string.
+6. The algorithm visits `m + n - 1` cells, not every cell in the grid.
